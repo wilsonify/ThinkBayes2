@@ -12,7 +12,8 @@ import numpy
 
 from matplotlib import pyplot
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 
 def RenderPdf(mu, sigma, n=101):
@@ -20,12 +21,12 @@ def RenderPdf(mu, sigma, n=101):
 
     n: number of places to evaluate the PDF
     """
-    xs = numpy.linspace(mu-4*sigma, mu+4*sigma, n)
-    ys = [thinkbayes2.EvalNormalPdf(x, mu, sigma) for x in xs]
+    xs = numpy.linspace(mu - 4 * sigma, mu + 4 * sigma, n)
+    ys = [thinkbayes.EvalNormalPdf(x, mu, sigma) for x in xs]
     return xs, ys
 
 
-def main():
+def test_main():
     xs, ys = RenderPdf(100, 15)
 
     n = 34
@@ -39,7 +40,3 @@ def main():
                    xlabel='Persistence quotient',
                    ylabel='PDF',
                    legend=False)
-
-
-if __name__ == "__main__":
-    main()
