@@ -32,7 +32,9 @@ def test_RenderPdf():
     pyplot.annotate(s, [127, 0.002], xytext=[80, 0.005], arrowprops=d)
 
     thinkplot.Plot(xs, ys)
-    thinkplot.Show(title='Distribution of Persistence',
-                   xlabel='Persistence quotient',
-                   ylabel='PDF',
-                   legend=False)
+    thinkplot.Show(
+        title='Distribution of Persistence',
+        xlabel='Persistence quotient',
+        ylabel='PDF',
+        legend=False
+    )
