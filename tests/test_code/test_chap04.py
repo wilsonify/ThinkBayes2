@@ -1,47 +1,20 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
+"""
+This is based on a notebook from Think Bayes : Chapter 4.
+"""
 
-# # Think Bayes solutions: Chapter 4
-#
-# This notebook presents solutions to exercises in Think Bayes.
-#
-# Copyright 2016 Allen B. Downey
-#
-# MIT License: https://opensource.org/licenses/MIT
-
-# +
 from __future__ import print_function, division
-
-
-import warnings
-
-warnings.filterwarnings("ignore")
-
 import numpy as np
-
 from thinkbayes import Pmf, Cdf, Suite
 from thinkbayes import thinkplot
-
-
-# -
-
-# ## The Euro problem
-#
-# Here's a class that represents hypotheses about the probability a coin lands heads.
+from scipy import special
 
 
 class Euro(Suite):
+    """
+    The Euro problem
+    Here's a class that represents hypotheses about the probability a coin lands heads.
+    """
+
     def Likelihood(self, data, hypo):
         """Computes the likelihood of `data` given `hypo`.
         
@@ -57,59 +30,21 @@ class Euro(Suite):
             return 1 - x / 100
 
 
-# We can make a uniform prior and update it with 140 heads and 110 tails:
-
-# +
-suite = Euro(range(0, 101))
-dataset = "H" * 140 + "T" * 110
-
-for data in dataset:
-    suite.Update(data)
-# -
-
-# And here's what the posterior looks like.
-
-thinkplot.Pdf(suite)
-
-# We can summarize the posterior several ways, including the mean:
-
-suite.Mean()
-
-# Median:
-
-suite.Percentile(50)
-
-# The peak of the posterior, known as the Maximum Aposteori Probability (MAP)
-
-suite.MAP()
-
-# And a 90% credible interval
-
-suite.CredibleInterval(90)
-
-# We can look up a particular value in the posterior PMF, but the result doesn't mean much, because we could have divided the range (0-100) into as many pieces as we like, and the result would be different.
-
-suite.Prob(50)
-
-
-# ## Different priors
-#
-# Let's see how that looks with different priors.
-#
-# Here's a function that makes a uniform prior:
-
-
 def UniformPrior(label="uniform"):
-    """Makes a Suite with a uniform prior."""
+    """
+    Different priors
+    Let's see how that looks with different priors.
+    Here's a function that makes a uniform prior:
+    Makes a Suite with a uniform prior.
+    """
     suite = Euro(range(0, 101), label=label)
     return suite
 
 
-# And another that makes a triangular prior.
-
-
 def TrianglePrior(label="triangle"):
-    """Makes a Suite with a triangle prior."""
+    """
+    And another that makes a triangular prior.
+    Makes a Suite with a triangle prior."""
     suite = Euro(label=label)
     for x in range(0, 51):
         suite[x] = x
@@ -119,25 +54,10 @@ def TrianglePrior(label="triangle"):
     return suite
 
 
-# Here's what they look like:
-
-# +
-triangle = TrianglePrior()
-uniform = UniformPrior()
-suites = [triangle, uniform]
-
-thinkplot.Pdfs(suites)
-thinkplot.Config(xlabel="x", ylabel="Probability")
-
-
-# -
-
-# If we update them both with the same data:
-
-
 def RunUpdate(suite, heads=140, tails=110):
-    """Updates the Suite with the given number of heads and tails.
-
+    """
+    If we update them both with the same data:
+    Updates the Suite with the given number of heads and tails.
     suite: Suite object
     heads: int
     tails: int
@@ -147,24 +67,16 @@ def RunUpdate(suite, heads=140, tails=110):
         suite.Update(data)
 
 
-for suite in suites:
-    RunUpdate(suite)
-
-# The results are almost identical; the remaining difference is unlikely to matter in practice.
-
-thinkplot.Pdfs(suites)
-thinkplot.Config(xlabel="x", ylabel="Probability")
-
-
-# ## The binomial likelihood function
-#
-# We can make the Euro class more efficient by computing the likelihood of the entire dataset at once, rather than one coin toss at a time.
-#
-# If the probability of heads is p, we can compute the probability of k=140 heads in n=250 tosses using the binomial PMF.
-
-
 class Euro2(Suite):
-    """Represents hypotheses about the probability of heads."""
+    """
+
+    The binomial likelihood function
+    We can make the Euro class more efficient by computing the likelihood of the entire dataset at once, rather than one coin toss at a time.
+
+    If the probability of heads is p, we can compute the probability of k=140 heads in n=250 tosses using the binomial PMF.
+
+    Represents hypotheses about the probability of heads.
+    """
 
     def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
@@ -178,28 +90,14 @@ class Euro2(Suite):
         return like
 
 
-# I left out the binomial coefficient ${n}\choose{k}$ because it does not depend on `p`, so it's the same for all hypotheses.
-
-suite = Euro2(range(0, 101))
-dataset = 140, 110
-suite.Update(dataset)
-
-# Here's what the posterior looks like.
-
-thinkplot.Pdf(suite)
-
-# ## The Beta distribution
-#
-# The Beta distribution is a conjugate prior for the binomial likelihood function, which means that if you start with a Beta distribution and update with a binomial likelihood, the posterior is also Beta.
-#
-# Also, given the parameters of the prior and the data, we can compute the parameters of the posterior directly.  The following class represents a Beta distribution and provides a constant-time Update method.
-
-# +
-from scipy import special
-
-
 class Beta:
-    """Represents a Beta distribution.
+    """
+    The Beta distribution
+
+    The Beta distribution is a conjugate prior for the binomial likelihood function, which means that if you start with a Beta distribution and update with a binomial likelihood, the posterior is also Beta.
+    Also, given the parameters of the prior and the data, we can compute the parameters of the posterior directly.  The following class represents a Beta distribution and provides a constant-time Update method.
+
+    Represents a Beta distribution.
 
     See http://en.wikipedia.org/wiki/Beta_distribution
     """
@@ -292,37 +190,103 @@ class Beta:
         return xs
 
 
-# -
+def test_uniform():
+    # We can make a uniform prior and update it with 140 heads and 110 tails:
 
-# Here's how we use it.
+    # +
+    suite = Euro(range(0, 101))
+    dataset = "H" * 140 + "T" * 110
 
-beta = Beta()
-beta.Update((140, 110))
-beta.Mean()
+    for data in dataset:
+        suite.Update(data)
+    # -
 
-# And here's the posterior.
+    # And here's what the posterior looks like.
 
-thinkplot.Pdf(beta.MakePmf())
+    thinkplot.Pdf(suite)
 
-# Amazing, no?
+    # We can summarize the posterior several ways, including the mean:
 
-# **Exercise:** One way to construct priors is to make a Beta distribution and adjust the parameters until it has the shape you want.  Then when you do an update, the data get added to the parameters of the prior.  Since the parameters of the prior play the same mathematical role as the data, they are sometimes called "precounts".
-#
-# Suppose you believe that most coins are fair or unlikely to deviate from 50% by more than a few percentage points.  Construct a prior that captures this belief and update it with the Euro data.  How much effect does it have on the posterior, compared to the uniform prior?
-#
-# Hint: A Beta distribution with parameters `(1, 1)` is uniform from 0 to 1.
+    suite.Mean()
 
-# +
-# Solution goes here
+    # Median:
 
-# +
-# Solution goes here
+    suite.Percentile(50)
 
-# +
-# Solution goes here
+    # The peak of the posterior, known as the Maximum Aposteori Probability (MAP)
 
-# +
-# Solution goes here
+    suite.MAP()
 
-# +
-# Solution goes here
+    # And a 90% credible interval
+
+    suite.CredibleInterval(90)
+
+    # We can look up a particular value in the posterior PMF, but the result doesn't mean much, because we could have divided the range (0-100) into as many pieces as we like, and the result would be different.
+
+    suite.Prob(50)
+
+
+def test_priors():
+    triangle = TrianglePrior()
+    uniform = UniformPrior()
+    suites = [triangle, uniform]
+
+    thinkplot.Pdfs(suites)
+    thinkplot.Config(xlabel="x", ylabel="Probability")
+
+    for suite in suites:
+        RunUpdate(suite)
+
+    # The results are almost identical; the remaining difference is unlikely to matter in practice.
+
+    thinkplot.Pdfs(suites)
+    thinkplot.Config(xlabel="x", ylabel="Probability")
+
+
+def test_euro2():
+    # I left out the binomial coefficient ${n}\choose{k}$ because it does not depend on `p`, so it's the same for all hypotheses.
+
+    suite = Euro2(range(0, 101))
+    dataset = 140, 110
+    suite.Update(dataset)
+
+    # Here's what the posterior looks like.
+
+    thinkplot.Pdf(suite)
+
+
+def test_beta():
+    # -
+
+    # Here's how we use it.
+
+    beta = Beta()
+    beta.Update((140, 110))
+    beta.Mean()
+
+    # And here's the posterior.
+
+    thinkplot.Pdf(beta.MakePmf())
+
+    # Amazing, no?
+
+    # **Exercise:** One way to construct priors is to make a Beta distribution and adjust the parameters until it has the shape you want.  Then when you do an update, the data get added to the parameters of the prior.  Since the parameters of the prior play the same mathematical role as the data, they are sometimes called "precounts".
+    #
+    # Suppose you believe that most coins are fair or unlikely to deviate from 50% by more than a few percentage points.  Construct a prior that captures this belief and update it with the Euro data.  How much effect does it have on the posterior, compared to the uniform prior?
+    #
+    # Hint: A Beta distribution with parameters `(1, 1)` is uniform from 0 to 1.
+
+    # +
+    # Solution goes here
+
+    # +
+    # Solution goes here
+
+    # +
+    # Solution goes here
+
+    # +
+    # Solution goes here
+
+    # +
+    # Solution goes here
