@@ -116,7 +116,7 @@ def _UnderrideColor(options):
 
     try:
         options['color'] = next(color_iter)
-    except StopIteration:
+    except (StopIteration, RuntimeError):
         # if you run out of colors, initialize the color iterator
         # and try again
         warnings.warn('Ran out of colors.  Starting over.')
@@ -228,8 +228,9 @@ def Plot(obj, ys=None, style='', **options):
       style: style string passed along to plt.plot
       options: keyword args passed to plt.plot
     """
-    options = _UnderrideColor(options)
+
     label = getattr(obj, 'label', '_nolegend_')
+    options = _UnderrideColor(options)
     options = _Underride(options, linewidth=3, alpha=0.7, label=label)
 
     xs = obj
@@ -339,7 +340,7 @@ def Pdf(pdf, **options):
     """
     low, high = options.pop('low', None), options.pop('high', None)
     n = options.pop('n', 101)
-    xs, ps = pdf.Render(low=low, high=high, n=n)
+    xs, ps = pdf.Render()
     options = _Underride(options, label=pdf.label)
     Plot(xs, ps, **options)
 
