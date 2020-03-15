@@ -52,8 +52,8 @@ from thinkbayes import thinkplot
 #
 #
 
+
 class Logistic(Suite, Joint):
-    
     def Likelihood(self, data, hypo):
         """
         
@@ -75,18 +75,19 @@ thinkplot.Hist(pmf)
 total = 0
 for n, p in pmf.Items():
     total += p * EvalBinomialPmf(k, n, f)
-    
+
 total
 
 
 # -
+
 
 def compute_likelihood(k, r, f):
     pmf = MakePoissonPmf(r, high=500)
     total = 0
     for n, p in pmf.Items():
         total += p * EvalBinomialPmf(k, n, f)
-    
+
     return total
 
 
@@ -97,16 +98,16 @@ for kk in range(0, 40):
     likes[kk] = compute_likelihood(kk, r, f)
 
 likes.plot()
-thinkplot.decorate(xlabel='Counter particles (n)',
-                   ylabel='PMF')
+thinkplot.decorate(xlabel="Counter particles (n)", ylabel="PMF")
 
 
 # +
 # Solution
 
+
 class Logistic(Suite, Joint):
     f = 0.1
-    
+
     def Likelihood(self, data, hypo):
         """
         
@@ -121,16 +122,18 @@ class Logistic(Suite, Joint):
 
 # -
 
-rs = np.linspace(0, 300, 51);
+rs = np.linspace(0, 300, 51)
 
-suite = Logistic(rs);
+suite = Logistic(rs)
 
 suite.Update(15)
 
 thinkplot.Pdf(suite)
-thinkplot.decorate(xlabel='Emission rate (particles/second)',
-                   ylabel='PMF',
-                   title='Posterior marginal distribution')
+thinkplot.decorate(
+    xlabel="Emission rate (particles/second)",
+    ylabel="PMF",
+    title="Posterior marginal distribution",
+)
 
 # ### MCMC
 #
@@ -147,27 +150,27 @@ f = 0.1
 model = pm.Model()
 
 with model:
-    r = pm.Uniform('r', 0, 500)
-    n = pm.Poisson('n', r)
-    k = pm.Binomial('k', n, f, observed=15)
+    r = pm.Uniform("r", 0, 500)
+    n = pm.Poisson("n", r)
+    k = pm.Binomial("k", n, f, observed=15)
     trace = pm.sample_prior_predictive(1000)
 # -
 
-thinkplot.Cdf(Cdf(trace['r']));
+thinkplot.Cdf(Cdf(trace["r"]))
 
-thinkplot.Cdf(Cdf(trace['n']));
+thinkplot.Cdf(Cdf(trace["n"]))
 
-thinkplot.Cdf(Cdf(trace['k']));
+thinkplot.Cdf(Cdf(trace["k"]))
 
 with model:
     trace = pm.sample(1000, tune=3000)
 
-pm.traceplot(trace);
+pm.traceplot(trace)
 
-n_sample = trace['n']
+n_sample = trace["n"]
 thinkplot.Cdf(Cdf(n_sample))
 
-r_sample = trace['r']
+r_sample = trace["r"]
 thinkplot.Cdf(Cdf(r_sample))
 
 thinkplot.Cdf(suite.MakeCdf())
@@ -179,9 +182,10 @@ thinkplot.Cdf(Cdf(r_sample))
 # +
 # Solution
 
+
 class Logistic(Suite, Joint):
     f = 0.1
-    
+
     def Likelihood(self, data, hypo):
         """
         
@@ -195,7 +199,7 @@ class Logistic(Suite, Joint):
 
 # -
 
-rs = np.linspace(0, 300, 51);
+rs = np.linspace(0, 300, 51)
 
 # +
 suite = Logistic()
@@ -204,7 +208,7 @@ for r in rs:
     pmf = MakePoissonPmf(r, high=500)
     for n, p in pmf.Items():
         suite[r, n] += p
-        
+
 suite.Normalize()
 # -
 
@@ -212,18 +216,23 @@ suite.Update(15)
 
 pmf_r = suite.Marginal(0)
 thinkplot.Pdf(pmf_r)
-thinkplot.decorate(xlabel='Emission rate (particles/second)',
-                   ylabel='PMF',
-                   title='Posterior marginal distribution')
+thinkplot.decorate(
+    xlabel="Emission rate (particles/second)",
+    ylabel="PMF",
+    title="Posterior marginal distribution",
+)
 
 pmf_n = suite.Marginal(1)
 thinkplot.Pdf(pmf_n)
-thinkplot.decorate(xlabel='Number of particles (n)',
-                   ylabel='PMF',
-                   title='Posterior marginal distribution')
+thinkplot.decorate(
+    xlabel="Number of particles (n)",
+    ylabel="PMF",
+    title="Posterior marginal distribution",
+)
 
 
 # ### Hierarchical version, as in the book
+
 
 class Detector(Suite):
     """Represents hypotheses about n."""
@@ -257,7 +266,7 @@ r = 160
 k = 15
 f = 0.1
 
-suite = Detector(r, f);
+suite = Detector(r, f)
 # -
 
 suite.Update(15)
@@ -275,10 +284,10 @@ class Emitter(Suite):
         return hypo.Update(data)
 
 
-rs = np.linspace(0, 300, 51);
+rs = np.linspace(0, 300, 51)
 
 detectors = [Detector(r, f=0.1) for r in rs[1:]]
-suite = Emitter(detectors);
+suite = Emitter(detectors)
 
 suite.Update(15)
 
@@ -286,12 +295,10 @@ suite.Update(15)
 pmf_r = Pmf()
 for detector, p in suite.Items():
     pmf_r[detector.r] = p
-    
+
 thinkplot.Pdf(pmf_r)
 # -
 
-mix = MakeMixture(suite);
+mix = MakeMixture(suite)
 
 thinkplot.Pdf(mix)
-
-

@@ -30,6 +30,7 @@
 # import classes from thinkbayes
 from thinkbayes import Hist, Pmf, Suite
 from thinkbayes import thinkplot
+
 # -
 
 # ### The Grizzly Bear Problem
@@ -67,6 +68,7 @@ from thinkbayes import thinkplot
 
 from scipy.special import binom
 
+
 class Grizzly(Suite):
     """Represents hypotheses about how many bears there are."""
 
@@ -82,7 +84,7 @@ class Grizzly(Suite):
         if hypo < K + (n - k):
             return 0
 
-        like = binom(N-K, n-k) / binom(N, n)
+        like = binom(N - K, n - k) / binom(N, n)
         return like
 
 
@@ -99,14 +101,14 @@ suite.Update(data)
 # Solution
 
 thinkplot.Pdf(suite)
-thinkplot.Config(xlabel='Number of bears', ylabel='PMF', legend=False)
+thinkplot.Config(xlabel="Number of bears", ylabel="PMF", legend=False)
 
 # +
 # Solution
 
-print('Posterior mean', suite.Mean())
-print('Maximum a posteriori estimate', suite.MaximumLikelihood())
-print('90% credible interval', suite.CredibleInterval(90))
+print("Posterior mean", suite.Mean())
+print("Maximum a posteriori estimate", suite.MaximumLikelihood())
+print("90% credible interval", suite.CredibleInterval(90))
 
 # +
 # Solution
@@ -115,6 +117,7 @@ print('90% credible interval', suite.CredibleInterval(90))
 # object in scipy.stats.
 
 from scipy import stats
+
 
 class Grizzly2(Suite):
     """Represents hypotheses about how many bears there are."""
@@ -147,9 +150,7 @@ suite.Update(data)
 # +
 # Solution
 
-print('Posterior mean', suite.Mean())
-print('Maximum a posteriori estimate', suite.MaximumLikelihood())
-print('90% credible interval', suite.CredibleInterval(90))
+print("Posterior mean", suite.Mean())
+print("Maximum a posteriori estimate", suite.MaximumLikelihood())
+print("90% credible interval", suite.CredibleInterval(90))
 # -
-
-

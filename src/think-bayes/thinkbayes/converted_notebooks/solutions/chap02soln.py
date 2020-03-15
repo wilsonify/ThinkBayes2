@@ -29,6 +29,7 @@
 
 # import classes from thinkbayes
 from thinkbayes import Hist, Pmf, Suite
+
 # -
 
 # ## The Pmf class
@@ -37,9 +38,9 @@ from thinkbayes import Hist, Pmf, Suite
 
 # +
 pmf = Pmf()
-for x in [1,2,3,4,5,6]:
+for x in [1, 2, 3, 4, 5, 6]:
     pmf[x] = 1
-    
+
 pmf.Print()
 # -
 
@@ -53,7 +54,7 @@ pmf.Print()
 
 # A faster way to make a Pmf is to provide a sequence of values.  The constructor adds the values to the Pmf and then normalizes:
 
-pmf = Pmf([1,2,3,4,5,6])
+pmf = Pmf([1, 2, 3, 4, 5, 6])
 pmf.Print()
 
 # To extract a value from a Pmf, you can use `Prob`
@@ -73,25 +74,25 @@ pmf[7]
 # Here's a Pmf that represents the prior distribution.
 
 pmf = Pmf()
-pmf['Bowl 1'] = 0.5
-pmf['Bowl 2'] = 0.5
+pmf["Bowl 1"] = 0.5
+pmf["Bowl 2"] = 0.5
 pmf.Print()
 
 # And we can update it using `Mult`
 
-pmf.Mult('Bowl 1', 0.75)
-pmf.Mult('Bowl 2', 0.5)
+pmf.Mult("Bowl 1", 0.75)
+pmf.Mult("Bowl 2", 0.5)
 pmf.Print()
 
 # Or here's the shorter way to construct the prior.
 
-pmf = Pmf(['Bowl 1', 'Bowl 2'])
+pmf = Pmf(["Bowl 1", "Bowl 2"])
 pmf.Print()
 
 # And we can use `*=` for the update.
 
-pmf['Bowl 1'] *= 0.75
-pmf['Bowl 2'] *= 0.5
+pmf["Bowl 1"] *= 0.75
+pmf["Bowl 2"] *= 0.5
 pmf.Print()
 
 # Either way, we have to normalize the posterior distribution.
@@ -103,6 +104,7 @@ pmf.Print()
 # ## The Bayesian framework
 #
 # Here's the same computation encapsulated in a class.
+
 
 class Cookie(Pmf):
     """A map from string bowl ID to probablity."""
@@ -127,8 +129,8 @@ class Cookie(Pmf):
         self.Normalize()
 
     mixes = {
-        'Bowl 1':dict(vanilla=0.75, chocolate=0.25),
-        'Bowl 2':dict(vanilla=0.5, chocolate=0.5),
+        "Bowl 1": dict(vanilla=0.75, chocolate=0.25),
+        "Bowl 2": dict(vanilla=0.5, chocolate=0.5),
     }
 
     def Likelihood(self, data, hypo):
@@ -144,17 +146,17 @@ class Cookie(Pmf):
 
 # We can confirm that we get the same result.
 
-pmf = Cookie(['Bowl 1', 'Bowl 2'])
-pmf.Update('vanilla')
+pmf = Cookie(["Bowl 1", "Bowl 2"])
+pmf.Update("vanilla")
 pmf.Print()
 
 # But this implementation is more general; it can handle any sequence of data.
 
 # +
-dataset = ['vanilla', 'chocolate', 'vanilla']
+dataset = ["vanilla", "chocolate", "vanilla"]
 for data in dataset:
     pmf.Update(data)
-    
+
 pmf.Print()
 
 
@@ -204,6 +206,7 @@ pmf.Print()
 #
 # Here's a class that solves the Monty Hall problem.
 
+
 class Monty(Pmf):
     """Map from string location of car to probability"""
 
@@ -234,7 +237,7 @@ class Monty(Pmf):
         """
         if hypo == data:
             return 0
-        elif hypo == 'A':
+        elif hypo == "A":
             return 0.5
         else:
             return 1
@@ -242,8 +245,8 @@ class Monty(Pmf):
 
 # And here's how we use it.
 
-pmf = Monty('ABC')
-pmf.Update('B')
+pmf = Monty("ABC")
+pmf.Update("B")
 pmf.Print()
 
 
@@ -258,12 +261,12 @@ pmf.Print()
 #
 # So here's the short version of `Monty`
 
-class Monty(Suite):
 
+class Monty(Suite):
     def Likelihood(self, data, hypo):
         if hypo == data:
             return 0
-        elif hypo == 'A':
+        elif hypo == "A":
             return 0.5
         else:
             return 1
@@ -271,8 +274,8 @@ class Monty(Suite):
 
 # And it works.
 
-pmf = Monty('ABC')
-pmf.Update('B')
+pmf = Monty("ABC")
+pmf.Update("B")
 pmf.Print()
 
 
@@ -295,24 +298,13 @@ pmf.Print()
 #
 # Here's a solution:
 
+
 class M_and_M(Suite):
     """Map from hypothesis (A or B) to probability."""
 
-    mix94 = dict(brown=30,
-                 yellow=20,
-                 red=20,
-                 green=10,
-                 orange=10,
-                 tan=10,
-                 blue=0)
+    mix94 = dict(brown=30, yellow=20, red=20, green=10, orange=10, tan=10, blue=0)
 
-    mix96 = dict(blue=24,
-                 green=20,
-                 orange=16,
-                 yellow=14,
-                 red=13,
-                 brown=13,
-                 tan=0)
+    mix96 = dict(blue=24, green=20, orange=16, yellow=14, red=13, brown=13, tan=0)
 
     hypoA = dict(bag1=mix94, bag2=mix96)
     hypoB = dict(bag1=mix96, bag2=mix94)
@@ -333,14 +325,14 @@ class M_and_M(Suite):
 
 # And here's an update:
 
-suite = M_and_M('AB')
-suite.Update(('bag1', 'yellow'))
-suite.Update(('bag2', 'green'))
+suite = M_and_M("AB")
+suite.Update(("bag1", "yellow"))
+suite.Update(("bag2", "green"))
 suite.Print()
 
 # **Exercise:**  Suppose you draw another M&M from `bag1` and it's blue.  What can you conclude?  Run the update to confirm your intuition.
 
-suite.Update(('bag1', 'blue'))
+suite.Update(("bag1", "blue"))
 suite.Print()
 
 # **Exercise:**  Now suppose you draw an M&M from `bag2` and it's blue.  What does that mean?  Run the update to see what happens.

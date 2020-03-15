@@ -28,12 +28,12 @@ import thinkbayes
 #
 # My solution follows.  First I'll create a suite to represent our prior knowledge.  If we know nothing about a voter, we would use the relative populations of the states to guess where they are from.
 
-prior = thinkbayes.Suite({'State 1': 0.4, 'State 2': 0.25, 'State 3': 0.35})
+prior = thinkbayes.Suite({"State 1": 0.4, "State 2": 0.25, "State 3": 0.35})
 prior.Print()
 
 # Now if we know a voter supports Party 1, we can use that as data to update our belief.  The following dictionary contains the likelihood of the data (supporting Party 1) under each hypothesis (which state the voter is from).
 
-likelihood = {'State 1': 0.5, 'State 2': 0.60, 'State 3': 0.35}
+likelihood = {"State 1": 0.5, "State 2": 0.60, "State 3": 0.35}
 
 # To make the posterior distribution, I'll start with a copy of the prior.
 #
@@ -55,5 +55,3 @@ posterior.Normalize()
 posterior.Print()
 
 # And the probability that the voter is from State 2 is about 32%.
-
-

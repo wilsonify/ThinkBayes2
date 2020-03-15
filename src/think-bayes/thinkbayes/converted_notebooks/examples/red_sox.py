@@ -33,13 +33,13 @@ from thinkbayes import Pmf, Beta, MakeBinomialPmf
 from thinkbayes import thinkplot
 
 import numpy as np
+
 # -
 
 beta = Beta(5, 5)
 prior = beta.MakePmf()
 thinkplot.Pdf(prior)
-thinkplot.decorate(xlabel='Prob Red Sox win (x)',
-                   ylabel='PDF')
+thinkplot.decorate(xlabel="Prob Red Sox win (x)", ylabel="PDF")
 
 # %psource beta.Update
 
@@ -47,10 +47,9 @@ thinkplot.decorate(xlabel='Prob Red Sox win (x)',
 beta.Update((15, 0))
 posterior = beta.MakePmf()
 
-thinkplot.Pdf(prior, color='gray', label='prior')
-thinkplot.Pdf(posterior, label='posterior')
-thinkplot.decorate(xlabel='Prob Red Sox win (x)',
-                   ylabel='PDF')
+thinkplot.Pdf(prior, color="gray", label="prior")
+thinkplot.Pdf(posterior, label="posterior")
+thinkplot.decorate(xlabel="Prob Red Sox win (x)", ylabel="PDF")
 # -
 
 posterior.Mean()
@@ -68,15 +67,12 @@ np.sum(np.random.random(7) < x)
 def simulate(k, dist):
     x = dist.Random()
     return np.sum(np.random.random(k) <= x)
-    
+
+
 simulate(7, posterior)
 # -
 
-sample = [simulate(7, posterior) for i in range(100000)];
+sample = [simulate(7, posterior) for i in range(100000)]
 thinkplot.Hist(Pmf(sample))
 
 np.mean(np.array(sample) >= 4)
-
-
-
-

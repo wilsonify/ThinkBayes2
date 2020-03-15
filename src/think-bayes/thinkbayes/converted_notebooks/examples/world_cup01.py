@@ -36,6 +36,7 @@ from thinkbayes import thinkplot
 
 import numpy as np
 from scipy.special import gamma
+
 # -
 
 # ## The World Cup Problem, Part One
@@ -54,9 +55,7 @@ from thinkbayes import MakeGammaPmf
 xs = np.linspace(0, 8, 101)
 pmf = MakeGammaPmf(xs, 1.3)
 thinkplot.Pdf(pmf)
-thinkplot.decorate(title='Gamma PDF',
-                   xlabel='Goals per game',
-                   ylabel='PDF')
+thinkplot.decorate(title="Gamma PDF", xlabel="Goals per game", ylabel="PDF")
 pmf.Mean()
 
 
@@ -67,6 +66,7 @@ pmf.Mean()
 # Hint: For a given value of `lam`, the time between goals is distributed exponentially.
 #
 # Here's an outline to get you started:
+
 
 class Soccer(Suite):
     """Represents hypotheses about goal-scoring rates."""
@@ -88,30 +88,28 @@ class Soccer(Suite):
 
 soccer = Soccer(pmf)
 thinkplot.Pdf(soccer)
-thinkplot.decorate(title='Gamma prior',
-                   xlabel='Goals per game',
-                   ylabel='PDF')
+thinkplot.decorate(title="Gamma prior", xlabel="Goals per game", ylabel="PDF")
 soccer.Mean()
 
 # Here's the update after first goal at 11 minutes.
 
-thinkplot.Pdf(soccer, color='0.7')
+thinkplot.Pdf(soccer, color="0.7")
 soccer.Update(11)
 thinkplot.Pdf(soccer)
-thinkplot.decorate(title='Posterior after 1 goal',
-                   xlabel='Goals per game',
-                   ylabel='PDF')
+thinkplot.decorate(
+    title="Posterior after 1 goal", xlabel="Goals per game", ylabel="PDF"
+)
 soccer.Mean()
 
 # Here's the update after the second goal at 23 minutes (the time between first and second goals is 12 minutes).
 #
 
-thinkplot.Pdf(soccer, color='0.7')
+thinkplot.Pdf(soccer, color="0.7")
 soccer.Update(12)
 thinkplot.Pdf(soccer)
-thinkplot.decorate(title='Posterior after 2 goals',
-                   xlabel='Goals per game',
-                   ylabel='PDF')
+thinkplot.decorate(
+    title="Posterior after 2 goals", xlabel="Goals per game", ylabel="PDF"
+)
 soccer.Mean()
 
 # This distribution represents our belief about `lam` after two goals.
@@ -149,9 +147,9 @@ np.random.poisson(lam * t)
 sample = np.random.poisson(lam * t, size=10000)
 pmf = Pmf(sample)
 thinkplot.Hist(pmf)
-thinkplot.decorate(title='Distribution of goals, known lambda',
-                   xlabel='Goals scored', 
-                   ylabel='PMF')
+thinkplot.decorate(
+    title="Distribution of goals, known lambda", xlabel="Goals scored", ylabel="PMF"
+)
 pmf.Mean()
 
 # But that's based on a single value of `lam`, so it doesn't take into account both sources of uncertainty.  Instead, we should sample values from the posterior distribution and generate one prediction for each.
@@ -188,9 +186,9 @@ rem_time = 90 - 23
 lt = lam * rem_time / 90
 pred = MakePoissonPmf(lt, 10)
 thinkplot.Hist(pred)
-thinkplot.decorate(title='Distribution of goals, known lambda',
-                   xlabel='Goals scored', 
-                   ylabel='PMF')
+thinkplot.decorate(
+    title="Distribution of goals, known lambda", xlabel="Goals scored", ylabel="PMF"
+)
 
 # The predictive mean is about 2 goals.
 
@@ -210,11 +208,11 @@ pred.ProbGreater(4)
 for lam, prob in soccer.Items():
     lt = lam * rem_time / 90
     pred = MakePoissonPmf(lt, 14)
-    thinkplot.Pdf(pred, color='gray', alpha=0.3, linewidth=0.5)
+    thinkplot.Pdf(pred, color="gray", alpha=0.3, linewidth=0.5)
 
-thinkplot.decorate(title='Distribution of goals, all lambda',
-                   xlabel='Goals scored', 
-                   ylabel='PMF')
+thinkplot.decorate(
+    title="Distribution of goals, all lambda", xlabel="Goals scored", ylabel="PMF"
+)
 # -
 
 # We can compute the mixture of these distributions by making a Meta-Pmf that maps from each Poisson Pmf to its probability.
@@ -232,7 +230,8 @@ for lam, prob in soccer.Items():
 
 # `MakeMixture` takes a Meta-Pmf (a Pmf that contains Pmfs) and returns a single Pmf that represents the weighted mixture of distributions:
 
-def MakeMixture(metapmf, label='mix'):
+
+def MakeMixture(metapmf, label="mix"):
     """Make a mixture distribution.
 
     Args:
@@ -256,14 +255,12 @@ mix.Print()
 # And here's what the mixture looks like.
 
 thinkplot.Hist(mix)
-thinkplot.decorate(title='Posterior predictive distribution',
-                   xlabel='Goals scored', 
-                   ylabel='PMF')
+thinkplot.decorate(
+    title="Posterior predictive distribution", xlabel="Goals scored", ylabel="PMF"
+)
 
 # **Exercise:** Compute the predictive mean and the probability of scoring 5 or more additional goals.
 
 # +
 # Solution goes here
 # -
-
-

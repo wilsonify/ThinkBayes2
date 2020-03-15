@@ -50,8 +50,8 @@ from thinkbayes import thinkplot
 #
 #
 
+
 class LionsTigersBears(Suite, Joint):
-    
     def Likelihood(self, data, hypo):
         """
         
@@ -65,14 +65,15 @@ class LionsTigersBears(Suite, Joint):
 # Solution goes here
 # -
 
-ps = np.linspace(0, 1, 101);
+ps = np.linspace(0, 1, 101)
 
 # +
 from itertools import product
 
+
 def enumerate_triples(ps):
     for p1, p2, p3 in product(ps, ps, ps):
-        if p1+p2+p3 == 1:
+        if p1 + p2 + p3 == 1:
             yield p1, p2, p3
 
 
@@ -84,7 +85,7 @@ def enumerate_triples(ps):
 # Solution goes here
 # -
 
-suite = LionsTigersBears(enumerate_triples(ps));
+suite = LionsTigersBears(enumerate_triples(ps))
 
 
 def plot_marginal_pmfs(joint):
@@ -92,17 +93,16 @@ def plot_marginal_pmfs(joint):
     pmf_tiger = joint.Marginal(1)
     pmf_bear = joint.Marginal(2)
 
-    thinkplot.Pdf(pmf_lion, label='lions')
-    thinkplot.Pdf(pmf_tiger, label='tigers')
-    thinkplot.Pdf(pmf_bear, label='bears')
-    
-    thinkplot.decorate(xlabel='Prevalence',
-                       ylabel='PMF')
+    thinkplot.Pdf(pmf_lion, label="lions")
+    thinkplot.Pdf(pmf_tiger, label="tigers")
+    thinkplot.Pdf(pmf_bear, label="bears")
+
+    thinkplot.decorate(xlabel="Prevalence", ylabel="PMF")
 
 
 plot_marginal_pmfs(suite)
 
-for data in 'LLLTTB':
+for data in "LLLTTB":
     suite.Update(data)
 
 plot_marginal_pmfs(suite)
@@ -113,12 +113,11 @@ def plot_marginal_cdfs(joint):
     pmf_tiger = joint.Marginal(1)
     pmf_bear = joint.Marginal(2)
 
-    thinkplot.Cdf(pmf_lion.MakeCdf(), label='lions')
-    thinkplot.Cdf(pmf_tiger.MakeCdf(), label='tigers')
-    thinkplot.Cdf(pmf_bear.MakeCdf(), label='bears')
-    
-    thinkplot.decorate(xlabel='Prevalence',
-                       ylabel='CDF')
+    thinkplot.Cdf(pmf_lion.MakeCdf(), label="lions")
+    thinkplot.Cdf(pmf_tiger.MakeCdf(), label="tigers")
+    thinkplot.Cdf(pmf_bear.MakeCdf(), label="bears")
+
+    thinkplot.decorate(xlabel="Prevalence", ylabel="CDF")
 
 
 plot_marginal_cdfs(suite)
@@ -128,8 +127,10 @@ plot_marginal_cdfs(suite)
 # +
 from thinkbayes import Dirichlet
 
+
 def DirichletMarginal(dirichlet, i):
     return dirichlet.MarginalBeta(i).MakePmf()
+
 
 Dirichlet.Marginal = DirichletMarginal
 # -
@@ -153,7 +154,7 @@ plot_marginal_cdfs(suite)
 
 import pymc3 as pm
 
-observed = [0,0,0,1,1,2]
+observed = [0, 0, 0, 1, 1, 2]
 k = len(Pmf(observed))
 a = np.ones(k)
 
@@ -168,27 +169,27 @@ with model:
 # Solution goes here
 # -
 
+
 def plot_trace_cdfs(trace):
-    rows = trace['ps'].transpose()
+    rows = trace["ps"].transpose()
 
     cdf_lion = Cdf(rows[0])
     cdf_tiger = Cdf(rows[1])
     cdf_bear = Cdf(rows[2])
 
-    thinkplot.Cdf(cdf_lion, label='lions')
-    thinkplot.Cdf(cdf_tiger, label='tigers')
-    thinkplot.Cdf(cdf_bear, label='bears')
-    
-    thinkplot.decorate(xlabel='Prevalence',
-                       ylabel='CDF')
+    thinkplot.Cdf(cdf_lion, label="lions")
+    thinkplot.Cdf(cdf_tiger, label="tigers")
+    thinkplot.Cdf(cdf_bear, label="bears")
+
+    thinkplot.decorate(xlabel="Prevalence", ylabel="CDF")
 
 
 # +
-#plot_trace_cdfs(trace)
+# plot_trace_cdfs(trace)
 
 # +
-#pmf = Pmf(trace['xs'][0])
-#thinkplot.Hist(pmf)
+# pmf = Pmf(trace['xs'][0])
+# thinkplot.Hist(pmf)
 # -
 
 with model:
@@ -196,12 +197,10 @@ with model:
     step = pm.Metropolis()
     trace = pm.sample(1000, start=start, step=step, tune=1000)
 
-pm.traceplot(trace);
+pm.traceplot(trace)
 
 plot_trace_cdfs(trace)
 
 thinkplot.PrePlot(6)
 plot_marginal_cdfs(dirichlet)
 plot_trace_cdfs(trace)
-
-

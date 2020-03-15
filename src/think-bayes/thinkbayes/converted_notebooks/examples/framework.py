@@ -48,13 +48,12 @@ import thinkbayes
 
 
 class Coin(thinkbayes.Suite):
-    
     def Likelihood(self, data, hypo):
         x = hypo / 100
-        if data == 'H':
+        if data == "H":
             return x
         else:
-            return 1-x
+            return 1 - x
 
 
 # -
@@ -70,6 +69,7 @@ suite = Coin(range(0, 101))
 # `thinkplot` is a module that comes with thinkbayes.  It provides wrappers for some of the functions in Matplotlib, and includes functions like `Pdf` that known how to plot `Suites` and other objects from thinkbayes.
 
 from thinkbayes import thinkplot
+
 thinkplot.Pdf(suite)
 
 # As expected, the prior is uniform.
@@ -77,7 +77,7 @@ thinkplot.Pdf(suite)
 # The next step is to update the prior with data.  Since Update modifies the Suite, I'll make a copy before updating.
 
 posterior = suite.Copy()
-posterior.Update('H')
+posterior.Update("H")
 
 # The return value from Update is the normalizing constant, which is the average likelihood of the data across all hypotheses.
 #
@@ -88,10 +88,10 @@ thinkplot.Pdf(posterior)
 # With additional data we can do a sequence of updates.  The result shows the cumulative effect of all updates.
 
 # +
-results = 'HTHHTHHHTTHHHTH'
+results = "HTHHTHHHTTHHHTH"
 for data in results:
     posterior.Update(data)
-    
+
 thinkplot.Pdf(posterior)
 
 
@@ -103,8 +103,8 @@ thinkplot.Pdf(posterior)
 #
 # ThinkBayes2 is a very simple library.  The `Pmf` class is basically a wrapper for a Python dictionary.  The only substantive method in it is `Normalize`:
 
-class Pmf(object):
 
+class Pmf(object):
     def Normalize(self, fraction=1.0):
         """Normalizes this PMF so the sum of all probs is fraction.
 
@@ -118,9 +118,9 @@ class Pmf(object):
 
         total = self.Total()
         if total == 0.0:
-            raise ValueError('Normalize: total probability is zero.')
-            #logging.warning('Normalize: total probability is zero.')
-            #return total
+            raise ValueError("Normalize: total probability is zero.")
+            # logging.warning('Normalize: total probability is zero.')
+            # return total
 
         factor = fraction / total
         for x in self.d:
@@ -130,6 +130,7 @@ class Pmf(object):
 
 
 # And the only substantial method in `Suite` is `Update`:
+
 
 class Suite(Pmf):
     """Represents a suite of hypotheses and their probabilities."""
@@ -148,5 +149,3 @@ class Suite(Pmf):
 
 
 # As far as the implementation goes, that's all there is to it.  But if you are not sure how or why it works, you should read [Chapter 3](http://www.greenteapress.com/thinkbayes/html/thinkbayes004.html) and [Chapter 4](http://www.greenteapress.com/thinkbayes/html/thinkbayes005.html) of Think Bayes.
-
-

@@ -32,11 +32,12 @@ import pandas as pd
 
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
+
 # -
 
 # ### The height problem
 #
-# For adult male residents of the US, the mean and standard deviation of height are 178 cm and 7.7 cm.  For adult female residents the corresponding stats are 163 cm and 7.3 cm.  Suppose you learn that someone is 170 cm tall.  What is the probability that they are male? 
+# For adult male residents of the US, the mean and standard deviation of height are 178 cm and 7.7 cm.  For adult female residents the corresponding stats are 163 cm and 7.3 cm.  Suppose you learn that someone is 170 cm tall.  What is the probability that they are male?
 #
 # Run this analysis again for a range of observed heights from 150 cm to 200 cm, and plot a curve that shows P(male) versus height.  What is the mathematical form of this function?
 
@@ -46,16 +47,15 @@ from thinkbayes import thinkplot
 # +
 from scipy.stats import norm
 
-dist_height = dict(male=norm(178, 7.7),
-                   female=norm(163, 7.3))
+dist_height = dict(male=norm(178, 7.7), female=norm(163, 7.3))
 
 
 # -
 
 # Write a class that implements `Likelihood` using the frozen distributions.  Here's starter code:
 
+
 class Height(Suite):
-    
     def Likelihood(self, data, hypo):
         """
         data: height in cm
@@ -70,7 +70,7 @@ class Height(Suite):
 
 # Here's the prior.
 
-suite = Height(['male', 'female'])
+suite = Height(["male", "female"])
 for hypo, prob in suite.Items():
     print(hypo, prob)
 
@@ -101,23 +101,22 @@ for hypo, prob in suite.Items():
 
 # Here are distributions that represent the heights of men and women in the U.S.
 
-dist_height = dict(male=norm(178, 7.7),
-                   female=norm(163, 7.3))
+dist_height = dict(male=norm(178, 7.7), female=norm(163, 7.3))
 
 hs = np.linspace(130, 210)
-ps = dist_height['male'].pdf(hs)
-male_height_pmf = Pmf(dict(zip(hs, ps)));
+ps = dist_height["male"].pdf(hs)
+male_height_pmf = Pmf(dict(zip(hs, ps)))
 
-ps = dist_height['female'].pdf(hs)
-female_height_pmf = Pmf(dict(zip(hs, ps)));
+ps = dist_height["female"].pdf(hs)
+female_height_pmf = Pmf(dict(zip(hs, ps)))
 
 # +
-thinkplot.Pdf(male_height_pmf, label='Male')
-thinkplot.Pdf(female_height_pmf, label='Female')
+thinkplot.Pdf(male_height_pmf, label="Male")
+thinkplot.Pdf(female_height_pmf, label="Female")
 
-thinkplot.decorate(xlabel='Height (cm)',
-                   ylabel='PMF',
-                   title='Adult residents of the U.S.')
+thinkplot.decorate(
+    xlabel="Height (cm)", ylabel="PMF", title="Adult residents of the U.S."
+)
 # -
 
 # Use `thinkbayes.MakeMixture` to make a `Pmf` that represents the height of all residents of the U.S.
@@ -145,9 +144,9 @@ suite = thinkplot.make_prior(mix)
 suite.Total()
 
 thinkplot.Contour(suite)
-thinkplot.decorate(xlabel='B Height (cm)',
-                   ylabel='A Height (cm)',
-                   title='Posterior joint distribution')
+thinkplot.decorate(
+    xlabel="B Height (cm)", ylabel="A Height (cm)", title="Posterior joint distribution"
+)
 
 # Update your `Suite`, then plot the joint distribution and the marginal distribution, and compute the posterior means for `A` and `B`.
 
@@ -163,7 +162,3 @@ thinkplot.decorate(xlabel='B Height (cm)',
 # +
 # Solution goes here
 # -
-
-
-
-

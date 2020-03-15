@@ -32,6 +32,7 @@ import numpy as np
 
 from thinkbayes import Pmf, Cdf, Suite
 from thinkbayes import thinkplot
+
 # -
 
 # ### The flea beetle problem
@@ -71,7 +72,7 @@ from thinkbayes import thinkplot
 # +
 import pandas as pd
 
-df = pd.read_csv('../data/flea_beetles.csv', delimiter='\t')
+df = pd.read_csv("../data/flea_beetles.csv", delimiter="\t")
 df.head()
 
 
@@ -79,25 +80,24 @@ df.head()
 
 # Here's what the distributions of width look like.
 
+
 def plot_cdfs(df, col):
-    for name, group in df.groupby('Species'):
+    for name, group in df.groupby("Species"):
         cdf = Cdf(group[col], label=name)
         thinkplot.Cdf(cdf)
-    
-    thinkplot.decorate(xlabel=col, 
-                       ylabel='CDF',
-                       loc='lower right')
+
+    thinkplot.decorate(xlabel=col, ylabel="CDF", loc="lower right")
 
 
-plot_cdfs(df, 'Width')
+plot_cdfs(df, "Width")
 
 # And the distributions of angle.
 
-plot_cdfs(df, 'Angle')
+plot_cdfs(df, "Angle")
 
 # I'll group the data by species and compute summary statistics.
 
-grouped = df.groupby('Species')
+grouped = df.groupby("Species")
 
 # Here are the means.
 
@@ -133,8 +133,8 @@ for name, group in grouped:
 
 # Now we can write the likelihood function concisely.
 
+
 class Beetle(Suite):
-    
     def Likelihood(self, data, hypo):
         """
         data: sequence of width, height
@@ -142,7 +142,7 @@ class Beetle(Suite):
         """
         width, angle = data
         name = hypo
-        
+
         like = dist_width[name].pdf(width)
         like *= dist_angle[name].pdf(angle)
         return like

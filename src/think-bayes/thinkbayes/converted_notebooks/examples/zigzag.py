@@ -39,6 +39,7 @@ import numpy as np
 import pymc3 as pm
 
 import matplotlib.pyplot as plt
+
 # -
 
 # ## Simulating hockey
@@ -50,7 +51,7 @@ import matplotlib.pyplot as plt
 lam_per_game = 2.7
 min_per_game = 60
 lam_per_min = lam_per_game / min_per_game
-lam_per_min, lam_per_min**2
+lam_per_min, lam_per_min ** 2
 
 # If we assume that a goal is equally likely during any minute of the game, and we ignore the possibility of scoring more than one goal in the same minute, we can simulate a game by generating one random value each minute.
 
@@ -66,6 +67,7 @@ np.sum(np.random.random(min_per_game) < lam_per_min)
 
 
 # I'll wrap that in a function.
+
 
 def half_game(lam_per_min, min_per_game=60):
     return np.sum(np.random.random(min_per_game) < lam_per_min)
@@ -91,14 +93,14 @@ np.mean(sample_sim), lam_per_game
 # +
 from collections import Counter
 
+
 class Pmf(Counter):
-    
     def normalize(self):
         """Normalizes the PMF so the probabilities add to 1."""
         total = sum(self.values())
         for key in self:
             self[key] /= total
-            
+
     def sorted_items(self):
         """Returns the outcomes and their probabilities."""
         return zip(*sorted(self.items()))
@@ -111,6 +113,7 @@ class Pmf(Counter):
 # +
 plot_options = dict(linewidth=3, alpha=0.6)
 
+
 def underride(options):
     """Add key-value pairs to d only if key is not in d.
 
@@ -121,13 +124,16 @@ def underride(options):
         options.setdefault(key, val)
     return options
 
+
 def plot(xs, ys, **options):
     """Line plot with plot_options."""
     plt.plot(xs, ys, **underride(options))
 
+
 def bar(xs, ys, **options):
     """Bar plot with plot_options."""
     plt.bar(xs, ys, **underride(options))
+
 
 def plot_pmf(sample, **options):
     """Compute and plot a PMF."""
@@ -135,14 +141,16 @@ def plot_pmf(sample, **options):
     pmf.normalize()
     xs, ps = pmf.sorted_items()
     bar(xs, ps, **options)
-    
+
+
 def pmf_goals():
     """Decorate the axes."""
-    plt.xlabel('Number of goals')
-    plt.ylabel('PMF')
-    plt.title('Distribution of goals scored')
+    plt.xlabel("Number of goals")
+    plt.ylabel("PMF")
+    plt.title("Distribution of goals scored")
     legend()
-    
+
+
 def legend(**options):
     """Draw a legend only if there are labeled items.
     """
@@ -156,7 +164,7 @@ def legend(**options):
 
 # Here's what the results from the simulation look like.
 
-plot_pmf(sample_sim, label='simulation')
+plot_pmf(sample_sim, label="simulation")
 pmf_goals()
 
 # ## Analytic distributions
@@ -172,8 +180,8 @@ np.mean(sample_bin)
 
 # And confirm that the results are similar to what we got from the model.
 
-plot_pmf(sample_sim, label='simulation')
-plot_pmf(sample_bin, label='binomial')
+plot_pmf(sample_sim, label="simulation")
+plot_pmf(sample_bin, label="binomial")
 pmf_goals()
 
 
@@ -187,20 +195,23 @@ def plot_cdf(sample, **options):
     ps = np.cumsum(freqs, dtype=np.float)
     ps /= ps[-1]
     plot(xs, ps, **options)
-    
+
+
 def cdf_rates():
     """Decorate the axes."""
-    plt.xlabel('Goal scoring rate (mu)')
-    plt.ylabel('CDF')
-    plt.title('Distribution of goal scoring rate')
+    plt.xlabel("Goal scoring rate (mu)")
+    plt.ylabel("CDF")
+    plt.title("Distribution of goal scoring rate")
     legend()
+
 
 def cdf_goals():
     """Decorate the axes."""
-    plt.xlabel('Number of goals')
-    plt.ylabel('CDF')
-    plt.title('Distribution of goals scored')
+    plt.xlabel("Number of goals")
+    plt.ylabel("CDF")
+    plt.title("Distribution of goals scored")
     legend()
+
 
 def plot_cdfs(*sample_seq, **options):
     """Plot multiple CDFs."""
@@ -213,8 +224,8 @@ def plot_cdfs(*sample_seq, **options):
 
 # Now we can compare the results from the simulation and the sample from the biomial distribution.
 
-plot_cdf(sample_sim, label='simulation')
-plot_cdf(sample_bin, label='binomial')
+plot_cdf(sample_sim, label="simulation")
+plot_cdf(sample_bin, label="binomial")
 cdf_goals()
 
 # ## Poisson process
@@ -228,7 +239,7 @@ np.mean(sample_poisson)
 # And we can confirm that the results are consistent with the simulation and the binomial distribution.
 
 plot_cdfs(sample_sim, sample_bin)
-plot_cdf(sample_poisson, label='poisson', linestyle='dashed')
+plot_cdf(sample_poisson, label="poisson", linestyle="dashed")
 legend()
 
 # ## Warming up PyMC
@@ -239,19 +250,19 @@ legend()
 model = pm.Model()
 
 with model:
-    goals = pm.Poisson('goals', mu)
+    goals = pm.Poisson("goals", mu)
     trace = pm.sample_prior_predictive(1000)
 # -
 
-len(trace['goals'])
+len(trace["goals"])
 
-sample_pm = trace['goals']
+sample_pm = trace["goals"]
 np.mean(sample_pm)
 
 # This example is like using a cannon to kill a fly.  But it help us learn to use the cannon.
 
 plot_cdfs(sample_sim, sample_bin, sample_poisson)
-plot_cdf(sample_pm, label='poisson pymc', linestyle='dashed')
+plot_cdf(sample_pm, label="poisson pymc", linestyle="dashed")
 legend()
 
 # ## Evaluating the Poisson distribution
@@ -265,7 +276,7 @@ xs = np.arange(11)
 ps = st.poisson.cdf(xs, mu)
 
 plot_cdfs(sample_sim, sample_bin, sample_poisson, sample_pm)
-plt.plot(xs, ps, label='analytic', linestyle='dashed')
+plt.plot(xs, ps, label="analytic", linestyle="dashed")
 legend()
 # -
 
@@ -273,11 +284,12 @@ legend()
 
 xs = np.arange(11)
 ps = st.poisson.pmf(xs, mu)
-bar(xs, ps, label='analytic PMF')
+bar(xs, ps, label="analytic PMF")
 pmf_goals()
 
 
 # And here's a function that compute the probability of scoring a given number of goals in a game, for a known value of `mu`.
+
 
 def poisson_likelihood(goals, mu):
     """Probability of goals given scoring rate.
@@ -320,7 +332,7 @@ poisson_likelihood(goals=[6, 2], mu=2.7)
 # +
 class Suite(Pmf):
     """Represents a set of hypotheses and their probabilities."""
-    
+
     def bayes_update(self, data, like_func):
         """Perform a Bayesian update.
         
@@ -332,18 +344,18 @@ class Suite(Pmf):
         for hypo in self:
             self[hypo] *= like_func(data, hypo)
         self.normalize()
-        
+
     def plot(self, **options):
         """Plot the hypotheses and their probabilities."""
         xs, ps = self.sorted_items()
         plot(xs, ps, **options)
-        
+
 
 def pdf_rate():
     """Decorate the axes."""
-    plt.xlabel('Goals per game (mu)')
-    plt.ylabel('PDF')
-    plt.title('Distribution of goal scoring rate')
+    plt.xlabel("Goals per game (mu)")
+    plt.ylabel("PDF")
+    plt.title("Distribution of goal scoring rate")
     legend()
 
 
@@ -358,13 +370,13 @@ hypo_mu
 
 suite = Suite(hypo_mu)
 suite.normalize()
-suite.plot(label='prior')
+suite.plot(label="prior")
 pdf_rate()
 
 # Now we can update it with the data and plot the posterior.
 
 suite.bayes_update(data=6, like_func=poisson_likelihood)
-suite.plot(label='posterior')
+suite.plot(label="posterior")
 pdf_rate()
 
 # With a uniform prior, the posterior is the likelihood function, and the MAP is the value of `mu` that maximizes likelihood, which is the observed number of goals, 6.
@@ -377,12 +389,13 @@ pdf_rate()
 #
 # Why gamma?  You'll see.
 #
-# Here are (total goals)/(number of games) for both teams from 2013 to 2017, not including games that went into overtime. 
+# Here are (total goals)/(number of games) for both teams from 2013 to 2017, not including games that went into overtime.
 
-xs = [13/6, 19/6, 8/4, 4/4, 10/6, 13/6, 2/2, 4/2, 5/3, 6/3]
+xs = [13 / 6, 19 / 6, 8 / 4, 4 / 4, 10 / 6, 13 / 6, 2 / 2, 4 / 2, 5 / 3, 6 / 3]
 
 
 # If those values were sampled from a gamma distribution, we can estimate its parameters, `k` and `theta`.
+
 
 def estimate_gamma_params(xs):
     """Estimate the parameters of a gamma distribution.
@@ -390,7 +403,7 @@ def estimate_gamma_params(xs):
     See https://en.wikipedia.org/wiki/Gamma_distribution#Parameter_estimation
     """
     s = np.log(np.mean(xs)) - np.mean(np.log(xs))
-    k = (3 - s + np.sqrt((s-3)**2 + 24*s)) / 12 / s
+    k = (3 - s + np.sqrt((s - 3) ** 2 + 24 * s)) / 12 / s
     theta = np.mean(xs) / k
     alpha = k
     beta = 1 / theta
@@ -405,10 +418,11 @@ print(alpha, beta)
 
 # The following function takes `alpha` and `beta` and returns a "frozen" distribution from SciPy's stats module:
 
+
 def make_gamma_dist(alpha, beta):
     """Returns a frozen distribution with given parameters.
     """
-    return st.gamma(a=alpha, scale=1/beta)
+    return st.gamma(a=alpha, scale=1 / beta)
 
 
 # The frozen distribution knows how to compute its mean and standard deviation:
@@ -421,11 +435,12 @@ print(dist.mean(), dist.std())
 hypo_mu = np.linspace(0, 10, num=101)
 ps = dist.pdf(hypo_mu)
 
-plot(hypo_mu, ps, label='gamma(9.6, 5.1)')
+plot(hypo_mu, ps, label="gamma(9.6, 5.1)")
 pdf_rate()
 
 
 # We can use `make_gamma_dist` to construct a prior suite with the given parameters.
+
 
 def make_gamma_suite(xs, alpha, beta):
     """Makes a suite based on a gamma distribution.
@@ -447,7 +462,7 @@ def make_gamma_suite(xs, alpha, beta):
 # +
 prior = make_gamma_suite(hypo_mu, alpha, beta)
 
-prior.plot(label='gamma prior')
+prior.plot(label="gamma prior")
 pdf_rate()
 # -
 
@@ -457,15 +472,15 @@ pdf_rate()
 posterior = prior.copy()
 posterior.bayes_update(data=6, like_func=poisson_likelihood)
 
-prior.plot(label='prior')
-posterior.plot(label='posterior')
+prior.plot(label="prior")
+posterior.plot(label="posterior")
 pdf_rate()
 # -
 
 # The results are substantially different from what we got with the uniform prior.
 
-suite.plot(label='posterior with uniform prior', color='gray')
-posterior.plot(label='posterior with gamma prior', color='C1')
+suite.plot(label="posterior with uniform prior", color="gray")
+posterior.plot(label="posterior with gamma prior", color="C1")
 pdf_rate()
 
 # Suppose the same team plays again and scores 2 goals in the second game.  We can perform a second update using the posterior from the first update as the prior for the second.
@@ -474,9 +489,9 @@ pdf_rate()
 posterior2 = posterior.copy()
 posterior2.bayes_update(data=2, like_func=poisson_likelihood)
 
-prior.plot(label='prior')
-posterior.plot(label='posterior')
-posterior2.plot(label='posterior2')
+prior.plot(label="prior")
+posterior.plot(label="posterior")
+posterior2.plot(label="posterior2")
 pdf_rate()
 # -
 
@@ -486,10 +501,10 @@ pdf_rate()
 posterior3 = prior.copy()
 posterior3.bayes_update(data=[6, 2], like_func=poisson_likelihood)
 
-prior.plot(label='prior')
-posterior.plot(label='posterior')
-posterior2.plot(label='posterior2')
-posterior3.plot(label='posterior3', linestyle='dashed')
+prior.plot(label="prior")
+posterior.plot(label="posterior")
+posterior2.plot(label="posterior2")
+posterior3.plot(label="posterior3", linestyle="dashed")
 pdf_rate()
 
 
@@ -505,9 +520,10 @@ pdf_rate()
 #
 # And often we can compute the parameters of the posterior with very little computation.  If we observe `x` goals in `1` game, the new parameters are `alpha+x` and `beta+1`.
 
+
 class GammaSuite:
     """Represents a gamma conjugate prior/posterior."""
-    
+
     def __init__(self, alpha, beta):
         """Initialize.
         
@@ -517,7 +533,7 @@ class GammaSuite:
         self.alpha = alpha
         self.beta = beta
         self.dist = make_gamma_dist(alpha, beta)
-    
+
     def plot(self, xs, **options):
         """Plot the suite.
         
@@ -526,15 +542,15 @@ class GammaSuite:
         ps = self.dist.pdf(xs)
         ps /= np.sum(ps)
         plot(xs, ps, **options)
-        
+
     def bayes_update(self, data):
-        return GammaSuite(self.alpha+data, self.beta+1)
+        return GammaSuite(self.alpha + data, self.beta + 1)
 
 
 # Here's what the prior looks like using a `GammaSuite`:
 
 gamma_prior = GammaSuite(alpha, beta)
-gamma_prior.plot(hypo_mu, label='prior')
+gamma_prior.plot(hypo_mu, label="prior")
 pdf_rate()
 gamma_prior.dist.mean()
 
@@ -543,17 +559,17 @@ gamma_prior.dist.mean()
 # +
 gamma_posterior = gamma_prior.bayes_update(6)
 
-gamma_prior.plot(hypo_mu, label='prior')
-gamma_posterior.plot(hypo_mu, label='posterior')
+gamma_prior.plot(hypo_mu, label="prior")
+gamma_posterior.plot(hypo_mu, label="posterior")
 pdf_rate()
 gamma_posterior.dist.mean()
 # -
 
 # And we can confirm that the posterior we get using the conjugate prior is the same as the one we got using a grid approximation.
 
-gamma_prior.plot(hypo_mu, label='prior')
-gamma_posterior.plot(hypo_mu, label='posterior conjugate')
-posterior.plot(label='posterior grid', linestyle='dashed')
+gamma_prior.plot(hypo_mu, label="prior")
+gamma_posterior.plot(hypo_mu, label="posterior conjugate")
+posterior.plot(label="posterior grid", linestyle="dashed")
 pdf_rate()
 
 
@@ -581,6 +597,7 @@ pdf_rate()
 #
 # Here's a function that draws a sample from a posterior `Suite` (the grid approximation, not `GammaSuite`).
 
+
 def sample_suite(suite, size):
     """Draw a random sample from a Suite
     
@@ -599,7 +616,7 @@ np.mean(sample_post)
 
 # Here's what the posterior distribution looks like.
 
-plot_cdf(sample_post, label='posterior sample')
+plot_cdf(sample_post, label="posterior sample")
 cdf_rates()
 
 # Now for each value of `mu` in the posterior sample we draw one sample from `Poisson(mu)`
@@ -609,7 +626,7 @@ np.mean(sample_post_pred)
 
 # Here's what the posterior predictive distribution looks like.
 
-plot_pmf(sample_post_pred, label='posterior predictive sample')
+plot_pmf(sample_post_pred, label="posterior predictive sample")
 pmf_goals()
 
 # ## Posterior prediction done wrong
@@ -632,8 +649,8 @@ np.mean(sample_post_pred_wrong)
 
 # Here's what the samples looks like:
 
-plot_cdf(sample_post_pred, label='posterior predictive sample')
-plot_cdf(sample_post_pred_wrong, label='incorrect posterior predictive')
+plot_cdf(sample_post_pred, label="posterior predictive sample")
+plot_cdf(sample_post_pred_wrong, label="incorrect posterior predictive")
 cdf_goals()
 
 # In the incorrect predictive sample, low values and high values are slightly less likely.
@@ -664,7 +681,7 @@ print(alpha, beta)
 model = pm.Model()
 
 with model:
-    mu = pm.Gamma('mu', alpha, beta)
+    mu = pm.Gamma("mu", alpha, beta)
     trace = pm.sample_prior_predictive(1000)
 # -
 
@@ -672,14 +689,14 @@ with model:
 #
 # So let's see if the sample looks right.
 
-sample_prior_pm = trace['mu']
+sample_prior_pm = trace["mu"]
 np.mean(sample_prior_pm)
 
 sample_prior = sample_suite(prior, 2000)
 np.mean(sample_prior)
 
-plot_cdf(sample_prior, label='prior')
-plot_cdf(sample_prior_pm, label='prior pymc')
+plot_cdf(sample_prior, label="prior")
+plot_cdf(sample_prior_pm, label="prior pymc")
 cdf_rates()
 
 # It looks pretty good (although not actually as close as I expected).
@@ -690,14 +707,14 @@ cdf_rates()
 model = pm.Model()
 
 with model:
-    mu = pm.Gamma('mu', alpha, beta)
-    goals = pm.Poisson('goals', mu, observed=[6])
+    mu = pm.Gamma("mu", alpha, beta)
+    goals = pm.Poisson("goals", mu, observed=[6])
     trace = pm.sample_prior_predictive(2000)
 # -
 
 # Let's see how the results compare with a sample from the prior predictive distribution, generated by plain old NumPy.
 
-sample_prior_pred_pm = trace['goals'].flatten()
+sample_prior_pred_pm = trace["goals"].flatten()
 np.mean(sample_prior_pred_pm)
 
 sample_prior_pred = np.random.poisson(sample_prior)
@@ -705,8 +722,8 @@ np.mean(sample_prior_pred)
 
 # Looks good.
 
-plot_cdf(sample_prior_pred, label='prior pred')
-plot_cdf(sample_prior_pred_pm, label='prior pred pymc')
+plot_cdf(sample_prior_pred, label="prior pred")
+plot_cdf(sample_prior_pred_pm, label="prior pred pymc")
 cdf_goals()
 
 # ## Using PyMC
@@ -719,8 +736,8 @@ cdf_goals()
 model = pm.Model()
 
 with model:
-    mu = pm.Gamma('mu', alpha, beta)
-    goals = pm.Poisson('goals', mu, observed=6)
+    mu = pm.Gamma("mu", alpha, beta)
+    goals = pm.Poisson("goals", mu, observed=6)
     trace = pm.sample(2000, tune=1000)
 # -
 
@@ -731,13 +748,13 @@ pdf_rate()
 
 # And we can extract a sample from the posterior of `mu`
 
-sample_post_pm = trace['mu']
+sample_post_pm = trace["mu"]
 np.mean(sample_post_pm)
 
 # And compare it to the sample we drew from the grid approximation:
 
-plot_cdf(sample_post, label='posterior grid')
-plot_cdf(sample_post_pm, label='posterior pymc')
+plot_cdf(sample_post, label="posterior grid")
+plot_cdf(sample_post_pm, label="posterior pymc")
 cdf_rates()
 
 # Again, it looks pretty good.
@@ -749,13 +766,13 @@ with model:
 
 # Here's what it looks like:
 
-sample_post_pred_pm = post_pred['goals']
+sample_post_pred_pm = post_pred["goals"]
 
-sample_post_pred_pm = post_pred['goals']
+sample_post_pred_pm = post_pred["goals"]
 np.mean(sample_post_pred_pm)
 
-plot_cdf(sample_post_pred, label='posterior pred grid')
-plot_cdf(sample_post_pred_pm, label='posterior pred pm')
+plot_cdf(sample_post_pred, label="posterior pred grid")
+plot_cdf(sample_post_pred_pm, label="posterior pred pm")
 cdf_goals()
 
 # Look's pretty good!
@@ -775,9 +792,9 @@ cdf_goals()
 
 sample = pm.Exponential.dist(lam=1).random(size=1000)
 plot_cdf(sample)
-plt.xscale('log')
-plt.xlabel('Parameter of a gamma distribution')
-plt.ylabel('CDF')
+plt.xscale("log")
+plt.xlabel("Parameter of a gamma distribution")
+plt.ylabel("CDF")
 np.mean(sample)
 
 # This distribution represents radical uncertainty about the value of this distribution: it's probably between 0.1 and 10, but it could be really big or really small.
@@ -788,22 +805,22 @@ np.mean(sample)
 model = pm.Model()
 
 with model:
-    alpha = pm.Exponential('alpha', lam=1)
-    beta = pm.Exponential('beta', lam=1)
+    alpha = pm.Exponential("alpha", lam=1)
+    beta = pm.Exponential("beta", lam=1)
     trace = pm.sample_prior_predictive(1000)
 # -
 
 # Here's what the distributions of `alpha` and `beta` look like.
 
 # +
-sample_prior_alpha = trace['alpha']
-plot_cdf(sample_prior_alpha, label='alpha prior')
-sample_prior_beta = trace['beta']
-plot_cdf(sample_prior_beta, label='beta prior')
+sample_prior_alpha = trace["alpha"]
+plot_cdf(sample_prior_alpha, label="alpha prior")
+sample_prior_beta = trace["beta"]
+plot_cdf(sample_prior_beta, label="beta prior")
 
-plt.xscale('log')
-plt.xlabel('Parameter of a gamma distribution')
-plt.ylabel('CDF')
+plt.xscale("log")
+plt.xlabel("Parameter of a gamma distribution")
+plt.ylabel("CDF")
 np.mean(sample_prior_alpha)
 # -
 
@@ -813,16 +830,16 @@ np.mean(sample_prior_alpha)
 model = pm.Model()
 
 with model:
-    alpha = pm.Exponential('alpha', lam=1)
-    beta = pm.Exponential('beta', lam=1)
-    mu = pm.Gamma('mu', alpha, beta)
+    alpha = pm.Exponential("alpha", lam=1)
+    beta = pm.Exponential("beta", lam=1)
+    mu = pm.Gamma("mu", alpha, beta)
     trace = pm.sample_prior_predictive(1000)
 # -
 
 # Here's what the prior distribution of `mu` looks like.
 
-sample_prior_mu = trace['mu']
-plot_cdf(sample_prior_mu, label='mu prior hierarchical')
+sample_prior_mu = trace["mu"]
+plot_cdf(sample_prior_mu, label="mu prior hierarchical")
 cdf_rates()
 np.mean(sample_prior_mu)
 
@@ -830,8 +847,8 @@ np.mean(sample_prior_mu)
 #
 # If we zoom in on the range 0 to 10, we can compare the prior implied by the hierarchical model with the gamma prior I hand picked.
 
-plot_cdf(sample_prior_mu, label='mu prior hierarchical')
-plot_cdf(sample_prior, label='mu prior', color='gray')
+plot_cdf(sample_prior_mu, label="mu prior hierarchical")
+plot_cdf(sample_prior, label="mu prior", color="gray")
 plt.xlim(0, 10)
 cdf_rates()
 
@@ -845,17 +862,17 @@ cdf_rates()
 model = pm.Model()
 
 with model:
-    alpha = pm.Exponential('alpha', lam=1)
-    beta = pm.Exponential('beta', lam=1)
-    mu = pm.Gamma('mu', alpha, beta)
-    goals = pm.Poisson('goals', mu)
+    alpha = pm.Exponential("alpha", lam=1)
+    beta = pm.Exponential("beta", lam=1)
+    mu = pm.Gamma("mu", alpha, beta)
+    goals = pm.Poisson("goals", mu)
     trace = pm.sample_prior_predictive(1000)
 # -
 
 # Here's the prior predictive distribution of goals.
 
-sample_prior_goals = trace['goals']
-plot_cdf(sample_prior_goals, label='goals prior')
+sample_prior_goals = trace["goals"]
+plot_cdf(sample_prior_goals, label="goals prior")
 cdf_goals()
 np.mean(sample_prior_goals)
 
@@ -866,18 +883,19 @@ np.mean(sample_prior_goals)
 def forward_hierarchical(size=1):
     alpha = st.expon().rvs(size=size)
     beta = st.expon().rvs(size=size)
-    mu = st.gamma(a=alpha, scale=1/beta).rvs(size=size)
+    mu = st.gamma(a=alpha, scale=1 / beta).rvs(size=size)
     goals = st.poisson(mu).rvs(size=size)
     return goals[0]
 
-sample_prior_goals_st = [forward_hierarchical() for i in range(1000)];
+
+sample_prior_goals_st = [forward_hierarchical() for i in range(1000)]
 # -
 
-plot_cdf(sample_prior_goals, label='goals prior')
-plot_cdf(sample_prior_goals_st, label='goals prior scipy')
+plot_cdf(sample_prior_goals, label="goals prior")
+plot_cdf(sample_prior_goals_st, label="goals prior scipy")
 cdf_goals()
 plt.xlim(0, 50)
-plt.legend(loc='lower right')
+plt.legend(loc="lower right")
 np.mean(sample_prior_goals_st)
 
 # ## Hierarchical inference
@@ -888,17 +906,17 @@ np.mean(sample_prior_goals_st)
 model = pm.Model()
 
 with model:
-    alpha = pm.Exponential('alpha', lam=1)
-    beta = pm.Exponential('beta', lam=1)
-    mu = pm.Gamma('mu', alpha, beta)
-    goals = pm.Poisson('goals', mu, observed=[6])
+    alpha = pm.Exponential("alpha", lam=1)
+    beta = pm.Exponential("beta", lam=1)
+    mu = pm.Gamma("mu", alpha, beta)
+    goals = pm.Poisson("goals", mu, observed=[6])
     trace = pm.sample(1000, tune=2000, nuts_kwargs=dict(target_accept=0.99))
 # -
 
 # Here's the posterior distribution of `mu`.  The posterior mean is close to the observed value, which is what we expect with a weakly informative prior.
 
-sample_post_mu = trace['mu']
-plot_cdf(sample_post_mu, label='mu posterior')
+sample_post_mu = trace["mu"]
+plot_cdf(sample_post_mu, label="mu posterior")
 cdf_rates()
 np.mean(sample_post_mu)
 
@@ -910,27 +928,27 @@ np.mean(sample_post_mu)
 model = pm.Model()
 
 with model:
-    alpha = pm.Exponential('alpha', lam=1)
-    beta = pm.Exponential('beta', lam=1)
-    mu_VGK = pm.Gamma('mu_VGK', alpha, beta)
-    mu_WSH = pm.Gamma('mu_WSH', alpha, beta)
-    goals_VGK = pm.Poisson('goals_VGK', mu_VGK, observed=[6])
-    goals_WSH = pm.Poisson('goals_WSH', mu_WSH, observed=[4])
+    alpha = pm.Exponential("alpha", lam=1)
+    beta = pm.Exponential("beta", lam=1)
+    mu_VGK = pm.Gamma("mu_VGK", alpha, beta)
+    mu_WSH = pm.Gamma("mu_WSH", alpha, beta)
+    goals_VGK = pm.Poisson("goals_VGK", mu_VGK, observed=[6])
+    goals_WSH = pm.Poisson("goals_WSH", mu_WSH, observed=[4])
     trace = pm.sample(1000, tune=2000, nuts_kwargs=dict(target_accept=0.95))
 # -
 
 # We can use `traceplot` to review the results and do some visual diagnostics.
 
-pm.traceplot(trace);
+pm.traceplot(trace)
 
 # Here are the posterior distribitions for `mu_WSH` and `mu_VGK`.
 
 # +
-sample_post_mu_WSH = trace['mu_WSH']
-plot_cdf(sample_post_mu_WSH, label='mu_WSH posterior')
+sample_post_mu_WSH = trace["mu_WSH"]
+plot_cdf(sample_post_mu_WSH, label="mu_WSH posterior")
 
-sample_post_mu_VGK = trace['mu_VGK']
-plot_cdf(sample_post_mu_VGK, label='mu_VGK posterior')
+sample_post_mu_VGK = trace["mu_VGK"]
+plot_cdf(sample_post_mu_VGK, label="mu_VGK posterior")
 
 cdf_rates()
 np.mean(sample_post_mu_WSH), np.mean(sample_post_mu_VGK)
@@ -944,19 +962,20 @@ np.mean(sample_post_mu_VGK > sample_post_mu_WSH)
 #
 # But let's take advantage of more information.  Here are the results from the five most recent Stanley Cup finals, ignoring games that went into overtime.
 
-data = dict(BOS13 = [2, 1, 2],
-            CHI13 = [0, 3, 3],
-            NYR14 = [0, 2],
-            LAK14 = [3, 1],
-            TBL15 = [1, 4, 3, 1, 1, 0],
-            CHI15 = [2, 3, 2, 2, 2, 2],
-            SJS16 = [2, 1, 4, 1],
-            PIT16 = [3, 3, 2, 3],
-            NSH17 = [3, 1, 5, 4, 0, 0],
-            PIT17 = [5, 4, 1, 1, 6, 2],
-            VGK18 = [6,2,1],
-            WSH18 = [4,3,3],
-           )
+data = dict(
+    BOS13=[2, 1, 2],
+    CHI13=[0, 3, 3],
+    NYR14=[0, 2],
+    LAK14=[3, 1],
+    TBL15=[1, 4, 3, 1, 1, 0],
+    CHI15=[2, 3, 2, 2, 2, 2],
+    SJS16=[2, 1, 4, 1],
+    PIT16=[3, 3, 2, 3],
+    NSH17=[3, 1, 5, 4, 0, 0],
+    PIT17=[5, 4, 1, 1, 6, 2],
+    VGK18=[6, 2, 1],
+    WSH18=[4, 3, 3],
+)
 
 # Here's how we can get the data into the model.
 
@@ -964,28 +983,28 @@ data = dict(BOS13 = [2, 1, 2],
 model = pm.Model()
 
 with model:
-    alpha = pm.Exponential('alpha', lam=1)
-    beta = pm.Exponential('beta', lam=1)
-    
+    alpha = pm.Exponential("alpha", lam=1)
+    beta = pm.Exponential("beta", lam=1)
+
     mu = dict()
     goals = dict()
     for name, observed in data.items():
-        mu[name] = pm.Gamma('mu_'+name, alpha, beta)
+        mu[name] = pm.Gamma("mu_" + name, alpha, beta)
         goals[name] = pm.Poisson(name, mu[name], observed=observed)
-        
+
     trace = pm.sample(1000, tune=2000, nuts_kwargs=dict(target_accept=0.95))
 # -
 
 # And here are the results.
 
-pm.traceplot(trace);
+pm.traceplot(trace)
 
 # Here are the posterior means.
 
-sample_post_mu_VGK = trace['mu_VGK18']
+sample_post_mu_VGK = trace["mu_VGK18"]
 np.mean(sample_post_mu_VGK)
 
-sample_post_mu_WSH = trace['mu_WSH18']
+sample_post_mu_WSH = trace["mu_WSH18"]
 np.mean(sample_post_mu_WSH)
 
 # They are lower with the background information than without, and closer together.  Here's the updated chance that Vegas is the better team.
@@ -1003,15 +1022,15 @@ with model:
 
 # Here are the posterior predictive distributions of goals scored.
 
-WSH = post_pred['WSH18']
+WSH = post_pred["WSH18"]
 WSH.shape
 
 # +
-WSH = post_pred['WSH18'].flatten()
-VGK = post_pred['VGK18'].flatten()
+WSH = post_pred["WSH18"].flatten()
+VGK = post_pred["VGK18"].flatten()
 
-plot_cdf(WSH, label='WSH')
-plot_cdf(VGK, label='VGK')
+plot_cdf(WSH, label="WSH")
+plot_cdf(VGK, label="VGK")
 cdf_goals()
 # -
 
@@ -1038,15 +1057,15 @@ tie
 #
 # So we can take a sample from the posterior distributions of `mu`:
 
-mu_VGK = trace['mu_VGK18']
-mu_WSH = trace['mu_WSH18']
+mu_VGK = trace["mu_VGK18"]
+mu_WSH = trace["mu_WSH18"]
 
 # And generate time to score,`tts`, for each team:
 
-tts_VGK  = np.random.exponential(1/mu_VGK)
+tts_VGK = np.random.exponential(1 / mu_VGK)
 np.mean(tts_VGK)
 
-tts_WSH  = np.random.exponential(1/mu_WSH)
+tts_WSH = np.random.exponential(1 / mu_WSH)
 np.mean(tts_WSH)
 
 # Here's the chance that Vegas wins in overtime.
@@ -1061,6 +1080,7 @@ total_win
 
 
 # Finally, we can simulate the rest of the series and compute the probability that Vegas wins the series.
+
 
 def flip(p):
     """Simulate a single game."""
@@ -1082,10 +1102,10 @@ def series(wins, losses, p_win):
         else:
             losses += 1
 
-        if wins==4:
+        if wins == 4:
             return True
 
-        if losses==4:
+        if losses == 4:
             return False
 
 
@@ -1093,5 +1113,3 @@ series(1, 2, total_win)
 
 t = [series(1, 2, total_win) for i in range(1000)]
 np.mean(t)
-
-

@@ -29,6 +29,7 @@
 
 # import classes from thinkbayes
 from thinkbayes import Hist, Pmf, Suite
+
 # -
 
 # ## The cookie problem
@@ -56,7 +57,7 @@ from thinkbayes import Hist, Pmf, Suite
 # +
 # Solution
 
-# We'll need an object to keep track of the number of cookies in each bowl. 
+# We'll need an object to keep track of the number of cookies in each bowl.
 # I use a Hist object, defined in thinkbayes2:
 
 bowl1 = Hist(dict(vanilla=30, chocolate=10))
@@ -76,12 +77,13 @@ pmf.Print()
 # +
 # Solution
 
-# Here's a likelihood function that takes `hypo`, which is one of 
-# the Hist objects that represents a bowl, and `data`, which is either 
+# Here's a likelihood function that takes `hypo`, which is one of
+# the Hist objects that represents a bowl, and `data`, which is either
 # 'vanilla' or 'chocolate'.
 
-# `likelihood` computes the likelihood of the data under the hypothesis, 
+# `likelihood` computes the likelihood of the data under the hypothesis,
 # and as a side effect, it removes one of the cookies from `hypo`
+
 
 def likelihood(hypo, data):
     like = hypo[data] / hypo.Total()
@@ -93,8 +95,9 @@ def likelihood(hypo, data):
 # +
 # Solution
 
-# Now for the update.  We have to loop through the hypotheses and 
+# Now for the update.  We have to loop through the hypotheses and
 # compute the likelihood of the data under each hypothesis.
+
 
 def update(pmf, data):
     for hypo in pmf:
@@ -105,20 +108,20 @@ def update(pmf, data):
 # +
 # Solution
 
-# Here's the first update.  The posterior probabilities are the 
-# same as what we got before, but notice that the number of cookies 
+# Here's the first update.  The posterior probabilities are the
+# same as what we got before, but notice that the number of cookies
 # in each Hist has been updated.
 
-update(pmf, 'vanilla')
+update(pmf, "vanilla")
 pmf.Print()
 
 # +
 # Solution
 
-# So when we update again with a chocolate cookies, we get different 
+# So when we update again with a chocolate cookies, we get different
 # likelihoods, and different posteriors.
 
-update(pmf, 'chocolate')
+update(pmf, "chocolate")
 pmf.Print()
 
 # +
@@ -127,5 +130,5 @@ pmf.Print()
 # If we get 10 more chocolate cookies, that eliminates Bowl 1 completely
 
 for i in range(10):
-    update(pmf, 'chocolate')
+    update(pmf, "chocolate")
     print(pmf[bowl1])

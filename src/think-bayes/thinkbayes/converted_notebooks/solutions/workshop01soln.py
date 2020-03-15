@@ -27,10 +27,12 @@ from __future__ import print_function, division
 # %matplotlib inline
 
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
 
 from thinkbayes import Pmf, Suite
 from thinkbayes import thinkplot
+
 # -
 
 # Working with Pmfs
@@ -41,7 +43,7 @@ d6 = Pmf()
 
 # A Pmf is a map from possible outcomes to their probabilities.
 
-for x in [1,2,3,4,5,6]:
+for x in [1, 2, 3, 4, 5, 6]:
     d6[x] = 1
 
 # Initially the probabilities don't add up to 1.
@@ -73,7 +75,7 @@ thinkplot.Hist(d6)
 # Compute and plot the Pmf of the sum of two 6-sided dice.
 
 # Solution
-thinkplot.Hist(d6+d6)
+thinkplot.Hist(d6 + d6)
 
 # **Exercise 2:** Suppose I roll two dice and tell you the result is greater than 3.
 #
@@ -95,13 +97,13 @@ pmf.Mean()
 # Create a Pmf with two equally likely hypotheses.
 #
 
-cookie = Pmf(['Bowl 1', 'Bowl 2'])
+cookie = Pmf(["Bowl 1", "Bowl 2"])
 cookie.Print()
 
 # Update each hypothesis with the likelihood of the data (a vanilla cookie).
 
-cookie['Bowl 1'] *= 0.75
-cookie['Bowl 2'] *= 0.5
+cookie["Bowl 1"] *= 0.75
+cookie["Bowl 2"] *= 0.5
 cookie.Normalize()
 
 # Print the posterior probabilities.
@@ -115,8 +117,8 @@ cookie.Print()
 # +
 # Solution
 
-cookie['Bowl 1'] *= 0.25
-cookie['Bowl 2'] *= 0.5
+cookie["Bowl 1"] *= 0.25
+cookie["Bowl 2"] *= 0.5
 cookie.Normalize()
 cookie.Print()
 # -
@@ -130,9 +132,9 @@ cookie.Print()
 # +
 # Solution
 
-cookie = Pmf(['Bowl 1', 'Bowl 2'])
-cookie['Bowl 1'] *= 0.75 * 0.25
-cookie['Bowl 2'] *= 0.5 * 0.5
+cookie = Pmf(["Bowl 1", "Bowl 2"])
+cookie["Bowl 1"] *= 0.75 * 0.25
+cookie["Bowl 2"] *= 0.5 * 0.5
 cookie.Normalize()
 cookie.Print()
 # -
@@ -152,9 +154,9 @@ pmf.Print()
 # Solution
 
 pmf[4] *= 0
-pmf[6] *= 1/6
-pmf[8] *= 1/8
-pmf[12] *= 1/12
+pmf[6] *= 1 / 6
+pmf[8] *= 1 / 8
+pmf[12] *= 1 / 12
 
 pmf.Normalize()
 pmf.Print()
@@ -170,16 +172,18 @@ pmf.Print()
 #
 # Here's an outline to get you started:
 
+
 class Dice(Suite):
-        # hypo is the number of sides on the die
-        # data is the outcome
-        def Likelihood(self, data, hypo):
-            return 1
+    # hypo is the number of sides on the die
+    # data is the outcome
+    def Likelihood(self, data, hypo):
+        return 1
 
 
 # +
 # Solution
-    
+
+
 class Dice(Suite):
     # hypo is the number of sides on the die
     # data is the outcome
@@ -212,6 +216,7 @@ dice.Print()
 # ---
 # The German tank problem is actually identical to the dice problem.
 
+
 class Tank(Suite):
     # hypo is the number of tanks
     # data is an observed serial number
@@ -236,7 +241,7 @@ tank.Mean()
 # +
 # Solution
 
-thinkplot.Pdf(tank, color='0.7')
+thinkplot.Pdf(tank, color="0.7")
 tank.Update(17)
 thinkplot.Pdf(tank)
 tank.Mean()
@@ -251,8 +256,8 @@ tank.Mean()
 #
 # Note that `hypo` is in the range 0 to 100.  Here's an outline to get you started.
 
+
 class Euro(Suite):
-    
     def Likelihood(self, data, hypo):
         """ 
         hypo is the prob of heads (0-100)
@@ -264,18 +269,18 @@ class Euro(Suite):
 # +
 # Solution
 
+
 class Euro(Suite):
-    
     def Likelihood(self, data, hypo):
         """ 
         hypo is the prob of heads (0-100)
         data is a string, either 'H' or 'T'
         """
         x = hypo / 100
-        if data == 'H':
+        if data == "H":
             return x
         else:
-            return 1-x
+            return 1 - x
 
 
 # -
@@ -287,17 +292,17 @@ thinkplot.Pdf(euro)
 
 # Now we can update with a single heads:
 
-euro.Update('H')
+euro.Update("H")
 thinkplot.Pdf(euro)
 
 # Another heads:
 
-euro.Update('H')
+euro.Update("H")
 thinkplot.Pdf(euro)
 
 # And a tails:
 
-euro.Update('T')
+euro.Update("T")
 thinkplot.Pdf(euro)
 
 # Starting over, here's what it looks like after 7 heads and 3 tails.
@@ -305,7 +310,7 @@ thinkplot.Pdf(euro)
 # +
 euro = Euro(range(101))
 
-for outcome in 'HHHHHHHTTT':
+for outcome in "HHHHHHHTTT":
     euro.Update(outcome)
 
 thinkplot.Pdf(euro)
@@ -319,10 +324,10 @@ euro.MaximumLikelihood()
 # +
 euro = Euro(range(101))
 
-evidence = 'H' * 140 + 'T' * 110
+evidence = "H" * 140 + "T" * 110
 for outcome in evidence:
     euro.Update(outcome)
-    
+
 thinkplot.Pdf(euro)
 # -
 
@@ -343,37 +348,36 @@ euro.CredibleInterval(90)
 #
 # The following function makes a Euro object with a triangle prior.
 
+
 def TrianglePrior():
     """Makes a Suite with a triangular prior."""
-    suite = Euro(label='triangle')
+    suite = Euro(label="triangle")
     for x in range(0, 51):
         suite[x] = x
     for x in range(51, 101):
-        suite[x] = 100-x 
+        suite[x] = 100 - x
     suite.Normalize()
     return suite
 
 
 # And here's what it looks like:
 
-euro1 = Euro(range(101), label='uniform')
+euro1 = Euro(range(101), label="uniform")
 euro2 = TrianglePrior()
 thinkplot.Pdfs([euro1, euro2])
-thinkplot.Config(title='Priors')
+thinkplot.Config(title="Priors")
 
 # **Exercise 9:** Update euro1 and euro2 with the same data we used before (140 heads and 110 tails) and plot the posteriors.  How big is the difference in the means?
 
 # +
 # Solution
 
-evidence = 'H' * 140 + 'T' * 110
+evidence = "H" * 140 + "T" * 110
 for outcome in evidence:
     euro1.Update(outcome)
     euro2.Update(outcome)
 
 thinkplot.Pdfs([euro1, euro2])
-thinkplot.Config(title='Posteriors')
+thinkplot.Config(title="Posteriors")
 euro1.Mean(), euro2.Mean()
 # -
-
-

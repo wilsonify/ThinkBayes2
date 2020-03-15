@@ -33,7 +33,7 @@ import numpy as np
 # +
 from thinkbayes.utils import read_gss
 
-gss = read_gss('../../tests/data/gss_bayes')
+gss = read_gss("../../tests/data/gss_bayes")
 gss.head()
 
 
@@ -50,6 +50,7 @@ replace_invalid(gss.occ10, [0])
 
 
 # -
+
 
 def values(series):
     return series.value_counts().sort_index()
@@ -85,7 +86,7 @@ np.mean(gss.indus10 == 6870)
 
 (gss.indus10 == 6870).mean()
 
-subset = gss.dropna(subset=['sex', 'polviews', 'partyid', 'indus10'])
+subset = gss.dropna(subset=["sex", "polviews", "partyid", "indus10"])
 subset.shape
 
 #

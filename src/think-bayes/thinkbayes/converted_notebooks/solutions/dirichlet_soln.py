@@ -50,8 +50,8 @@ from thinkbayes import thinkplot
 #
 # I'll start with a grid algorithm, enumerating the space of prevalences, `p1`, `p2`, and `p3`, that add up to 1, and computing the likelihood of the data for each triple of prevalences.
 
+
 class LionsTigersBears(Suite, Joint):
-    
     def Likelihood(self, data, hypo):
         """
         
@@ -64,8 +64,8 @@ class LionsTigersBears(Suite, Joint):
 # +
 # Solution
 
+
 class LionsTigersBears(Suite, Joint):
-    
     def Likelihood(self, data, hypo):
         """
         
@@ -73,26 +73,27 @@ class LionsTigersBears(Suite, Joint):
         hypo: p1, p2, p3
         """
         p1, p2, p3 = hypo
-        if data == 'L':
+        if data == "L":
             return p1
-        if data == 'T':
+        if data == "T":
             return p2
-        if data == 'B':
+        if data == "B":
             return p3
 
 
 # -
 
-ps = np.linspace(0, 1, 101);
+ps = np.linspace(0, 1, 101)
 
 # Here's a simple way to find eligible triplets, but it is inefficient, and it runs into problems with floating-point approximations.
 
 # +
 from itertools import product
 
+
 def enumerate_triples(ps):
     for p1, p2, p3 in product(ps, ps, ps):
-        if p1+p2+p3 == 1:
+        if p1 + p2 + p3 == 1:
             yield p1, p2, p3
 
 
@@ -104,6 +105,7 @@ def enumerate_triples(ps):
 # Solution
 
 from itertools import product
+
 
 def enumerate_triples(ps):
     for p1, p2 in product(ps, ps):
@@ -117,22 +119,22 @@ def enumerate_triples(ps):
 
 # Now we can initialize the suite.
 
-suite = LionsTigersBears(enumerate_triples(ps));
+suite = LionsTigersBears(enumerate_triples(ps))
 
 
 # Here are functions for displaying the distributions
+
 
 def plot_marginal_pmfs(joint):
     pmf_lion = joint.Marginal(0)
     pmf_tiger = joint.Marginal(1)
     pmf_bear = joint.Marginal(2)
 
-    thinkplot.Pdf(pmf_lion, label='lions')
-    thinkplot.Pdf(pmf_tiger, label='tigers')
-    thinkplot.Pdf(pmf_bear, label='bears')
-    
-    thinkplot.decorate(xlabel='Prevalence',
-                       ylabel='PMF')
+    thinkplot.Pdf(pmf_lion, label="lions")
+    thinkplot.Pdf(pmf_tiger, label="tigers")
+    thinkplot.Pdf(pmf_bear, label="bears")
+
+    thinkplot.decorate(xlabel="Prevalence", ylabel="PMF")
 
 
 def plot_marginal_cdfs(joint):
@@ -140,12 +142,11 @@ def plot_marginal_cdfs(joint):
     pmf_tiger = joint.Marginal(1)
     pmf_bear = joint.Marginal(2)
 
-    thinkplot.Cdf(pmf_lion.MakeCdf(), label='lions')
-    thinkplot.Cdf(pmf_tiger.MakeCdf(), label='tigers')
-    thinkplot.Cdf(pmf_bear.MakeCdf(), label='bears')
-    
-    thinkplot.decorate(xlabel='Prevalence',
-                       ylabel='CDF')
+    thinkplot.Cdf(pmf_lion.MakeCdf(), label="lions")
+    thinkplot.Cdf(pmf_tiger.MakeCdf(), label="tigers")
+    thinkplot.Cdf(pmf_bear.MakeCdf(), label="bears")
+
+    thinkplot.decorate(xlabel="Prevalence", ylabel="CDF")
 
 
 # Here are the prior distributions
@@ -154,7 +155,7 @@ plot_marginal_cdfs(suite)
 
 # Now we can do the update.
 
-for data in 'LLLTTB':
+for data in "LLLTTB":
     suite.Update(data)
 
 # And here are the posteriors.
@@ -167,7 +168,7 @@ suite.Marginal(2).Mean()
 
 # Or we can do a pseudo-update and use the total probability of the data.
 
-suite.Copy().Update('B')
+suite.Copy().Update("B")
 
 # ### Using the Dirichlet object
 
@@ -178,8 +179,10 @@ suite.Copy().Update('B')
 # +
 from thinkbayes import Dirichlet
 
+
 def DirichletMarginal(dirichlet, i):
     return dirichlet.MarginalBeta(i).MakePmf()
+
 
 Dirichlet.Marginal = DirichletMarginal
 # -
@@ -215,14 +218,16 @@ plot_marginal_cdfs(suite)
 
 # +
 import warnings
-warnings.simplefilter('ignore', FutureWarning)
+
+warnings.simplefilter("ignore", FutureWarning)
 
 import pymc3 as pm
+
 # -
 
 # Here's the data.
 
-observed = [0,0,0,1,1,2]
+observed = [0, 0, 0, 1, 1, 2]
 k = len(Pmf(observed))
 a = np.ones(k)
 
@@ -234,9 +239,9 @@ a = np.ones(k)
 model = pm.Model()
 
 with model:
-    ps = pm.Dirichlet('ps', a, shape=a.shape)
-    xs = pm.Categorical('xs', ps, observed=observed, shape=1)
-    
+    ps = pm.Dirichlet("ps", a, shape=a.shape)
+    xs = pm.Categorical("xs", ps, observed=observed, shape=1)
+
 model
 
 # +
@@ -250,24 +255,24 @@ with model:
 
 # Check the traceplot
 
-pm.traceplot(trace);
+pm.traceplot(trace)
 
 
 # And let's see the results.
 
+
 def plot_trace_cdfs(trace):
-    rows = trace['ps'].transpose()
+    rows = trace["ps"].transpose()
 
     cdf_lion = Cdf(rows[0])
     cdf_tiger = Cdf(rows[1])
     cdf_bear = Cdf(rows[2])
 
-    thinkplot.Cdf(cdf_lion, label='lions')
-    thinkplot.Cdf(cdf_tiger, label='tigers')
-    thinkplot.Cdf(cdf_bear, label='bears')
-    
-    thinkplot.decorate(xlabel='Prevalence',
-                       ylabel='CDF')
+    thinkplot.Cdf(cdf_lion, label="lions")
+    thinkplot.Cdf(cdf_tiger, label="tigers")
+    thinkplot.Cdf(cdf_bear, label="bears")
+
+    thinkplot.decorate(xlabel="Prevalence", ylabel="CDF")
 
 
 plot_trace_cdfs(trace)
@@ -286,18 +291,18 @@ plot_trace_cdfs(trace)
 #
 # This solution is based on [this excellent notebook](http://nbviewer.jupyter.org/github/WillKoehrsen/probabilistic-programming/blob/master/Allen%20Downey%20Problem.ipynb) from Will Koehrsen.
 
-animals = ['lions', 'tigers', 'bears']
+animals = ["lions", "tigers", "bears"]
 c = np.array([3, 2, 1])
 a = np.array([1, 1, 1])
 
 # +
-warnings.simplefilter('ignore', UserWarning)
+warnings.simplefilter("ignore", UserWarning)
 
 with pm.Model() as model:
     # Probabilities for each species
-    ps = pm.Dirichlet('ps', a=a, shape=3)
+    ps = pm.Dirichlet("ps", a=a, shape=3)
     # Observed data is a multinomial distribution with 6 trials
-    xs = pm.Multinomial('xs', n=6, p=ps, shape=3, observed=c)   
+    xs = pm.Multinomial("xs", n=6, p=ps, shape=3, observed=c)
 # -
 
 model
@@ -306,7 +311,7 @@ with model:
     # Sample from the posterior
     trace = pm.sample(draws=1000, tune=1000)
 
-pm.traceplot(trace);
+pm.traceplot(trace)
 
 thinkplot.PrePlot(6)
 plot_marginal_cdfs(dirichlet)
@@ -321,10 +326,8 @@ summary
 # We can also use `plot_posterior` to get a better view of the results.
 
 # +
-ax = pm.plot_posterior(trace, varnames = ['ps']);
+ax = pm.plot_posterior(trace, varnames=["ps"])
 
 for i, a in enumerate(animals):
     ax[i].set_title(a)
 # -
-
-

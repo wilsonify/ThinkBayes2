@@ -59,6 +59,7 @@ from scipy.special import gamma
 #
 # If goal-scoring is a Poisson process, the distribution of goals per game is Poisson with parameter $\lambda$.  To compute the distribution of $\lambda$ we can define a new class that inherits from `thinkbayes.Suite` and provides an appropriate `Likelihood` function:
 
+
 class Soccer2(thinkbayes.Suite):
     """Represents hypotheses about goal-scoring rates."""
 
@@ -77,6 +78,7 @@ class Soccer2(thinkbayes.Suite):
 
 from scipy.stats import poisson
 
+
 class Soccer2(thinkbayes.Suite):
     """Represents hypotheses about goal-scoring rates."""
 
@@ -86,7 +88,7 @@ class Soccer2(thinkbayes.Suite):
         hypo: goal rate in goals per game
         data: goals scored in a game
         """
-        return poisson.pmf(data, hypo) 
+        return poisson.pmf(data, hypo)
 
 
 # -
@@ -107,19 +109,17 @@ from thinkbayes import MakeGammaPmf
 xs = np.linspace(0, 8, 101)
 pmf = MakeGammaPmf(xs, 1.3)
 thinkplot.Pdf(pmf)
-thinkplot.decorate(xlabel='Goal-scoring rate (λ)',
-                   ylabel='PMF')
+thinkplot.decorate(xlabel="Goal-scoring rate (λ)", ylabel="PMF")
 pmf.Mean()
 # -
 
-suite = Soccer2(pmf);
+suite = Soccer2(pmf)
 
-germany = suite.Copy(label='Germany')
-argentina = suite.Copy(label='Argentina')
+germany = suite.Copy(label="Germany")
+argentina = suite.Copy(label="Argentina")
 thinkplot.Pdf(germany)
 thinkplot.Pdf(argentina)
-thinkplot.decorate(xlabel='Goal-scoring rate (λ)',
-                   ylabel='PMF')
+thinkplot.decorate(xlabel="Goal-scoring rate (λ)", ylabel="PMF")
 pmf.Mean()
 
 # According to this prior, the goal-scoring rates are always greater than zero, with the most likely value (a priori) near 0.5.  Goal scoring rates greater than 5 are considered unlikely.
@@ -129,38 +129,37 @@ pmf.Mean()
 # The next step is to compute the posteriors for the two teams:
 
 # +
-germany = suite.Copy(label='Germany')
-argentina = suite.Copy(label='Argentina')
+germany = suite.Copy(label="Germany")
+argentina = suite.Copy(label="Argentina")
 germany.Update(1)
 argentina.Update(0)
 
-print('posterior mean Germany', germany.Mean())
-print('posterior mean Argentina', argentina.Mean())
+print("posterior mean Germany", germany.Mean())
+print("posterior mean Argentina", argentina.Mean())
 # -
 
 # `Update` invokes the likelihood function for each hypothetical value of $\lambda$ and updates the distribution accordingly.
 #
-# Since both teams scored fewer goals than the prior mean (1.4), we expect both posterior means to be lower.  
+# Since both teams scored fewer goals than the prior mean (1.4), we expect both posterior means to be lower.
 #
 # Here are the posteriors:
 
 thinkplot.Pdf(germany)
 thinkplot.Pdf(argentina)
-thinkplot.decorate(xlabel='Goal-scoring rate (λ)',
-                   ylabel='PMF')
+thinkplot.decorate(xlabel="Goal-scoring rate (λ)", ylabel="PMF")
 
 # To answer the first question, "How much evidence does this victory provide that Germany had the better team?", we can compute the posterior probability that Germany had a higher goal-scoring rate:
 
 post_prob = germany.ProbGreater(argentina)
-print('posterior prob Germany > Argentina', post_prob)
+print("posterior prob Germany > Argentina", post_prob)
 
 # Based on the prior distributions, we would have said that Germany had a 50% chance of having the better team, or 1:1 odds.  Based on the posteriors, we would say that Germany has a 70% chance.  We can use the ratio of the prior and posterior odds to compute the Bayes factor, which measures the strength of the evidence.
 
 prior_odds = 1
 post_odds = post_prob / (1 - post_prob)
-print('posterior odds Germany > Argentina', post_odds)   
+print("posterior odds Germany > Argentina", post_odds)
 k = post_odds / prior_odds
-print('Bayes factor', k)   
+print("Bayes factor", k)
 
 # The Bayes factor is about 2.3, which is generally considered weak evidence.
 #
@@ -168,7 +167,7 @@ print('Bayes factor', k)
 
 # ### Step 4: Comparing posterior distributions
 #
-# **Exercise:**  Write a few lines of code to 
+# **Exercise:**  Write a few lines of code to
 #
 # 1. Choose a random value of `lam` from the posterior distribution of each team.
 #
@@ -209,7 +208,8 @@ np.mean(gdr_goals < arg_goals)
 # +
 # Solution
 
-def PredictiveDist(suite, duration=1, label='pred'):
+
+def PredictiveDist(suite, duration=1, label="pred"):
     """Computes the distribution of goals scored in a game.
 
     returns: new Pmf (mixture of Poissons)
@@ -225,13 +225,12 @@ def PredictiveDist(suite, duration=1, label='pred'):
 
 # -
 
-germany_pred = PredictiveDist(germany, label='germany')
-argentina_pred = PredictiveDist(argentina, label='argentina');
+germany_pred = PredictiveDist(germany, label="germany")
+argentina_pred = PredictiveDist(argentina, label="argentina")
 
-thinkplot.Hist(germany_pred, width=0.45, align='right')
-thinkplot.Hist(argentina_pred, width=0.45, align='left')
-thinkplot.decorate(xlabel='Predicted # goals',
-                   ylabel='Pmf')
+thinkplot.Hist(germany_pred, width=0.45, align="right")
+thinkplot.Hist(argentina_pred, width=0.45, align="left")
+thinkplot.decorate(xlabel="Predicted # goals", ylabel="Pmf")
 
 # Using the predictive distributions, we can compute probabilities for the outcomes of a rematch.
 
@@ -240,9 +239,7 @@ win = germany_pred.ProbGreater(argentina_pred)
 lose = germany_pred.ProbLess(argentina_pred)
 tie = 1 - (win + lose)
 
-print('Posterior prob Germany wins rematch', win)
-print('Posterior prob tie', tie)
-print('Posterior prob Argentina wins rematch', lose)
+print("Posterior prob Germany wins rematch", win)
+print("Posterior prob tie", tie)
+print("Posterior prob Argentina wins rematch", lose)
 # -
-
-

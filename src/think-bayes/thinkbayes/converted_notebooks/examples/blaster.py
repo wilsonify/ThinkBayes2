@@ -26,12 +26,14 @@ from __future__ import print_function, division
 
 
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
 
 import numpy as np
 
 from thinkbayes import Hist, Pmf, Cdf, Suite, Beta
 from thinkbayes import thinkplot
+
 # -
 
 # ## Part One
@@ -50,15 +52,15 @@ posterior = Beta(3, 2)
 posterior.Update((2, 8))
 posterior.MAP()
 
-# Now suppose the new ultra-secret Alien Blaster 10K is being tested.  In a press conference, an EDF general reports that the new design has been tested twice, taking two shots during each test.  The results of the test are confidential, so the general won't say how many targets were hit, but they report: "The same number of targets were hit in the two tests, so we have reason to think this new design is consistent." 
+# Now suppose the new ultra-secret Alien Blaster 10K is being tested.  In a press conference, an EDF general reports that the new design has been tested twice, taking two shots during each test.  The results of the test are confidential, so the general won't say how many targets were hit, but they report: "The same number of targets were hit in the two tests, so we have reason to think this new design is consistent."
 #
 # Write a class called `AlienBlaster` that inherits from `Suite` and provides a likelihood function that takes this data -- two shots and a tie -- and computes the likelihood of the data for each hypothetical value of $x$.  If you would like a challenge, write a version that works for any number of shots.
 
 # +
 from scipy import stats
 
+
 class AlienBlaster(Suite):
-    
     def Likelihood(self, data, hypo):
         """Computes the likeliood of data under hypo.
         
@@ -67,13 +69,13 @@ class AlienBlaster(Suite):
         """
         n = data
         x = hypo
-        
+
         # specific version for n=2 shots
-        likes = [x**4, (1-x)**4, (2*x*(1-x))**2]
+        likes = [x ** 4, (1 - x) ** 4, (2 * x * (1 - x)) ** 2]
 
         # general version for any n shots
-        likes = [stats.binom.pmf(k, n, x)**2 for k in range(n+1)]
-        
+        likes = [stats.binom.pmf(k, n, x) ** 2 for k in range(n + 1)]
+
         return np.sum(likes)
 
 
@@ -131,11 +133,11 @@ x2 = 0.4
 # The answer is a value drawn from the mixture of the two distributions.
 
 # Continuing the previous problem, let's estimate the distribution
-# of `k`, the number of successful shots out of 10.  
+# of `k`, the number of successful shots out of 10.
 #
 # 1. Write a few lines of Python code to simulate choosing a random weapon and firing it.
 #
-# 2. Write a loop that simulates the scenario and generates random values of `k` 1000 times.  
+# 2. Write a loop that simulates the scenario and generates random values of `k` 1000 times.
 #
 # 3. Store the values of `k` you generate and plot their distribution.
 
@@ -143,8 +145,10 @@ x2 = 0.4
 def flip(p):
     return np.random.random() < p
 
+
 def simulate_shots(n, p):
     return np.random.binomial(n, p)
+
 
 ks = []
 for i in range(1000):
@@ -184,7 +188,7 @@ from thinkbayes import MakeBinomialPmf
 pmf1 = MakeBinomialPmf(n, x1)
 pmf2 = MakeBinomialPmf(n, x2)
 
-metapmf = Pmf({pmf1:0.3, pmf2:0.7})
+metapmf = Pmf({pmf1: 0.3, pmf2: 0.7})
 metapmf.Print()
 # -
 
@@ -217,7 +221,7 @@ np.mean(ks)
 #             for k, p2 in pmf.Items():
 #                 mix[k] += p1 * p2
 #         return mix
-#         
+#
 # The outer loop iterates through the Pmfs; the inner loop iterates through the items.
 #
 # So `p1` is the probability of choosing a particular Pmf; `p2` is the probability of choosing a value from the Pmf.
@@ -233,5 +237,3 @@ mix.Mean()
 # -
 
 # **Exercise**: Assuming again that the distribution of `x` in the population of designs is well-modeled by a beta distribution with parameters α=2 and β=3, what the distribution if `k` if I choose a random Alien Blaster and fire 10 shots?
-
-

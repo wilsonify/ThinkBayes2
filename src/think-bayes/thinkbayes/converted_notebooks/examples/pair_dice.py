@@ -41,25 +41,26 @@ from fractions import Fraction
 #
 # Here's the class that represents a Bayesian table.
 
+
 class BayesTable(pd.DataFrame):
     def __init__(self, hypo, prior=1, **options):
-        columns = ['hypo', 'prior', 'likelihood', 'unnorm', 'posterior']
+        columns = ["hypo", "prior", "likelihood", "unnorm", "posterior"]
         super().__init__(columns=columns, **options)
         self.hypo = hypo
         self.prior = prior
-    
+
     def mult(self):
         self.unnorm = self.prior * self.likelihood
-        
+
     def norm(self):
         nc = np.sum(self.unnorm)
         self.posterior = self.unnorm / nc
         return nc
-    
+
     def update(self):
         self.mult()
         return self.norm()
-    
+
     def reset(self):
         return BayesTable(self.hypo, self.posterior)
 
@@ -84,7 +85,7 @@ for die1 in sides:
     for die2 in sides:
         if die2 > die1:
             hypo.append((die1, die2))
-            
+
 hypo
 # -
 
@@ -105,8 +106,8 @@ table = BayesTable(hypo)
 # +
 for i, row in table.iterrows():
     n1, n2 = row.hypo
-    table.loc[i, 'likelihood'] = 2 / n1 / n2
-    
+    table.loc[i, "likelihood"] = 2 / n1 / n2
+
 table
 # -
 
@@ -124,17 +125,18 @@ table
 # Here's an example with the `4` and `6` sided dice:
 
 n1, n2 = 4, 6
-d1 = Pmf(range(1, n1+1))
-d2 = Pmf(range(1, n2+1))
+d1 = Pmf(range(1, n1 + 1))
+d2 = Pmf(range(1, n2 + 1))
 total = d1 + d2
 thinkplot.Hist(total)
 
 
 # And here's the general function:
 
+
 def prob_total(k, n1, n2):
-    d1 = Pmf(range(1, n1+1))
-    d2 = Pmf(range(1, n2+1))
+    d1 = Pmf(range(1, n1 + 1))
+    d2 = Pmf(range(1, n2 + 1))
     total = d1 + d2
     return total[k]
 
@@ -159,8 +161,8 @@ total = 0
 for i, row in table.iterrows():
     n1, n2 = row.hypo
     p = prob_total(11, n1, n2)
-    total += row.posterior * p 
-    
+    total += row.posterior * p
+
 total
 # -
 
@@ -176,8 +178,8 @@ total
 table2 = table.reset()
 for i, row in table2.iterrows():
     n1, n2 = row.hypo
-    table2.loc[i, 'likelihood'] = prob_total(11, n1, n2)
-    
+    table2.loc[i, "likelihood"] = prob_total(11, n1, n2)
+
 table2
 # -
 
@@ -193,7 +195,7 @@ table2
 
 dice = {}
 for n in sides:
-    dice[n] = Pmf(range(1, n+1))
+    dice[n] = Pmf(range(1, n + 1))
 
 # And a `Pmf` object for the sum of each pair of dice.
 
@@ -204,10 +206,10 @@ for n1 in sides:
             pairs[n1, n2] = dice[n1] + dice[n2]
 
 
-# Here's a `Dice` class that implements `Likelihood` by looking up the data, `k`, in the `Pmf` that corresponds to `hypo`: 
+# Here's a `Dice` class that implements `Likelihood` by looking up the data, `k`, in the `Pmf` that corresponds to `hypo`:
+
 
 class Dice(Suite):
-    
     def Likelihood(self, data, hypo):
         """Likelihood of the data given the hypothesis.
         
@@ -232,7 +234,3 @@ suite.Print()
 # And the posterior probability of getting `11` on the next roll.
 
 suite.Update(11)
-
-
-
-

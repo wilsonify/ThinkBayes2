@@ -32,6 +32,7 @@ import pandas as pd
 from thinkbayes import Pmf, Cdf, Suite, Joint
 
 from thinkbayes import thinkplot
+
 # -
 
 # ## The Space Shuttle problem
@@ -46,23 +47,22 @@ from thinkbayes import thinkplot
 # # !wget https://raw.githubusercontent.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Chapter2_MorePyMC/data/challenger_data.csv
 # -
 
-columns = ['Date', 'Temperature', 'Incident']
-df = pd.read_csv('challenger_data.csv', parse_dates=[0])
+columns = ["Date", "Temperature", "Incident"]
+df = pd.read_csv("challenger_data.csv", parse_dates=[0])
 df.drop(labels=[3, 24], inplace=True)
 df
 
-df['Incident'] = df['Damage Incident'].astype(float)
+df["Incident"] = df["Damage Incident"].astype(float)
 df
 
 # +
 import matplotlib.pyplot as plt
 
-plt.scatter(df.Temperature, df.Incident, s=75, color="k",
-            alpha=0.5)
+plt.scatter(df.Temperature, df.Incident, s=75, color="k", alpha=0.5)
 plt.yticks([0, 1])
 plt.ylabel("Damage Incident?")
 plt.xlabel("Outside temperature (Fahrenheit)")
-plt.title("Defects of the Space Shuttle O-Rings vs temperature");
+plt.title("Defects of the Space Shuttle O-Rings vs temperature")
 # -
 
 # ### Grid algorithm
@@ -78,8 +78,8 @@ plt.title("Defects of the Space Shuttle O-Rings vs temperature");
 # +
 from scipy.special import expit
 
+
 class Logistic(Suite, Joint):
-    
     def Likelihood(self, data, hypo):
         """
         
@@ -93,28 +93,29 @@ class Logistic(Suite, Joint):
 # Solution goes here
 # -
 
-b0 = np.linspace(0, 50, 101);
+b0 = np.linspace(0, 50, 101)
 
-b1 = np.linspace(-1, 1, 101);
+b1 = np.linspace(-1, 1, 101)
 
 from itertools import product
+
 hypos = product(b0, b1)
 
-suite = Logistic(hypos);
+suite = Logistic(hypos)
 
 for data in zip(df.Temperature, df.Incident):
     print(data)
     suite.Update(data)
 
 thinkplot.Pdf(suite.Marginal(0))
-thinkplot.decorate(xlabel='Intercept',
-                   ylabel='PMF',
-                   title='Posterior marginal distribution')
+thinkplot.decorate(
+    xlabel="Intercept", ylabel="PMF", title="Posterior marginal distribution"
+)
 
 thinkplot.Pdf(suite.Marginal(1))
-thinkplot.decorate(xlabel='Log odds ratio',
-                   ylabel='PMF',
-                   title='Posterior marginal distribution')
+thinkplot.decorate(
+    xlabel="Log odds ratio", ylabel="PMF", title="Posterior marginal distribution"
+)
 
 # According to the posterior distribution, what was the probability of damage when the shuttle launched at 31 degF?
 
@@ -137,8 +138,6 @@ import pymc3 as pm
 # Solution goes here
 # -
 
-pm.traceplot(thinkplot.trace);
+pm.traceplot(thinkplot.trace)
 
 # The posterior distributions for these parameters should be similar to what we got with the grid algorithm.
-
-

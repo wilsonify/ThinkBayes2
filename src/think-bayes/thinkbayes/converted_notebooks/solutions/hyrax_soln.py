@@ -30,13 +30,14 @@
 # import classes from thinkbayes
 from thinkbayes import Hist, Pmf, Suite
 from thinkbayes import thinkplot
+
 # -
 
 # ## The hyrax problem
 #
 # Suppose I capture and tag 10 rock hyraxes.  Some time later, I capture another 10 hyraxes and find that two of them are already tagged.  How many hyraxes are there in this environment?
 #
-# As always with problems like this, we have to make some modeling assumptions. 
+# As always with problems like this, we have to make some modeling assumptions.
 #
 # 1) For simplicity, you can assume that the environment is reasonably isolated, so the number of hyraxes does not change between observations.
 #
@@ -44,12 +45,12 @@ from thinkbayes import thinkplot
 #
 # I suggest the following notation:
 #
-# *  `N`: total population of hyraxes 
-# *  `K`: number of hyraxes tagged in the first round 
+# *  `N`: total population of hyraxes
+# *  `K`: number of hyraxes tagged in the first round
 # *  `n`: number of hyraxes caught in the second round
 # *  `k`: number of hyraxes in the second round that had been tagged
 #
-# So `N` is the hypothesis and `(K, n, k)` make up the data.  The probability of the data, given the hypothesis, is the probability of finding `k` tagged hyraxes out of `n` if (in the population) `K` out of `N` are tagged. 
+# So `N` is the hypothesis and `(K, n, k)` make up the data.  The probability of the data, given the hypothesis, is the probability of finding `k` tagged hyraxes out of `n` if (in the population) `K` out of `N` are tagged.
 #
 # If you are familiar with the hypergeometric distribution, you can use the hypergeometric PMF to compute the likelihood function.  Otherwise, you can figure it out using combinatorics.
 
@@ -57,6 +58,7 @@ from thinkbayes import thinkplot
 # Solution
 
 from scipy.special import binom
+
 
 class Hyrax(Suite):
     """Represents hypotheses about how many hyraxes there are."""
@@ -73,7 +75,7 @@ class Hyrax(Suite):
         if hypo < K + (n - k):
             return 0
 
-        like = binom(N-K, n-k) / binom(N, n)
+        like = binom(N - K, n - k) / binom(N, n)
         return like
 
 
@@ -90,19 +92,20 @@ suite.Update(data)
 # Solution
 
 thinkplot.Pdf(suite)
-thinkplot.Config(xlabel='Number of hyraxes', ylabel='PMF', legend=False)
+thinkplot.Config(xlabel="Number of hyraxes", ylabel="PMF", legend=False)
 
 # +
 # Solution
 
-print('Posterior mean', suite.Mean())
-print('Maximum a posteriori estimate', suite.MaximumLikelihood())
-print('90% credible interval', suite.CredibleInterval(90))
+print("Posterior mean", suite.Mean())
+print("Maximum a posteriori estimate", suite.MaximumLikelihood())
+print("90% credible interval", suite.CredibleInterval(90))
 
 # +
 # Solution
 
 from scipy import stats
+
 
 class Hyrax2(Suite):
     """Represents hypotheses about how many hyraxes there are."""
@@ -135,6 +138,6 @@ suite.Update(data)
 # +
 # Solution
 
-print('Posterior mean', suite.Mean())
-print('Maximum a posteriori estimate', suite.MaximumLikelihood())
-print('90% credible interval', suite.CredibleInterval(90))
+print("Posterior mean", suite.Mean())
+print("Maximum a posteriori estimate", suite.MaximumLikelihood())
+print("90% credible interval", suite.CredibleInterval(90))

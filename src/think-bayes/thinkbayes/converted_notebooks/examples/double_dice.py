@@ -40,25 +40,26 @@ from fractions import Fraction
 #
 # Here's the class that represents a Bayesian table.
 
+
 class BayesTable(pd.DataFrame):
     def __init__(self, hypo, prior=1, **options):
-        columns = ['hypo', 'prior', 'likelihood', 'unnorm', 'posterior']
+        columns = ["hypo", "prior", "likelihood", "unnorm", "posterior"]
         super().__init__(columns=columns, **options)
         self.hypo = hypo
         self.prior = prior
-    
+
     def mult(self):
         self.unnorm = self.prior * self.likelihood
-        
+
     def norm(self):
         nc = np.sum(self.unnorm)
         self.posterior = self.unnorm / nc
         return nc
-    
+
     def update(self):
         self.mult()
         return self.norm()
-    
+
     def reset(self):
         return BayesTable(self.hypo, self.posterior)
 
@@ -87,7 +88,7 @@ table = BayesTable(hypo)
 #
 # So the likelihoods are:
 
-table.likelihood = 1/table.hypo
+table.likelihood = 1 / table.hypo
 table
 
 # Now we can use `update` to compute the posterior probabilities:
@@ -118,7 +119,7 @@ table.posterior.astype(float)
 total = 0
 for _, row in table.iterrows():
     total += row.posterior / row.hypo
-    
+
 total
 # -
 
@@ -131,7 +132,7 @@ total
 # 3) Computing the normalizing constant.
 
 table2 = table.reset()
-table2.likelihood = 1/table.hypo
+table2.likelihood = 1 / table.hypo
 table2
 
 table2.update()
@@ -143,5 +144,3 @@ table2
 # This example demonstrates a general truth: to compute the predictive probability of an event, you can pretend you saw the event, do a Bayesian update, and record the normalizing constant.
 #
 # (With one caveat: this only works if your priors are normalized.)
-
-

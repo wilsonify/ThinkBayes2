@@ -64,6 +64,7 @@ from __future__ import print_function, division
 import thinkbayes
 from scipy.special import binom
 
+
 class Hyrax(thinkbayes.Suite):
     """Represents hypotheses about how many hyraxes there are."""
 
@@ -79,7 +80,7 @@ class Hyrax(thinkbayes.Suite):
         if hypo < K + (n - k):
             return 0
 
-        like = binom(N-K, n-k) / binom(N, n)
+        like = binom(N - K, n - k) / binom(N, n)
         return like
 
 
@@ -102,19 +103,21 @@ suite.Update(data)
 # Here's what the posterior distribution looks like:
 
 from thinkbayes import thinkplot
+
 thinkplot.Pdf(suite)
-thinkplot.Config(xlabel='Number of hyraxes', ylabel='PMF', legend=False)
+thinkplot.Config(xlabel="Number of hyraxes", ylabel="PMF", legend=False)
 
 # And here are some summaries of the posterior distribution:
 
-print('Posterior mean', suite.Mean())
-print('Maximum a posteriori estimate', suite.MaximumLikelihood())
-print('90% credible interval', suite.CredibleInterval(90))
+print("Posterior mean", suite.Mean())
+print("Maximum a posteriori estimate", suite.MaximumLikelihood())
+print("90% credible interval", suite.CredibleInterval(90))
 
 # The combinatorial expression we computed is the PMF of the hypergeometric distribution, so we can also compute it using `thinkbayes.EvalHypergeomPmf`, which uses `scipy.stats.hypergeom.pmf`.
 
 # +
 import thinkbayes
+
 
 class Hyrax2(thinkbayes.Suite):
     """Represents hypotheses about how many hyraxes there are."""
@@ -135,7 +138,6 @@ class Hyrax2(thinkbayes.Suite):
         return like
 
 
-
 # -
 
 # And the result is the same:
@@ -148,12 +150,12 @@ data = 10, 10, 2
 suite.Update(data)
 
 thinkplot.Pdf(suite)
-thinkplot.Config(xlabel='Number of hyraxes', ylabel='PMF', legend=False)
+thinkplot.Config(xlabel="Number of hyraxes", ylabel="PMF", legend=False)
 # -
 
-print('Posterior mean', suite.Mean())
-print('Maximum a posteriori estimate', suite.MaximumLikelihood())
-print('90% credible interval', suite.CredibleInterval(90))
+print("Posterior mean", suite.Mean())
+print("Maximum a posteriori estimate", suite.MaximumLikelihood())
+print("90% credible interval", suite.CredibleInterval(90))
 
 # If we run the analysis again with a different prior (running from 0 to 1999), the MAP is the same, but the posterior mean and credible interval are substantially different:
 
@@ -163,11 +165,9 @@ suite = Hyrax2(hypos)
 data = 10, 10, 2
 suite.Update(data)
 
-print('Posterior mean', suite.Mean())
-print('Maximum a posteriori estimate', suite.MaximumLikelihood())
-print('90% credible interval', suite.CredibleInterval(90))
+print("Posterior mean", suite.Mean())
+print("Maximum a posteriori estimate", suite.MaximumLikelihood())
+print("90% credible interval", suite.CredibleInterval(90))
 # -
 
 # This difference indicates that we don't have enough data to swamp the priors, so a more definitive answer would require either more data or a prior based on more background information.
-
-

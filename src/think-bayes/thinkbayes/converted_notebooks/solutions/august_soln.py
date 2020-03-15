@@ -34,6 +34,7 @@ import pandas as pd
 
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
+
 # -
 
 # ### The August birthday problem
@@ -62,11 +63,11 @@ from thinkbayes import thinkplot
 # Here's the data from the table.
 
 # +
-totals = np.array([32690, 31238, 34405, 34565, 34977, 34415, 
-                   36577, 36319, 35353, 34405, 31285, 31617])
+totals = np.array(
+    [32690, 31238, 34405, 34565, 34977, 34415, 36577, 36319, 35353, 34405, 31285, 31617]
+)
 
-diagnosed = np.array([265, 280, 307, 312, 317, 287, 
-                      320, 309, 225, 240, 232, 243])
+diagnosed = np.array([265, 280, 307, 312, 317, 287, 320, 309, 225, 240, 232, 243])
 # -
 
 # I'll roll the data so September comes first.
@@ -83,8 +84,7 @@ np.round(rates, 1)
 
 xs = np.arange(12)
 thinkplot.plot(xs, rates)
-thinkplot.decorate(xlabel='Months after cutoff',
-                   ylabel='Diagnosis rate per 10,000')
+thinkplot.decorate(xlabel="Months after cutoff", ylabel="Diagnosis rate per 10,000")
 
 # For the first 9 months, from September to May, we see what we would expect if at least some of the excess diagnoses are due to behavioral differences due to age.  For each month of difference in age, we see an increase in the number of diagnoses.
 #
@@ -101,7 +101,7 @@ pcount = 1
 res = []
 for (x, d, t) in zip(xs, diagnosed, totals):
     a = d + pcount
-    b = t-d + pcount
+    b = t - d + pcount
     ci = scipy.stats.beta(a, b).ppf([0.025, 0.975])
     res.append(ci * 10000)
 # -
@@ -119,6 +119,7 @@ high
 # +
 import matplotlib.pyplot as plt
 
+
 def errorbar(xs, low, high, **options):
     for x, l, h in zip(xs, low, high):
         plt.vlines(x, l, h, **options)
@@ -126,10 +127,9 @@ def errorbar(xs, low, high, **options):
 
 # -
 
-errorbar(xs, low, high, color='gray', alpha=0.7)
+errorbar(xs, low, high, color="gray", alpha=0.7)
 thinkplot.plot(xs, rates)
-thinkplot.decorate(xlabel='Months after cutoff',
-                   ylabel='Diagnosis rate per 10,000')
+thinkplot.decorate(xlabel="Months after cutoff", ylabel="Diagnosis rate per 10,000")
 
 # It seems like the lower rates in the last 3 months are unlikely to be due to random variation, so it might be good to investigate the effect of "red shirting".
 #
@@ -139,22 +139,22 @@ thinkplot.decorate(xlabel='Months after cutoff',
 from scipy.special import expit, logit
 
 for (x, d, t) in zip(xs, diagnosed, totals):
-    print(x, logit(d/t))
+    print(x, logit(d / t))
 
 
 # -
 
 # Here's a Suite that estimates the parameters of a logistic regression model, `b0` and `b1`.
 
+
 class August(Suite, Joint):
-    
     def Likelihood(self, data, hypo):
         x, d, t = data
         b0, b1 = hypo
-        
+
         p = expit(b0 + b1 * x)
         like = scipy.stats.binom.pmf(d, t, p)
-        
+
         return like
 
 
@@ -167,7 +167,7 @@ b0 = np.linspace(-4.75, -5.1, 101)
 b1 = np.linspace(-0.05, 0.05, 101)
 hypos = product(b0, b1)
 
-suite = August(hypos);
+suite = August(hypos)
 # -
 
 # Here's the update.
@@ -183,9 +183,11 @@ b0 = pmf0.Mean()
 print(b0)
 thinkplot.Pdf(pmf0)
 
-thinkplot.decorate(title='Posterior marginal distribution',
-                   xlabel='Intercept log odds (b0)',
-                   ylabel='Pdf')
+thinkplot.decorate(
+    title="Posterior marginal distribution",
+    xlabel="Intercept log odds (b0)",
+    ylabel="Pdf",
+)
 # -
 
 # And the posterior marginal distribution for `b1`.
@@ -196,9 +198,9 @@ b1 = pmf1.Mean()
 print(b1)
 thinkplot.Pdf(pmf1)
 
-thinkplot.decorate(title='Posterior marginal distribution',
-                   xlabel='Slope log odds (b0)',
-                   ylabel='Pdf')
+thinkplot.decorate(
+    title="Posterior marginal distribution", xlabel="Slope log odds (b0)", ylabel="Pdf"
+)
 # -
 
 # Let's see what the posterior regression lines look like, superimposed on the data.
@@ -207,13 +209,12 @@ thinkplot.decorate(title='Posterior marginal distribution',
 for i in range(100):
     b0, b1 = suite.Random()
     ys = expit(b0 + b1 * xs) * 10000
-    thinkplot.plot(xs, ys, color='green', alpha=0.01)
-    
-errorbar(xs, low, high, color='gray', alpha=0.7)
+    thinkplot.plot(xs, ys, color="green", alpha=0.01)
+
+errorbar(xs, low, high, color="gray", alpha=0.7)
 thinkplot.plot(xs, rates)
 
-thinkplot.decorate(xlabel='Months after cutoff',
-                   ylabel='Diagnosis rate per 10,000')
+thinkplot.decorate(xlabel="Months after cutoff", ylabel="Diagnosis rate per 10,000")
 
 
 # -
@@ -224,13 +225,14 @@ thinkplot.decorate(xlabel='Months after cutoff',
 #
 # To express the results more clearly, we can look at the posterior predictive distribution for the difference between a child born in September and one born in August:
 
+
 def posterior_predictive(x):
     pmf = Pmf()
 
     for (b0, b1), p in suite.Items():
         base = expit(b0 + b1 * x) * 10000
         pmf[base] += p
-        
+
     return pmf
 
 
@@ -238,14 +240,16 @@ def posterior_predictive(x):
 
 # +
 pmf0 = posterior_predictive(0)
-thinkplot.Cdf(pmf0.MakeCdf(), label='September')
+thinkplot.Cdf(pmf0.MakeCdf(), label="September")
 
 pmf1 = posterior_predictive(11)
-thinkplot.Cdf(pmf1.MakeCdf(), label='August')
+thinkplot.Cdf(pmf1.MakeCdf(), label="August")
 
-thinkplot.decorate(title='Posterior predictive distribution',
-                   xlabel='Diagnosis rate per 10,000',
-                   ylabel='CDF')
+thinkplot.decorate(
+    title="Posterior predictive distribution",
+    xlabel="Diagnosis rate per 10,000",
+    ylabel="CDF",
+)
 # -
 
 pmf0.Mean()
@@ -253,15 +257,16 @@ pmf0.Mean()
 
 # And we can compute the posterior predictive distribution for the difference.
 
+
 def posterior_predictive_diff():
     pmf = Pmf()
-    
+
     for (b0, b1), p in suite.Items():
         p0 = expit(b0) * 10000
         p1 = expit(b0 + b1 * 11) * 10000
         diff = p1 - p0
         pmf[diff] += p
-        
+
     return pmf
 
 
@@ -269,9 +274,11 @@ def posterior_predictive_diff():
 pmf_diff = posterior_predictive_diff()
 thinkplot.Cdf(pmf_diff.MakeCdf())
 
-thinkplot.decorate(title='Posterior predictive distribution',
-                   xlabel='11 month increase in diagnosis rate per 10,000',
-                   ylabel='CDF')
+thinkplot.decorate(
+    title="Posterior predictive distribution",
+    xlabel="11 month increase in diagnosis rate per 10,000",
+    ylabel="CDF",
+)
 # -
 
 # To summarize, we can compute the mean and 95% credible interval for this difference.
@@ -287,5 +294,3 @@ pmf_diff.CredibleInterval(95)
 pmf_diff.Mean() / pmf0.Mean()
 
 pmf_diff.CredibleInterval(95) / pmf0.Mean()
-
-

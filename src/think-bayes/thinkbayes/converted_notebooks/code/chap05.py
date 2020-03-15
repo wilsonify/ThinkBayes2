@@ -25,7 +25,8 @@ from __future__ import print_function, division
 
 
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
 
 import numpy as np
 
@@ -39,14 +40,16 @@ from thinkbayes import thinkplot
 #
 # The following function converts from probabilities to odds.
 
+
 def Odds(p):
-    return p / (1-p)
+    return p / (1 - p)
 
 
 # And this function converts from odds to probabilities.
 
+
 def Probability(o):
-    return o / (o+1)
+    return o / (o + 1)
 
 
 # If 20% of bettors think my horse will win, that corresponds to odds of 1:4, or 0.25.
@@ -56,7 +59,7 @@ Odds(p)
 
 # If the odds against my horse are 1:5, that corresponds to a probability of 1/6.
 
-o = 1/5
+o = 1 / 5
 Probability(o)
 
 # We can use the odds form of Bayes's theorem to solve the cookie problem:
@@ -133,5 +136,3 @@ Probability(post_odds)
 # +
 # Solution goes here
 # -
-
-

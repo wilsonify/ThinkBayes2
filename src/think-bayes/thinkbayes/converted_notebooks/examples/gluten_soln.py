@@ -33,6 +33,7 @@ from thinkbayes import Pmf, Suite, MakeBinomialPmf
 from thinkbayes import thinkplot
 
 import numpy as np
+
 # -
 
 # ## The dinner party
@@ -54,8 +55,7 @@ pmf1 = MakeBinomialPmf(n_allergic, p_allergic)
 pmf2 = MakeBinomialPmf(n_non, p_non)
 pmf = pmf1 + pmf2
 thinkplot.Hist(pmf)
-thinkplot.decorate(xlabel='Number of sneezers',
-                   ylabel='Pmf')
+thinkplot.decorate(xlabel="Number of sneezers", ylabel="Pmf")
 
 # +
 # Solution
@@ -91,8 +91,8 @@ pmf.Mean()
 
 # Here's a class that models the study
 
+
 class Gluten(Suite):
-    
     def Likelihood(self, data, hypo):
         """Computes the probability of the data under the hypothesis.
         
@@ -105,7 +105,7 @@ class Gluten(Suite):
         yes, no = data
         n = yes + no
         ngs = n - gs
-        
+
         pmf1 = MakeBinomialPmf(gs, 0.95)
         pmf2 = MakeBinomialPmf(ngs, 0.4)
         pmf = pmf1 + pmf2
@@ -115,10 +115,9 @@ class Gluten(Suite):
 # +
 # Solution
 
-prior = Gluten(range(0, 35+1))
+prior = Gluten(range(0, 35 + 1))
 thinkplot.Pdf(prior)
-thinkplot.decorate(xlabel='Number who are gluten sensitive',
-                   ylabel='Pmf')
+thinkplot.decorate(xlabel="Number who are gluten sensitive", ylabel="Pmf")
 
 # +
 # Solution
@@ -131,13 +130,10 @@ posterior.Update(data)
 # Solution
 
 thinkplot.Pdf(posterior)
-thinkplot.decorate(xlabel='Number who are gluten sensitive',
-                   ylabel='Pmf')
+thinkplot.decorate(xlabel="Number who are gluten sensitive", ylabel="Pmf")
 
 # +
 # Solution
 
 posterior.CredibleInterval(95)
 # -
-
-

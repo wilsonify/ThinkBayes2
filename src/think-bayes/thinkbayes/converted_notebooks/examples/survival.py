@@ -54,13 +54,15 @@ def EvalWeibullPdf(x, lam, k):
 
     returns: float probability density
     """
-    arg = (x / lam)
-    return k / lam * arg**(k-1) * np.exp(-arg**k)
+    arg = x / lam
+    return k / lam * arg ** (k - 1) * np.exp(-(arg ** k))
+
 
 def EvalWeibullCdf(x, lam, k):
     """Evaluates CDF of the Weibull distribution."""
-    arg = (x / lam)
-    return 1 - np.exp(-arg**k)
+    arg = x / lam
+    return 1 - np.exp(-(arg ** k))
+
 
 def MakeWeibullPmf(lam, k, high, n=200):
     """Makes a PMF discrete approx to a Weibull distribution.
@@ -101,8 +103,7 @@ EvalWeibullCdf(x, lam, k)
 
 pmf = MakeWeibullPmf(lam, k, high=10)
 thinkplot.Pdf(pmf)
-thinkplot.decorate(xlabel='Lifetime',
-                   ylabel='PMF')
+thinkplot.decorate(xlabel="Lifetime", ylabel="PMF")
 
 
 # We can use `np.random.weibull` to generate random values from a Weibull distribution with given parameters.
@@ -113,12 +114,12 @@ thinkplot.decorate(xlabel='Lifetime',
 def SampleWeibull(lam, k, n=1):
     return np.random.weibull(k, size=n) * lam
 
+
 data = SampleWeibull(lam, k, 10000)
 cdf = Cdf(data)
 model = pmf.MakeCdf()
 thinkplot.Cdfs([cdf, model])
-thinkplot.decorate(xlabel='Lifetime',
-                   ylabel='CDF')
+thinkplot.decorate(xlabel="Lifetime", ylabel="CDF")
 # -
 
 # **Exercise:** Write a class called `LightBulb` that inherits from `Suite` and `Joint` and provides a `Likelihood` function that takes an observed lifespan as data and a tuple, `(lam, k)`, as a hypothesis.  It should return a likelihood proportional to the probability of the observed lifespan in a Weibull distribution with the given parameters.
@@ -146,7 +147,7 @@ thinkplot.decorate(xlabel='Lifetime',
 # Solution goes here
 # -
 
-# **Exercise:** Now suppose that instead of observing a lifespan, `k`, you observe a lightbulb that has operated for 1 year and is still working.  Write another version of `LightBulb` that takes data in this form and performs an update. 
+# **Exercise:** Now suppose that instead of observing a lifespan, `k`, you observe a lightbulb that has operated for 1 year and is still working.  Write another version of `LightBulb` that takes data in this form and performs an update.
 
 # +
 # Solution goes here
@@ -194,9 +195,9 @@ t_end = 10
 starts = np.random.uniform(0, t_end, n)
 lifespans = SampleWeibull(lam, k, n)
 
-df = pd.DataFrame({'start': starts, 'lifespan': lifespans})
-df['end'] = df.start + df.lifespan
-df['age_t'] = t_end - df.start
+df = pd.DataFrame({"start": starts, "lifespan": lifespans})
+df["end"] = df.start + df.lifespan
+df["age_t"] = t_end - df.start
 
 df.head()
 # -
@@ -207,10 +208,10 @@ df.head()
 data = []
 for i, row in df.iterrows():
     if row.end < t_end:
-        data.append(('eq', row.lifespan))
+        data.append(("eq", row.lifespan))
     else:
-        data.append(('gt', row.age_t))
-        
+        data.append(("gt", row.age_t))
+
 for pair in data:
     print(pair)
 
@@ -255,5 +256,3 @@ for pair in data:
 # +
 # Solution goes here
 # -
-
-

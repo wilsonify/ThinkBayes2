@@ -26,13 +26,15 @@ from __future__ import print_function, division
 
 
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
 
 import math
 import numpy as np
 
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
+
 # -
 
 # ## Improving Reading Ability
@@ -50,13 +52,13 @@ from thinkbayes import thinkplot
 # +
 import pandas as pd
 
-df = pd.read_csv('../data/drp_scores.csv', skiprows=21, delimiter='\t')
+df = pd.read_csv("../data/drp_scores.csv", skiprows=21, delimiter="\t")
 df.head()
 # -
 
 # And use `groupby` to compute the means for the two groups.
 
-grouped = df.groupby('Treatment')
+grouped = df.groupby("Treatment")
 for name, group in grouped:
     print(name, group.Response.mean())
 
@@ -66,8 +68,8 @@ for name, group in grouped:
 from scipy.stats import norm
 from thinkbayes import EvalNormalPdf
 
+
 class Normal(Suite, Joint):
-    
     def Likelihood(self, data, hypo):
         """
         
@@ -92,26 +94,26 @@ sigmas = np.linspace(5, 30, 101)
 from itertools import product
 
 control = Normal(product(mus, sigmas))
-data = df[df.Treatment=='Control'].Response
+data = df[df.Treatment == "Control"].Response
 control.Update(data)
 # -
 
 # After the update, we can plot the probability of each `mu`-`sigma` pair as a contour plot.
 
 thinkplot.Contour(control, pcolor=True)
-thinkplot.Config(xlabel='mu', ylabel='sigma')
+thinkplot.Config(xlabel="mu", ylabel="sigma")
 
 # And then we can extract the marginal distribution of `mu`
 
 pmf_mu0 = control.Marginal(0)
 thinkplot.Pdf(pmf_mu0)
-thinkplot.Config(xlabel='mu', ylabel='Pmf')
+thinkplot.Config(xlabel="mu", ylabel="Pmf")
 
 # And the marginal distribution of `sigma`
 
 pmf_sigma0 = control.Marginal(1)
 thinkplot.Pdf(pmf_sigma0)
-thinkplot.Config(xlabel='sigma', ylabel='Pmf')
+thinkplot.Config(xlabel="sigma", ylabel="Pmf")
 
 
 # **Exercise:** Run this analysis again for the control group.  What is the distribution of the difference between the groups?  What is the probability that the average "reading power" for the treatment group is higher?  What is the probability that the variance of the treatment group is higher?
@@ -165,6 +167,7 @@ thinkplot.Config(xlabel='sigma', ylabel='Pmf')
 # Here's the Suite that does the update.  It uses `MakeLocationPmf`,
 # defined below.
 
+
 class Paintball(Suite, Joint):
     """Represents hypotheses about the location of an opponent."""
 
@@ -179,9 +182,7 @@ class Paintball(Suite, Joint):
         locations: possible locations along the wall
         """
         self.locations = locations
-        pairs = [(alpha, beta) 
-                 for alpha in alphas 
-                 for beta in betas]
+        pairs = [(alpha, beta) for alpha in alphas for beta in betas]
         Suite.__init__(self, pairs)
 
     def Likelihood(self, data, hypo):
@@ -197,7 +198,6 @@ class Paintball(Suite, Joint):
         pmf = MakeLocationPmf(alpha, beta, self.locations)
         like = pmf.Prob(x)
         return like
-
 
 
 def MakeLocationPmf(alpha, beta, locations):
@@ -221,7 +221,6 @@ def MakeLocationPmf(alpha, beta, locations):
     return pmf
 
 
-
 def StrafingSpeed(alpha, beta, x):
     """Computes strafing speed, given location of shooter and impact.
 
@@ -232,7 +231,7 @@ def StrafingSpeed(alpha, beta, x):
     Returns: derivative of x with respect to theta
     """
     theta = math.atan2(x - alpha, beta)
-    speed = beta / math.cos(theta)**2
+    speed = beta / math.cos(theta) ** 2
     return speed
 
 
@@ -257,29 +256,27 @@ thinkplot.PrePlot(num=len(betas))
 
 for beta in betas:
     pmf = MakeLocationPmf(alpha, beta, locations)
-    pmf.label = 'beta = %d' % beta
+    pmf.label = "beta = %d" % beta
     thinkplot.Pdf(pmf)
 
-thinkplot.Config(xlabel='Distance',
-                ylabel='Prob')
+thinkplot.Config(xlabel="Distance", ylabel="Prob")
 # -
 
 # Here are the marginal posterior distributions for `alpha` and `beta`.
 
 # +
-marginal_alpha = suite.Marginal(0, label='alpha')
-marginal_beta = suite.Marginal(1, label='beta')
+marginal_alpha = suite.Marginal(0, label="alpha")
+marginal_beta = suite.Marginal(1, label="beta")
 
-print('alpha CI', marginal_alpha.CredibleInterval(50))
-print('beta CI', marginal_beta.CredibleInterval(50))
+print("alpha CI", marginal_alpha.CredibleInterval(50))
+print("beta CI", marginal_beta.CredibleInterval(50))
 
 thinkplot.PrePlot(num=2)
-    
+
 thinkplot.Cdf(Cdf(marginal_alpha))
 thinkplot.Cdf(Cdf(marginal_beta))
-    
-thinkplot.Config(xlabel='Distance',
-                ylabel='Prob')
+
+thinkplot.Config(xlabel="Distance", ylabel="Prob")
 # -
 
 # To visualize the joint posterior, I take slices for a few values of `beta` and plot the conditional distributions of `alpha`.  If the shooter is close to the wall, we can be somewhat confident of his position.  The farther away he is, the less certain we are.
@@ -290,11 +287,10 @@ thinkplot.PrePlot(num=len(betas))
 
 for beta in betas:
     cond = suite.Conditional(0, 1, beta)
-    cond.label = 'beta = %d' % beta
+    cond.label = "beta = %d" % beta
     thinkplot.Pdf(cond)
 
-thinkplot.Config(xlabel='Distance',
-                ylabel='Prob')
+thinkplot.Config(xlabel="Distance", ylabel="Prob")
 # -
 
 # Another way to visualize the posterio distribution: a pseudocolor plot of probability as a function of `alpha` and `beta`.
@@ -302,9 +298,7 @@ thinkplot.Config(xlabel='Distance',
 # +
 thinkplot.Contour(suite.GetDict(), contour=False, pcolor=True)
 
-thinkplot.Config(xlabel='alpha',
-                ylabel='beta',
-                axis=[0, 30, 0, 20])
+thinkplot.Config(xlabel="alpha", ylabel="beta", axis=[0, 30, 0, 20])
 # -
 
 # Here's another visualization that shows posterior credible regions.
@@ -319,15 +313,12 @@ for p in percentages:
         d[pair] += 1
 
 thinkplot.Contour(d, contour=False, pcolor=True)
-thinkplot.Text(17, 4, '25', color='white')
-thinkplot.Text(17, 15, '50', color='white')
-thinkplot.Text(17, 30, '75')
+thinkplot.Text(17, 4, "25", color="white")
+thinkplot.Text(17, 15, "50", color="white")
+thinkplot.Text(17, 30, "75")
 
-thinkplot.Config(xlabel='alpha',
-                   ylabel='beta',
-                   legend=False)
+thinkplot.Config(xlabel="alpha", ylabel="beta", legend=False)
 # -
-
 
 
 # **Exercise:** From [John D. Cook](http://www.johndcook.com/blog/2010/07/13/lincoln-index/)
@@ -427,7 +418,7 @@ thinkplot.Config(xlabel='alpha',
 # Species: Species of flea beetle from the genus Chaetocnema
 #
 
-# Suggestions: 
+# Suggestions:
 #
 # 1. Plot CDFs for the width and angle data, broken down by species, to get a visual sense of whether the normal distribution is a good model.
 #
@@ -443,29 +434,30 @@ thinkplot.Config(xlabel='alpha',
 # +
 import pandas as pd
 
-df = pd.read_csv('../data/flea_beetles.csv', delimiter='\t')
+df = pd.read_csv("../data/flea_beetles.csv", delimiter="\t")
 df.head()
 
 
 # -
 
+
 def plot_cdfs(df, col):
-    for name, group in df.groupby('Species'):
+    for name, group in df.groupby("Species"):
         cdf = Cdf(group[col], label=name)
         thinkplot.Cdf(cdf)
-    
-    thinkplot.Config(xlabel=col, legend=True, loc='lower right')
+
+    thinkplot.Config(xlabel=col, legend=True, loc="lower right")
 
 
-plot_cdfs(df, 'Width')
+plot_cdfs(df, "Width")
 
-plot_cdfs(df, 'Angle')
+plot_cdfs(df, "Angle")
 
 # +
 from thinkbayes import EvalNormalPdf
 
+
 class Beetle(Suite, Joint):
-    
     def Likelihood(self, data, hypo):
         """
         data: sequence of measurements
@@ -474,7 +466,7 @@ class Beetle(Suite, Joint):
         mu, sigma = hypo
         likes = EvalNormalPdf(data, mu, sigma)
         return np.prod(likes)
-    
+
     def PredictiveProb(self, data):
         """Compute the posterior total probability of a datum.
         
@@ -490,6 +482,7 @@ class Beetle(Suite, Joint):
 # +
 from itertools import product
 
+
 def MakeWidthSuite(data):
     mus = np.linspace(115, 160, 51)
     sigmas = np.linspace(1, 10, 51)
@@ -500,7 +493,7 @@ def MakeWidthSuite(data):
 
 # -
 
-groups = df.groupby('Species')
+groups = df.groupby("Species")
 
 for name, group in groups:
     suite = MakeWidthSuite(group.Width)
@@ -523,15 +516,14 @@ for name, group in groups:
 
 
 class Species:
-    
     def __init__(self, name, suite_width, suite_angle):
         self.name = name
         self.suite_width = suite_width
         self.suite_angle = suite_angle
-        
+
     def __str__(self):
         return self.name
-        
+
     def Likelihood(self, data):
         width, angle = data
         like1 = self.suite_width.PredictiveProb(width)
@@ -548,11 +540,10 @@ for name, group in groups:
     species[name] = Species(name, suite_width, suite_angle)
 # -
 
-species['Con'].Likelihood((145, 14))
+species["Con"].Likelihood((145, 14))
 
 
 class Classifier(Suite):
-    
     def Likelihood(self, data, hypo):
         return hypo.Likelihood(data)
 
@@ -564,5 +555,3 @@ for hypo, prob in suite.Items():
 suite.Update((145, 14))
 for hypo, prob in suite.Items():
     print(hypo, prob)
-
-

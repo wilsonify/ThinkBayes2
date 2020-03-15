@@ -32,6 +32,7 @@ from thinkbayes import Hist, Pmf, Suite, Beta
 from thinkbayes import thinkplot
 
 import numpy as np
+
 # -
 
 # ## Comparing distributions
@@ -46,17 +47,17 @@ import numpy as np
 #
 # First I create a Beta distribution for each of the competitors, and update it with the results.
 
-rhode = Beta(1, 1, label='Rhode')
+rhode = Beta(1, 1, label="Rhode")
 rhode.Update((22, 11))
 
-wei = Beta(1, 1, label='Wei')
+wei = Beta(1, 1, label="Wei")
 wei.Update((21, 12))
 
 # Based on the data, the distribution for Rhode is slightly farther right than the distribution for Wei, but there is a lot of overlap.
 
 thinkplot.Pdf(rhode.MakePmf())
 thinkplot.Pdf(wei.MakePmf())
-thinkplot.Config(xlabel='x', ylabel='Probability')
+thinkplot.Config(xlabel="x", ylabel="Probability")
 
 # To compute the probability that Rhode actually has a higher value of `p`, there are two options:
 #
@@ -86,6 +87,7 @@ np.mean(rhode_sample > wei_sample)
 
 
 # The other option is to make `Pmf` objects that approximate the Beta distributions, and enumerate pairs of values:
+
 
 def ProbGreater(pmf1, pmf2):
     total = 0
@@ -119,6 +121,7 @@ pmf1.ProbLess(pmf2)
 # +
 import random
 
+
 def flip(p):
     return random.random() < p
 
@@ -137,20 +140,20 @@ losses = 0
 for _ in range(iters):
     x1 = rhode.Random()
     x2 = wei.Random()
-    
+
     count1 = count2 = 0
     for _ in range(25):
         if flip(x1):
             count1 += 1
         if flip(x2):
             count2 += 1
-            
+
     if count1 > count2:
         wins += 1
     if count1 < count2:
         losses += 1
-        
-wins/iters, losses/iters
+
+wins / iters, losses / iters
 # -
 
 # Or, realizing that the distribution of `k` is binomial, we can simplify the code using NumPy:
@@ -168,7 +171,8 @@ np.mean(rhode_rematch < wei_rematch)
 # +
 from thinkbayes import MakeBinomialPmf
 
-def MakeBinomialMix(pmf, label=''):
+
+def MakeBinomialMix(pmf, label=""):
     mix = Pmf(label=label)
     for x, prob in pmf.Items():
         binom = MakeBinomialPmf(n=25, p=x)
@@ -179,11 +183,11 @@ def MakeBinomialMix(pmf, label=''):
 
 # -
 
-rhode_rematch = MakeBinomialMix(rhode.MakePmf(), label='Rhode')
-wei_rematch = MakeBinomialMix(wei.MakePmf(), label='Wei')
+rhode_rematch = MakeBinomialMix(rhode.MakePmf(), label="Rhode")
+wei_rematch = MakeBinomialMix(wei.MakePmf(), label="Wei")
 thinkplot.Pdf(rhode_rematch)
 thinkplot.Pdf(wei_rematch)
-thinkplot.Config(xlabel='hits')
+thinkplot.Config(xlabel="hits")
 
 rhode_rematch.ProbGreater(wei_rematch), rhode_rematch.ProbLess(wei_rematch)
 
@@ -191,6 +195,7 @@ rhode_rematch.ProbGreater(wei_rematch), rhode_rematch.ProbLess(wei_rematch)
 
 # +
 from thinkbayes import MakeMixture
+
 
 def MakeBinomialMix2(pmf):
     binomials = Pmf()
@@ -236,6 +241,7 @@ thinkplot.Hist(pmf)
 
 
 # Alternatively, we could compute the distribution of the sum by enumeration:
+
 
 def AddPmfs(pmf1, pmf2):
     pmf = Pmf()
@@ -314,7 +320,7 @@ maxes[:10]
 pmf = Pmf(maxes)
 thinkplot.Hist(pmf)
 
-# Or we can figure it out analytically.  If the maximum is less-than-or-equal-to some value `k`, all 6 random selections must be less-than-or-equal-to `k`, so: 
+# Or we can figure it out analytically.  If the maximum is less-than-or-equal-to some value `k`, all 6 random selections must be less-than-or-equal-to `k`, so:
 #
 # $ CDF_{max}(x) = CDF(x)^6 $
 #
@@ -339,9 +345,10 @@ thinkplot.Hist(pmf)
 #
 # Write a function that takes a Pmf and an integer `n` and returns a Pmf that represents the distribution of the minimum of `k` values drawn from the given Pmf.  Use your function to compute the distribution of the minimum score Kim Rhode would be expected to shoot in six competitions.
 
+
 def Min(pmf, k):
     cdf = pmf.MakeCdf()
-    cdf.ps = 1 - (1-cdf.ps)**k
+    cdf.ps = 1 - (1 - cdf.ps) ** k
     return cdf
 
 

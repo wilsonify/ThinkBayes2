@@ -34,6 +34,7 @@ from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import MakePoissonPmf, EvalBinomialPmf, MakeMixture
 
 from thinkbayes import thinkplot
+
 # -
 
 # ## The rain in Boston problem
@@ -55,7 +56,7 @@ from thinkbayes import thinkplot
 # 3. During the last three days in the Boston area, we have measured the following rainfalls in inches: 0.78, 0.87, 0.64.
 #
 # Use this data to compute a joint posterior distributions for the
-# parameters of the gamma distribution.  
+# parameters of the gamma distribution.
 #
 # You can use the following priors:
 #
@@ -76,8 +77,9 @@ from thinkbayes import thinkplot
 # +
 from scipy.special import gamma
 
+
 def gamma_pdf(x, k, theta):
-    return x**(k-1) * np.exp(-x/theta) / gamma(k) / theta**k
+    return x ** (k - 1) * np.exp(-x / theta) / gamma(k) / theta ** k
 
 
 # -
@@ -86,6 +88,7 @@ def gamma_pdf(x, k, theta):
 
 # +
 from scipy import stats
+
 
 def gamma_pdf2(x, k, theta):
     return stats.gamma(k, scale=theta).pdf(x)
@@ -98,7 +101,7 @@ def gamma_pdf2(x, k, theta):
 # +
 x = 2
 k = 3
-theta = 2 
+theta = 2
 
 gamma_pdf(x, k, theta)
 # -
@@ -110,8 +113,8 @@ gamma_pdf2(x, k, theta)
 
 # Now here's the `Suite` we'll use to estimate parameters from data.
 
+
 class Rainfall(Suite, Joint):
-    
     def Likelihood(self, data, hypo):
         """
         
@@ -131,21 +134,21 @@ from scipy.stats import norm
 
 ks = np.linspace(0.01, 2, 101)
 ps = norm(0, 0.5).pdf(ks)
-pmf_k = Pmf(dict(zip(ks, ps)));
+pmf_k = Pmf(dict(zip(ks, ps)))
 # -
 
 # And a HalfNormal for `theta`
 
 thetas = np.linspace(0.01, 12, 101)
 ps = norm(0, 4).pdf(thetas)
-pmf_theta = Pmf(dict(zip(thetas, ps)));
+pmf_theta = Pmf(dict(zip(thetas, ps)))
 
 # Now we can initialize the suite.
 
 # +
 from thinkbayes import MakeJoint
 
-suite = Rainfall(MakeJoint(pmf_k, pmf_theta));
+suite = Rainfall(MakeJoint(pmf_k, pmf_theta))
 # -
 
 # And update it.
@@ -165,17 +168,18 @@ data = [0.78, 0.87, 0.64]
 post_k = suite.Marginal(0)
 print(post_k.Mean())
 thinkplot.Pdf(post_k)
-thinkplot.decorate(xlabel='k', ylabel='PDF')
+thinkplot.decorate(xlabel="k", ylabel="PDF")
 
 # And here's the posterior marginal for `theta`
 
 post_theta = suite.Marginal(1)
 print(post_theta.Mean())
 thinkplot.Pdf(post_theta)
-thinkplot.decorate(xlabel='theta', ylabel='PDF')
+thinkplot.decorate(xlabel="theta", ylabel="PDF")
 
 
 # To make the predictive distribution, we'll need to make PMF approximations to gamma distributions.
+
 
 def make_gamma_pmf(xs, k, theta):
     ps = gamma_pdf(xs, k, theta)
@@ -211,9 +215,11 @@ thinkplot.Pdf(pred_pmf)
 
 # +
 from warnings import simplefilter
-simplefilter('ignore', FutureWarning)
+
+simplefilter("ignore", FutureWarning)
 
 import pymc3 as pm
+
 # -
 
 # Here's the model in three lines.  The only trick part is translating to yet another parameterization.
@@ -222,9 +228,9 @@ import pymc3 as pm
 model = pm.Model()
 
 with model:
-    k = pm.HalfNormal('k', 0.5)
-    theta = pm.HalfNormal('theta', 4)
-    rain = pm.Gamma('rain', alpha=k, beta=1/theta, observed=data)
+    k = pm.HalfNormal("k", 0.5)
+    theta = pm.HalfNormal("theta", 4)
+    rain = pm.Gamma("rain", alpha=k, beta=1 / theta, observed=data)
 # -
 
 # Sampling worked well enough with the default parameters.
@@ -234,15 +240,15 @@ with model:
 
 # Here are the posterior distributions.
 
-pm.traceplot(trace);
+pm.traceplot(trace)
 
-pm.plot_posterior(trace);
+pm.plot_posterior(trace)
 
 # Here are the posterior means.
 
-trace['k'].mean()
+trace["k"].mean()
 
-trace['theta'].mean()
+trace["theta"].mean()
 
 # ### Predictions
 #
@@ -253,16 +259,13 @@ with model:
 
 # And the posterior predictive mean.
 
-pred['rain'].mean()
+pred["rain"].mean()
 
 # Comparing the results from MCMC and the grid algorithm
 
-cdf = Cdf(pred['rain'].flatten())
-thinkplot.Cdf(cdf, label='MCMC')
-thinkplot.Cdf(pred_pmf.MakeCdf(), label='Grid')
-thinkplot.decorate(xlabel='Predicted rainfall',
-                   ylabel='CDF')
+cdf = Cdf(pred["rain"].flatten())
+thinkplot.Cdf(cdf, label="MCMC")
+thinkplot.Cdf(pred_pmf.MakeCdf(), label="Grid")
+thinkplot.decorate(xlabel="Predicted rainfall", ylabel="CDF")
 
 # Looks good.  The predictive means are not quite the same; the most likely culprit is the resolution of the grid algorithm.
-
-

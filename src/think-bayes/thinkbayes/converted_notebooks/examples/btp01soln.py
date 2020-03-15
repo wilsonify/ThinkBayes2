@@ -25,12 +25,14 @@ from __future__ import print_function, division
 
 
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
 
 import numpy as np
 
 from thinkbayes import Hist, Pmf, Cdf, Suite, Beta
 from thinkbayes import thinkplot
+
 # -
 
 # ## The sock problem
@@ -43,27 +45,27 @@ from thinkbayes import thinkplot
 # +
 # Solution
 
-pmf = Pmf(['drawer 1', 'drawer 2'])
-pmf['drawer 1'] *= (40/50)**2 + (10/50)**2
-pmf['drawer 2'] *= (30/50)**2 + (20/50)**2
+pmf = Pmf(["drawer 1", "drawer 2"])
+pmf["drawer 1"] *= (40 / 50) ** 2 + (10 / 50) ** 2
+pmf["drawer 2"] *= (30 / 50) ** 2 + (20 / 50) ** 2
 pmf.Normalize()
 pmf.Print()
 
 # +
 # Solution
 
-pmf = Pmf(['drawer 1', 'drawer 2'])
-pmf['drawer 1'] *= (40/50)*(39/49) + (10/50)*(9/49)
-pmf['drawer 2'] *= (30/50)*(29/49) + (20/50)*(19/49)
+pmf = Pmf(["drawer 1", "drawer 2"])
+pmf["drawer 1"] *= (40 / 50) * (39 / 49) + (10 / 50) * (9 / 49)
+pmf["drawer 2"] *= (30 / 50) * (29 / 49) + (20 / 50) * (19 / 49)
 pmf.Normalize()
 pmf.Print()
 
 
 # +
 # Solution
+
 
 class Socks(Suite):
-    
     def Likelihood(self, data, hypo):
         """Probability of data under hypo.
         
@@ -72,11 +74,13 @@ class Socks(Suite):
         """
         white, black = hypo
         total = white + black
-        like = white/total*(white-1)/(total-1) + black/total*(black-1)/(total-1)
-        if data == 'pair':
+        like = white / total * (white - 1) / (total - 1) + black / total * (
+            black - 1
+        ) / (total - 1)
+        if data == "pair":
             return like
         else:
-            return 1-like                         
+            return 1 - like
 
 
 # +
@@ -84,17 +88,17 @@ class Socks(Suite):
 
 n = 50
 socks = Socks()
-for white in range(n+1):
-    socks[white, n-white] = 1
+for white in range(n + 1):
+    socks[white, n - white] = 1
 socks.Normalize()
 thinkplot.Pdf(socks)
 
 # +
 # Solution
 
-socks.Update('pair')
+socks.Update("pair")
 thinkplot.Pdf(socks)
-thinkplot.Config(ylim=[0,0.03])
+thinkplot.Config(ylim=[0, 0.03])
 # -
 
 # ## Chess-playing twins
@@ -106,9 +110,9 @@ thinkplot.Config(ylim=[0,0.03])
 # +
 # Solution
 
-pmf = Pmf(['AB', 'BA'])
-pmf['AB'] = 0.4 * 0.3
-pmf['BA'] = 0.7 * 0.6
+pmf = Pmf(["AB", "BA"])
+pmf["AB"] = 0.4 * 0.3
+pmf["BA"] = 0.7 * 0.6
 pmf.Normalize()
 pmf.Print()
 
@@ -116,10 +120,11 @@ pmf.Print()
 # +
 # Solution
 
+
 class Chess(Suite):
-    
+
     prob_I_beat = dict(A=0.4, B=0.7)
-    
+
     def Likelihood(self, data, hypo):
         """Probability of data under hypo.
         
@@ -129,18 +134,18 @@ class Chess(Suite):
         total = 1
         for outcome, twin in zip(data, hypo):
             like = self.prob_I_beat[twin]
-            if outcome == 'W':
+            if outcome == "W":
                 total *= like
             else:
-                total *= 1-like
+                total *= 1 - like
         return total
 
 
 # +
 # Solution
 
-chess = Chess(['AB', 'BA'])
-chess.Update('WL')
+chess = Chess(["AB", "BA"])
+chess.Update("WL")
 chess.Print()
 # -
 
@@ -165,40 +170,41 @@ chess.Print()
 # +
 # Solution
 
-officer = {'everything':0.15, 'something':0.25, 'nothing':0.6}
+officer = {"everything": 0.15, "something": 0.25, "nothing": 0.6}
+
 
 class ThoughtPolice(Suite):
-
     def Likelihood(self, data, hypo):
-        if data == 'gave away':
-            if hypo == 'everything':
+        if data == "gave away":
+            if hypo == "everything":
                 return 0
-            elif hypo == 'something':
+            elif hypo == "something":
                 return 1
             else:
                 return 3
-        elif data == 'none':
-            if hypo == 'everything':
+        elif data == "none":
+            if hypo == "everything":
                 return 2
-            elif hypo == 'something':
+            elif hypo == "something":
                 return 1
             else:
                 return 1
-        else: # data == 'good comrades'
-            if hypo == 'everything':
+        else:  # data == 'good comrades'
+            if hypo == "everything":
                 return 0
-            elif hypo == 'something':
+            elif hypo == "something":
                 return 0
             else:
                 return 2
-        
+
+
 pmf = ThoughtPolice(officer)
 pmf.Print()
 
 # +
 # Solution
 
-pmf.Update('none')
+pmf.Update("none")
 pmf.Print()
 # -
 
@@ -221,9 +227,9 @@ pmf.Print()
 # +
 # Solution
 
-colors = 'GRRGGG'
+colors = "GRRGGG"
 locs = range(len(colors))
-data = 'R'
+data = "R"
 
 pmf = Pmf(locs)
 for hypo in pmf:
@@ -238,10 +244,11 @@ pmf.Print()
 # +
 # Solution
 
+
 class Robot(Suite):
-    
-    colors = 'GRRGGG'
-    
+
+    colors = "GRRGGG"
+
     def Likelihood(self, data, hypo):
         """
         
@@ -258,7 +265,7 @@ class Robot(Suite):
 # Solution
 
 robot = Robot(locs)
-robot.Update('R')
+robot.Update("R")
 robot.Print()
 
 
@@ -271,10 +278,11 @@ robot.Print()
 # +
 # Solution
 
+
 class Robot2(Suite):
-    
-    colors = 'GRRGGG'
-    
+
+    colors = "GRRGGG"
+
     def Likelihood(self, data, hypo):
         """
         
@@ -293,13 +301,13 @@ class Robot2(Suite):
 # Solution
 
 robot = Robot2(locs)
-robot.Update((0, 'R'))
+robot.Update((0, "R"))
 robot.Print()
 
 # +
 # Solution
 
-robot.Update((1, 'G'))
+robot.Update((1, "G"))
 robot.Print()
 # -
 
@@ -314,24 +322,25 @@ robot.Print()
 
 from fractions import Fraction
 
-d1 = Pmf({'Red':Fraction(2), 'Blue':Fraction(4)}, label='d1 (bluish) ')
+d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1 (bluish) ")
 d1.Print()
 
 # +
 # Solution
 
-d2 = Pmf({'Red':Fraction(4), 'Blue':Fraction(2)}, label='d2 (reddish)')
+d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2 (reddish)")
 d2.Print()
 
 # +
 # Solution
 
-dice = Pmf({d1:Fraction(1), d2:Fraction(1)})
+dice = Pmf({d1: Fraction(1), d2: Fraction(1)})
 dice.Print()
 
 
 # +
 # Solution
+
 
 class Dice(Suite):
     def Likelihood(self, data, hypo):
@@ -345,14 +354,14 @@ class Dice(Suite):
 # +
 # Solution
 
-prior = Dice({d1:Fraction(1), d2:Fraction(1)})
+prior = Dice({d1: Fraction(1), d2: Fraction(1)})
 prior.Print()
 
 # +
 # Solution
 
 posterior = prior.Copy()
-posterior.Update('Red')
+posterior.Update("Red")
 posterior.Print()
 # -
 
@@ -398,7 +407,7 @@ predictive.Print()
 #    d2, red       1/2 * 2/3
 #    d2, blue      1/2 * 1/3
 
-#On the last roll, I tell you that the outcome is red, so we are left with two possibilities:
+# On the last roll, I tell you that the outcome is red, so we are left with two possibilities:
 
 #    d1, red       1/2 * 1/3
 #    d2, red       1/2 * 2/3
@@ -432,7 +441,7 @@ posterior.Print()
 # +
 # Solution
 
-#In summary, each of the four scenarios yields a different pair of posterior
+# In summary, each of the four scenarios yields a different pair of posterior
 # and predictive distributions.
 
 # Scenario        Posterior probability of d2      Predictive probability of red
@@ -455,6 +464,7 @@ posterior.Print()
 # +
 # Solution
 
+
 def generate_times(lam, n=10):
     gaps = np.random.exponential(lam, n)
     times = np.cumsum(gaps)
@@ -472,26 +482,27 @@ for time in generate_times(20, 10):
 # +
 # Solution
 
+
 def generate_buses(names, lams, n):
     buses = [generate_times(lam, n) for lam in lams]
     times = [next(bus) for bus in buses]
 
     while True:
-        i = np.argmin(times) 
-        yield(names[i], times[i])
+        i = np.argmin(times)
+        yield (names[i], times[i])
         times[i] = next(buses[i])
 
 
 # +
 # Solution
 
-next(generate_buses('AB', [20, 30], 10))
+next(generate_buses("AB", [20, 30], 10))
 
 # +
 # Solution
 
 res = []
-for bus, time in generate_buses('AB', [20, 30], 1000):
+for bus, time in generate_buses("AB", [20, 30], 1000):
     res.append((bus, time))
 
 # +
@@ -503,7 +514,5 @@ buses, times = zip(*res)
 # Solution
 
 hist = Hist(buses)
-hist['A'] / hist.Total()
+hist["A"] / hist.Total()
 # -
-
-

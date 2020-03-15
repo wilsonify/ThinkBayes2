@@ -32,6 +32,7 @@ from thinkbayes import Hist, Pmf, Suite, Beta
 from thinkbayes import thinkplot
 
 import numpy as np
+
 # -
 
 # ## Section
@@ -39,19 +40,13 @@ import numpy as np
 # xxx
 
 
-
 #
-
-
-
-#
-
 
 
 #
 
 
-
 #
 
 
+#

@@ -32,6 +32,7 @@ from thinkbayes import Pmf, Suite, Beta
 from thinkbayes import thinkplot
 
 import numpy as np
+
 # -
 
 # ## The social desirability problem
@@ -79,5 +80,3 @@ import numpy as np
 # +
 # Solution goes here
 # -
-
-

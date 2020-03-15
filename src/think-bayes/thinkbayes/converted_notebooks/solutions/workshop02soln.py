@@ -32,7 +32,8 @@ from thinkbayes import Suite
 from thinkbayes import thinkplot
 
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
 
 
 # -
@@ -44,54 +45,54 @@ warnings.filterwarnings('ignore')
 #
 # Note that `hypo` is in the range 0 to 100.
 
+
 class Bandit(Suite):
-    
     def Likelihood(self, data, hypo):
         """ 
         hypo is the prob of win (0-100)
         data is a string, either 'W' or 'L'
         """
         x = hypo / 100
-        if data == 'W':
+        if data == "W":
             return x
         else:
-            return 1-x
+            return 1 - x
 
 
 # We'll start with a uniform distribution from 0 to 100.
 
 bandit = Bandit(range(101))
 thinkplot.Pdf(bandit)
-thinkplot.Config(xlabel='x', ylabel='Probability')
+thinkplot.Config(xlabel="x", ylabel="Probability")
 
 # Now we can update with a single loss:
 
-bandit.Update('L')
+bandit.Update("L")
 thinkplot.Pdf(bandit)
-thinkplot.Config(xlabel='x', ylabel='Probability', legend=False)
+thinkplot.Config(xlabel="x", ylabel="Probability", legend=False)
 
 # Another loss:
 
-bandit.Update('L')
+bandit.Update("L")
 thinkplot.Pdf(bandit)
-thinkplot.Config(xlabel='x', ylabel='Probability', legend=False)
+thinkplot.Config(xlabel="x", ylabel="Probability", legend=False)
 
 # And a win:
 
-bandit.Update('W')
+bandit.Update("W")
 thinkplot.Pdf(bandit)
-thinkplot.Config(xlabel='x', ylabel='Probability', legend=False)
+thinkplot.Config(xlabel="x", ylabel="Probability", legend=False)
 
 # Starting over, here's what it looks like after 1 win and 9 losses.
 
 # +
 bandit = Bandit(range(101))
 
-for outcome in 'WLLLLLLLLL':
+for outcome in "WLLLLLLLLL":
     bandit.Update(outcome)
 
 thinkplot.Pdf(bandit)
-thinkplot.Config(xlabel='x', ylabel='Probability', legend=False)
+thinkplot.Config(xlabel="x", ylabel="Probability", legend=False)
 # -
 
 # The posterior mean is about 17%
@@ -122,16 +123,18 @@ from collections import Counter
 
 counter = Counter()
 
+
 def flip(p):
     return random() < p
+
 
 def play(i):
     counter[i] += 1
     p = actual_probs[i]
     if flip(p):
-        return 'W'
+        return "W"
     else:
-        return 'L'
+        return "L"
 
 
 # -
@@ -140,7 +143,7 @@ def play(i):
 
 for i in range(20):
     result = play(3)
-    print(result, end=' ')
+    print(result, end=" ")
 
 # Now I'll make 4 `Bandit` objects to represent our beliefs about the 4 machines.
 
@@ -150,12 +153,13 @@ beliefs = [Bandit(prior) for i in range(4)]
 # This function displays the four posterior distributions
 
 # +
-options = dict(yticklabels='invisible')
+options = dict(yticklabels="invisible")
+
 
 def plot(beliefs, **options):
     thinkplot.preplot(rows=2, cols=2)
     for i, b in enumerate(beliefs):
-        thinkplot.subplot(i+1)
+        thinkplot.subplot(i + 1)
         thinkplot.Pdf(b, label=i)
         thinkplot.Config(**options)
 
@@ -166,6 +170,7 @@ plot(beliefs, legend=True)
 
 
 # Now suppose we play each machine 10 times.  This function updates our beliefs about one of the machines based on one outcome.
+
 
 def update(beliefs, i, outcome):
     beliefs[i].Update(outcome)
@@ -193,6 +198,7 @@ plot(beliefs, legend=True)
 #
 # `argmax` returns the index of the machine that chose the highest value.
 
+
 def choose(beliefs):
     ps = [b.Random() for b in beliefs]
     return np.argmax(ps)
@@ -204,6 +210,7 @@ choose(beliefs)
 
 
 # Putting it all together, the following function chooses a machine, plays once, and updates `beliefs`:
+
 
 def choose_play_update(beliefs, verbose=False):
     i = choose(beliefs)
@@ -231,7 +238,7 @@ num_plays = 100
 
 for i in range(num_plays):
     choose_play_update(beliefs)
-    
+
 plot(beliefs)
 # -
 
@@ -250,5 +257,3 @@ for machine, count in sorted(counter.items()):
     print(machine, count)
 
 # **Exercise:**  Go back and run this section again with a different value of `num_play` and see how it does.
-
-

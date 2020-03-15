@@ -60,8 +60,8 @@ from thinkbayes import thinkplot as tplt
 #
 # Here's a class that represents a suite of hypotheses about the urns:
 
+
 class Urns(Suite):
-    
     def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
         
@@ -69,23 +69,23 @@ class Urns(Suite):
         hypo: urn index from 0..3
         """
         prob_blue = hypo / 3
-        if data == 'B':
+        if data == "B":
             return prob_blue
         else:
-            return 1-prob_blue
+            return 1 - prob_blue
 
 
 # Here's the uniform prior:
 
 prior = Urns([0, 1, 2, 3])
 tplt.Hist(prior)
-tplt.decorate(xlabel='Urn index (i)', ylabel='PMF')
+tplt.decorate(xlabel="Urn index (i)", ylabel="PMF")
 
 # Here's Jacob's update after 5 blue marbles.
 
 # +
 jacob = prior.Copy()
-B5G0 = 'B'*5
+B5G0 = "B" * 5
 
 for data in B5G0:
     jacob.Update(data)
@@ -93,15 +93,15 @@ for data in B5G0:
 jacob.Print()
 # -
 
-tplt.Hist(prior, color='gray')
+tplt.Hist(prior, color="gray")
 tplt.Hist(jacob)
-tplt.decorate(xlabel='Urn index (i)', ylabel='PMF')
+tplt.decorate(xlabel="Urn index (i)", ylabel="PMF")
 
 # Here's Emily's update after an additional 12 blue and 3 green.
 
 # +
 emily = jacob.Copy()
-B12G3 = 'B'*12 + 'G'*3
+B12G3 = "B" * 12 + "G" * 3
 
 for data in B12G3:
     emily.Update(data)
@@ -110,12 +110,12 @@ emily.Print()
 
 # +
 tplt.preplot(cols=2)
-tplt.Hist(jacob, label='Jacob')
-tplt.decorate(xlabel='Urn index (i)', ylabel='PMF')
+tplt.Hist(jacob, label="Jacob")
+tplt.decorate(xlabel="Urn index (i)", ylabel="PMF")
 
 tplt.subplot(2)
-tplt.Hist(emily, label='Emily')
-tplt.decorate(xlabel='Urn index (i)', ylabel='PMF')
+tplt.Hist(emily, label="Emily")
+tplt.decorate(xlabel="Urn index (i)", ylabel="PMF")
 # -
 
 # What should Jacob believe about Bnext?
@@ -124,9 +124,9 @@ tplt.decorate(xlabel='Urn index (i)', ylabel='PMF')
 total = 0
 for i, prob_i in jacob.Items():
     print(i, prob_i)
-    prob_blue = i/3
+    prob_blue = i / 3
     total += prob_i * prob_blue
-    
+
 total
 
 
@@ -134,12 +134,13 @@ total
 
 # Let's make it a function:
 
+
 def prob_b_next(suite):
     total = 0
     for i, prob_i in suite.Items():
-        prob_blue = i/3
+        prob_blue = i / 3
         total += prob_i * prob_blue
-    
+
     return total
 
 
@@ -156,23 +157,21 @@ prob_b_next(emily)
 # Here's the effect on Jacob.
 
 print(prob_b_next(jacob))
-jacob.Update('B')
+jacob.Update("B")
 print(prob_b_next(jacob))
 
 # And on Emily.
 
 print(prob_b_next(emily))
-emily.Update('B')
+emily.Update("B")
 print(prob_b_next(emily))
 
 # Suppose we draw a **green** marble from the same urn and show it to Jacob and Emily.  How much do their beliefs about Bnext change?
 
 print(prob_b_next(jacob))
-jacob.Update('G')
+jacob.Update("G")
 print(prob_b_next(jacob))
 
 print(prob_b_next(emily))
-emily.Update('G')
+emily.Update("G")
 print(prob_b_next(emily))
-
-

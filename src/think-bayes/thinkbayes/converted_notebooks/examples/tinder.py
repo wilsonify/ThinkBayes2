@@ -15,6 +15,7 @@
 from __future__ import print_function, division
 import thinkbayes
 from thinkbayes import thinkplot
+
 # %matplotlib inline
 
 # Ignore the first few cells for now -- they are experiments I am working on related to the prior.
@@ -37,17 +38,18 @@ thinkplot.Pdf(pmf)
 # +
 metapmf = thinkbayes.Pmf()
 for lam, prob in pmf.Items():
-    if lam==0: continue
+    if lam == 0:
+        continue
     pmf = thinkbayes.MakeExponentialPmf(lam, high=30)
     metapmf[pmf] = prob
-    
+
 interarrival = thinkbayes.MakeMixture(metapmf)
 thinkplot.Pdf(interarrival)
 # -
 
 # Ok, let's start here.  Suppose we know $\lambda$.  We can compute the distribution of interarrival times (times between logins).
 
-lam = 0.1    # average arrival rate in logins per day
+lam = 0.1  # average arrival rate in logins per day
 interarrival = pmf = thinkbayes.MakeExponentialPmf(lam, high=90)
 thinkplot.Pdf(interarrival)
 
@@ -72,7 +74,7 @@ for time, prob in observed.Items():
         continue
     pmf = thinkbayes.MakeUniformPmf(0, time, 101)
     metapmf[pmf] = prob
-    
+
 timesince = thinkbayes.MakeMixture(metapmf)
 print(timesince.Mean())
 thinkplot.Pdf(timesince)
@@ -96,6 +98,7 @@ thinkplot.Pdf(pdf)
 
 import scipy
 import numpy
+
 xs = numpy.linspace(0, 90, 101)
 ys = [scipy.misc.derivative(cdf.Prob, x) for x in xs]
 
@@ -104,7 +107,6 @@ ys = [scipy.misc.derivative(cdf.Prob, x) for x in xs]
 thinkplot.plot(xs, ys)
 
 #
-
 
 
 #

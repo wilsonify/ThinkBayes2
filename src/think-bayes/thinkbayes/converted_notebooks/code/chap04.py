@@ -25,7 +25,8 @@ from __future__ import print_function, division
 
 
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
 
 import numpy as np
 
@@ -39,8 +40,8 @@ from thinkbayes import thinkplot
 #
 # Here's a class that represents hypotheses about the probability a coin lands heads.
 
-class Euro(Suite):
 
+class Euro(Suite):
     def Likelihood(self, data, hypo):
         """Computes the likelihood of `data` given `hypo`.
         
@@ -50,17 +51,17 @@ class Euro(Suite):
         returns: float
         """
         x = hypo
-        if data == 'H':
-            return x/100
+        if data == "H":
+            return x / 100
         else:
-            return 1 - x/100
+            return 1 - x / 100
 
 
 # We can make a uniform prior and update it with 140 heads and 110 tails:
 
 # +
 suite = Euro(range(0, 101))
-dataset = 'H' * 140 + 'T' * 110
+dataset = "H" * 140 + "T" * 110
 
 for data in dataset:
     suite.Update(data)
@@ -97,7 +98,8 @@ suite.Prob(50)
 #
 # Here's a function that makes a uniform prior:
 
-def UniformPrior(label='uniform'):
+
+def UniformPrior(label="uniform"):
     """Makes a Suite with a uniform prior."""
     suite = Euro(range(0, 101), label=label)
     return suite
@@ -105,13 +107,14 @@ def UniformPrior(label='uniform'):
 
 # And another that makes a triangular prior.
 
-def TrianglePrior(label='triangle'):
+
+def TrianglePrior(label="triangle"):
     """Makes a Suite with a triangle prior."""
     suite = Euro(label=label)
     for x in range(0, 51):
         suite[x] = x
     for x in range(51, 101):
-        suite[x] = 100-x 
+        suite[x] = 100 - x
     suite.Normalize()
     return suite
 
@@ -124,12 +127,13 @@ uniform = UniformPrior()
 suites = [triangle, uniform]
 
 thinkplot.Pdfs(suites)
-thinkplot.Config(xlabel='x', ylabel='Probability')
+thinkplot.Config(xlabel="x", ylabel="Probability")
 
 
 # -
 
 # If we update them both with the same data:
+
 
 def RunUpdate(suite, heads=140, tails=110):
     """Updates the Suite with the given number of heads and tails.
@@ -138,7 +142,7 @@ def RunUpdate(suite, heads=140, tails=110):
     heads: int
     tails: int
     """
-    dataset = 'H' * heads + 'T' * tails
+    dataset = "H" * heads + "T" * tails
     for data in dataset:
         suite.Update(data)
 
@@ -149,7 +153,7 @@ for suite in suites:
 # The results are almost identical; the remaining difference is unlikely to matter in practice.
 
 thinkplot.Pdfs(suites)
-thinkplot.Config(xlabel='x', ylabel='Probability')
+thinkplot.Config(xlabel="x", ylabel="Probability")
 
 
 # ## The binomial likelihood function
@@ -157,6 +161,7 @@ thinkplot.Config(xlabel='x', ylabel='Probability')
 # We can make the Euro class more efficient by computing the likelihood of the entire dataset at once, rather than one coin toss at a time.
 #
 # If the probability of heads is p, we can compute the probability of k=140 heads in n=250 tosses using the binomial PMF.
+
 
 class Euro2(Suite):
     """Represents hypotheses about the probability of heads."""
@@ -169,11 +174,11 @@ class Euro2(Suite):
         """
         x = hypo / 100.0
         heads, tails = data
-        like = x**heads * (1-x)**tails
+        like = x ** heads * (1 - x) ** tails
         return like
 
 
-# I left out the binomial coefficient ${n}\choose{k}$ because it does not depend on `p`, so it's the same for all hypotheses.  
+# I left out the binomial coefficient ${n}\choose{k}$ because it does not depend on `p`, so it's the same for all hypotheses.
 
 suite = Euro2(range(0, 101))
 dataset = 140, 110
@@ -192,16 +197,18 @@ thinkplot.Pdf(suite)
 # +
 from scipy import special
 
+
 class Beta:
     """Represents a Beta distribution.
 
     See http://en.wikipedia.org/wiki/Beta_distribution
     """
+
     def __init__(self, alpha=1, beta=1, label=None):
         """Initializes a Beta distribution."""
         self.alpha = alpha
         self.beta = beta
-        self.label = label if label is not None else '_nolegend_'
+        self.label = label if label is not None else "_nolegend_"
 
     def Update(self, data):
         """Updates a Beta distribution.
@@ -231,7 +238,7 @@ class Beta:
 
         n: int sample size
         """
-        size = n,
+        size = (n,)
         return np.random.beta(self.alpha, self.beta, size)
 
     def EvalPdf(self, x):
@@ -283,7 +290,6 @@ class Beta:
         ps = np.asarray(ps) / 100
         xs = special.betaincinv(self.alpha, self.beta, ps)
         return xs
-
 
 
 # -

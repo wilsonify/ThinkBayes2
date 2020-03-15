@@ -29,6 +29,7 @@
 
 # import classes from thinkbayes
 from thinkbayes import Hist, Pmf, Suite
+
 # -
 
 # ## Smoking problem
@@ -56,7 +57,7 @@ from thinkbayes import Hist, Pmf, Suite
 # Here's my solution.
 
 pmf = Pmf(dict(smoker=15, nonsmoker=85))
-pmf['smoker'] *= 13
-pmf['nonsmoker'] *= 1
+pmf["smoker"] *= 13
+pmf["nonsmoker"] *= 1
 pmf.Normalize()
 pmf.Print()

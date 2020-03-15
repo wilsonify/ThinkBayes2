@@ -47,8 +47,8 @@ from thinkbayes import thinkplot
 
 # Here's a class that models an unreliable coin
 
+
 class UnreliableCoin(Suite):
-    
     def __init__(self, prior, y):
         """
         prior: seq or map
@@ -56,7 +56,7 @@ class UnreliableCoin(Suite):
         """
         super().__init__(prior)
         self.y = y
-    
+
     def Likelihood(self, data, hypo):
         """
         data: outcome of unreliable measurement, either 'H' or 'T'
@@ -64,10 +64,10 @@ class UnreliableCoin(Suite):
         """
         x = hypo / 100
         y = self.y
-        if data == 'H':
-            return x*y + (1-x)*(1-y)
+        if data == "H":
+            return x * y + (1 - x) * (1 - y)
         else:
-            return x*(1-y) + (1-x)*y
+            return x * (1 - y) + (1 - x) * y
 
 
 # +
@@ -84,9 +84,9 @@ thinkplot.Pdf(suite)
 
 # And update with 3 heads and 7 tails.
 
-for outcome in 'HHHTTTTTTT':
+for outcome in "HHHTTTTTTT":
     suite.Update(outcome)
-    
+
 thinkplot.Pdf(suite)
 
 
@@ -95,13 +95,14 @@ thinkplot.Pdf(suite)
 
 # Now let's try it out with different values of `y`:
 
+
 def plot_posterior(y, data):
     prior = range(0, 101)
     suite = UnreliableCoin(prior, y=y)
     for outcome in data:
         suite.Update(outcome)
-    
-    thinkplot.Pdf(suite, label='y=%g' % y)
+
+    thinkplot.Pdf(suite, label="y=%g" % y)
 
 
 # +
@@ -109,12 +110,11 @@ def plot_posterior(y, data):
 
 # The posterior distribution gets wider as the measurement gets less reliable.
 
-data = 'HHHTTTTTTT'
+data = "HHHTTTTTTT"
 plot_posterior(1, data)
 plot_posterior(0.8, data)
 plot_posterior(0.6, data)
-thinkplot.decorate(xlabel='Probability of heads (x)',
-                   ylabel='PMF')
+thinkplot.decorate(xlabel="Probability of heads (x)", ylabel="PMF")
 
 # +
 # Solution
@@ -122,21 +122,17 @@ thinkplot.decorate(xlabel='Probability of heads (x)',
 # At `y=0.5`, the measurement provides no information, so the posterior equals the prior:
 
 plot_posterior(0.5, data)
-thinkplot.decorate(xlabel='Probability of heads (x)',
-                   ylabel='PMF')
+thinkplot.decorate(xlabel="Probability of heads (x)", ylabel="PMF")
 
 # +
 # Solution
 
-# As the coin gets less reliable (below `y=0.5`) the distribution gets narrower again.  
-# In fact, a measurement with `y=0` is just as good as one with `y=1`, 
+# As the coin gets less reliable (below `y=0.5`) the distribution gets narrower again.
+# In fact, a measurement with `y=0` is just as good as one with `y=1`,
 # provided that we know what `y` is.
 
 plot_posterior(0.4, data)
 plot_posterior(0.2, data)
 plot_posterior(0.0, data)
-thinkplot.decorate(xlabel='Probability of heads (x)',
-                   ylabel='PMF')
+thinkplot.decorate(xlabel="Probability of heads (x)", ylabel="PMF")
 # -
-
-

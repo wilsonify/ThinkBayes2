@@ -33,6 +33,7 @@ import numpy as np
 
 from thinkbayes import Hist, Pmf, Suite, Beta
 from thinkbayes import thinkplot
+
 # -
 
 # ### The Alien Blaster problem
@@ -52,8 +53,7 @@ from thinkbayes import thinkplot
 
 prior = Beta(5, 10)
 thinkplot.Pdf(prior.MakePmf())
-thinkplot.decorate(xlabel='Probability of hit',
-                   ylabel='PMF')
+thinkplot.decorate(xlabel="Probability of hit", ylabel="PMF")
 prior.Mean()
 
 # +
@@ -63,8 +63,8 @@ prior.Mean()
 
 from scipy.stats import binom
 
+
 class AlienBlaster(Suite):
-    
     def Likelihood(self, data, hypo):
         """Computes the likeliood of data under hypo.
         
@@ -73,43 +73,41 @@ class AlienBlaster(Suite):
         """
         n = data
         x = hypo
-        
+
         # specific version for n=2 shots
-        likes = [x**4, (1-x)**4, (2*x*(1-x))**2]
+        likes = [x ** 4, (1 - x) ** 4, (2 * x * (1 - x)) ** 2]
 
         # general version for any n shots
-        likes = [binom.pmf(k, n, x)**2 for k in range(n+1)]
-        
+        likes = [binom.pmf(k, n, x) ** 2 for k in range(n + 1)]
+
         return np.sum(likes)
 
 
 # +
 # Solution
 
-# If we start with a uniform prior, 
+# If we start with a uniform prior,
 # we can see what the likelihood function looks like:
 
 pmf = Beta(1, 1).MakePmf()
 blaster = AlienBlaster(pmf)
 blaster.Update(2)
 thinkplot.Pdf(blaster)
-thinkplot.decorate(xlabel='Probability of hit',
-                   ylabel='PMF')
+thinkplot.decorate(xlabel="Probability of hit", ylabel="PMF")
 
 # +
 # Solution
 
-# Now let's run it with the specified prior and 
-# see what happens when we multiply the convex prior and 
+# Now let's run it with the specified prior and
+# see what happens when we multiply the convex prior and
 # the concave posterior.
 
 pmf = Beta(5, 10).MakePmf()
 blaster = AlienBlaster(pmf)
-thinkplot.Pdf(blaster, color='gray')
+thinkplot.Pdf(blaster, color="gray")
 blaster.Update(2)
 thinkplot.Pdf(blaster)
-thinkplot.decorate(xlabel='Probability of hit',
-                   ylabel='PMF')
+thinkplot.decorate(xlabel="Probability of hit", ylabel="PMF")
 
 # +
 # Solution
@@ -156,11 +154,11 @@ x2 = 0.4
 # The answer is a value drawn from the mixture of the two distributions.
 
 # Continuing the previous problem, let's estimate the distribution
-# of `k`, the number of successful shots out of 10.  
+# of `k`, the number of successful shots out of 10.
 #
 # 1. Write a few lines of Python code to simulate choosing a random weapon and firing it.
 #
-# 2. Write a loop that simulates the scenario and generates random values of `k` 1000 times.  
+# 2. Write a loop that simulates the scenario and generates random values of `k` 1000 times.
 #
 # 3. Store the values of `k` you generate and plot their distribution.
 
@@ -168,8 +166,10 @@ x2 = 0.4
 def flip(p):
     return np.random.random() < p
 
+
 def simulate_shots(n, p):
     return np.random.binomial(n, p)
+
 
 ks = []
 for i in range(1000):
@@ -184,8 +184,7 @@ for i in range(1000):
 
 pmf = Pmf(ks)
 thinkplot.Hist(pmf)
-thinkplot.decorate(xlabel='Number of hits',
-                   ylabel='PMF')
+thinkplot.decorate(xlabel="Number of hits", ylabel="PMF")
 len(ks), np.mean(ks)
 
 # The mean should be near 3.7.  We can run this simulation more efficiently using NumPy.  First we generate a sample of `xs`:
@@ -195,14 +194,13 @@ Hist(xs)
 
 # Then for each `x` we generate a `k`:
 
-ks = np.random.binomial(n, xs);
+ks = np.random.binomial(n, xs)
 
 # And the results look similar.
 
 pmf = Pmf(ks)
 thinkplot.Hist(pmf)
-thinkplot.decorate(xlabel='Number of hits',
-                   ylabel='PMF')
+thinkplot.decorate(xlabel="Number of hits", ylabel="PMF")
 np.mean(ks)
 
 # One more way to do the same thing is to make a meta-Pmf, which contains the two binomial `Pmf` objects:
@@ -213,20 +211,19 @@ from thinkbayes import MakeBinomialPmf
 pmf1 = MakeBinomialPmf(n, x1)
 pmf2 = MakeBinomialPmf(n, x2)
 
-metapmf = Pmf({pmf1:0.3, pmf2:0.7})
+metapmf = Pmf({pmf1: 0.3, pmf2: 0.7})
 metapmf.Print()
 # -
 
 # Here's how we can draw samples from the meta-Pmf:
 
-ks = [metapmf.Random().Random() for _ in range(1000)];
+ks = [metapmf.Random().Random() for _ in range(1000)]
 
 # And here are the results, one more time:
 
 pmf = Pmf(ks)
 thinkplot.Hist(pmf)
-thinkplot.decorate(xlabel='Number of hits',
-                   ylabel='PMF')
+thinkplot.decorate(xlabel="Number of hits", ylabel="PMF")
 np.mean(ks)
 
 # This result, which we have estimated three ways, is a predictive distribution, based on our uncertainty about `x`.
@@ -248,7 +245,7 @@ np.mean(ks)
 #             for k, p2 in pmf.Items():
 #                 mix[k] += p1 * p2
 #         return mix
-#         
+#
 # The outer loop iterates through the Pmfs; the inner loop iterates through the items.
 #
 # So `p1` is the probability of choosing a particular Pmf; `p2` is the probability of choosing a value from the Pmf.
@@ -266,5 +263,3 @@ mix.Mean()
 mix[3]
 
 # **Exercise**: Assuming again that the distribution of `x` in the population of designs is well-modeled by a beta distribution with parameters α=2 and β=3, what the distribution if `k` if I choose a random Alien Blaster and fire 10 shots?
-
-

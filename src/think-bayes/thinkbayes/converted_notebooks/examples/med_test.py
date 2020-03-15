@@ -52,24 +52,25 @@ from thinkbayes import thinkplot
 #
 # [Performance Measures for 1,838,372 Screening Mammography Examinations1 from 2004 to 2008 by Age -- based on BCSC data through 2009](http://www.bcsc-research.org/statistics/performance/screening/2009/perf_age.html).
 
+
 class BayesTable(pd.DataFrame):
     def __init__(self, hypo, prior=1, **options):
-        columns = ['prior', 'likelihood', 'unnorm', 'posterior']
+        columns = ["prior", "likelihood", "unnorm", "posterior"]
         super().__init__(index=hypo, columns=columns, **options)
         self.prior = prior
-    
+
     def mult(self):
         self.unnorm = self.prior * self.likelihood
-        
+
     def norm(self):
         nc = np.sum(self.unnorm)
         self.posterior = self.unnorm / nc
         return nc
-    
+
     def update(self):
         self.mult()
         return self.norm()
-    
+
     def reset(self):
         return BayesTable(self.hypo, self.posterior)
 
@@ -90,21 +91,21 @@ class BayesTable(pd.DataFrame):
 # Now we can use a Bayes table to compute the probability we are interested in, `P(cancer | positive test)`
 
 base_rate = 2.65 / 1000
-hypo = ['cancer', 'no cancer']
-prior = [base_rate, 1-base_rate]
+hypo = ["cancer", "no cancer"]
+prior = [base_rate, 1 - base_rate]
 table = BayesTable(hypo, prior)
 
 sensitivity = 0.734
 specificity = 0.877
-table.likelihood = [sensitivity, 1-specificity]
+table.likelihood = [sensitivity, 1 - specificity]
 table
 
-likelihood_ratio = table.likelihood['cancer'] / table.likelihood['no cancer']
+likelihood_ratio = table.likelihood["cancer"] / table.likelihood["no cancer"]
 
 table.update()
 table
 
-table.posterior['cancer'] * 100
+table.posterior["cancer"] * 100
 
 
 # So there is a 1.56% chance that this patient has cancer, given that the initial screening mammogram was positive.
@@ -113,10 +114,11 @@ table.posterior['cancer'] * 100
 
 # This data was the basis, in 2009, for the recommendation of the US Preventive Services Task Force,
 
+
 def compute_ppv(base_rate, sensitivity, specificity):
     pmf = Pmf()
-    pmf['cancer'] = base_rate * sensitivity
-    pmf['no cancer'] = (1 - base_rate) * (1 - specificity)
+    pmf["cancer"] = base_rate * sensitivity
+    pmf["no cancer"] = (1 - base_rate) * (1 - specificity)
     pmf.Normalize()
     return pmf
 
@@ -125,10 +127,8 @@ pmf = compute_ppv(base_rate, sensitivity, specificity)
 
 ages = [40, 50, 60, 70, 80]
 rates = pd.Series([2.65, 4.28, 5.70, 6.76, 8.51], index=ages)
-    
+
 
 for age, rate in rates.items():
     pmf = compute_ppv(rate, sensitivity, specificity)
-    print(age, pmf['cancer'])
-
-
+    print(age, pmf["cancer"])

@@ -24,7 +24,6 @@
 from __future__ import print_function, division
 
 
-
 from thinkbayes import thinkplot
 from thinkbayes import Hist, Pmf, Suite, Cdf
 
@@ -41,12 +40,13 @@ from thinkbayes import Hist, Pmf, Suite, Cdf
 #
 # The `Dice` class inherits `Update` and provides `Likelihood`
 
+
 class Dice(Suite):
     def Likelihood(self, data, hypo):
         if hypo < data:
             return 0
         else:
-            return 1/hypo
+            return 1 / hypo
 
 
 # Here's what the update looks like:
@@ -59,8 +59,8 @@ suite.Print()
 
 # +
 for roll in [6, 8, 7, 7, 5, 4]:
-        suite.Update(roll)
-        
+    suite.Update(roll)
+
 suite.Print()
 
 
@@ -70,12 +70,13 @@ suite.Print()
 #
 # The Train problem has the same likelihood as the Dice problem.
 
+
 class Train(Suite):
     def Likelihood(self, data, hypo):
         if hypo < data:
             return 0
         else:
-            return 1/hypo
+            return 1 / hypo
 
 
 # But there are many more hypotheses
@@ -98,6 +99,7 @@ def Mean(suite):
         total += hypo * prob
     return total
 
+
 Mean(suite)
 # -
 
@@ -110,6 +112,7 @@ suite.Mean()
 #
 # Here's a function that solves the train problem for different priors and data
 
+
 def MakePosterior(high, dataset, constructor=Train):
     """Solves the train problem.
     
@@ -119,7 +122,7 @@ def MakePosterior(high, dataset, constructor=Train):
     
     returns: Train object representing the posterior suite
     """
-    hypos = range(1, high+1)
+    hypos = range(1, high + 1)
     suite = constructor(hypos)
 
     for data in dataset:
@@ -146,19 +149,19 @@ for high in [500, 1000, 2000]:
 #
 # Now let's try it with a power law prior.
 
-class Train2(Train):
 
+class Train2(Train):
     def __init__(self, hypos, alpha=1.0):
         Pmf.__init__(self)
         for hypo in hypos:
-            self[hypo] = hypo**(-alpha)
+            self[hypo] = hypo ** (-alpha)
         self.Normalize()
 
 
 # Here's what a power law prior looks like, compared to a uniform prior
 
 high = 100
-hypos = range(1, high+1)
+hypos = range(1, high + 1)
 suite1 = Train(hypos)
 suite2 = Train2(hypos)
 thinkplot.Pdf(suite1)
@@ -173,15 +176,14 @@ high = 1000
 thinkplot.PrePlot(num=2)
 
 constructors = [Train, Train2]
-labels = ['uniform', 'power law']
+labels = ["uniform", "power law"]
 
 for constructor, label in zip(constructors, labels):
     suite = MakePosterior(high, dataset, constructor)
     suite.label = label
     thinkplot.Pmf(suite)
 
-thinkplot.Config(xlabel='Number of trains',
-                 ylabel='Probability')
+thinkplot.Config(xlabel="Number of trains", ylabel="Probability")
 # -
 
 # The power law gives less prior probability to high values, which yields lower posterior means, and less sensitivity to the upper bound.
@@ -212,9 +214,9 @@ suite.Percentile(5), suite.Percentile(95)
 
 cdf = Cdf(suite)
 thinkplot.Cdf(cdf)
-thinkplot.Config(xlabel='Number of trains',
-                 ylabel='Cumulative Probability',
-                 legend=False)
+thinkplot.Config(
+    xlabel="Number of trains", ylabel="Cumulative Probability", legend=False
+)
 
 # `Cdf` also provides `Percentile`
 

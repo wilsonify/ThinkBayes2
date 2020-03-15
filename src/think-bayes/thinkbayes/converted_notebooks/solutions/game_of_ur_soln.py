@@ -29,6 +29,7 @@
 
 from thinkbayes import Pmf, Cdf, Suite
 from thinkbayes import thinkplot
+
 # -
 
 # ### The Game of Ur problem
@@ -49,12 +50,13 @@ die = Pmf([0, 1])
 
 # And here's the outcome of a single roll.
 
-roll = sum([die]*4)
+roll = sum([die] * 4)
 
 
 # I'll start with a simulation, which helps in two ways: it makes modeling assumptions explicit and it provides an estimate of the answer.
 #
 # The following function simulates playing the game over and over; after every roll, it yields the number of rolls and the total so far.  When it gets past the 14th space, it starts over.
+
 
 def roll_until(iters):
     """Generates observations of the game.
@@ -69,7 +71,7 @@ def roll_until(iters):
             total += roll.Random()
             if total > 14:
                 break
-            yield(n, total)
+            yield (n, total)
 
 
 # Now I'll the simulation many times and, every time the token is observed on space 13, record the number of rolls it took to get there.
@@ -85,9 +87,8 @@ pmf_sim.Normalize()
 
 pmf_sim.Print()
 
-thinkplot.Hist(pmf_sim, label='Simulation')
-thinkplot.decorate(xlabel='Number of rolls to get to space 13',
-                   ylabel='PMF')
+thinkplot.Hist(pmf_sim, label="Simulation")
+thinkplot.decorate(xlabel="Number of rolls to get to space 13", ylabel="PMF")
 
 # ### Bayes
 #
@@ -100,9 +101,9 @@ thinkplot.decorate(xlabel='Number of rolls to get to space 13',
 # +
 pmf_13 = Pmf()
 for n in range(4, 15):
-    pmf_n = sum([roll]*n)
+    pmf_n = sum([roll] * n)
     pmf_13[n] = pmf_n[13]
-    
+
 pmf_13.Print()
 pmf_13.Total()
 # -
@@ -123,11 +124,8 @@ posterior.Print()
 
 # That sure looks similar to what we got by simulation.  Let's compare them.
 
-thinkplot.Hist(pmf_sim, label='Simulation')
-thinkplot.Pmf(posterior, color='orange', label='Normalized likelihoods')
-thinkplot.decorate(xlabel='Number of rolls (n)',
-                   ylabel='PMF')
+thinkplot.Hist(pmf_sim, label="Simulation")
+thinkplot.Pmf(posterior, color="orange", label="Normalized likelihoods")
+thinkplot.decorate(xlabel="Number of rolls (n)", ylabel="PMF")
 
 # Since the posterior distribution based on a uniform prior matches the simulation, it seems like the uniform prior must be correct.  But it is not obvious (to me) why.
-
-

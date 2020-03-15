@@ -19,7 +19,7 @@
 #
 # This notebook contains a solution to a problem I posed in my Bayesian statistics class:
 #
-# > In the final match of the 2014 FIFA World Cup, Germany defeated Argentina 1-0.  How much evidence 
+# > In the final match of the 2014 FIFA World Cup, Germany defeated Argentina 1-0.  How much evidence
 # > does this victory provide that Germany had the better team?  What is the probability that Germany
 # > would win a rematch?
 #
@@ -46,6 +46,7 @@ from __future__ import print_function, division
 
 # +
 import thinkbayes
+
 
 class Soccer(thinkbayes.Suite):
     """Represents hypotheses about goal-scoring rates."""
@@ -80,7 +81,9 @@ from thinkbayes import thinkplot
 
 hypos = numpy.linspace(0, 12, 201)
 suite = Soccer(hypos)
-suite.Update(0.33)                # fake data chosen by trial and error to yield the observed prior mean
+suite.Update(
+    0.33
+)  # fake data chosen by trial and error to yield the observed prior mean
 
 thinkplot.Pdf(suite)
 suite.Mean()
@@ -93,13 +96,13 @@ suite.Mean()
 # The next step is to compute the posteriors for the two teams:
 
 # +
-germany = suite.Copy(label='Germany')
-argentina = suite.Copy(label='Argentina')
+germany = suite.Copy(label="Germany")
+argentina = suite.Copy(label="Argentina")
 germany.Update(1)
 argentina.Update(0)
 
-print('posterior mean Germany', germany.Mean())
-print('posterior mean Argentina', argentina.Mean())
+print("posterior mean Germany", germany.Mean())
+print("posterior mean Argentina", argentina.Mean())
 # -
 
 # `Update` invokes the likelihood function for each hypothetical value of $\lambda$ and updates the distribution accordingly.
@@ -108,20 +111,20 @@ print('posterior mean Argentina', argentina.Mean())
 
 thinkplot.Pdf(germany)
 thinkplot.Pdf(argentina)
-thinkplot.Config(xlabel='goal-scoring rate', ylabel='probability')
+thinkplot.Config(xlabel="goal-scoring rate", ylabel="probability")
 
 # To answer the first question, "How much evidence does this victory provide that Germany had the better team?", we can compute the posterior probability that Germany had a higher goal-scoring rate:
 
 post_prob = germany > argentina
-print('posterior prob Germany > Argentina', post_prob)
+print("posterior prob Germany > Argentina", post_prob)
 
 # Based on the prior distributions, we would have said that Germany had a 50% chance of having the better team, or 1:1 odds.  Based on the posteriors, we would say that Germany has a 70% chance.  We can use the ratio of the prior and posterior odds to compute the Bayes factor, which measures the strength of the evidence.
 
 prior_odds = 1
 post_odds = post_prob / (1 - post_prob)
-print('posterior odds Germany > Argentina', post_odds)   
+print("posterior odds Germany > Argentina", post_odds)
 k = post_odds / prior_odds
-print('Bayes factor', k)   
+print("Bayes factor", k)
 
 
 # The Bayes factor is 2.4, which is generally considered weak evidence.
@@ -135,7 +138,7 @@ print('Bayes factor', k)
 # We don't actually know $\lambda$, but we can use the posterior distribution of $\lambda$ to generate a predictive distribution for the number of additional goals.
 
 # +
-def PredictiveDist(suite, duration=1, label='pred'):
+def PredictiveDist(suite, duration=1, label="pred"):
     """Computes the distribution of goals scored in a game.
 
     returns: new Pmf (mixture of Poissons)
@@ -148,8 +151,9 @@ def PredictiveDist(suite, duration=1, label='pred'):
     mix = thinkbayes.MakeMixture(metapmf, label=label)
     return mix
 
-germany_pred = PredictiveDist(germany, label='germany')
-argentina_pred = PredictiveDist(argentina, label='argentina')
+
+germany_pred = PredictiveDist(germany, label="germany")
+argentina_pred = PredictiveDist(argentina, label="argentina")
 
 # -
 
@@ -159,9 +163,9 @@ argentina_pred = PredictiveDist(argentina, label='argentina')
 #
 # Finally, it uses `MakeMixture` to compute the mixture of the distributions.  Here's what the predictive distributions look like.
 
-thinkplot.Hist(germany_pred, width=0.45, align='right')
-thinkplot.Hist(argentina_pred, width=0.45, align='left')
-thinkplot.Config(xlabel='predicted # goals', ylabel='probability', xlim=[-0.5, 7])
+thinkplot.Hist(germany_pred, width=0.45, align="right")
+thinkplot.Hist(argentina_pred, width=0.45, align="left")
+thinkplot.Config(xlabel="predicted # goals", ylabel="probability", xlim=[-0.5, 7])
 
 # Using the predictive distributions, we can compute probabilities for the outcomes of a rematch.
 
@@ -170,30 +174,28 @@ win = germany_pred > argentina_pred
 lose = germany_pred < argentina_pred
 tie = 1 - (win + lose)
 
-print('posterior prob Germany wins rematch', win)
-print('posterior prob Argentina wins rematch', lose)
-print('posterior prob tie', tie)
+print("posterior prob Germany wins rematch", win)
+print("posterior prob Argentina wins rematch", lose)
+print("posterior prob tie", tie)
 # -
 
 # If the score is tied after 90 minutes the teams play an additional 30 minute period.  We can use `PredictiveDist` again to compute the distribution of scores after 1/3 of a game:
 
-germany_pred_overtime = PredictiveDist(germany, 1/3, label='germany')
-argentina_pred_overtime = PredictiveDist(argentina, 1/3, label='argentina')
+germany_pred_overtime = PredictiveDist(germany, 1 / 3, label="germany")
+argentina_pred_overtime = PredictiveDist(argentina, 1 / 3, label="argentina")
 
 # +
 win = germany_pred_overtime > argentina_pred_overtime
 lose = germany_pred_overtime < argentina_pred_overtime
 tie = 1 - (win + lose)
 
-print('posterior prob Germany wins rematch', win)
-print('posterior prob Argentina wins rematch', lose)
-print('posterior prob tie', tie)
+print("posterior prob Germany wins rematch", win)
+print("posterior prob Argentina wins rematch", lose)
+print("posterior prob tie", tie)
 # -
 
-print('Total prob Germany wins a rematch', 0.45 + 0.32 * 0.26)
+print("Total prob Germany wins a rematch", 0.45 + 0.32 * 0.26)
 
-print('Total prob Argentina wins', 0.23 + 0.32 * 0.14)
+print("Total prob Argentina wins", 0.23 + 0.32 * 0.14)
 
-print('Prob of draw after overtime', 0.32 * 0.60)
-
-
+print("Prob of draw after overtime", 0.32 * 0.60)

@@ -33,6 +33,7 @@ import numpy as np
 
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
+
 # -
 
 # ### The flea beetle problem
@@ -75,23 +76,24 @@ measurements = (140, 15)
 # +
 import pandas as pd
 
-df = pd.read_csv('../data/flea_beetles.csv', delimiter='\t')
+df = pd.read_csv("../data/flea_beetles.csv", delimiter="\t")
 df.head()
 
 
 # -
 
+
 def plot_cdfs(df, col):
-    for name, group in df.groupby('Species'):
+    for name, group in df.groupby("Species"):
         cdf = Cdf(group[col], label=name)
         thinkplot.Cdf(cdf)
-    
-    thinkplot.Config(xlabel=col, legend=True, loc='lower right')
+
+    thinkplot.Config(xlabel=col, legend=True, loc="lower right")
 
 
-plot_cdfs(df, 'Width')
+plot_cdfs(df, "Width")
 
-plot_cdfs(df, 'Angle')
+plot_cdfs(df, "Angle")
 
 # The following class estimates the mean and standard deviation of a normal distribution, given the data:
 
@@ -99,8 +101,8 @@ plot_cdfs(df, 'Angle')
 from scipy.stats import norm
 from thinkbayes import EvalNormalPdf
 
+
 class Beetle(Suite, Joint):
-    
     def Likelihood(self, data, hypo):
         """
         data: sequence of measurements
@@ -109,7 +111,7 @@ class Beetle(Suite, Joint):
         mu, sigma = hypo
         likes = EvalNormalPdf(data, mu, sigma)
         return np.prod(likes)
-    
+
     def PredictiveProb(self, data):
         """Compute the posterior total probability of a datum.
         
@@ -129,6 +131,7 @@ class Beetle(Suite, Joint):
 # +
 from itertools import product
 
+
 def MakeWidthSuite(data):
     mus = np.linspace(115, 160, 51)
     sigmas = np.linspace(1, 10, 51)
@@ -139,7 +142,7 @@ def MakeWidthSuite(data):
 
 # -
 
-groups = df.groupby('Species')
+groups = df.groupby("Species")
 
 # Here are the posterior distributions for mu and sigma, and the predictive probability of the width measurement, for each species.
 
@@ -150,6 +153,7 @@ for name, group in groups:
 
 
 # Now we can do the same thing for the angles.
+
 
 def MakeAngleSuite(data):
     mus = np.linspace(8, 16, 101)
@@ -167,16 +171,16 @@ for name, group in groups:
 
 # These posterior distributions are used to compute the likelihoods of the measurements.
 
+
 class Species:
-    
     def __init__(self, name, suite_width, suite_angle):
         self.name = name
         self.suite_width = suite_width
         self.suite_angle = suite_angle
-        
+
     def __str__(self):
         return self.name
-        
+
     def Likelihood(self, data):
         width, angle = data
         like1 = self.suite_width.PredictiveProb(width)
@@ -195,13 +199,13 @@ for name, group in groups:
 
 # For example, here's the likelihood of the data given that the species is 'Con'
 
-species['Con'].Likelihood(measurements)
+species["Con"].Likelihood(measurements)
 
 
 # Now we can make a `Classifier` that uses the `Species` objects as hypotheses.
 
+
 class Classifier(Suite):
-    
     def Likelihood(self, data, hypo):
         return hypo.Likelihood(data)
 
@@ -220,7 +224,8 @@ for hypo, prob in suite.Items():
 
 # +
 from warnings import simplefilter
-simplefilter('ignore', FutureWarning)
+
+simplefilter("ignore", FutureWarning)
 
 import pymc3 as pm
 
@@ -228,49 +233,49 @@ import pymc3 as pm
 N = 10000
 
 μ_actual = np.array([1, -2])
-Σ_actual = np.array([[0.5, -0.3],
-                     [-0.3, 1.]])
+Σ_actual = np.array([[0.5, -0.3], [-0.3, 1.0]])
 
 x = np.random.multivariate_normal(μ_actual, Σ_actual, size=N)
 
 # +
-df['Width10'] = df.Width / 10
+df["Width10"] = df.Width / 10
 
 observed = {}
-for name, group in df.groupby('Species'):
-    observed[name] = group[['Width10', 'Angle']].values
+for name, group in df.groupby("Species"):
+    observed[name] = group[["Width10", "Angle"]].values
     print(name)
     print(np.cov(np.transpose(observed[name])))
 # -
 
-x = observed['Con']
+x = observed["Con"]
 
 with pm.Model() as model:
-    packed_L = pm.LKJCholeskyCov('packed_L', n=2,
-                                 eta=2, sd_dist=pm.HalfCauchy.dist(2.5))
+    packed_L = pm.LKJCholeskyCov(
+        "packed_L", n=2, eta=2, sd_dist=pm.HalfCauchy.dist(2.5)
+    )
 
 with model:
     L = pm.expand_packed_triangular(2, packed_L)
-    Σ = pm.Deterministic('Σ', L.dot(L.T))
+    Σ = pm.Deterministic("Σ", L.dot(L.T))
 
 with model:
-    μ = pm.Normal('μ', 0., 10., shape=2,
-                  testval=x.mean(axis=0))
-    obs = pm.MvNormal('obs', μ, chol=L, observed=x)
+    μ = pm.Normal("μ", 0.0, 10.0, shape=2, testval=x.mean(axis=0))
+    obs = pm.MvNormal("obs", μ, chol=L, observed=x)
 
 with model:
     trace = pm.sample(1000)
 
-pm.traceplot(trace);
+pm.traceplot(trace)
 
-μ_post = trace['μ'].mean(axis=0)
+μ_post = trace["μ"].mean(axis=0)
 
-Σ_post = trace['Σ'].mean(axis=0)
+Σ_post = trace["Σ"].mean(axis=0)
 
 # +
 from statsmodels.stats.moment_helpers import cov2corr
 
 from scipy.stats import multivariate_normal
+
 # -
 
 cov2corr(Σ_post)
@@ -280,34 +285,35 @@ measured = (14, 15)
 
 total = 0
 for row in trace:
-    total += multivariate_normal.pdf(measured, mean=row['μ'], cov=row['Σ'])
-    
+    total += multivariate_normal.pdf(measured, mean=row["μ"], cov=row["Σ"])
+
 total / len(trace)
 
 
 # -
 
+
 def compute_posterior_likelihood(measured, species):
     x = observed[species]
-    
+
     with pm.Model() as model:
-        packed_L = pm.LKJCholeskyCov('packed_L', n=2,
-                                 eta=2, sd_dist=pm.HalfCauchy.dist(2.5))
+        packed_L = pm.LKJCholeskyCov(
+            "packed_L", n=2, eta=2, sd_dist=pm.HalfCauchy.dist(2.5)
+        )
         L = pm.expand_packed_triangular(2, packed_L)
-        Σ = pm.Deterministic('Σ', L.dot(L.T))
-        μ = pm.Normal('μ', 0., 10., shape=2,
-                      testval=x.mean(axis=0))
-        obs = pm.MvNormal('obs', μ, chol=L, observed=x)
+        Σ = pm.Deterministic("Σ", L.dot(L.T))
+        μ = pm.Normal("μ", 0.0, 10.0, shape=2, testval=x.mean(axis=0))
+        obs = pm.MvNormal("obs", μ, chol=L, observed=x)
         trace = pm.sample(1000)
-        
+
     total = 0
     for row in trace:
-        total += multivariate_normal.pdf(measured, mean=row['μ'], cov=row['Σ'])
-    
+        total += multivariate_normal.pdf(measured, mean=row["μ"], cov=row["Σ"])
+
     return total / len(trace)
 
 
-suite = Suite(['Con', 'Hep', 'Hei'])
+suite = Suite(["Con", "Hep", "Hei"])
 
 for hypo in suite:
     like = compute_posterior_likelihood(measured, hypo)
@@ -317,5 +323,3 @@ for hypo in suite:
 suite.Normalize()
 
 suite.Print()
-
-

@@ -44,6 +44,7 @@
 # +
 import thinkbayes
 
+
 class Soccer(thinkbayes.Suite):
     """Represents hypotheses about goal-scoring rates."""
 
@@ -79,7 +80,9 @@ from thinkbayes import thinkplot
 
 hypos = numpy.linspace(0, 12, 201)
 suite = Soccer(hypos)
-suite.Update(134)                # fake data chosen by trial and error to yield the observed prior mean
+suite.Update(
+    134
+)  # fake data chosen by trial and error to yield the observed prior mean
 
 thinkplot.Pdf(suite)
 suite.Mean()
@@ -87,7 +90,7 @@ suite.Mean()
 
 # Now that we have a prior, we can update with the time of the first goal, 11 minutes.
 
-suite.Update(11)                # time until first goal is 11 minutes
+suite.Update(11)  # time until first goal is 11 minutes
 thinkplot.Pdf(suite)
 suite.Mean()
 
@@ -95,7 +98,7 @@ suite.Mean()
 #
 # Now we update with the second goal:
 
-suite.Update(12)                # time between first and second goals is 12 minutes
+suite.Update(12)  # time between first and second goals is 12 minutes
 thinkplot.Pdf(suite)
 suite.Mean()
 
@@ -122,12 +125,13 @@ def PredRemaining(suite, rem_time):
         lt = lam * rem_time / 90
         pred = thinkbayes.MakePoissonPmf(lt, 15)
         metapmf[pred] = prob
-        thinkplot.Pdf(pred, color='gray', alpha=0.3, linewidth=0.5)
+        thinkplot.Pdf(pred, color="gray", alpha=0.3, linewidth=0.5)
 
     mix = thinkbayes.MakeMixture(metapmf)
     return mix
 
-mix = PredRemaining(suite, 90-23)
+
+mix = PredRemaining(suite, 90 - 23)
 # -
 
 # `PredRemaining` takes the posterior distribution of $\lambda$ and the remaining game time in minutes (I'm ignoring so-called "injury time").
@@ -152,7 +156,8 @@ mix.Mean()
 
 # That's the end of this example.  But for completeness (and if you are curious), here is the code for `MakeMixture`:
 
-def MakeMixture(metapmf, label='mix'):
+
+def MakeMixture(metapmf, label="mix"):
     """Make a mixture distribution.
 
     Args:
@@ -166,5 +171,3 @@ def MakeMixture(metapmf, label='mix'):
         for x, p2 in pmf.Items():
             mix.Incr(x, p1 * p2)
     return mix
-
-

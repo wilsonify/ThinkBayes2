@@ -27,7 +27,8 @@ from __future__ import print_function, division
 # %precision 6
 
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
 
 from thinkbayes import Pmf, Cdf
 from thinkbayes import thinkplot
@@ -38,10 +39,11 @@ from numpy.fft import fft, ifft
 # +
 from inspect import getsourcelines
 
+
 def show_code(func):
     lines, _ = getsourcelines(func)
     for line in lines:
-        print(line, end='')
+        print(line, end="")
 
 
 # -
@@ -137,7 +139,7 @@ show_code(Pmf.__getitem__)
 
 show_code(Pmf.Mean)
 
-# This implementation is efficient, in the sense that it is $O(n)$, and because it uses a comprehension to traverse the outcomes, the overhead is low. 
+# This implementation is efficient, in the sense that it is $O(n)$, and because it uses a comprehension to traverse the outcomes, the overhead is low.
 #
 # The implementation of `Pmf.Var` is similar:
 
@@ -157,10 +159,10 @@ d6.Mean(), d6.Var()
 
 show_code(Pmf.Expect)
 
-# As an example, we can use `Expect` to compute the third central moment of the distribution: 
+# As an example, we can use `Expect` to compute the third central moment of the distribution:
 
 mu = d6.Mean()
-d6.Expect(lambda x: (x-mu)**3)
+d6.Expect(lambda x: (x - mu) ** 3)
 
 # Because the distribution is symmetric, the third central moment is 0.
 
@@ -185,14 +187,14 @@ thinkplot.Pdf(d6)
 # When we use the `+` operator, Python invokes `__add__`, which invokes `AddPmf`, which returns a new `Pmf` object.  Here's the `Pmf` that represents the sum of two dice:
 
 twice = d6 + d6
-thinkplot.Pdf(twice, color='green')
+thinkplot.Pdf(twice, color="green")
 
 # And here's the `Pmf` that represents the sum of three dice.
 
 thrice = twice + d6
 thinkplot.Pdf(d6)
-thinkplot.Pdf(twice, color='green')
-thinkplot.Pdf(thrice, color='red')
+thinkplot.Pdf(twice, color="green")
+thinkplot.Pdf(thrice, color="red")
 
 # As we add up more dice, the result converges to the bell shape of the Gaussian distribution.
 
@@ -234,7 +236,7 @@ cdf.Print()
 #
 # Here's what the CDF looks like:
 
-thinkplot.Cdf(cdf);
+thinkplot.Cdf(cdf)
 
 # The range of the CDF is always from 0 to 1.
 #
@@ -294,9 +296,11 @@ cdf.Sample((2, 2))
 # +
 # Solution
 
+
 def iqr(cdf):
     values = cdf.Values((0.25, 0.75))
     return np.diff(values)[0]
+
 
 iqr(cdf)
 # -
@@ -313,14 +317,14 @@ show_code(Cdf.Max)
 #
 # To see how it works, suppose you generate six properties and your best is only a 10.  That's unlucky, but you might wonder how unlucky.  So, what is the chance of rolling 3 dice six times, and never getting anything better than 10?
 #
-# Well, that means that all six values were 10 or less.  The probability that each of them is 10 or less is $CDF(10)$, because that's what the CDF means.  So the probability that all 6 are 10 or less is $CDF(10)^6$.  
+# Well, that means that all six values were 10 or less.  The probability that each of them is 10 or less is $CDF(10)$, because that's what the CDF means.  So the probability that all 6 are 10 or less is $CDF(10)^6$.
 #
 # Now we can generalize that by replacing $10$ with any value of $x$ and $6$ with any integer $k$.  The result is $CDF(x)^k$, which is the probability that all $k$ rolls are $x$ or less, and that is the CDF of the maximum.
 #
 # Here's how we use `Cdf.Max`:
 
 best = cdf.Max(6)
-thinkplot.Cdf(best);
+thinkplot.Cdf(best)
 
 best[10]
 
@@ -334,11 +338,13 @@ best[10]
 # +
 # Solution
 
+
 def Min(cdf, k):
-    return Cdf(cdf.xs, 1 - (1-cdf.ps)**k)
+    return Cdf(cdf.xs, 1 - (1 - cdf.ps) ** k)
+
 
 worst = Min(cdf, 6)
-thinkplot.Cdf(worst);
+thinkplot.Cdf(worst)
 # -
 
 # ## Characteristic function
@@ -363,7 +369,7 @@ thinkplot.Cdf(worst);
 #
 # $PMF_Z(z) = \sum_x PMF_X(x) \cdot PMF_Y(z-x)$
 #
-# You might recognize that computation as convolution, denoted with the operator $\ast$.  
+# You might recognize that computation as convolution, denoted with the operator $\ast$.
 #
 # $PMF_Z = PMF_X \ast PMF_Y$
 #
@@ -382,8 +388,8 @@ thinkplot.Cdf(worst);
 # +
 import matplotlib.pyplot as plt
 
+
 class CharFunc:
-    
     def __init__(self, hs):
         """Initializes the CF.
         
@@ -394,7 +400,7 @@ class CharFunc:
     def __mul__(self, other):
         """Computes the elementwise product of two CFs."""
         return CharFunc(self.hs * other.hs)
-        
+
     def make_pmf(self, thresh=1e-11):
         """Converts a CF to a PMF.
         
@@ -403,14 +409,14 @@ class CharFunc:
         ps = ifft(self.hs)
         d = dict((i, p) for i, p in enumerate(ps.real) if p > thresh)
         return Pmf(d)
-    
+
     def plot_cf(self, **options):
         """Plots the real and imaginary parts of the CF."""
         n = len(self.hs)
-        xs = np.arange(-n//2, n//2)
+        xs = np.arange(-n // 2, n // 2)
         hs = np.roll(self.hs, len(self.hs) // 2)
-        plt.plot(xs, hs.real, label='real', **options)
-        plt.plot(xs, hs.imag, label='imag', **options)
+        plt.plot(xs, hs.real, label="real", **options)
+        plt.plot(xs, hs.imag, label="imag", **options)
         plt.legend()
 
 
@@ -419,6 +425,7 @@ class CharFunc:
 # The attribute, `hs`, is the Fourier transform of the `Pmf`, represented as a NumPy array of complex numbers.
 #
 # The following function takes a dictionary that maps from outcomes to their probabilities, and computes the FT of the PDF:
+
 
 def compute_fft(d, n=256):
     """Computes the FFT of a PMF of integers.
@@ -474,15 +481,15 @@ sixth.Mean(), sixth.Var()
 # Hint: it might be clearer if you us `np.roll` to put the peak of the CF in the middle.
 
 # +
-#Solution
+# Solution
 
 n = len(cf.hs)
 mags = np.abs(cf.hs)
-plt.plot(np.roll(mags, n//2))
+plt.plot(np.roll(mags, n // 2))
 None
 
-# The result approximates a Gaussian curve because 
-# the PMF is approximately Gaussian and the FT of a 
+# The result approximates a Gaussian curve because
+# the PMF is approximately Gaussian and the FT of a
 # Gaussian is also Gaussian
 # -
 
@@ -494,8 +501,8 @@ None
 #
 # One option is to treat each representation as a **mixin**; that is, a class that provides a set of capabilities.  A distribution inherits all of the capabilities from all of the representations.  Here's a class that shows what I mean:
 
+
 class Dist(Pmf, Cdf, CharFunc):
-    
     def __init__(self, d):
         """Initializes the Dist.
         
@@ -504,13 +511,13 @@ class Dist(Pmf, Cdf, CharFunc):
         Pmf.__init__(self, d)
         Cdf.__init__(self, d)
         CharFunc.__init__(self, compute_fft(d))
-        
+
     def __add__(self, other):
         """Computes the distribution of the sum using Pmf.__add__.
         """
         pmf = Pmf.__add__(self, other)
         return Dist(pmf.d)
-    
+
     def __mul__(self, other):
         """Computes the distribution of the sum using CharFunc.__mul__.
         """
@@ -547,7 +554,7 @@ dist.Probs((18, 21, 24))
 
 dist.Sample(10)
 
-thinkplot.Cdf(dist.Max(6));
+thinkplot.Cdf(dist.Max(6))
 
 # `Dist.__add__` uses `Pmf.__add__`, which performs convolution the slow way:
 
@@ -567,7 +574,7 @@ twelfth_fft.Mean()
 
 # ## Summary
 #
-# Abstractly, a distribution is an entity that can answer questions about the outcomes of random variables and their probabilities.  There are many ways to represent a distribution; each representation is equivalent to the others in the sense that they contain the same information, and you can convert from any of them to the others.  
+# Abstractly, a distribution is an entity that can answer questions about the outcomes of random variables and their probabilities.  There are many ways to represent a distribution; each representation is equivalent to the others in the sense that they contain the same information, and you can convert from any of them to the others.
 #
 # Some representations make it easy and efficient to answer some questions, but none of the representations is best for all of the questions.
 #
@@ -576,5 +583,3 @@ twelfth_fft.Mean()
 # In short, if you give me any representation of a distribution, you have told me everything I need to know to answer questions about the possible outcomes and their probabilities.  Converting from one representation to another is mostly a matter of convenience and computational efficiency.
 #
 # Conversely, if you are trying to find the distribution of a random variable, you can do it by computing whichever representation is easiest to figure out.
-
-

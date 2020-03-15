@@ -33,6 +33,7 @@ from thinkbayes import Hist, Pmf, Suite, Beta
 from thinkbayes import thinkplot
 
 import numpy as np
+
 # -
 
 # ## The dinner party
@@ -46,7 +47,9 @@ n_allergic = 4
 n_non = 6
 p_allergic = 0.5
 p_non = 0.1
-pmf = thinkplot.MakeBinomialPmf(n_allergic, p_allergic) + thinkplot.MakeBinomialPmf(n_non, p_non)
+pmf = thinkplot.MakeBinomialPmf(n_allergic, p_allergic) + thinkplot.MakeBinomialPmf(
+    n_non, p_non
+)
 thinkplot.Hist(pmf)
 
 # +
@@ -83,8 +86,8 @@ pmf.Mean()
 
 # Here's a class that models the study
 
+
 class Gluten(Suite):
-    
     def Likelihood(self, data, hypo):
         """Computes the probability of the data under the hypothesis.
         
@@ -97,7 +100,7 @@ class Gluten(Suite):
         yes, no = data
         n = yes + no
         ngs = n - gs
-        
+
         pmf1 = thinkplot.MakeBinomialPmf(gs, 0.95)
         pmf2 = thinkplot.MakeBinomialPmf(ngs, 0.4)
         pmf = pmf1 + pmf2
@@ -107,7 +110,7 @@ class Gluten(Suite):
 # +
 # Solution
 
-prior = Gluten(range(0, 35+1))
+prior = Gluten(range(0, 35 + 1))
 thinkplot.Pdf(prior)
 
 # +
@@ -121,8 +124,7 @@ posterior.Update(data)
 # Solution
 
 thinkplot.Pdf(posterior)
-thinkplot.Config(xlabel='# who are gluten sensitive', 
-                 ylabel='PMF', legend=False)
+thinkplot.Config(xlabel="# who are gluten sensitive", ylabel="PMF", legend=False)
 
 # +
 # Solution

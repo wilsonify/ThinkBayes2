@@ -38,13 +38,14 @@ from thinkbayes import thinkplot
 
 import pymc3 as pm
 import theano.tensor as T
+
 # -
 
 # ### Fake data
 
 n = 60
 t1 = 30
-t2 = n-t1
+t2 = n - t1
 lam1 = 4
 lam2 = 2
 
@@ -57,8 +58,8 @@ data = np.concatenate([before, after])
 
 # ### Grid algorithm
 
+
 class Change(Suite, Joint):
-    
     def Likelihood(self, data, hypo):
         """
         
@@ -69,15 +70,12 @@ class Change(Suite, Joint):
         return 1
 
 
-
-
-
 # ### MCMC
 #
 # To implement this model in PyMC, see Chapter 1 of [Bayesian Methods for Hackers](http://nbviewer.jupyter.org/github/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/blob/master/Chapter1_Introduction/Ch1_Introduction_PyMC2.ipynb)
 # and this example from [Computational Statistics in Python](http://people.duke.edu/~ccc14/sta-663-2016/16C_PyMC3.html#Changepoint-detection)
 
-#stop
+# stop
 
 # ### Real data
 #
@@ -87,17 +85,17 @@ class Change(Suite, Joint):
 # # !wget https://raw.githubusercontent.com/baltimore-sun-data/2018-shootings-analysis/master/BPD_Part_1_Victim_Based_Crime_Data.csv
 # -
 
-df = pd.read_csv('BPD_Part_1_Victim_Based_Crime_Data.csv', parse_dates=[0])
+df = pd.read_csv("BPD_Part_1_Victim_Based_Crime_Data.csv", parse_dates=[0])
 df.head()
 
 df.shape
 
-shootings = df[df.Description.isin(['HOMICIDE', 'SHOOTING']) & (df.Weapon == 'FIREARM')]
+shootings = df[df.Description.isin(["HOMICIDE", "SHOOTING"]) & (df.Weapon == "FIREARM")]
 shootings.shape
 
-grouped = shootings.groupby('CrimeDate')
+grouped = shootings.groupby("CrimeDate")
 
-counts = grouped['Total Incidents'].sum()
+counts = grouped["Total Incidents"].sum()
 counts.head()
 
 index = pd.date_range(counts.index[0], counts.index[-1])
@@ -106,5 +104,4 @@ counts = counts.reindex(index, fill_value=0)
 counts.head()
 
 counts.plot()
-thinkplot.decorate(xlabel='Date',
-                   ylabel='Number of shootings')
+thinkplot.decorate(xlabel="Date", ylabel="Number of shootings")

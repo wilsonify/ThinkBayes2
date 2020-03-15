@@ -59,16 +59,16 @@ import numpy as np
 # +
 # Solution
 
+
 class Social(Suite):
-    
     def Likelihood(self, data, hypo):
         """
         data: outcome of unreliable measurement, either 'YES' or 'NO'
         hypo: actual proportion of the thing we're measuring
         """
         p = hypo
-        p_yes = 0.5 + p/2
-        if data == 'YES':
+        p_yes = 0.5 + p / 2
+        if data == "YES":
             return p_yes
         else:
             return 1 - p_yes
@@ -80,25 +80,23 @@ class Social(Suite):
 prior = np.linspace(0, 1, 101)
 suite = Social(prior)
 
-thinkplot.Pdf(suite, label='Prior')
-thinkplot.decorate(xlabel='Fraction of the population',
-                   ylabel='PDF')
+thinkplot.Pdf(suite, label="Prior")
+thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
 
 # +
 # Solution
 
 for i in range(80):
-    suite.Update('YES')
-    
+    suite.Update("YES")
+
 for i in range(20):
-    suite.Update('NO')
+    suite.Update("NO")
 
 # +
 # Solution
 
-thinkplot.Pdf(suite, label='Posterior')
-thinkplot.decorate(xlabel='Fraction of the population',
-                   ylabel='PDF')
+thinkplot.Pdf(suite, label="Posterior")
+thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
 
 # +
 # Solution
@@ -108,16 +106,15 @@ suite.Mean(), suite.MAP()
 # +
 # Solution
 
-# For comparison, what would we think if we had been able 
+# For comparison, what would we think if we had been able
 # to survey 100 people directly?
 
 beta = Beta(1, 1)
 beta.Update((60, 40))
-thinkplot.Pdf(beta.MakePmf(), label='Direct', color='gray')
+thinkplot.Pdf(beta.MakePmf(), label="Direct", color="gray")
 
-thinkplot.Pdf(suite, label='Randomized')
-thinkplot.decorate(xlabel='Fraction of the population',
-                   ylabel='PDF')
+thinkplot.Pdf(suite, label="Randomized")
+thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
 
 # +
 # Solution
@@ -127,12 +124,11 @@ thinkplot.decorate(xlabel='Fraction of the population',
 
 factor = 2 * np.sqrt(2)
 beta = Beta(1, 1)
-beta.Update((60/factor, 40/factor))
-thinkplot.Pdf(beta.MakePmf(), label='Direct', color='gray')
+beta.Update((60 / factor, 40 / factor))
+thinkplot.Pdf(beta.MakePmf(), label="Direct", color="gray")
 
-thinkplot.Pdf(suite, label='Randomized')
-thinkplot.decorate(xlabel='Fraction of the population',
-                   ylabel='PDF')
+thinkplot.Pdf(suite, label="Randomized")
+thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
 
 # +
 # Solution
@@ -141,5 +137,3 @@ thinkplot.decorate(xlabel='Fraction of the population',
 
 100 / 2 / np.sqrt(2)
 # -
-
-

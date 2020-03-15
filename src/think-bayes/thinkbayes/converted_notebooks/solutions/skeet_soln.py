@@ -32,6 +32,7 @@ from thinkbayes import Pmf, Beta
 from thinkbayes import thinkplot
 
 import numpy as np
+
 # -
 
 # ## The skeet problem
@@ -48,7 +49,7 @@ import numpy as np
 # Here's a Beta distribution that represents Rhode's probability
 # of hitting a skeet
 
-rhode_beta = Beta(1, 1, label='Rhode')
+rhode_beta = Beta(1, 1, label="Rhode")
 rhode_beta.Update((22, 11))
 
 # +
@@ -56,7 +57,7 @@ rhode_beta.Update((22, 11))
 
 # And another Beta for Wei
 
-wei_beta = Beta(1, 1, label='Wei')
+wei_beta = Beta(1, 1, label="Wei")
 wei_beta.Update((21, 12))
 
 # +
@@ -66,7 +67,7 @@ wei_beta.Update((21, 12))
 
 thinkplot.Pdf(rhode_beta.MakePmf())
 thinkplot.Pdf(wei_beta.MakePmf())
-thinkplot.Config(xlabel='x', ylabel='Probability')
+thinkplot.Config(xlabel="x", ylabel="Probability")
 
 # +
 # Solution
@@ -128,5 +129,3 @@ np.mean(rhode_rematch < wei_rematch)
 
 np.mean(rhode_rematch == wei_rematch)
 # -
-
-

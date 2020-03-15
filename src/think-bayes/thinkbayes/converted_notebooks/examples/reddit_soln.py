@@ -31,6 +31,7 @@
 # import classes from thinkbayes
 from thinkbayes import Hist, Pmf, Suite, Beta
 from thinkbayes import thinkplot
+
 # -
 
 # ## Unreliable evaluators
@@ -52,8 +53,8 @@ from thinkbayes import thinkplot
 
 # Here's one possible model:
 
-#  Each article has a quality Q, which is the probability of 
-#  eliciting an upvote from a completely reliable redditor. 
+#  Each article has a quality Q, which is the probability of
+#  eliciting an upvote from a completely reliable redditor.
 
 #  Each user has a reliability R, which is the probability of
 #  giving an upvote to an item with Q=1.
@@ -66,33 +67,32 @@ from thinkbayes import thinkplot
 
 # +
 # Solution
-    
+
 # Suppose we start with a redditor who has demonstrated some reliability.
 
 beta = Beta(2, 1)
 redditor = beta.MakePmf(11)
 thinkplot.Pdf(redditor)
-thinkplot.decorate(xlabel='Reliability (R)',
-                   ylabel='PMF')
+thinkplot.decorate(xlabel="Reliability (R)", ylabel="PMF")
 
 mean_r = redditor.Mean()
 
 # +
 # Solution
-    
+
 # And a completely unknown item.
 
 beta = Beta(1, 1)
 item = beta.MakePmf(11)
 thinkplot.Pdf(item)
-thinkplot.decorate(xlabel='Quality (Q))',
-                   ylabel='PMF')
+thinkplot.decorate(xlabel="Quality (Q))", ylabel="PMF")
 
 mean_q = item.Mean()
 
 
 # +
 # Solution
+
 
 class Pair(Suite):
     """Represents hypotheses about the reliability and quality."""
@@ -104,46 +104,45 @@ class Pair(Suite):
         data: 'up' or 'down'
         """
         q, r = hypo
-        if data == 'up':
-            return r * q + (1-r) * (1-q)
-        elif data == 'down':
-            return r * (1-q) + (1-r) * q
+        if data == "up":
+            return r * q + (1 - r) * (1 - q)
+        elif data == "down":
+            return r * (1 - q) + (1 - r) * q
         else:
             return 0
 
 
 # +
 # Solution
-    
+
 # And here are the results.  Since we knew nothing about the item,
 # the vote provides no information about the redditor:
 
-d={}
+d = {}
 for r, p1 in redditor.Items():
     for q, p2 in item.Items():
         d[q, r] = p1 * p2
-        
-suite = Pair(d);
+
+suite = Pair(d)
 
 # +
 # Solution
-    
-suite.Update('up')
+
+suite.Update("up")
 
 # +
 # Solution
-    
+
 redditor_post = Pmf()
 for (q, r), p in suite.Items():
     redditor_post[r] += p
-    
+
 redditor_post.Total()
 
 # +
 thinkplot.Pdf(redditor_post)
 ylim = 0, redditor_post.MaxLike() * 1.05
-thinkplot.decorate(xlabel='Reliability (R)',
-                   ylabel='PMF', ylim=ylim)
+thinkplot.decorate(xlabel="Reliability (R)", ylabel="PMF", ylim=ylim)
 
 mean_r = redditor_post.Mean()
 
@@ -151,16 +150,13 @@ mean_r = redditor_post.Mean()
 item_post = Pmf()
 for (q, r), p in suite.Items():
     item_post[q] += p
-    
+
 item_post.Total()
 
 # +
 thinkplot.Pdf(item_post)
 ylim = 0, item_post.MaxLike() * 1.05
-thinkplot.decorate(xlabel='Quality (Q))',
-                   ylabel='PMF', ylim=ylim)
+thinkplot.decorate(xlabel="Quality (Q))", ylabel="PMF", ylim=ylim)
 
 mean_q = item_post.Mean()
 # -
-
-

@@ -48,32 +48,33 @@ import pandas as pd
 #
 # Here's the class that represents a Bayesian table.
 
+
 class BayesTable(pd.DataFrame):
     def __init__(self, hypo, prior=1):
-        columns = ['hypo', 'prior', 'likelihood', 'unnorm', 'posterior']
+        columns = ["hypo", "prior", "likelihood", "unnorm", "posterior"]
         super().__init__(columns=columns)
         self.hypo = hypo
         self.prior = prior
-    
+
     def mult(self):
         self.unnorm = self.prior * self.likelihood
-        
+
     def norm(self):
         nc = np.sum(self.unnorm)
         self.posterior = self.unnorm / nc
         return nc
-    
+
     def update(self):
         self.mult()
         return self.norm()
-    
+
     def reset(self):
         return BayesTable(self.hypo, self.posterior)
 
 
 # Here's an instance that represents the two hypotheses: you either chose from Bowl 1 or Bowl 2:
 
-table = BayesTable(['Bowl 1', 'Bowl 2'])
+table = BayesTable(["Bowl 1", "Bowl 2"])
 
 # Since we didn't specify prior probabilities, the default value is equal priors for all hypotheses.
 #
@@ -85,7 +86,7 @@ table = BayesTable(['Bowl 1', 'Bowl 2'])
 #
 # Here's how we plug the likelihoods in:
 
-table.likelihood = [3/4, 1/2]
+table.likelihood = [3 / 4, 1 / 2]
 table
 
 # The next step is to multiply the priors by the likelihoods, which yields the unnormalized posteriors.
@@ -113,7 +114,7 @@ table2 = table.reset()
 
 # Here are the likelihoods for the second update.
 
-table2.likelihood = [1/4, 1/2]
+table2.likelihood = [1 / 4, 1 / 2]
 
 # We could run `mult` and `norm` again, or run `update`, which does both steps.
 

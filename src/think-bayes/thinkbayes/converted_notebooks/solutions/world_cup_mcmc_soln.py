@@ -38,6 +38,7 @@ import numpy as np
 from scipy.special import gamma
 
 import pymc3 as pm
+
 # -
 
 # ## The World Cup Problem, Part One
@@ -56,13 +57,12 @@ from thinkbayes import MakeGammaPmf
 xs = np.linspace(0, 12, 101)
 pmf_gamma = MakeGammaPmf(xs, 1.3)
 thinkplot.Pdf(pmf_gamma)
-thinkplot.decorate(title='Gamma PDF',
-                   xlabel='Goals per game',
-                   ylabel='PDF')
+thinkplot.decorate(title="Gamma PDF", xlabel="Goals per game", ylabel="PDF")
 pmf_gamma.Mean()
 
 
 # -
+
 
 class Soccer(Suite):
     """Represents hypotheses about goal-scoring rates."""
@@ -83,9 +83,7 @@ class Soccer(Suite):
 
 prior = Soccer(pmf_gamma)
 thinkplot.Pdf(prior)
-thinkplot.decorate(title='Gamma prior',
-                   xlabel='Goals per game',
-                   ylabel='PDF')
+thinkplot.decorate(title="Gamma prior", xlabel="Goals per game", ylabel="PDF")
 prior.Mean()
 
 # Here's the update after the first goal at 11 minutes.
@@ -94,11 +92,11 @@ prior.Mean()
 posterior1 = prior.Copy()
 posterior1.Update(11)
 
-thinkplot.Pdf(prior, color='0.7')
+thinkplot.Pdf(prior, color="0.7")
 thinkplot.Pdf(posterior1)
-thinkplot.decorate(title='Posterior after 1 goal',
-                   xlabel='Goals per game',
-                   ylabel='PDF')
+thinkplot.decorate(
+    title="Posterior after 1 goal", xlabel="Goals per game", ylabel="PDF"
+)
 posterior1.Mean()
 # -
 
@@ -109,13 +107,13 @@ posterior1.Mean()
 posterior2 = posterior1.Copy()
 posterior2.Update(12)
 
-thinkplot.Pdf(prior, color='0.7')
-thinkplot.Pdf(posterior1, color='0.7')
+thinkplot.Pdf(prior, color="0.7")
+thinkplot.Pdf(posterior1, color="0.7")
 thinkplot.Pdf(posterior2)
 
-thinkplot.decorate(title='Posterior after 2 goals',
-                   xlabel='Goals per game',
-                   ylabel='PDF')
+thinkplot.decorate(
+    title="Posterior after 2 goals", xlabel="Goals per game", ylabel="PDF"
+)
 posterior2.Mean()
 # -
 
@@ -137,7 +135,8 @@ for lam, prob in posterior2.Items():
 
 # `MakeMixture` takes a Meta-Pmf (a Pmf that contains Pmfs) and returns a single Pmf that represents the weighted mixture of distributions:
 
-def MakeMixture(metapmf, label='mix'):
+
+def MakeMixture(metapmf, label="mix"):
     """Make a mixture distribution.
 
     Args:
@@ -161,9 +160,9 @@ mix.Print()
 # And here's what the mixture looks like.
 
 thinkplot.Hist(mix)
-thinkplot.decorate(title='Posterior predictive distribution',
-                   xlabel='Goals scored', 
-                   ylabel='PMF')
+thinkplot.decorate(
+    title="Posterior predictive distribution", xlabel="Goals scored", ylabel="PMF"
+)
 
 # **Exercise:** Compute the predictive mean and the probability of scoring 5 or more additional goals.
 
@@ -177,91 +176,87 @@ mix.Mean(), mix.ProbGreater(4)
 #
 # Building the MCMC model incrementally, start with just the prior distribution for `lam`.
 
-cdf_gamma = pmf_gamma.MakeCdf();
+cdf_gamma = pmf_gamma.MakeCdf()
 
 # +
 mean_rate = 1.3
 
 with pm.Model() as model:
-    lam = pm.Gamma('lam', alpha=mean_rate, beta=1)
+    lam = pm.Gamma("lam", alpha=mean_rate, beta=1)
     trace = pm.sample_prior_predictive(1000)
 
 # +
-lam_sample = trace['lam']
+lam_sample = trace["lam"]
 print(lam_sample.mean())
 
 cdf_lam = Cdf(lam_sample)
-thinkplot.Cdf(cdf_gamma, label='Prior grid')
-thinkplot.Cdf(cdf_lam, label='Prior MCMC')
-thinkplot.decorate(xlabel='Goal scoring rate',
-                   ylabel='Cdf')
+thinkplot.Cdf(cdf_gamma, label="Prior grid")
+thinkplot.Cdf(cdf_lam, label="Prior MCMC")
+thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
 # -
 
 # Let's look at the prior predictive distribution for the time between goals (in games).
 
 with pm.Model() as model:
-    lam = pm.Gamma('lam', alpha=mean_rate, beta=1)
-    gap = pm.Exponential('gap', lam)
+    lam = pm.Gamma("lam", alpha=mean_rate, beta=1)
+    gap = pm.Exponential("gap", lam)
     trace = pm.sample_prior_predictive(1000)
 
 # +
-gap_sample = trace['gap']
+gap_sample = trace["gap"]
 print(gap_sample.mean())
 cdf_lam = Cdf(gap_sample)
 
 thinkplot.Cdf(cdf_lam)
-thinkplot.decorate(xlabel='Time between goals (games)',
-                   ylabel='Cdf')
+thinkplot.decorate(xlabel="Time between goals (games)", ylabel="Cdf")
 # -
 
 # Now we're ready for the inverse problem, estimating `lam` based on the first observed gap.
 
 # +
-first_gap = 11/90
+first_gap = 11 / 90
 
 with pm.Model() as model:
-    lam = pm.Gamma('lam', alpha=mean_rate, beta=1)
-    gap = pm.Exponential('gap', lam, observed=first_gap)
+    lam = pm.Gamma("lam", alpha=mean_rate, beta=1)
+    gap = pm.Exponential("gap", lam, observed=first_gap)
     trace = pm.sample(1000, tune=3000)
 # -
 
-pm.traceplot(trace);
+pm.traceplot(trace)
 
 # +
-lam_sample = trace['lam']
+lam_sample = trace["lam"]
 print(lam_sample.mean())
 print(posterior1.Mean())
 cdf_lam = Cdf(lam_sample)
 
-thinkplot.Cdf(posterior1.MakeCdf(), label='Posterior analytic')
-thinkplot.Cdf(cdf_lam, label='Posterior MCMC')
-thinkplot.decorate(xlabel='Goal scoring rate',
-                   ylabel='Cdf')
+thinkplot.Cdf(posterior1.MakeCdf(), label="Posterior analytic")
+thinkplot.Cdf(cdf_lam, label="Posterior MCMC")
+thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
 # -
 
 # And here's the inverse problem with both observed gaps.
 
 # +
-second_gap = 12/90
+second_gap = 12 / 90
 
 with pm.Model() as model:
-    lam = pm.Gamma('lam', alpha=mean_rate, beta=1)
-    gap = pm.Exponential('gap', lam, observed=[first_gap, second_gap])
+    lam = pm.Gamma("lam", alpha=mean_rate, beta=1)
+    gap = pm.Exponential("gap", lam, observed=[first_gap, second_gap])
     trace = pm.sample(1000, tune=2000)
 # -
 
-pm.traceplot(trace);
+pm.traceplot(trace)
 
 # +
-lam_sample = trace['lam']
+lam_sample = trace["lam"]
 print(lam_sample.mean())
 print(posterior2.Mean())
 cdf_lam = Cdf(lam_sample)
 
-thinkplot.Cdf(posterior2.MakeCdf(), label='Posterior analytic')
-thinkplot.Cdf(cdf_lam, label='Posterior MCMC')
-thinkplot.decorate(xlabel='Goal scoring rate',
-                   ylabel='Cdf')
+thinkplot.Cdf(posterior2.MakeCdf(), label="Posterior analytic")
+thinkplot.Cdf(cdf_lam, label="Posterior MCMC")
+thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
 # -
 
 # And we can generate a predictive distribution for the time until the next goal (in games).
@@ -270,13 +265,12 @@ with model:
     post_pred = pm.sample_ppc(trace, samples=1000)
 
 # +
-gap_sample = post_pred['gap'].flatten()
+gap_sample = post_pred["gap"].flatten()
 print(gap_sample.mean())
 
 cdf_gap = Cdf(gap_sample)
 thinkplot.Cdf(cdf_gap)
-thinkplot.decorate(xlabel='Time between goals (games)',
-                   ylabel='Cdf')
+thinkplot.decorate(xlabel="Time between goals (games)", ylabel="Cdf")
 # -
 
 # **Exercise:** Use PyMC to write a solution to the second World Cup problem:
@@ -284,20 +278,19 @@ thinkplot.decorate(xlabel='Time between goals (games)',
 # >In the final match of the 2014 FIFA World Cup, Germany defeated Argentina 1-0. How much evidence does this victory provide that Germany had the better team? What is the probability that Germany would win a rematch?
 
 with pm.Model() as model:
-    lam = pm.Gamma('lam', alpha=mean_rate, beta=1)
-    goals = pm.Poisson('goals', lam, observed=1)
+    lam = pm.Gamma("lam", alpha=mean_rate, beta=1)
+    goals = pm.Poisson("goals", lam, observed=1)
     trace = pm.sample(1000, tune=3000)
 
-pm.traceplot(trace);
+pm.traceplot(trace)
 
 # +
-lam_sample = trace['lam']
+lam_sample = trace["lam"]
 print(lam_sample.mean())
 cdf_lam = Cdf(lam_sample)
 
-thinkplot.Cdf(cdf_lam, label='Posterior MCMC')
-thinkplot.decorate(xlabel='Goal scoring rate',
-                   ylabel='Cdf')
+thinkplot.Cdf(cdf_lam, label="Posterior MCMC")
+thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
 # -
 
 # And we can generate a predictive distribution for the time until the next goal (in games).
@@ -306,16 +299,16 @@ with model:
     post_pred = pm.sample_ppc(trace, samples=1000)
 
 # +
-goal_sample = post_pred['goals'].flatten()
+goal_sample = post_pred["goals"].flatten()
 print(goal_sample.mean())
 
 pmf_goals = Pmf(goal_sample)
 thinkplot.Hist(pmf_goals)
-thinkplot.decorate(xlabel='Number of goals',
-                   ylabel='Cdf')
+thinkplot.decorate(xlabel="Number of goals", ylabel="Cdf")
 
 # +
 from scipy.stats import poisson
+
 
 class Soccer2(thinkbayes.Suite):
     """Represents hypotheses about goal-scoring rates."""
@@ -326,7 +319,7 @@ class Soccer2(thinkbayes.Suite):
         hypo: goal rate in goals per game
         data: goals scored in a game
         """
-        return poisson.pmf(data, hypo) 
+        return poisson.pmf(data, hypo)
 
 
 # +
@@ -335,17 +328,16 @@ from thinkbayes import MakeGammaPmf
 xs = np.linspace(0, 8, 101)
 pmf = MakeGammaPmf(xs, 1.3)
 thinkplot.Pdf(pmf)
-thinkplot.decorate(xlabel='Goal-scoring rate (λ)',
-                   ylabel='PMF')
+thinkplot.decorate(xlabel="Goal-scoring rate (λ)", ylabel="PMF")
 pmf.Mean()
 # -
 
-germany = Soccer2(pmf);
+germany = Soccer2(pmf)
 
 germany.Update(1)
 
 
-def PredictiveDist(suite, duration=1, label='pred'):
+def PredictiveDist(suite, duration=1, label="pred"):
     """Computes the distribution of goals scored in a game.
 
     returns: new Pmf (mixture of Poissons)
@@ -360,17 +352,13 @@ def PredictiveDist(suite, duration=1, label='pred'):
 
 
 # +
-germany_pred = PredictiveDist(germany, label='germany')
+germany_pred = PredictiveDist(germany, label="germany")
 
-thinkplot.Hist(germany_pred, width=0.45, align='right')
-thinkplot.Hist(pmf_goals, width=0.45, align='left')
-thinkplot.decorate(xlabel='Predicted # goals',
-                   ylabel='Pmf')
+thinkplot.Hist(germany_pred, width=0.45, align="right")
+thinkplot.Hist(pmf_goals, width=0.45, align="left")
+thinkplot.decorate(xlabel="Predicted # goals", ylabel="Pmf")
 # -
 
-thinkplot.Cdf(germany_pred.MakeCdf(), label='Grid')
-thinkplot.Cdf(Cdf(goal_sample), label='MCMC')
-thinkplot.decorate(xlabel='Predicted # goals',
-                   ylabel='Pmf')
-
-
+thinkplot.Cdf(germany_pred.MakeCdf(), label="Grid")
+thinkplot.Cdf(Cdf(goal_sample), label="MCMC")
+thinkplot.decorate(xlabel="Predicted # goals", ylabel="Pmf")
