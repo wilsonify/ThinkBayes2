@@ -9,12 +9,8 @@ MIT License: https://opensource.org/licenses/MIT
 from __future__ import print_function, division
 
 import logging
-import math
-import numpy
 
 from matplotlib import pyplot
-
-import thinkbayes
 from thinkbayes import thinkplot
 
 
