@@ -38,16 +38,16 @@
 #
 # ### Step 2: Updating
 #
-# If goal-scoring is a Poisson process, the distribution of goals per game is Poisson with parameter $\lambda$.  To compute the distribution of $\lambda$ we can define a new class that inherits from `thinkbayes2.Suite` and provides an appropriate `Likelihood` function:
+# If goal-scoring is a Poisson process, the distribution of goals per game is Poisson with parameter $\lambda$.  To compute the distribution of $\lambda$ we can define a new class that inherits from `thinkbayes.Suite` and provides an appropriate `Likelihood` function:
 
 # first a little house-keeping
 from __future__ import print_function, division
-% matplotlib inline
+
 
 # +
-import thinkbayes2
+import thinkbayes
 
-class Soccer(thinkbayes2.Suite):
+class Soccer(thinkbayes.Suite):
     """Represents hypotheses about goal-scoring rates."""
 
     def Likelihood(self, data, hypo):
@@ -58,7 +58,7 @@ class Soccer(thinkbayes2.Suite):
         """
         goals = data
         lam = hypo
-        like = thinkbayes2.EvalPoissonPmf(goals, lam)
+        like = thinkbayes.EvalPoissonPmf(goals, lam)
         return like
 
 
@@ -76,7 +76,7 @@ class Soccer(thinkbayes2.Suite):
 
 # +
 import numpy
-import thinkplot
+from thinkbayes import thinkplot
 
 hypos = numpy.linspace(0, 12, 201)
 suite = Soccer(hypos)
@@ -140,12 +140,12 @@ def PredictiveDist(suite, duration=1, label='pred'):
 
     returns: new Pmf (mixture of Poissons)
     """
-    metapmf = thinkbayes2.Pmf()
+    metapmf = thinkbayes.Pmf()
     for lam, prob in suite.Items():
-        pred = thinkbayes2.MakePoissonPmf(lam * duration, 15)
+        pred = thinkbayes.MakePoissonPmf(lam * duration, 15)
         metapmf[pred] = prob
 
-    mix = thinkbayes2.MakeMixture(metapmf, label=label)
+    mix = thinkbayes.MakeMixture(metapmf, label=label)
     return mix
 
 germany_pred = PredictiveDist(germany, label='germany')

@@ -28,9 +28,9 @@
 # Configure Jupyter to display the assigned value after an assignment
 # %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
-# import classes from thinkbayes2
-from thinkbayes2 import Hist, Pmf, Suite, Beta
-import thinkplot
+# import classes from thinkbayes
+from thinkbayes import Hist, Pmf, Suite, Beta
+from thinkbayes import thinkplot
 
 import numpy as np
 # -
@@ -46,7 +46,7 @@ n_allergic = 4
 n_non = 6
 p_allergic = 0.5
 p_non = 0.1
-pmf = MakeBinomialPmf(n_allergic, p_allergic) + MakeBinomialPmf(n_non, p_non)
+pmf = thinkplot.MakeBinomialPmf(n_allergic, p_allergic) + thinkplot.MakeBinomialPmf(n_non, p_non)
 thinkplot.Hist(pmf)
 
 # +
@@ -98,8 +98,8 @@ class Gluten(Suite):
         n = yes + no
         ngs = n - gs
         
-        pmf1 = MakeBinomialPmf(gs, 0.95)
-        pmf2 = MakeBinomialPmf(ngs, 0.4)
+        pmf1 = thinkplot.MakeBinomialPmf(gs, 0.95)
+        pmf2 = thinkplot.MakeBinomialPmf(ngs, 0.4)
         pmf = pmf1 + pmf2
         return pmf[yes]
 

@@ -29,8 +29,8 @@
 import numpy as np
 import pandas as pd
 
-import thinkplot
-from thinkbayes2 import Pmf, Suite
+from thinkbayes import thinkplot
+from thinkbayes import Pmf, Suite
 
 from fractions import Fraction
 

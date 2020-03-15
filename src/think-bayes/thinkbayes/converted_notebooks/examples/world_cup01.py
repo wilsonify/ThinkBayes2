@@ -28,11 +28,11 @@
 # Configure Jupyter to display the assigned value after an assignment
 # %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
-# import classes from thinkbayes2
-from thinkbayes2 import Pmf, Suite
+# import classes from thinkbayes
+from thinkbayes import Pmf, Suite
 
-import thinkbayes2
-import thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 import numpy as np
 from scipy.special import gamma
@@ -49,7 +49,7 @@ from scipy.special import gamma
 # Here's what the prior looks like.
 
 # +
-from thinkbayes2 import MakeGammaPmf
+from thinkbayes import MakeGammaPmf
 
 xs = np.linspace(0, 8, 101)
 pmf = MakeGammaPmf(xs, 1.3)
@@ -179,7 +179,7 @@ pmf.Mean()
 #
 # `MakePoissonPmf` makes a Pmf that represents a Poisson distribution.
 
-from thinkbayes2 import MakePoissonPmf
+from thinkbayes import MakePoissonPmf
 
 # If we assume that `lam` is the mean of the posterior, we can generate a predictive distribution for the number of goals in the remainder of the game.
 

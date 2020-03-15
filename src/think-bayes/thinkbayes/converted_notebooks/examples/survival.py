@@ -27,11 +27,11 @@
 # Configure Jupyter to display the assigned value after an assignment
 # %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
-# import classes from thinkbayes2
-from thinkbayes2 import Pmf, Cdf, Suite, Joint
+# import classes from thinkbayes
+from thinkbayes import Pmf, Cdf, Suite, Joint
 
-import thinkbayes2
-import thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 import numpy as np
 

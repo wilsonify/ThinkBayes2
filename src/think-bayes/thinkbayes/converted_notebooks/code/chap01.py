@@ -40,7 +40,8 @@ gss.head()
 # +
 def replace_invalid(series, bad_vals, replacement=np.nan):
     series.replace(bad_vals, replacement, inplace=True)
-    
+
+
 replace_invalid(gss.feminist, [0, 8, 9])
 replace_invalid(gss.polviews, [0, 8, 9])
 replace_invalid(gss.partyid, [8, 9])
@@ -89,20 +90,19 @@ subset.shape
 
 #
 
-globals().update(subset)
 
 #
 
-female = sex == 2
+female = gss.sex == 2
 values(female)
 
-liberal = polviews <= 2
+liberal = gss.polviews <= 2
 values(liberal)
 
-democrat = partyid <= 1
+democrat = gss.partyid <= 1
 values(democrat)
 
-banker = indus10 == 6870
+banker = gss.indus10 == 6870
 values(banker)
 
 # +
@@ -110,7 +110,7 @@ total = 0
 for x in banker:
     if x is True:
         total += 1
-        
+
 total
 # -
 

@@ -23,7 +23,7 @@
 # Configure Jupyter to display the assigned value after an assignment
 # %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
-from thinkbayes2 import Pmf, Suite
+from thinkbayes import Pmf, Suite
 # -
 
 # Here is another problem from MacKay’s *Information Theory, Inference, and Learning Algorithms*:
@@ -71,7 +71,7 @@ pairs.Print()
 #
 # So we can compute `P(D | S̄)`:
 
-like_S̄ = pairs['O\tAB\t'] + pairs['AB\tO\t']
+like_s = pairs['O\tAB\t'] + pairs['AB\tO\t']
 
 # As MacKay points out, the data are more likely under `S̄` than under `S`, so they are evidence in favor of `S̄`; that is, they are exculpatory.
 #
@@ -81,7 +81,7 @@ suite = Suite(['S', 'S̄'])
 suite.Print()
 
 suite['S'] *= like_S
-suite['S̄'] *= like_S̄
+suite['S̄'] *= like_s
 suite.Normalize()
 
 # In light of this evidence, we are slightly more inclined to believe that Oliver is not guilty (or at least, did not leave a blood trace at the scene).

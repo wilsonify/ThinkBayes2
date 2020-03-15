@@ -23,15 +23,15 @@
 # +
 from __future__ import print_function, division
 
-% matplotlib inline
+
 import warnings
 warnings.filterwarnings('ignore')
 
 import math
 import numpy as np
 
-from thinkbayes2 import Pmf, Cdf, Suite, Joint
-import thinkplot
+from thinkbayes import Pmf, Cdf, Suite, Joint
+from thinkbayes import thinkplot
 
 
 # -
@@ -365,7 +365,7 @@ p
 
 # The number of bulbs that have burned out is distributed Binom(n, p)
 n = 100
-from thinkbayes2 import MakeBinomialPmf
+from thinkbayes import MakeBinomialPmf
 
 pmf_c = MakeBinomialPmf(n, p)
 thinkplot.Pdf(pmf_c)
@@ -388,7 +388,7 @@ for (lam, k), prob in suite.Items():
 # +
 # Solution
 
-from thinkbayes2 import MakeMixture
+from thinkbayes import MakeMixture
 
 mix = MakeMixture(metapmf)
 thinkplot.Pdf(mix)

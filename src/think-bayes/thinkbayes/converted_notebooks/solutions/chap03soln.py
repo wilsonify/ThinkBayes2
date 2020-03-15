@@ -23,10 +23,10 @@
 # +
 from __future__ import print_function, division
 
-% matplotlib inline
 
-import thinkplot
-from thinkbayes2 import Hist, Pmf, Suite, Cdf
+
+from thinkbayes import thinkplot
+from thinkbayes import Hist, Pmf, Suite, Cdf
 
 
 # -

@@ -27,11 +27,11 @@
 # Configure Jupyter to display the assigned value after an assignment
 # %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
-# import classes from thinkbayes2
-from thinkbayes2 import Pmf, Suite
+# import classes from thinkbayes
+from thinkbayes import Pmf, Suite
 
-import thinkbayes2
-import thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 # -
 
 # ### The Dungeons and Dragons club
@@ -130,12 +130,12 @@ thinkplot.decorate(xlabel='Number of players',
 #
 #
 
-help(thinkbayes2.MakeBinomialPmf)
+help(thinkbayes.MakeBinomialPmf)
 
 # And we can confirm that the analytic result matches what we computed by convolution.
 
 # +
-binomial = thinkbayes2.MakeBinomialPmf(10, 0.7)
+binomial = thinkbayes.MakeBinomialPmf(10, 0.7)
 thinkplot.Pmf(prior, color='C1')
 thinkplot.Pmf(binomial, color='C2', linestyle='dotted')
 
@@ -215,7 +215,7 @@ cdf = cdf_thrice.Max(n*6)
 thinkplot.Cdf(cdf, label='n=%s'%n)
 
 sample_max = [max(cdf_thrice.Sample(42)) for i in range(1000)]
-thinkplot.Cdf(thinkbayes2.Cdf(sample_max), label='sample')
+thinkplot.Cdf(thinkbayes.Cdf(sample_max), label='sample')
 
 thinkplot.decorate(xlabel='Attribute',
                    ylabel='CDF',
@@ -261,7 +261,7 @@ cdf = compute_cdf_min(cdf_thrice, n*6)
 thinkplot.Cdf(cdf, label='n=%s'%n)
 
 sample_min = [min(cdf_thrice.Sample(42)) for i in range(1000)]
-thinkplot.Cdf(thinkbayes2.Cdf(sample_min), label='sample')
+thinkplot.Cdf(thinkbayes.Cdf(sample_min), label='sample')
 
 thinkplot.decorate(xlabel='Attribute',
                    ylabel='CDF',

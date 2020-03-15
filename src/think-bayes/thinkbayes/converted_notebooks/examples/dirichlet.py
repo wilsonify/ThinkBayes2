@@ -28,12 +28,12 @@
 import numpy as np
 import pandas as pd
 
-# import classes from thinkbayes2
-from thinkbayes2 import Pmf, Cdf, Suite, Joint
+# import classes from thinkbayes
+from thinkbayes import Pmf, Cdf, Suite, Joint
 
-from thinkbayes2 import MakePoissonPmf, EvalBinomialPmf, MakeMixture
+from thinkbayes import MakePoissonPmf, EvalBinomialPmf, MakeMixture
 
-import thinkplot
+from thinkbayes import thinkplot
 
 
 # -
@@ -126,7 +126,7 @@ plot_marginal_cdfs(suite)
 # ### Using the Dirichlet object
 
 # +
-from thinkbayes2 import Dirichlet
+from thinkbayes import Dirichlet
 
 def DirichletMarginal(dirichlet, i):
     return dirichlet.MarginalBeta(i).MakePmf()

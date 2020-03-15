@@ -27,8 +27,8 @@
 # Configure Jupyter to display the assigned value after an assignment
 # %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
-# import classes from thinkbayes2
-from thinkbayes2 import Hist, Pmf, Suite
+# import classes from thinkbayes
+from thinkbayes import Hist, Pmf, Suite
 # -
 
 # **Exercise:** Let's consider [a more general version of the Monty Hall problem](https://en.wikipedia.org/wiki/Monty_Hall_problem#Other_host_behaviors) where Monty is more unpredictable.  As before, Monty never opens the door you chose (let's call it A) and never opens the door with the prize.  So if you choose the door with the prize, Monty has to decide which door to open.  Suppose he opens B with probability `p` and C with probability `1-p`.

@@ -31,8 +31,8 @@
 import math
 import numpy as np
 
-from thinkbayes2 import Hist, Pmf, Suite, Beta
-import thinkplot
+from thinkbayes import Hist, Pmf, Suite, Beta
+from thinkbayes import thinkplot
 # -
 
 # ### The Alien Blaster problem
@@ -208,7 +208,7 @@ np.mean(ks)
 # One more way to do the same thing is to make a meta-Pmf, which contains the two binomial `Pmf` objects:
 
 # +
-from thinkbayes2 import MakeBinomialPmf
+from thinkbayes import MakeBinomialPmf
 
 pmf1 = MakeBinomialPmf(n, x1)
 pmf2 = MakeBinomialPmf(n, x2)
@@ -231,7 +231,7 @@ np.mean(ks)
 
 # This result, which we have estimated three ways, is a predictive distribution, based on our uncertainty about `x`.
 #
-# We can compute the mixture analtically using `thinkbayes2.MakeMixture`:
+# We can compute the mixture analtically using `thinkbayes.MakeMixture`:
 #
 #
 #     def MakeMixture(metapmf, label='mix'):
@@ -256,7 +256,7 @@ np.mean(ks)
 # In the example, each Pmf is associated with a value of `x` (probability of hitting a target).  The inner loop enumerates the values of `k` (number of targets hit after 10 shots).
 
 # +
-from thinkbayes2 import MakeMixture
+from thinkbayes import MakeMixture
 
 mix = MakeMixture(metapmf)
 thinkplot.Hist(mix)

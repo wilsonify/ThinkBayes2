@@ -29,8 +29,8 @@ from __future__ import print_function, division
 import warnings
 warnings.filterwarnings('ignore')
 
-from thinkbayes2 import Pmf, Suite
-import thinkplot
+from thinkbayes import Pmf, Suite
+from thinkbayes import thinkplot
 # -
 
 # Working with Pmfs
@@ -72,16 +72,22 @@ thinkplot.Hist(d6)
 #
 # Compute and plot the Pmf of the sum of two 6-sided dice.
 
-# +
-# Solution goes here
-# -
+# Solution
+thinkplot.Hist(d6+d6)
 
 # **Exercise 2:** Suppose I roll two dice and tell you the result is greater than 3.
 #
 # Plot the Pmf of the remaining possible outcomes and compute its mean.
 
 # +
-# Solution goes here
+# Solution
+
+pmf = d6 + d6
+pmf[2] = 0
+pmf[3] = 0
+pmf.Normalize()
+thinkplot.Hist(pmf)
+pmf.Mean()
 # -
 
 # The cookie problem
@@ -107,7 +113,12 @@ cookie.Print()
 # Hint: The posterior (after the first cookie) becomes the prior (before the second cookie).
 
 # +
-# Solution goes here
+# Solution
+
+cookie['Bowl 1'] *= 0.25
+cookie['Bowl 2'] *= 0.5
+cookie.Normalize()
+cookie.Print()
 # -
 
 # **Exercise 4:** Instead of doing two updates, what if we collapse the two pieces of data into one update?
@@ -117,7 +128,13 @@ cookie.Print()
 # The result should be the same regardless of how many updates you do (or the order of updates).
 
 # +
-# Solution goes here
+# Solution
+
+cookie = Pmf(['Bowl 1', 'Bowl 2'])
+cookie['Bowl 1'] *= 0.75 * 0.25
+cookie['Bowl 2'] *= 0.5 * 0.5
+cookie.Normalize()
+cookie.Print()
 # -
 
 # The dice problem
@@ -127,13 +144,22 @@ cookie.Print()
 pmf = Pmf([4, 6, 8, 12])
 pmf.Print()
 
-
 # **Exercise 5:** We'll solve this problem two ways.  First we'll do it "by hand", as we did with the cookie problem; that is, we'll multiply each hypothesis by the likelihood of the data, and then renormalize.
 #
 # In the space below, update `suite` based on the likelihood of the data (rolling a 6), then normalize and print the results.
 
 # +
-# Solution goes here
+# Solution
+
+pmf[4] *= 0
+pmf[6] *= 1/6
+pmf[8] *= 1/8
+pmf[12] *= 1/12
+
+pmf.Normalize()
+pmf.Print()
+
+
 # -
 
 # **Exercise 6:**  Now let's do the same calculation using `Suite.Update`.
@@ -152,7 +178,18 @@ class Dice(Suite):
 
 
 # +
-# Solution goes here
+# Solution
+    
+class Dice(Suite):
+    # hypo is the number of sides on the die
+    # data is the outcome
+    def Likelihood(self, data, hypo):
+        if data > hypo:
+            return 0
+        else:
+            return 1 / hypo
+
+
 # -
 
 # Now we can create a `Dice` object and update it.
@@ -192,13 +229,19 @@ tank.Update(37)
 thinkplot.Pdf(tank)
 tank.Mean()
 
-
 # **Exercise 7:**  Suppose we see another tank with serial number 17.  What effect does this have on the posterior probabilities?
 #
 # Update the suite again with the new data and plot the results.
 
 # +
-# Solution goes here
+# Solution
+
+thinkplot.Pdf(tank, color='0.7')
+tank.Update(17)
+thinkplot.Pdf(tank)
+tank.Mean()
+
+
 # -
 
 # The Euro problem
@@ -219,7 +262,22 @@ class Euro(Suite):
 
 
 # +
-# Solution goes here
+# Solution
+
+class Euro(Suite):
+    
+    def Likelihood(self, data, hypo):
+        """ 
+        hypo is the prob of heads (0-100)
+        data is a string, either 'H' or 'T'
+        """
+        x = hypo / 100
+        if data == 'H':
+            return x
+        else:
+            return 1-x
+
+
 # -
 
 # We'll start with a uniform distribution from 0 to 100.
@@ -306,7 +364,16 @@ thinkplot.Config(title='Priors')
 # **Exercise 9:** Update euro1 and euro2 with the same data we used before (140 heads and 110 tails) and plot the posteriors.  How big is the difference in the means?
 
 # +
-# Solution goes here
+# Solution
+
+evidence = 'H' * 140 + 'T' * 110
+for outcome in evidence:
+    euro1.Update(outcome)
+    euro2.Update(outcome)
+
+thinkplot.Pdfs([euro1, euro2])
+thinkplot.Config(title='Posteriors')
+euro1.Mean(), euro2.Mean()
 # -
 
 

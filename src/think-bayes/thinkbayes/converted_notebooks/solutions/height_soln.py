@@ -30,8 +30,8 @@
 import numpy as np
 import pandas as pd
 
-from thinkbayes2 import Pmf, Cdf, Suite, Joint
-import thinkplot
+from thinkbayes import Pmf, Cdf, Suite, Joint
+from thinkbayes import thinkplot
 # -
 
 # ### The height problem
@@ -152,12 +152,12 @@ thinkplot.decorate(xlabel='Height (cm)',
                    title='Adult residents of the U.S.')
 # -
 
-# Use `thinkbayes2.MakeMixture` to make a `Pmf` that represents the height of all residents of the U.S.
+# Use `thinkbayes.MakeMixture` to make a `Pmf` that represents the height of all residents of the U.S.
 
 # +
 # Solution
 
-from thinkbayes2 import MakeMixture
+from thinkbayes import MakeMixture
 
 metapmf = Pmf({male_height_pmf:0.49, female_height_pmf:0.51})
 mix = MakeMixture(metapmf)
@@ -354,7 +354,7 @@ class Heights2(Suite, Joint):
 
 # Everything else is pretty much the same
 
-from thinkbayes2 import MakeJoint
+from thinkbayes import MakeJoint
 
 def faceoff(player1, player2, data):
     joint = Heights2(MakeJoint(player1, player2))

@@ -24,15 +24,15 @@
 # +
 from __future__ import print_function, division
 
-% matplotlib inline
+
 import warnings
 warnings.filterwarnings('ignore')
 
 import math
 import numpy as np
 
-from thinkbayes2 import Pmf, Cdf, Suite, Joint
-import thinkplot
+from thinkbayes import Pmf, Cdf, Suite, Joint
+from thinkbayes import thinkplot
 # -
 
 # ## Improving Reading Ability
@@ -64,7 +64,7 @@ for name, group in grouped:
 
 # +
 from scipy.stats import norm
-from thinkbayes2 import EvalNormalPdf
+from thinkbayes import EvalNormalPdf
 
 class Normal(Suite, Joint):
     
@@ -477,7 +477,7 @@ print('MAP n', n_marginal.MAP())
 # +
 # Solution
 
-from thinkbayes2 import EvalNormalPdf
+from thinkbayes import EvalNormalPdf
 
 class Gps(Suite, Joint):
     """Represents hypotheses about your location in the field."""
@@ -600,7 +600,7 @@ plot_cdfs(df, 'Width')
 plot_cdfs(df, 'Angle')
 
 # +
-from thinkbayes2 import EvalNormalPdf
+from thinkbayes import EvalNormalPdf
 
 class Beetle(Suite, Joint):
     

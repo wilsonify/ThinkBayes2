@@ -58,13 +58,13 @@
 
 # first a little house-keeping
 from __future__ import print_function, division
-% matplotlib inline
+
 
 # +
-import thinkbayes2
+import thinkbayes
 from scipy.special import binom
 
-class Hyrax(thinkbayes2.Suite):
+class Hyrax(thinkbayes.Suite):
     """Represents hypotheses about how many hyraxes there are."""
 
     def Likelihood(self, data, hypo):
@@ -101,7 +101,7 @@ suite.Update(data)
 
 # Here's what the posterior distribution looks like:
 
-import thinkplot
+from thinkbayes import thinkplot
 thinkplot.Pdf(suite)
 thinkplot.Config(xlabel='Number of hyraxes', ylabel='PMF', legend=False)
 
@@ -111,12 +111,12 @@ print('Posterior mean', suite.Mean())
 print('Maximum a posteriori estimate', suite.MaximumLikelihood())
 print('90% credible interval', suite.CredibleInterval(90))
 
-# The combinatorial expression we computed is the PMF of the hypergeometric distribution, so we can also compute it using `thinkbayes2.EvalHypergeomPmf`, which uses `scipy.stats.hypergeom.pmf`.
+# The combinatorial expression we computed is the PMF of the hypergeometric distribution, so we can also compute it using `thinkbayes.EvalHypergeomPmf`, which uses `scipy.stats.hypergeom.pmf`.
 
 # +
-import thinkbayes2
+import thinkbayes
 
-class Hyrax2(thinkbayes2.Suite):
+class Hyrax2(thinkbayes.Suite):
     """Represents hypotheses about how many hyraxes there are."""
 
     def Likelihood(self, data, hypo):
@@ -131,7 +131,7 @@ class Hyrax2(thinkbayes2.Suite):
         if hypo < K + (n - k):
             return 0
 
-        like = thinkbayes2.EvalHypergeomPmf(k, N, K, n)
+        like = thinkbayes.EvalHypergeomPmf(k, N, K, n)
         return like
 
 

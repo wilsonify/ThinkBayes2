@@ -32,8 +32,8 @@ import math
 import numpy as np
 import pandas as pd
 
-from thinkbayes2 import Pmf, Cdf, Suite, Joint
-import thinkplot
+from thinkbayes import Pmf, Cdf, Suite, Joint
+from thinkbayes import thinkplot
 # -
 
 # ### The August birthday problem

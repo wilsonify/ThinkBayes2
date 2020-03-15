@@ -27,9 +27,9 @@
 # Configure Jupyter to display the assigned value after an assignment
 # %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
-# import classes from thinkbayes2
-from thinkbayes2 import Hist, Pmf, Suite, Beta
-import thinkplot
+# import classes from thinkbayes
+from thinkbayes import Hist, Pmf, Suite, Beta
+from thinkbayes import thinkplot
 
 import numpy as np
 # -
@@ -166,7 +166,7 @@ np.mean(rhode_rematch < wei_rematch)
 # Alternatively, we can make a mixture that represents the distribution of `k`, taking into account our uncertainty about `x`:
 
 # +
-from thinkbayes2 import MakeBinomialPmf
+from thinkbayes import MakeBinomialPmf
 
 def MakeBinomialMix(pmf, label=''):
     mix = Pmf(label=label)
@@ -190,7 +190,7 @@ rhode_rematch.ProbGreater(wei_rematch), rhode_rematch.ProbLess(wei_rematch)
 # Alternatively, we could use MakeMixture:
 
 # +
-from thinkbayes2 import MakeMixture
+from thinkbayes import MakeMixture
 
 def MakeBinomialMix2(pmf):
     binomials = Pmf()

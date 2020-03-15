@@ -28,12 +28,12 @@
 import numpy as np
 import pandas as pd
 
-# import classes from thinkbayes2
-from thinkbayes2 import Pmf, Cdf, Suite, Joint
+# import classes from thinkbayes
+from thinkbayes import Pmf, Cdf, Suite, Joint
 
-from thinkbayes2 import MakePoissonPmf, EvalBinomialPmf, MakeMixture
+from thinkbayes import MakePoissonPmf, EvalBinomialPmf, MakeMixture
 
-import thinkplot
+from thinkbayes import thinkplot
 # -
 
 # ## The rain in Boston problem
@@ -143,7 +143,7 @@ pmf_theta = Pmf(dict(zip(thetas, ps)));
 # Now we can initialize the suite.
 
 # +
-from thinkbayes2 import MakeJoint
+from thinkbayes import MakeJoint
 
 suite = Rainfall(MakeJoint(pmf_k, pmf_theta));
 # -

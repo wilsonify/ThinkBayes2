@@ -27,10 +27,10 @@
 
 import numpy as np
 
-# import classes from thinkbayes2
-from thinkbayes2 import Pmf, Cdf, Suite, Joint
+# import classes from thinkbayes
+from thinkbayes import Pmf, Cdf, Suite, Joint
 
-import thinkplot
+from thinkbayes import thinkplot
 # -
 
 # ## Bayesian regression

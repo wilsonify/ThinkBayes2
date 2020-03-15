@@ -30,8 +30,8 @@
 import numpy as np
 import pandas as pd
 
-from thinkbayes2 import Pmf, Cdf, Suite, Joint
-import thinkplot
+from thinkbayes import Pmf, Cdf, Suite, Joint
+from thinkbayes import thinkplot
 # -
 
 # ### The height problem
@@ -120,7 +120,7 @@ thinkplot.decorate(xlabel='Height (cm)',
                    title='Adult residents of the U.S.')
 # -
 
-# Use `thinkbayes2.MakeMixture` to make a `Pmf` that represents the height of all residents of the U.S.
+# Use `thinkbayes.MakeMixture` to make a `Pmf` that represents the height of all residents of the U.S.
 
 # +
 # Solution goes here
@@ -140,8 +140,8 @@ thinkplot.decorate(xlabel='Height (cm)',
 # +
 # Solution goes here
 # -
-
-suite = make_prior(mix)
+mix = Pmf()
+suite = thinkplot.make_prior(mix)
 suite.Total()
 
 thinkplot.Contour(suite)

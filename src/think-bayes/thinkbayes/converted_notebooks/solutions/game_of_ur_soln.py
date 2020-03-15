@@ -27,8 +27,8 @@
 # Configure Jupyter to display the assigned value after an assignment
 # %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
-from thinkbayes2 import Pmf, Cdf, Suite
-import thinkplot
+from thinkbayes import Pmf, Cdf, Suite
+from thinkbayes import thinkplot
 # -
 
 # ### The Game of Ur problem

@@ -28,8 +28,8 @@ from __future__ import print_function, division
 
 import numpy as np
 
-from thinkbayes2 import Suite
-import thinkplot
+from thinkbayes import Suite
+from thinkbayes import thinkplot
 
 import warnings
 warnings.filterwarnings('ignore')

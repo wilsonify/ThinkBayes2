@@ -31,8 +31,8 @@
 import math
 import numpy as np
 
-from thinkbayes2 import Pmf, Cdf, Suite, Joint
-import thinkplot
+from thinkbayes import Pmf, Cdf, Suite, Joint
+from thinkbayes import thinkplot
 # -
 
 # ### The flea beetle problem
@@ -97,7 +97,7 @@ plot_cdfs(df, 'Angle')
 
 # +
 from scipy.stats import norm
-from thinkbayes2 import EvalNormalPdf
+from thinkbayes import EvalNormalPdf
 
 class Beetle(Suite, Joint):
     

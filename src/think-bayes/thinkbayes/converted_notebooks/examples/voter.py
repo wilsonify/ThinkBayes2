@@ -20,7 +20,7 @@
 # [The MIT License](https://opensource.org/licenses/MIT)
 # Copyright 2016 Allen Downey
 
-import thinkbayes2
+import thinkbayes
 
 # The following problem was submitted to my blog, [Probably Overthinking It](http://allendowney.blogspot.com/2011/10/my-favorite-bayess-theorem-problems.html), by a user named Amit, who wrote:
 #
@@ -28,7 +28,7 @@ import thinkbayes2
 #
 # My solution follows.  First I'll create a suite to represent our prior knowledge.  If we know nothing about a voter, we would use the relative populations of the states to guess where they are from.
 
-prior = thinkbayes2.Suite({'State 1': 0.4, 'State 2': 0.25, 'State 3': 0.35})
+prior = thinkbayes.Suite({'State 1': 0.4, 'State 2': 0.25, 'State 3': 0.35})
 prior.Print()
 
 # Now if we know a voter supports Party 1, we can use that as data to update our belief.  The following dictionary contains the likelihood of the data (supporting Party 1) under each hypothesis (which state the voter is from).

@@ -30,46 +30,43 @@
 import math
 import numpy as np
 
-from thinkbayes2 import Pmf, Suite, Joint
-import thinkbayes2
-import thinkplot
+from thinkbayes import Pmf, Suite, Joint
+import thinkbayes
+from thinkbayes import thinkplot
 
 
 # -
 
 class Battleship(Suite, Joint):
     lam = 1
-    
+
     def Likelihood(self, hypo, data):
         x_actual, y_actual = hypo
         x_guess, y_guess, result = data
-        d = np.hypot(x_guess-x_actual, y_guess-y_actual)
+        d = np.hypot(x_guess - x_actual, y_guess - y_actual)
         p_hit = np.exp(-self.lam * d)
-        return p if result == 'hit' else 1-p
+        return p if result == 'hit' else 1 - p
 
 
-for t, p in gap.Items():
-    arrivals = thinkbayes2.MakePoissonPmf(1.3 * t, 25)
-    thinkplot.plot(arrivals, color='C0', linewidth=0.1)
-    metapmf[arrivals] = p
-
-gap = thinkbayes2.MakeNormalPmf(7, 1, 3)
+gap = thinkbayes.MakeNormalPmf(7, 1, 3)
 thinkplot.plot(gap)
 
-metapmf = thinkbayes2.Pmf()
+metapmf = thinkbayes.Pmf()
 for t, p in gap.Items():
-    arrivals = thinkbayes2.MakePoissonPmf(1.3 * t, 25)
+    arrivals = thinkbayes.MakePoissonPmf(1.3 * t, 25)
+    thinkplot.plot(arrivals, color='C0', linewidth=0.1)
+    thinkbayes.metapmf[arrivals] = p
+
+metapmf = thinkbayes.Pmf()
+for t, p in gap.Items():
+    arrivals = thinkbayes.MakePoissonPmf(1.3 * t, 25)
     thinkplot.plot(arrivals, color='C0', linewidth=0.1)
     metapmf[arrivals] = p
 
-mix = thinkbayes2.MakeMixture(metapmf)
+mix = thinkbayes.MakeMixture(metapmf)
 mix.Mean()
 thinkplot.Hist(mix)
 thinkplot.decorate(xlabel='Number of passengers',
                    ylabel='PMF')
 
 mix[10]
-
-
-
-

@@ -23,15 +23,15 @@
 # +
 from __future__ import print_function, division
 
-% matplotlib inline
+
 import warnings
 warnings.filterwarnings('ignore')
 
 import math
 import numpy as np
 
-from thinkbayes2 import Pmf, Cdf, Suite, Joint
-import thinkplot
+from thinkbayes import Pmf, Cdf, Suite, Joint
+from thinkbayes import thinkplot
 # -
 
 # ## Warm-up exercises
@@ -100,8 +100,8 @@ import thinkplot
 # The Likelihood function takes as data the number of goals scored in a game.
 
 # +
-from thinkbayes2 import MakeNormalPmf
-from thinkbayes2 import EvalPoissonPmf
+from thinkbayes import MakeNormalPmf
+from thinkbayes import EvalPoissonPmf
 
 class Hockey(Suite):
     """Represents hypotheses about the scoring rate for a team."""
@@ -164,8 +164,8 @@ suite1.Mean(), suite2.Mean()
 # To predict the number of goals scored in the next game we can compute, for each hypothetical value of $\lambda$, a Poisson distribution of goals scored, then make a weighted mixture of Poissons:
 
 # +
-from thinkbayes2 import MakeMixture
-from thinkbayes2 import MakePoissonPmf
+from thinkbayes import MakeMixture
+from thinkbayes import MakePoissonPmf
 
 def MakeGoalPmf(suite, high=10):
     """Makes the distribution of goals scored, given distribution of lam.
@@ -217,7 +217,7 @@ print('Prob win, loss, tie:', p_win, p_loss, p_tie)
 # If the game goes into overtime, we have to compute the distribution of `t`, the time until the first goal, for each team.  For each hypothetical value of $\lambda$, the distribution of `t` is exponential, so the predictive distribution is a mixture of exponentials.
 
 # +
-from thinkbayes2 import MakeExponentialPmf
+from thinkbayes import MakeExponentialPmf
 
 def MakeGoalTimePmf(suite):
     """Makes the distribution of time til first goal.
@@ -278,7 +278,7 @@ print('p_win_overall', p_win_overall)
 # For a prior distribution on the goal-scoring rate for each team, use a gamma distribution with parameter 1.3.
 
 # +
-from thinkbayes2 import MakeGammaPmf
+from thinkbayes import MakeGammaPmf
 
 xs = np.linspace(0, 8, 101)
 pmf = MakeGammaPmf(xs, 1.3)

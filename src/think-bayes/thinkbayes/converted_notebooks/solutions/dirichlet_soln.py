@@ -30,10 +30,10 @@ import pandas as pd
 
 import matplotlib.pyplot as plt
 
-# import classes from thinkbayes2
-from thinkbayes2 import Pmf, Cdf, Suite, Joint
+# import classes from thinkbayes
+from thinkbayes import Pmf, Cdf, Suite, Joint
 
-import thinkplot
+from thinkbayes import thinkplot
 
 
 # -
@@ -176,7 +176,7 @@ suite.Copy().Update('B')
 # The following is a [monkey patch](https://en.wikipedia.org/wiki/Monkey_patch) that gives `Dirichlet` objects a `Marginal` method.
 
 # +
-from thinkbayes2 import Dirichlet
+from thinkbayes import Dirichlet
 
 def DirichletMarginal(dirichlet, i):
     return dirichlet.MarginalBeta(i).MakePmf()

@@ -23,14 +23,14 @@
 # +
 from __future__ import print_function, division
 
-% matplotlib inline
+
 import warnings
 warnings.filterwarnings('ignore')
 
 import numpy as np
 
-from thinkbayes2 import Pmf, Cdf, Suite
-import thinkplot
+from thinkbayes import Pmf, Cdf, Suite
+from thinkbayes import thinkplot
 
 
 # -
@@ -224,7 +224,7 @@ class Beta:
 
     def Random(self):
         """Generates a random variate from this distribution."""
-        return random.betavariate(self.alpha, self.beta)
+        return np.random.betavariate(self.alpha, self.beta)
 
     def Sample(self, n):
         """Generates a random sample from this distribution.

@@ -39,12 +39,12 @@
 #
 # ### Step 2: Updating
 #
-# If goal-scoring is a Poisson process, the distribution of time between goals is exponential with parameter $\lambda$, the goal scoring rate.  In this case we are given as data the inter-arrival time of the first two goals, 11 minutes and 12 minutes.  We can define a new class that inherits from `thinkbayes2.Suite` and provides an appropriate `Likelihood` function:
+# If goal-scoring is a Poisson process, the distribution of time between goals is exponential with parameter $\lambda$, the goal scoring rate.  In this case we are given as data the inter-arrival time of the first two goals, 11 minutes and 12 minutes.  We can define a new class that inherits from `thinkbayes.Suite` and provides an appropriate `Likelihood` function:
 
 # +
-import thinkbayes2
+import thinkbayes
 
-class Soccer(thinkbayes2.Suite):
+class Soccer(thinkbayes.Suite):
     """Represents hypotheses about goal-scoring rates."""
 
     def Likelihood(self, data, hypo):
@@ -55,7 +55,7 @@ class Soccer(thinkbayes2.Suite):
         """
         x = data
         lam = hypo / 90
-        like = thinkbayes2.EvalExponentialPdf(x, lam)
+        like = thinkbayes.EvalExponentialPdf(x, lam)
         return like
 
 
@@ -75,7 +75,7 @@ class Soccer(thinkbayes2.Suite):
 
 # +
 import numpy
-import thinkplot
+from thinkbayes import thinkplot
 
 hypos = numpy.linspace(0, 12, 201)
 suite = Soccer(hypos)
@@ -117,14 +117,14 @@ def PredRemaining(suite, rem_time):
     suite: posterior distribution of lam in goals per game
     rem_time: remaining time in the game in minutes
     """
-    metapmf = thinkbayes2.Pmf()
+    metapmf = thinkbayes.Pmf()
     for lam, prob in suite.Items():
         lt = lam * rem_time / 90
-        pred = thinkbayes2.MakePoissonPmf(lt, 15)
+        pred = thinkbayes.MakePoissonPmf(lt, 15)
         metapmf[pred] = prob
         thinkplot.Pdf(pred, color='gray', alpha=0.3, linewidth=0.5)
 
-    mix = thinkbayes2.MakeMixture(metapmf)
+    mix = thinkbayes.MakeMixture(metapmf)
     return mix
 
 mix = PredRemaining(suite, 90-23)
@@ -161,7 +161,7 @@ def MakeMixture(metapmf, label='mix'):
 
     Returns: Pmf object.
     """
-    mix = Pmf(label=label)
+    mix = thinkbayes.Pmf(label=label)
     for pmf, p1 in metapmf.Items():
         for x, p2 in pmf.Items():
             mix.Incr(x, p1 * p2)

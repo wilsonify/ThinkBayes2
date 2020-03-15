@@ -30,8 +30,8 @@
 import math
 import numpy as np
 
-from thinkbayes2 import Pmf, Cdf, Suite
-import thinkplot
+from thinkbayes import Pmf, Cdf, Suite
+from thinkbayes import thinkplot
 # -
 
 # ### The flea beetle problem

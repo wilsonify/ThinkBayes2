@@ -12,11 +12,11 @@
 #     name: python3
 # ---
 
-import thinkbayes2
-import thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 
-class Socks(thinkbayes2.Suite):
+class Socks(thinkbayes.Suite):
     
     def __init__(self, hypos):
         """Inits a Sock object.
@@ -26,7 +26,7 @@ class Socks(thinkbayes2.Suite):
         matched: number of matched socks that have been picked
         unmatched: number of unmatched socks that have been picked
         """
-        thinkbayes2.Suite.__init__(self, hypos)
+        thinkbayes.Suite.__init__(self, hypos)
         self.matched = 0
         self.unmatched = 0
         
@@ -35,7 +35,7 @@ class Socks(thinkbayes2.Suite):
         
         data: 'u' if we picked an unmatched sock, 'm' otherwise
         """
-        thinkbayes2.Suite.Update(self, data)
+        thinkbayes.Suite.Update(self, data)
         if data == 'u':
             self.unmatched += 1
         else:
@@ -59,19 +59,19 @@ class Socks(thinkbayes2.Suite):
         return like
 
 
-prior_n_pairs = thinkbayes2.MakePoissonPmf(12, 30)
+prior_n_pairs = thinkbayes.MakePoissonPmf(12, 30)
 suite = Socks(prior_n_pairs)
 thinkplot.Hist(suite)
 thinkplot.Config(xlabel='# pairs', ylabel='PMF', xlim=[0, 30])
 
-suite = Socks(hypos)
+suite = Socks(thinkbayes.hypos)
 for datum in 'u' * 11:
     suite.Update('u')
 thinkplot.Hist(suite)
 thinkplot.Config(xlabel='# pairs', ylabel='PMF', xlim=[0, 30])
 
 
-class Socks2(Socks, thinkbayes2.Joint):
+class Socks2(Socks, thinkbayes.Joint):
     
     def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
@@ -91,11 +91,11 @@ class Socks2(Socks, thinkbayes2.Joint):
         return like
 
 
-prior_n_odds = thinkbayes2.MakePoissonPmf(3, 30)
+prior_n_odds = thinkbayes.MakePoissonPmf(3, 30)
 thinkplot.Hist(prior_n_odds)
 thinkplot.Config(xlabel='# odds', ylabel='PMF', xlim=[0, 30])
 
-joint = thinkbayes2.MakeJoint(prior_n_pairs, prior_n_odds)
+joint = thinkbayes.MakeJoint(prior_n_pairs, prior_n_odds)
 suite = Socks2(joint)
 for datum in 'u' * 11:
     suite.Update('u')

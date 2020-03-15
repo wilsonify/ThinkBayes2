@@ -23,15 +23,15 @@
 # +
 from __future__ import print_function, division
 
-% matplotlib inline
+
 import warnings
 warnings.filterwarnings('ignore')
 
 import math
 import numpy as np
 
-from thinkbayes2 import Pmf, Cdf, Suite, Joint
-import thinkplot
+from thinkbayes import Pmf, Cdf, Suite, Joint
+from thinkbayes import thinkplot
 
 
 # -

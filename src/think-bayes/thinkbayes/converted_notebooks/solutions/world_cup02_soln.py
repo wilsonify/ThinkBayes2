@@ -28,11 +28,11 @@
 # Configure Jupyter to display the assigned value after an assignment
 # %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
-# import classes from thinkbayes2
-from thinkbayes2 import Pmf, Suite
+# import classes from thinkbayes
+from thinkbayes import Pmf, Suite
 
-import thinkbayes2
-import thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 import numpy as np
 from scipy.special import gamma
@@ -57,9 +57,9 @@ from scipy.special import gamma
 
 # ### Step 2: Updating
 #
-# If goal-scoring is a Poisson process, the distribution of goals per game is Poisson with parameter $\lambda$.  To compute the distribution of $\lambda$ we can define a new class that inherits from `thinkbayes2.Suite` and provides an appropriate `Likelihood` function:
+# If goal-scoring is a Poisson process, the distribution of goals per game is Poisson with parameter $\lambda$.  To compute the distribution of $\lambda$ we can define a new class that inherits from `thinkbayes.Suite` and provides an appropriate `Likelihood` function:
 
-class Soccer2(thinkbayes2.Suite):
+class Soccer2(thinkbayes.Suite):
     """Represents hypotheses about goal-scoring rates."""
 
     def Likelihood(self, data, hypo):
@@ -77,7 +77,7 @@ class Soccer2(thinkbayes2.Suite):
 
 from scipy.stats import poisson
 
-class Soccer2(thinkbayes2.Suite):
+class Soccer2(thinkbayes.Suite):
     """Represents hypotheses about goal-scoring rates."""
 
     def Likelihood(self, data, hypo):
@@ -102,7 +102,7 @@ class Soccer2(thinkbayes2.Suite):
 # To construct the prior, I use a gamma distribution with a mean of 1.34 goals per game.
 
 # +
-from thinkbayes2 import MakeGammaPmf
+from thinkbayes import MakeGammaPmf
 
 xs = np.linspace(0, 8, 101)
 pmf = MakeGammaPmf(xs, 1.3)
@@ -214,12 +214,12 @@ def PredictiveDist(suite, duration=1, label='pred'):
 
     returns: new Pmf (mixture of Poissons)
     """
-    metapmf = thinkbayes2.Pmf()
+    metapmf = thinkbayes.Pmf()
     for lam, prob in suite.Items():
-        pred = thinkbayes2.MakePoissonPmf(lam * duration, 10)
+        pred = thinkbayes.MakePoissonPmf(lam * duration, 10)
         metapmf[pred] = prob
 
-    mix = thinkbayes2.MakeMixture(metapmf, label=label)
+    mix = thinkbayes.MakeMixture(metapmf, label=label)
     return mix
 
 

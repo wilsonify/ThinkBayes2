@@ -17,11 +17,11 @@
 #
 # Allen Downey
 #
-# This notebook describes the ThinkBayes2 module, which I wrote to demonstrate a simple approach to Bayesian statistics.  The [documentation for the module is here](http://www.greenteapress.com/thinkbayes/thinkbayes2.html).
+# This notebook describes the ThinkBayes2 module, which I wrote to demonstrate a simple approach to Bayesian statistics.  The [documentation for the module is here](http://www.greenteapress.com/thinkbayes/thinkbayes.html).
 #
 # My book, [Think Bayes](http://thinkbayes.com), is based on the previous version of this module, thinkbayes.py.  There are only a few changes changes that are not backward-compatible, so if the read the book, you can use this module.
 #
-# thinkbayes2.py and supporting code are in [this GitHub repository](https://github.com/AllenDowney/ThinkBayes2).
+# thinkbayes.py and supporting code are in [this GitHub repository](https://github.com/AllenDowney/ThinkBayes2).
 #
 # ### Introduction
 #
@@ -44,10 +44,10 @@
 
 # +
 from __future__ import print_function, division
-import thinkbayes2
+import thinkbayes
 
 
-class Coin(thinkbayes2.Suite):
+class Coin(thinkbayes.Suite):
     
     def Likelihood(self, data, hypo):
         x = hypo / 100
@@ -67,9 +67,9 @@ class Coin(thinkbayes2.Suite):
 
 suite = Coin(range(0, 101))
 
-# `thinkplot` is a module that comes with ThinkBayes2.  It provides wrappers for some of the functions in Matplotlib, and includes functions like `Pdf` that known how to plot `Suites` and other objects from ThinkBayes2.
+# `thinkplot` is a module that comes with thinkbayes.  It provides wrappers for some of the functions in Matplotlib, and includes functions like `Pdf` that known how to plot `Suites` and other objects from thinkbayes.
 
-import thinkplot
+from thinkbayes import thinkplot
 thinkplot.Pdf(suite)
 
 # As expected, the prior is uniform.

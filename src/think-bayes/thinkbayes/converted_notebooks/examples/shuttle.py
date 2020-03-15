@@ -28,10 +28,10 @@
 import numpy as np
 import pandas as pd
 
-# import classes from thinkbayes2
-from thinkbayes2 import Pmf, Cdf, Suite, Joint
+# import classes from thinkbayes
+from thinkbayes import Pmf, Cdf, Suite, Joint
 
-import thinkplot
+from thinkbayes import thinkplot
 # -
 
 # ## The Space Shuttle problem
@@ -137,7 +137,7 @@ import pymc3 as pm
 # Solution goes here
 # -
 
-pm.traceplot(trace);
+pm.traceplot(thinkplot.trace);
 
 # The posterior distributions for these parameters should be similar to what we got with the grid algorithm.
 

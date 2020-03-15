@@ -28,11 +28,11 @@
 # Configure Jupyter to display the assigned value after an assignment
 # %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
-# import classes from thinkbayes2
-from thinkbayes2 import Pmf, Cdf, Suite
+# import classes from thinkbayes
+from thinkbayes import Pmf, Cdf, Suite
 
-import thinkbayes2
-import thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 import numpy as np
 from scipy.special import gamma
@@ -51,7 +51,7 @@ import pymc3 as pm
 # Here's what the prior looks like.
 
 # +
-from thinkbayes2 import MakeGammaPmf
+from thinkbayes import MakeGammaPmf
 
 xs = np.linspace(0, 12, 101)
 pmf_gamma = MakeGammaPmf(xs, 1.3)
@@ -119,7 +119,7 @@ thinkplot.decorate(title='Posterior after 2 goals',
 posterior2.Mean()
 # -
 
-from thinkbayes2 import MakePoissonPmf
+from thinkbayes import MakePoissonPmf
 
 # We can compute the mixture of these distributions by making a Meta-Pmf that maps from each Poisson Pmf to its probability.
 
@@ -317,7 +317,7 @@ thinkplot.decorate(xlabel='Number of goals',
 # +
 from scipy.stats import poisson
 
-class Soccer2(thinkbayes2.Suite):
+class Soccer2(thinkbayes.Suite):
     """Represents hypotheses about goal-scoring rates."""
 
     def Likelihood(self, data, hypo):
@@ -330,7 +330,7 @@ class Soccer2(thinkbayes2.Suite):
 
 
 # +
-from thinkbayes2 import MakeGammaPmf
+from thinkbayes import MakeGammaPmf
 
 xs = np.linspace(0, 8, 101)
 pmf = MakeGammaPmf(xs, 1.3)
@@ -350,12 +350,12 @@ def PredictiveDist(suite, duration=1, label='pred'):
 
     returns: new Pmf (mixture of Poissons)
     """
-    metapmf = thinkbayes2.Pmf()
+    metapmf = thinkbayes.Pmf()
     for lam, prob in suite.Items():
-        pred = thinkbayes2.MakePoissonPmf(lam * duration, 10)
+        pred = thinkbayes.MakePoissonPmf(lam * duration, 10)
         metapmf[pred] = prob
 
-    mix = thinkbayes2.MakeMixture(metapmf, label=label)
+    mix = thinkbayes.MakeMixture(metapmf, label=label)
     return mix
 
 

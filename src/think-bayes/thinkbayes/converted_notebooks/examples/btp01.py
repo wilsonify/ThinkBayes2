@@ -23,14 +23,14 @@
 # +
 from __future__ import print_function, division
 
-% matplotlib inline
+
 import warnings
 warnings.filterwarnings('ignore')
 
 import numpy as np
 
-from thinkbayes2 import Hist, Pmf, Cdf, Suite, Beta
-import thinkplot
+from thinkbayes import Hist, Pmf, Cdf, Suite, Beta
+from thinkbayes import thinkplot
 # -
 
 # ## The sock problem
