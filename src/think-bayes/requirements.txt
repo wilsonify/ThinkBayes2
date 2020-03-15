@@ -6,3 +6,4 @@ networkx
 matplotlib
 jupyter
 pymc3
+statsmodels
