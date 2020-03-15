@@ -2,7 +2,7 @@
 by Allen B. Downey, available from greenteapress.com
 
 Copyright 2014 Allen B. Downey
-License: GNU GPLv3 http://www.gnu.org/licenses/gpl.html
+MIT License: https://opensource.org/licenses/MIT
 """
 
 from __future__ import print_function, division
