@@ -1,4 +1,5 @@
-"""This file contains code used in "Think Bayes",
+"""
+This file contains code used in "Think Bayes",
 by Allen B. Downey, available from greenteapress.com
 
 Copyright 2018 Allen B. Downey
@@ -7,6 +8,7 @@ MIT License: https://opensource.org/licenses/MIT
 
 from __future__ import print_function, division
 
+import logging
 import math
 import numpy
 
@@ -16,18 +18,12 @@ import thinkbayes
 from thinkbayes import thinkplot
 
 
-def RenderPdf(mu, sigma, n=101):
-    """Makes xs and ys for a normal PDF with (mu, sigma).
-
-    n: number of places to evaluate the PDF
-    """
-    xs = numpy.linspace(mu - 4 * sigma, mu + 4 * sigma, n)
-    ys = [thinkbayes.EvalNormalPdf(x, mu, sigma) for x in xs]
-    return xs, ys
+def test_smoke():
+    logging.warning("is anything on fire")
 
 
-def test_main():
-    xs, ys = RenderPdf(100, 15)
+def test_RenderPdf():
+    xs, ys = thinkplot.RenderPdf(100, 15)
 
     n = 34
     pyplot.fill_between(xs[-n:], ys[-n:], y2=0.0001, color='blue', alpha=0.2)

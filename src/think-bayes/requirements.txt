@@ -7,3 +7,5 @@ matplotlib
 jupyter
 pymc3
 statsmodels
+plotly
+chart_studio

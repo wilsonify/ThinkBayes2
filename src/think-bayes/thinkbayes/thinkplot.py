@@ -11,9 +11,12 @@ import math
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+
+from chart_studio import plotly
 import pandas
 
 import warnings
+import thinkbayes
 
 
 # customize some matplotlib attributes
@@ -756,7 +759,7 @@ def Plotly(**options):
     """
     clf = options.pop('clf', True)
     Config(**options)
-    import plotly.plotly as plotly
+
     url = plotly.plot_mpl(plt.gcf())
     if clf:
         Clf()
@@ -809,6 +812,16 @@ def SaveFormat(root, fmt='eps', **options):
     filename = '%s.%s' % (root, fmt)
     print('Writing', filename)
     plt.savefig(filename, format=fmt, **options)
+
+
+def RenderPdf(mu, sigma, n=101):
+    """Makes xs and ys for a normal PDF with (mu, sigma).
+
+    n: number of places to evaluate the PDF
+    """
+    xs = np.linspace(mu - 4 * sigma, mu + 4 * sigma, n)
+    ys = [thinkbayes.EvalNormalPdf(x, mu, sigma) for x in xs]
+    return xs, ys
 
 
 # provide aliases for calling functions with lower-case names
