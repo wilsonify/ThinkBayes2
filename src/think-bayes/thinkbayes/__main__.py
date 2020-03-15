@@ -1,13 +1,7 @@
-"""This file contains code for use with "Think Stats" and
-"Think Bayes", both by Allen B. Downey, available from greenteapress.com
-
-Copyright 2014 Allen B. Downey
-License: GNU GPLv3 http://www.gnu.org/licenses/gpl.html
 """
+This code is inspired by "Think Bayes" by Allen B. Downey
 
-from __future__ import print_function, division
-
-"""This file contains class definitions for:
+This file contains class definitions for:
 
 Hist: represents a histogram (map from values to integer frequencies).
 
@@ -21,30 +15,26 @@ Pdf: represents a continuous probability density function
 
 """
 
+from __future__ import print_function, division
+
 import bisect
 import copy
 import logging
-import math
 import random
 import re
-
 from collections import Counter
+from io import open
 from operator import itemgetter
 
 import numpy as np
 import pandas as pd
-
 import scipy
-from scipy import stats
-from scipy import special
+from matplotlib import pyplot as plt
 from scipy import ndimage
-
+from scipy import stats
 from scipy.special import gamma
 
-from io import open
-from matplotlib import pyplot as plt
-
-ROOT2 = math.sqrt(2)
+ROOT2 = np.sqrt(2)
 
 
 def RandomSeed(x):
@@ -164,9 +154,6 @@ class _DictWrapper(object):
             # finally, treat it like a list
             self.d.update(Counter(obj))
 
-        if len(self) > 0 and isinstance(self, Pmf):
-            self.Normalize()
-
     def __hash__(self):
         return id(self)
 
@@ -257,7 +244,7 @@ class _DictWrapper(object):
 
         for x, p in self.d.items():
             if p:
-                self.Set(x, math.log(p / m))
+                self.Set(x, np.log(p / m))
             else:
                 self.Remove(x)
 
@@ -276,7 +263,7 @@ class _DictWrapper(object):
             m = self.MaxLike()
 
         for x, p in self.d.items():
-            self.Set(x, math.exp(p - m))
+            self.Set(x, np.exp(p - m))
 
     def GetDict(self):
         """Gets the dictionary."""
@@ -307,7 +294,7 @@ class _DictWrapper(object):
 
         def isnan(x):
             try:
-                return math.isnan(x)
+                return np.isnan(x)
             except TypeError:
                 return False
 
@@ -320,10 +307,8 @@ class _DictWrapper(object):
         except TypeError:
             return self.d.items()
 
-    def Render(self, **options):
+    def Render(self):
         """Generates a sequence of points suitable for plotting.
-
-        Note: options are ignored
 
         Returns:
             tuple of (sorted value sequence, freq/prob sequence)
@@ -442,6 +427,11 @@ class Pmf(_DictWrapper):
     Values can be any hashable type; probabilities are floating-point.
     Pmfs are not necessarily normalized.
     """
+
+    def __init__(self, obj=None, label=None):
+        super().__init__(obj, label)
+        if len(self) > 0:
+            self.Normalize()
 
     def Prob(self, x, default=0):
         """Gets the probability associated with the value x.
@@ -612,7 +602,7 @@ class Pmf(_DictWrapper):
         returns: float standard deviation
         """
         var = self.Var(mu)
-        return math.sqrt(var)
+        return np.sqrt(var)
 
     def Mode(self):
         """Returns the value with the highest probability.
@@ -1066,11 +1056,12 @@ class Cdf:
     def __getitem__(self, x):
         return self.Prob(x)
 
-    def __setitem__(self):
-        raise UnimplementedMethodException()
+    def __setitem__(self, key, xs):
+        assert key == "xs", "only xs may be set in cdf"
+        self.xs = xs
 
-    def __delitem__(self):
-        raise UnimplementedMethodException()
+    def __delitem__(self, key="xs"):
+        self.xs = np.asarray([])
 
     def __eq__(self, other):
         return np.all(self.xs == other.xs) and np.all(self.ps == other.ps)
@@ -1232,7 +1223,7 @@ class Cdf:
 
         returns: array of percentile ranks in the range 0 to 100
         """
-        return self.Probs(x) * 100
+        return self.Probs(xs) * 100
 
     def Random(self):
         """Chooses a random value from this distribution."""
@@ -1244,7 +1235,7 @@ class Cdf:
         n: int length of the sample
         returns: NumPy array
         """
-        ps = np.random.random(n)
+        ps = np.random.random(n)  # pylint: disable=no-member
         return self.ValueArray(ps)
 
     def Mean(self):
@@ -1278,23 +1269,21 @@ class Cdf:
 
     ConfidenceInterval = CredibleInterval
 
-    def _Round(self, multiplier=1000):
+    def _Round(self, a, b, multiplier=1000):
         """
         An entry is added to the cdf only if the percentile differs
         from the previous value in a significant digit, where the number
         of significant digits is determined by multiplier.  The
         default is 1000, which keeps log10(1000) = 3 significant digits.
         """
-        # TODO(write this method)
-        raise UnimplementedMethodException()
+        digits = np.log10(multiplier)
+        return np.isclose(self.Prob(a), self.Prob(b), atol=10 ** digits)
 
-    def Render(self, **options):
+    def Render(self):
         """Generates a sequence of points suitable for plotting.
 
         An empirical CDF is a step function; linear interpolation
         can be misleading.
-
-        Note: options are ignored
 
         Returns:
             tuple of (xs, ps)
@@ -1552,7 +1541,7 @@ def MakeSuiteFromDict(d, label=None):
 class Pdf(object):
     """Represents a probability density function (PDF)."""
 
-    def Density(self, x):
+    def Density(self, xs):
         """Evaluates this Pdf at x.
 
         Returns: float or NumPy array of probability density
@@ -1816,7 +1805,7 @@ def SampleSum(dists, n):
 
     returns: new Pmf of sums
     """
-    pmf = Pmf(RandomSum(dists) for i in range(n))
+    pmf = Pmf(RandomSum(dists) for _ in range(n))
     return pmf
 
 
@@ -1977,12 +1966,12 @@ def EvalExponentialPdf(x, lam):
 
     returns: float probability density
     """
-    return lam * math.exp(-lam * x)
+    return lam * np.exp(-lam * x)
 
 
 def EvalExponentialCdf(x, lam):
     """Evaluates CDF of the exponential distribution with parameter lam."""
-    return 1 - math.exp(-lam * x)
+    return 1 - np.exp(-lam * x)
 
 
 def MakeExponentialPmf(lam, high, n=200):
@@ -2076,7 +2065,7 @@ def StandardNormalCdf(x):
     Returns:
         float
     """
-    return (math.erf(x / ROOT2) + 1) / 2
+    return (np.erf(x / ROOT2) + 1) / 2
 
 
 def EvalNormalCdf(x, mu=0, sigma=1):
@@ -2268,7 +2257,7 @@ class Beta:
     def MakeCdf(self, steps=101):
         """Returns the CDF of this distribution."""
         xs = [i / (steps - 1.0) for i in range(steps)]
-        ps = special.betainc(self.alpha, self.beta, xs)
+        ps = scipy.special.betainc(self.alpha, self.beta, xs)  # pylint: disable=no-member
         cdf = Cdf(xs, ps)
         return cdf
 
@@ -2278,7 +2267,7 @@ class Beta:
         ps: scalar, array, or list of [0-100]
         """
         ps = np.asarray(ps) / 100
-        xs = special.betaincinv(self.alpha, self.beta, ps)
+        xs = scipy.special.betaincinv(self.alpha, self.beta, ps)  # pylint: disable=no-member
         return xs
 
 
@@ -2387,7 +2376,7 @@ def BinomialCoef(n, k):
 
     Returns: float
     """
-    return scipy.misc.comb(n, k)
+    return scipy.special.comb(n, k)
 
 
 def LogBinomialCoef(n, k):
@@ -2401,7 +2390,7 @@ def LogBinomialCoef(n, k):
 
     Returns: float
     """
-    return n * math.log(n) - k * math.log(k) - (n - k) * math.log(n - k)
+    return n * np.log(n) - k * np.log(k) - (n - k) * np.log(n - k)
 
 
 def NormalProbability(ys, jitter=0):
@@ -2446,7 +2435,7 @@ def NormalProbabilityPlot(sample, fit_color="0.8", **options):
     """
     xs, ys = NormalProbability(sample)
     mean, var = MeanVar(sample)
-    std = math.sqrt(var)
+    std = np.sqrt(var)
 
     fit = FitLine(xs, mean, std)
     plt.plot(*fit, color=fit_color, label="model")
@@ -2493,7 +2482,7 @@ def Std(xs, mu=None, ddof=0):
     returns: float
     """
     var = Var(xs, mu, ddof)
-    return math.sqrt(var)
+    return np.sqrt(var)
 
 
 def MeanVar(xs, ddof=0):
@@ -2574,7 +2563,7 @@ def CohenEffectSize(group1, group2):
     var2 = group2.var()
 
     pooled_var = (n1 * var1 + n2 * var2) / (n1 + n2)
-    d = diff / math.sqrt(pooled_var)
+    d = diff / np.sqrt(pooled_var)
     return d
 
 
@@ -2618,7 +2607,7 @@ def Corr(xs, ys):
     meanx, varx = MeanVar(xs)
     meany, vary = MeanVar(ys)
 
-    corr = Cov(xs, ys, meanx, meany) / math.sqrt(varx * vary)
+    corr = Cov(xs, ys, meanx, meany) / np.sqrt(varx * vary)
 
     return corr
 
@@ -2750,7 +2739,7 @@ def CorrelatedGenerator(rho):
     x = random.gauss(0, 1)
     yield x
 
-    sigma = math.sqrt(1 - rho ** 2)
+    sigma = np.sqrt(1 - rho ** 2)
     while True:
         x = random.gauss(x * rho, sigma)
         yield x
@@ -2786,7 +2775,7 @@ def StandardizedMoment(xs, k):
     """Computes the kth standardized moment of xs.
     """
     var = CentralMoment(xs, 2)
-    std = math.sqrt(var)
+    std = np.sqrt(var)
     return CentralMoment(xs, k) / std ** k
 
 
@@ -2824,7 +2813,7 @@ def PearsonMedianSkewness(xs):
     median = Median(xs)
     mean = RawMoment(xs, 1)
     var = CentralMoment(xs, 2)
-    std = math.sqrt(var)
+    std = np.sqrt(var)
     gp = 3 * (mean - median) / std
     return gp
 
@@ -2961,7 +2950,7 @@ def PercentileRow(array, p):
 
     returns: NumPy array (one row)
     """
-    rows, cols = array.shape
+    rows, _ = array.shape
     index = int(rows * p / 100)
     return array[
         index,
@@ -3034,17 +3023,6 @@ class HypothesisTest(object):
         """
         return max(self.test_stats)
 
-    def PlotCdf(self, label=None):
-        """Draws a Cdf with vertical lines at the observed test stat.
-        """
-
-        def VertLine(x):
-            """Draws a vertical line at x."""
-            plt.plot([x, x], [0, 1], color="0.8")
-
-        VertLine(self.actual)
-        self.test_cdf.plot(label=label)
-
     def TestStatistic(self, data):
         """Computes the test statistic.
 
@@ -3055,7 +3033,7 @@ class HypothesisTest(object):
     def MakeModel(self):
         """Build a model of the null hypothesis.
         """
-        pass
+        raise UnimplementedMethodException()
 
     def RunModel(self):
         """Run the model of the null hypothesis.
