@@ -1,78 +1,27 @@
-# -*- coding: utf-8 -*-
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
+"""
+This notebook presents code and exercises from Think Bayes: Chapter 9
+Copyright 2016 Allen B. Downey
+MIT License: https://opensource.org/licenses/MIT
+"""
 
-# # Think Bayes: Chapter 9
-#
-# This notebook presents code and exercises from Think Bayes, second edition.
-#
-# Copyright 2016 Allen B. Downey
-#
-# MIT License: https://opensource.org/licenses/MIT
-
-# +
 from __future__ import print_function, division
-
-
-import warnings
-
-warnings.filterwarnings("ignore")
-
 import math
 import numpy as np
-
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
-
-# -
-
-# ## Improving Reading Ability
-#
-# From DASL(http://lib.stat.cmu.edu/DASL/Stories/ImprovingReadingAbility.html)
-#
-# > An educator conducted an experiment to test whether new directed reading activities in the classroom will help elementary school pupils improve some aspects of their reading ability. She arranged for a third grade class of 21 students to follow these activities for an 8-week period. A control classroom of 23 third graders followed the same curriculum without the activities. At the end of the 8 weeks, all students took a Degree of Reading Power (DRP) test, which measures the aspects of reading ability that the treatment is designed to improve.
-#
-# > Summary statistics on the two groups of children show that the average score of the treatment class was almost ten points higher than the average of the control class. A two-sample t-test is appropriate for testing whether this difference is statistically significant. The t-statistic is 2.31, which is significant at the .05 level.
-#
-#
-
-# I'll use Pandas to load the data into a DataFrame.
-
-# +
-import pandas as pd
-
-df = pd.read_csv("../data/drp_scores.csv", skiprows=21, delimiter="\t")
-df.head()
-# -
-
-# And use `groupby` to compute the means for the two groups.
-
-grouped = df.groupby("Treatment")
-for name, group in grouped:
-    print(name, group.Response.mean())
-
-# The `Normal` class provides a `Likelihood` function that computes the likelihood of a sample from a normal distribution.
-
-# +
 from scipy.stats import norm
 from thinkbayes import EvalNormalPdf
+from itertools import product
 
 
 class Normal(Suite, Joint):
+    """
+    The `Normal` class provides a `Likelihood` function that computes the likelihood of a sample from a normal distribution.
+    """
+
     def Likelihood(self, data, hypo):
         """
-        
+
         data: sequence of test scores
         hypo: mu, sigma
         """
@@ -81,127 +30,8 @@ class Normal(Suite, Joint):
         return np.prod(likes)
 
 
-# -
-
-# The prior distributions for `mu` and `sigma` are uniform.
-
-mus = np.linspace(20, 80, 101)
-sigmas = np.linspace(5, 30, 101)
-
-# I use `itertools.product` to enumerate all pairs of `mu` and `sigma`.
-
-# +
-from itertools import product
-
-control = Normal(product(mus, sigmas))
-data = df[df.Treatment == "Control"].Response
-control.Update(data)
-# -
-
-# After the update, we can plot the probability of each `mu`-`sigma` pair as a contour plot.
-
-thinkplot.Contour(control, pcolor=True)
-thinkplot.Config(xlabel="mu", ylabel="sigma")
-
-# And then we can extract the marginal distribution of `mu`
-
-pmf_mu0 = control.Marginal(0)
-thinkplot.Pdf(pmf_mu0)
-thinkplot.Config(xlabel="mu", ylabel="Pmf")
-
-# And the marginal distribution of `sigma`
-
-pmf_sigma0 = control.Marginal(1)
-thinkplot.Pdf(pmf_sigma0)
-thinkplot.Config(xlabel="sigma", ylabel="Pmf")
-
-
-# **Exercise:** Run this analysis again for the control group.  What is the distribution of the difference between the groups?  What is the probability that the average "reading power" for the treatment group is higher?  What is the probability that the variance of the treatment group is higher?
-
-# +
-# Solution goes here
-
-# +
-# Solution goes here
-
-# +
-# Solution goes here
-
-# +
-# Solution goes here
-
-# +
-# Solution goes here
-
-# +
-# Solution goes here
-
-# +
-# Solution goes here
-
-# +
-# Solution goes here
-
-# +
-# It looks like there is a high probability that the mean of
-# the treatment group is higher, and the most likely size of
-# the effect is 9-10 points.
-
-# It looks like the variance of the treated group is substantially
-# smaller, which suggests that the treatment might be helping
-# low scorers more than high scorers.
-# -
-
-# ## Paintball
-
-# Suppose you are playing paintball in an indoor arena 30 feet
-# wide and 50 feet long.  You are standing near one of the 30 foot
-# walls, and you suspect that one of your opponents has taken cover
-# nearby.  Along the wall, you see several paint spatters, all the same
-# color, that you think your opponent fired recently.
-#
-# The spatters are at 15, 16, 18, and 21 feet, measured from the
-# lower-left corner of the room.  Based on these data, where do you
-# think your opponent is hiding?
-#
-# Here's the Suite that does the update.  It uses `MakeLocationPmf`,
-# defined below.
-
-
-class Paintball(Suite, Joint):
-    """Represents hypotheses about the location of an opponent."""
-
-    def __init__(self, alphas, betas, locations):
-        """Makes a joint suite of parameters alpha and beta.
-
-        Enumerates all pairs of alpha and beta.
-        Stores locations for use in Likelihood.
-
-        alphas: possible values for alpha
-        betas: possible values for beta
-        locations: possible locations along the wall
-        """
-        self.locations = locations
-        pairs = [(alpha, beta) for alpha in alphas for beta in betas]
-        Suite.__init__(self, pairs)
-
-    def Likelihood(self, data, hypo):
-        """Computes the likelihood of the data under the hypothesis.
-
-        hypo: pair of alpha, beta
-        data: location of a hit
-
-        Returns: float likelihood
-        """
-        alpha, beta = hypo
-        x = data
-        pmf = MakeLocationPmf(alpha, beta, self.locations)
-        like = pmf.Prob(x)
-        return like
-
-
 def MakeLocationPmf(alpha, beta, locations):
-    """Computes the Pmf of the locations, given alpha and beta. 
+    """Computes the Pmf of the locations, given alpha and beta.
 
     Given that the shooter is at coordinates (alpha, beta),
     the probability of hitting any spot is inversely proportionate
@@ -235,90 +65,310 @@ def StrafingSpeed(alpha, beta, x):
     return speed
 
 
-# The prior probabilities for `alpha` and `beta` are uniform.
+class Paintball(Suite, Joint):
+    """
+    ## Paintball
+
+    Suppose you are playing paintball in an indoor arena 30 feet
+    wide and 50 feet long.  You are standing near one of the 30 foot
+    walls, and you suspect that one of your opponents has taken cover
+    nearby.  Along the wall, you see several paint spatters, all the same
+    color, that you think your opponent fired recently.
+
+    The spatters are at 15, 16, 18, and 21 feet, measured from the
+    lower-left corner of the room.  Based on these data, where do you
+    think your opponent is hiding?
+    Here's the Suite that does the update.  It uses `MakeLocationPmf`,
+    defined below.
+
+    Represents hypotheses about the location of an opponent.
+    """
+
+    def __init__(self, alphas, betas, locations):
+        """Makes a joint suite of parameters alpha and beta.
+
+        Enumerates all pairs of alpha and beta.
+        Stores locations for use in Likelihood.
+
+        alphas: possible values for alpha
+        betas: possible values for beta
+        locations: possible locations along the wall
+        """
+        self.locations = locations
+        pairs = [(alpha, beta) for alpha in alphas for beta in betas]
+        Suite.__init__(self, pairs)
+
+    def Likelihood(self, data, hypo):
+        """Computes the likelihood of the data under the hypothesis.
+
+        hypo: pair of alpha, beta
+        data: location of a hit
+
+        Returns: float likelihood
+        """
+        alpha, beta = hypo
+        x = data
+        pmf = MakeLocationPmf(alpha, beta, self.locations)
+        like = pmf.Prob(x)
+        return like
+
+
+class Beetle(Suite, Joint):
+    def Likelihood(self, data, hypo):
+        """
+        data: sequence of measurements
+        hypo: mu, sigma
+        """
+        mu, sigma = hypo
+        likes = EvalNormalPdf(data, mu, sigma)
+        return np.prod(likes)
+
+    def PredictiveProb(self, data):
+        """Compute the posterior total probability of a datum.
+
+        data: sequence of measurements
+        """
+        total = 0
+        for (mu, sigma), prob in self.Items():
+            likes = norm.pdf(data, mu, sigma)
+            total += prob * np.prod(likes)
+        return total
+
+
+def MakeWidthSuite(data):
+    mus = np.linspace(115, 160, 51)
+    sigmas = np.linspace(1, 10, 51)
+    suite = Beetle(product(mus, sigmas))
+    suite.Update(data)
+    return suite
+
+
+class Species:
+    def __init__(self, name, suite_width, suite_angle):
+        self.name = name
+        self.suite_width = suite_width
+        self.suite_angle = suite_angle
+
+    def __str__(self):
+        return self.name
+
+    def Likelihood(self, data):
+        width, angle = data
+        like1 = self.suite_width.PredictiveProb(width)
+        like2 = self.suite_angle.PredictiveProb(angle)
+        return like1 * like2
+
+
+def test_reading(drp_scores_df):
+    """
+
+    Improving Reading Ability From DASL(http://lib.stat.cmu.edu/DASL/Stories/ImprovingReadingAbility.html)
+
+    An educator conducted an experiment to test whether new directed reading activities in the classroom
+    will help elementary school pupils improve some aspects of their reading ability.
+    She arranged for a third grade class of 21 students to follow these activities for an 8-week period.
+    A control classroom of 23 third graders followed the same curriculum without the activities.
+    At the end of the 8 weeks, all students took a Degree of Reading Power (DRP) test,
+    which measures the aspects of reading ability that the treatment is designed to improve.
+
+    Summary statistics on the two groups of children show that the average score of the treatment class was
+    almost ten points higher than the average of the control class.
+    A two-sample t-test is appropriate for testing whether this difference is statistically significant.
+    The t-statistic is 2.31, which is significant at the .05 level.
+
+    use `groupby` to compute the means for the two groups.
+
+    It looks like there is a high probability that the mean of
+    the treatment group is higher, and the most likely size of
+    the effect is 9-10 points.
+
+    It looks like the variance of the treated group is substantially
+    smaller, which suggests that the treatment might be helping
+    low scorers more than high scorers.
+
+    :return:
+    """
+    df = drp_scores_df
+    grouped = df.groupby("Treatment")
+    for name, group in grouped:
+        print(name, group.Response.mean())
+
+    mus = np.linspace(20, 80, 101)  # The prior distributions for `mu` and `sigma` are uniform.
+    sigmas = np.linspace(5, 30, 101)
+    control = Normal(product(mus, sigmas))
+    data = df[df.Treatment == "Control"].Response
+    control.Update(data)
+
+    thinkplot.Contour(control, pcolor=True)  # plot the probability of each `mu`-`sigma` pair as a contour plot.
+    thinkplot.Config(xlabel="mu", ylabel="sigma")
+
+    pmf_mu0 = control.Marginal(0)  # And then we can extract the marginal distribution of `mu`
+    thinkplot.Pdf(pmf_mu0)
+    thinkplot.Config(xlabel="mu", ylabel="Pmf")
+
+    pmf_sigma0 = control.Marginal(1)  # And the marginal distribution of `sigma`
+    thinkplot.Pdf(pmf_sigma0)
+    thinkplot.Config(xlabel="sigma", ylabel="Pmf")
+
+
+def test_paintball():
+    """
+    The prior probabilities for `alpha` and `beta` are uniform.
+
+    To visualize the joint posterior, I take slices for a few values of `beta` and
+    plot the conditional distributions of `alpha`.
+    If the shooter is close to the wall, we can be somewhat confident of his position.
+    The farther away he is, the less certain we are.
+
+    To visualize the joint posterior, I take slices for a few values of `beta` and
+    plot the conditional distributions of `alpha`.
+    If the shooter is close to the wall, we can be somewhat confident of his position.
+    The farther away he is, the less certain we are.
+
+    :return:
+    """
+    alphas = range(0, 31)
+    betas = range(1, 51)
+    locations = range(0, 31)
+
+    suite = Paintball(alphas, betas, locations)
+    suite.UpdateSet([15, 16, 18, 21])
+    locations = range(0, 31)
+    alpha = 10
+    betas = [10, 20, 40]
+    thinkplot.PrePlot(num=len(betas))
+
+    for beta in betas:
+        pmf = MakeLocationPmf(alpha, beta, locations)
+        pmf.label = "beta = %d" % beta
+        thinkplot.Pdf(pmf)
+
+    thinkplot.Config(xlabel="Distance", ylabel="Prob")
+
+    marginal_alpha = suite.Marginal(0, label="alpha")  # Here are the marginal posterior distributions
+    marginal_beta = suite.Marginal(1, label="beta")
+
+    print("alpha CI", marginal_alpha.CredibleInterval(50))
+    print("beta CI", marginal_beta.CredibleInterval(50))
+
+    thinkplot.PrePlot(num=2)
+
+    thinkplot.Cdf(Cdf(marginal_alpha))
+    thinkplot.Cdf(Cdf(marginal_beta))
+
+    thinkplot.Config(xlabel="Distance", ylabel="Prob")
+
+    betas = [10, 20, 40]
+    thinkplot.PrePlot(num=len(betas))
+
+    for beta in betas:
+        cond = suite.Conditional(0, 1, beta)
+        cond.label = "beta = %d" % beta
+        thinkplot.Pdf(cond)
+
+    thinkplot.Config(xlabel="Distance", ylabel="Prob")
+
+    thinkplot.Contour(suite.GetDict(), contour=False,
+                      pcolor=True)  # Another way to visualize the posterior distribution
+
+    thinkplot.Config(xlabel="alpha", ylabel="beta", axis=[0, 30, 0, 20])
+
+    d = dict((pair, 0) for pair in suite.Values())
+
+    percentages = [75, 50, 25]
+    for p in percentages:
+        interval = suite.MaxLikeInterval(p)
+        for pair in interval:
+            d[pair] += 1
+
+    thinkplot.Contour(d, contour=False, pcolor=True)
+    thinkplot.Text(17, 4, "25", color="white")
+    thinkplot.Text(17, 15, "50", color="white")
+    thinkplot.Text(17, 30, "75")
+
+    thinkplot.Config(xlabel="alpha", ylabel="beta", legend=False)
+
+
+def test_flea_beetles(flea_beetles_df):
+    def plot_cdfs(df, col):
+        for name, group in df.groupby("Species"):
+            cdf = Cdf(group[col], label=name)
+            thinkplot.Cdf(cdf)
+
+        thinkplot.Config(xlabel=col, legend=True, loc="lower right")
+
+    df = flea_beetles_df
+    plot_cdfs(df, "Width")
+    plot_cdfs(df, "Angle")
+
+    groups = df.groupby("Species")
+
+    for name, group in groups:
+        suite = MakeWidthSuite(group.Width)
+        thinkplot.Contour(suite)
+        print(name, suite.PredictiveProb(137))
+
+    def MakeAngleSuite(data):
+        mus = np.linspace(8, 16, 101)
+        sigmas = np.linspace(0.1, 2, 101)
+        suite = Beetle(product(mus, sigmas))
+        suite.Update(data)
+        return suite
+
+    for name, group in groups:
+        suite = MakeAngleSuite(group.Angle)
+        thinkplot.Contour(suite)
+        print(name, suite.PredictiveProb(13))
+
+    species = {}
+
+    for name, group in groups:
+        suite_width = MakeWidthSuite(group.Width)
+        suite_angle = MakeAngleSuite(group.Angle)
+        species[name] = Species(name, suite_width, suite_angle)
+
+    species["Con"].Likelihood((145, 14))
+
+    class Classifier(Suite):
+        def Likelihood(self, data, hypo):
+            return hypo.Likelihood(data)
+
+    suite = Classifier(species.values())
+    for hypo, prob in suite.Items():
+        print(hypo, prob)
+
+    suite.Update((145, 14))
+    for hypo, prob in suite.Items():
+        print(hypo, prob)
+
+# **Exercise:** Run this analysis again for the control group.
+# What is the distribution of the difference between the groups?
+# What is the probability that the average "reading power" for the treatment group is higher?
+# What is the probability that the variance of the treatment group is higher?
 
 # +
-alphas = range(0, 31)
-betas = range(1, 51)
-locations = range(0, 31)
-
-suite = Paintball(alphas, betas, locations)
-suite.UpdateSet([15, 16, 18, 21])
-# -
-
-# To visualize the joint posterior, I take slices for a few values of `beta` and plot the conditional distributions of `alpha`.  If the shooter is close to the wall, we can be somewhat confident of his position.  The farther away he is, the less certain we are.
+# Solution goes here
 
 # +
-locations = range(0, 31)
-alpha = 10
-betas = [10, 20, 40]
-thinkplot.PrePlot(num=len(betas))
-
-for beta in betas:
-    pmf = MakeLocationPmf(alpha, beta, locations)
-    pmf.label = "beta = %d" % beta
-    thinkplot.Pdf(pmf)
-
-thinkplot.Config(xlabel="Distance", ylabel="Prob")
-# -
-
-# Here are the marginal posterior distributions for `alpha` and `beta`.
+# Solution goes here
 
 # +
-marginal_alpha = suite.Marginal(0, label="alpha")
-marginal_beta = suite.Marginal(1, label="beta")
-
-print("alpha CI", marginal_alpha.CredibleInterval(50))
-print("beta CI", marginal_beta.CredibleInterval(50))
-
-thinkplot.PrePlot(num=2)
-
-thinkplot.Cdf(Cdf(marginal_alpha))
-thinkplot.Cdf(Cdf(marginal_beta))
-
-thinkplot.Config(xlabel="Distance", ylabel="Prob")
-# -
-
-# To visualize the joint posterior, I take slices for a few values of `beta` and plot the conditional distributions of `alpha`.  If the shooter is close to the wall, we can be somewhat confident of his position.  The farther away he is, the less certain we are.
+# Solution goes here
 
 # +
-betas = [10, 20, 40]
-thinkplot.PrePlot(num=len(betas))
-
-for beta in betas:
-    cond = suite.Conditional(0, 1, beta)
-    cond.label = "beta = %d" % beta
-    thinkplot.Pdf(cond)
-
-thinkplot.Config(xlabel="Distance", ylabel="Prob")
-# -
-
-# Another way to visualize the posterio distribution: a pseudocolor plot of probability as a function of `alpha` and `beta`.
+# Solution goes here
 
 # +
-thinkplot.Contour(suite.GetDict(), contour=False, pcolor=True)
-
-thinkplot.Config(xlabel="alpha", ylabel="beta", axis=[0, 30, 0, 20])
-# -
-
-# Here's another visualization that shows posterior credible regions.
+# Solution goes here
 
 # +
-d = dict((pair, 0) for pair in suite.Values())
+# Solution goes here
 
-percentages = [75, 50, 25]
-for p in percentages:
-    interval = suite.MaxLikeInterval(p)
-    for pair in interval:
-        d[pair] += 1
+# +
+# Solution goes here
 
-thinkplot.Contour(d, contour=False, pcolor=True)
-thinkplot.Text(17, 4, "25", color="white")
-thinkplot.Text(17, 15, "50", color="white")
-thinkplot.Text(17, 30, "75")
-
-thinkplot.Config(xlabel="alpha", ylabel="beta", legend=False)
-# -
+# +
+# Solution goes here
 
 
 # **Exercise:** From [John D. Cook](http://www.johndcook.com/blog/2010/07/13/lincoln-index/)
@@ -341,6 +391,7 @@ thinkplot.Config(xlabel="alpha", ylabel="beta", legend=False)
 # +
 # Solution goes here
 # -
+
 
 # **Exercise:** The GPS problem.  According to [Wikipedia]()
 #
@@ -430,128 +481,3 @@ thinkplot.Config(xlabel="alpha", ylabel="beta", legend=False)
 #
 # 5. Use the function to classify each of the specimens in the table and see how many you get right.
 #
-
-# +
-import pandas as pd
-
-df = pd.read_csv("../data/flea_beetles.csv", delimiter="\t")
-df.head()
-
-
-# -
-
-
-def plot_cdfs(df, col):
-    for name, group in df.groupby("Species"):
-        cdf = Cdf(group[col], label=name)
-        thinkplot.Cdf(cdf)
-
-    thinkplot.Config(xlabel=col, legend=True, loc="lower right")
-
-
-plot_cdfs(df, "Width")
-
-plot_cdfs(df, "Angle")
-
-# +
-from thinkbayes import EvalNormalPdf
-
-
-class Beetle(Suite, Joint):
-    def Likelihood(self, data, hypo):
-        """
-        data: sequence of measurements
-        hypo: mu, sigma
-        """
-        mu, sigma = hypo
-        likes = EvalNormalPdf(data, mu, sigma)
-        return np.prod(likes)
-
-    def PredictiveProb(self, data):
-        """Compute the posterior total probability of a datum.
-        
-        data: sequence of measurements
-        """
-        total = 0
-        for (mu, sigma), prob in self.Items():
-            likes = norm.pdf(data, mu, sigma)
-            total += prob * np.prod(likes)
-        return total
-
-
-# +
-from itertools import product
-
-
-def MakeWidthSuite(data):
-    mus = np.linspace(115, 160, 51)
-    sigmas = np.linspace(1, 10, 51)
-    suite = Beetle(product(mus, sigmas))
-    suite.Update(data)
-    return suite
-
-
-# -
-
-groups = df.groupby("Species")
-
-for name, group in groups:
-    suite = MakeWidthSuite(group.Width)
-    thinkplot.Contour(suite)
-    print(name, suite.PredictiveProb(137))
-
-
-def MakeAngleSuite(data):
-    mus = np.linspace(8, 16, 101)
-    sigmas = np.linspace(0.1, 2, 101)
-    suite = Beetle(product(mus, sigmas))
-    suite.Update(data)
-    return suite
-
-
-for name, group in groups:
-    suite = MakeAngleSuite(group.Angle)
-    thinkplot.Contour(suite)
-    print(name, suite.PredictiveProb(13))
-
-
-class Species:
-    def __init__(self, name, suite_width, suite_angle):
-        self.name = name
-        self.suite_width = suite_width
-        self.suite_angle = suite_angle
-
-    def __str__(self):
-        return self.name
-
-    def Likelihood(self, data):
-        width, angle = data
-        like1 = self.suite_width.PredictiveProb(width)
-        like2 = self.suite_angle.PredictiveProb(angle)
-        return like1 * like2
-
-
-# +
-species = {}
-
-for name, group in groups:
-    suite_width = MakeWidthSuite(group.Width)
-    suite_angle = MakeAngleSuite(group.Angle)
-    species[name] = Species(name, suite_width, suite_angle)
-# -
-
-species["Con"].Likelihood((145, 14))
-
-
-class Classifier(Suite):
-    def Likelihood(self, data, hypo):
-        return hypo.Likelihood(data)
-
-
-suite = Classifier(species.values())
-for hypo, prob in suite.Items():
-    print(hypo, prob)
-
-suite.Update((145, 14))
-for hypo, prob in suite.Items():
-    print(hypo, prob)

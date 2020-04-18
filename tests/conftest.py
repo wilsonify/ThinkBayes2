@@ -1,5 +1,5 @@
 import os
-
+import pandas as pd
 import pytest
 import thinkbayes
 from thinkbayes import Hist, Pmf, Suite
@@ -29,3 +29,13 @@ def six_sided_die_pmf():
         pmf[x] = 1
     pmf.Normalize()
     return pmf
+
+
+@pytest.fixture
+def drp_scores_df():
+    return pd.read_csv(os.path.join(DATADIR, "drp_scores.csv"), skiprows=21, delimiter="\t")
+
+
+@pytest.fixture
+def flea_beetles_df():
+    return pd.read_csv(os.path.join(DATADIR, "flea_beetles.csv"), delimiter="\t")
