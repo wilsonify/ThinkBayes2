@@ -298,7 +298,7 @@ class _DictWrapper(object):
             except TypeError:
                 return False
 
-        if any([isnan(x) for x in self.Values()]):
+        if np.any([isnan(x) for x in self.Values()]):
             msg = "Keys contain NaN, may not sort correctly."
             logging.warning(msg)
 
