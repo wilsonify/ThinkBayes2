@@ -6,7 +6,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 # Configure Jupyter to display the assigned value after an assignment
 # %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 

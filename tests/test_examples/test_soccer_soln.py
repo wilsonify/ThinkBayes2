@@ -41,7 +41,7 @@
 #
 # If goal-scoring is a Poisson process, the distribution of time between goals is exponential with parameter $\lambda$, the goal scoring rate.  In this case we are given as data the inter-arrival time of the first two goals, 11 minutes and 12 minutes.  We can define a new class that inherits from `thinkbayes.Suite` and provides an appropriate `Likelihood` function:
 
-# +
+
 import thinkbayes
 
 
@@ -74,7 +74,7 @@ class Soccer(thinkbayes.Suite):
 #
 # To construct the prior, I'll start with an unrealistic uniform distribution and update it with fake data until the mean matches the observed rate for a single team, 1.34 goals per game.
 
-# +
+
 import numpy
 from thinkbayes import thinkplot
 
@@ -113,7 +113,7 @@ suite.Mean()
 #
 # We don't actually know $\lambda$, but we can use the posterior distribution of $\lambda$ to generate a predictive distribution for the number of additional goals.
 
-# +
+
 def PredRemaining(suite, rem_time):
     """Plots the predictive distribution for additional number of goals.
 

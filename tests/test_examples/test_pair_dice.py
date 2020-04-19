@@ -19,7 +19,7 @@
 # MIT License: https://opensource.org/licenses/MIT
 #
 
-# +
+
 # Configure Jupyter so figures appear in the notebook
 # %matplotlib inline
 
@@ -78,7 +78,7 @@ class BayesTable(pd.DataFrame):
 #
 # I'll start by making a list of possible pairs of dice.
 
-# +
+
 sides = [4, 6, 8, 12]
 hypo = []
 for die1 in sides:
@@ -103,7 +103,7 @@ table = BayesTable(hypo)
 #
 # So the likelihoods are:
 
-# +
+
 for i, row in table.iterrows():
     n1, n2 = row.hypo
     table.loc[i, "likelihood"] = 2 / n1 / n2
@@ -156,7 +156,7 @@ for i, row in table.iterrows():
 #
 # Here's how we compute the total probability:
 
-# +
+
 total = 0
 for i, row in table.iterrows():
     n1, n2 = row.hypo
@@ -174,7 +174,7 @@ total
 #
 # 3) Computing the normalizing constant.
 
-# +
+
 table2 = table.reset()
 for i, row in table2.iterrows():
     n1, n2 = row.hypo

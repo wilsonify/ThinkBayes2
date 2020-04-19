@@ -8,7 +8,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 # Configure Jupyter so figures appear in the notebook
 # %matplotlib inline
 
@@ -27,7 +27,7 @@ import numpy as np
 #
 # Suppose you are having a dinner party with 10 guests and 4 of them are allergic to cats.  Because you have cats, you expect 50% of the allergic guests to sneeze during dinner.  At the same time, you expect 10% of the non-allergic guests to sneeze.  What is the distribution of the total number of guests who sneeze?
 
-# +
+
 # Solution
 
 n_allergic = 4
@@ -35,7 +35,7 @@ n_non = 6
 p_allergic = 0.5
 p_non = 0.1
 
-# +
+
 # Solution
 
 pmf1 = MakeBinomialPmf(n_allergic, p_allergic)
@@ -44,7 +44,7 @@ pmf = pmf1 + pmf2
 thinkplot.Hist(pmf)
 thinkplot.decorate(xlabel="Number of sneezers", ylabel="Pmf")
 
-# +
+
 # Solution
 
 pmf.Mean()
@@ -73,7 +73,7 @@ pmf.Mean()
 #
 # Using this model, estimate the number of study participants who are sensitive to gluten.  What is the most likely number?  What is the 95% credible interval?
 
-# +
+
 # Solution
 
 # Here's a class that models the study
@@ -99,27 +99,27 @@ class Gluten(Suite):
         return pmf[yes]
 
 
-# +
+
 # Solution
 
 prior = Gluten(range(0, 35 + 1))
 thinkplot.Pdf(prior)
 thinkplot.decorate(xlabel="Number who are gluten sensitive", ylabel="Pmf")
 
-# +
+
 # Solution
 
 posterior = prior.Copy()
 data = 12, 23
 posterior.Update(data)
 
-# +
+
 # Solution
 
 thinkplot.Pdf(posterior)
 thinkplot.decorate(xlabel="Number who are gluten sensitive", ylabel="Pmf")
 
-# +
+
 # Solution
 
 posterior.CredibleInterval(95)

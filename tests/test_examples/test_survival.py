@@ -20,7 +20,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 # Configure Jupyter so figures appear in the notebook
 # %matplotlib inline
 
@@ -44,7 +44,7 @@ import numpy as np
 #
 # The following functions evaluate its PDF and CDF.
 
-# +
+
 def EvalWeibullPdf(x, lam, k):
     """Computes the Weibull PDF.
 
@@ -83,7 +83,7 @@ def MakeWeibullPmf(lam, k, high, n=200):
 
 # SciPy also provides functions to evaluate the Weibull distribution, which I'll use to check my implementation.
 
-# +
+
 from scipy.stats import weibull_min
 
 lam = 2
@@ -110,7 +110,7 @@ thinkplot.decorate(xlabel="Lifetime", ylabel="PMF")
 #
 # To check that it is correct, I generate a large sample and compare its CDF to the analytic CDF.
 
-# +
+
 def SampleWeibull(lam, k, n=1):
     return np.random.weibull(k, size=n) * lam
 
@@ -128,43 +128,43 @@ thinkplot.decorate(xlabel="Lifetime", ylabel="CDF")
 #
 # Plot the posterior distributions of `lam` and `k`.  As the sample size increases, does the posterior distribution converge on the values of `lam` and `k` used to generate the sample?
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -
 
 # **Exercise:** Now suppose that instead of observing a lifespan, `k`, you observe a lightbulb that has operated for 1 year and is still working.  Write another version of `LightBulb` that takes data in this form and performs an update.
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -
 
@@ -185,7 +185,7 @@ thinkplot.decorate(xlabel="Lifetime", ylabel="CDF")
 #
 # `age_t`: age of the bulb at t=10
 
-# +
+
 import pandas as pd
 
 lam = 2
@@ -204,7 +204,7 @@ df.head()
 
 # Now I'll process the DataFrame to generate data in the form we want for the update.
 
-# +
+
 data = []
 for i, row in df.iterrows():
     if row.end < t_end:
@@ -215,25 +215,25 @@ for i, row in df.iterrows():
 for pair in data:
     print(pair)
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -
 
 # **Exercise:** Suppose you install a light bulb and then you don't check on it for a year, but when you come back, you find that it has burned out.  Extend `LightBulb` to handle this kind of data, too.
 
-# +
+
 # Solution goes here
 # -
 
@@ -241,18 +241,18 @@ for pair in data:
 #
 # **Exercise:** Suppose we know that, for a particular kind of lightbulb in a particular location, the distribution of lifespans is well modeled by a Weibull distribution with `lam=2` and `k=1.5`.  If we install `n=100` lightbulbs and come back one year later, what is the distribution of `c`, the number of lightbulbs that have burned out?
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -
 
 # **Exercise:** Now suppose that `lam` and `k` are not known precisely, but we have a `LightBulb` object that represents the joint posterior distribution of the parameters after seeing some data.  Compute the posterior predictive distribution for `c`, the number of bulbs burned out after one year.
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -

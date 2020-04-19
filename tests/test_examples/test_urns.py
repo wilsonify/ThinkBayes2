@@ -8,7 +8,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 # Configure Jupyter so figures appear in the notebook
 # %matplotlib inline
 
@@ -70,7 +70,7 @@ tplt.decorate(xlabel="Urn index (i)", ylabel="PMF")
 
 # Here's Jacob's update after 5 blue marbles.
 
-# +
+
 jacob = prior.Copy()
 B5G0 = "B" * 5
 
@@ -86,7 +86,7 @@ tplt.decorate(xlabel="Urn index (i)", ylabel="PMF")
 
 # Here's Emily's update after an additional 12 blue and 3 green.
 
-# +
+
 emily = jacob.Copy()
 B12G3 = "B" * 12 + "G" * 3
 
@@ -95,7 +95,7 @@ for data in B12G3:
 
 emily.Print()
 
-# +
+
 tplt.preplot(cols=2)
 tplt.Hist(jacob, label="Jacob")
 tplt.decorate(xlabel="Urn index (i)", ylabel="PMF")
@@ -107,7 +107,7 @@ tplt.decorate(xlabel="Urn index (i)", ylabel="PMF")
 
 # What should Jacob believe about Bnext?
 
-# +
+
 total = 0
 for i, prob_i in jacob.Items():
     print(i, prob_i)

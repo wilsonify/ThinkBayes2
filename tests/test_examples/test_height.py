@@ -20,7 +20,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 # Configure Jupyter so figures appear in the notebook
 # %matplotlib inline
 
@@ -44,7 +44,7 @@ from thinkbayes import thinkplot
 # To represent the likelihood functions, I'll use `norm` from `scipy.stats`, which returns a "frozen" random variable (RV) that represents a normal distribution with given parameters.
 #
 
-# +
+
 from scipy.stats import norm
 
 dist_height = dict(male=norm(178, 7.7), female=norm(163, 7.3))
@@ -64,7 +64,7 @@ class Height(Suite):
         return 1
 
 
-# +
+
 # Solution goes here
 # -
 
@@ -82,10 +82,10 @@ for hypo, prob in suite.Items():
 
 # Compute the probability of being male as a function of height, for a range of values between 150 and 200.
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -
 
@@ -110,7 +110,7 @@ male_height_pmf = Pmf(dict(zip(hs, ps)))
 ps = dist_height["female"].pdf(hs)
 female_height_pmf = Pmf(dict(zip(hs, ps)))
 
-# +
+
 thinkplot.Pdf(male_height_pmf, label="Male")
 thinkplot.Pdf(female_height_pmf, label="Female")
 
@@ -121,22 +121,22 @@ thinkplot.decorate(
 
 # Use `thinkbayes.MakeMixture` to make a `Pmf` that represents the height of all residents of the U.S.
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -
 
 # Write a class that inherits from Suite and Joint, and provides a Likelihood function that computes the probability of the data under a given hypothesis.
 
-# +
+
 # Solution goes here
 # -
 
 # Write a function that initializes your `Suite` with an appropriate prior.
 
-# +
+
 # Solution goes here
 # -
 mix = Pmf()
@@ -150,15 +150,15 @@ thinkplot.decorate(
 
 # Update your `Suite`, then plot the joint distribution and the marginal distribution, and compute the posterior means for `A` and `B`.
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -

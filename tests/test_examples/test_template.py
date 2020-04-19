@@ -20,7 +20,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 # Configure Jupyter so figures appear in the notebook
 # %matplotlib inline
 

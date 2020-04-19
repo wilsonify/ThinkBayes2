@@ -20,7 +20,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 # Configure Jupyter so figures appear in the notebook
 # %matplotlib inline
 
@@ -42,7 +42,7 @@ from thinkbayes import thinkplot
 #
 # How does the spread of the posterior distribution depend on `y`?
 
-# +
+
 # Solution
 
 # Here's a class that models an unreliable coin
@@ -70,7 +70,7 @@ class UnreliableCoin(Suite):
             return x * (1 - y) + (1 - x) * y
 
 
-# +
+
 # Solution
 
 # Now let's initialize an UnreliableCoin with `y=0.9`:
@@ -79,7 +79,7 @@ prior = range(0, 101)
 suite = UnreliableCoin(prior, y=0.9)
 thinkplot.Pdf(suite)
 
-# +
+
 # Solution
 
 # And update with 3 heads and 7 tails.
@@ -90,7 +90,7 @@ for outcome in "HHHTTTTTTT":
 thinkplot.Pdf(suite)
 
 
-# +
+
 # Solution
 
 # Now let's try it out with different values of `y`:
@@ -105,7 +105,7 @@ def plot_posterior(y, data):
     thinkplot.Pdf(suite, label="y=%g" % y)
 
 
-# +
+
 # Solution
 
 # The posterior distribution gets wider as the measurement gets less reliable.
@@ -116,7 +116,7 @@ plot_posterior(0.8, data)
 plot_posterior(0.6, data)
 thinkplot.decorate(xlabel="Probability of heads (x)", ylabel="PMF")
 
-# +
+
 # Solution
 
 # At `y=0.5`, the measurement provides no information, so the posterior equals the prior:
@@ -124,7 +124,7 @@ thinkplot.decorate(xlabel="Probability of heads (x)", ylabel="PMF")
 plot_posterior(0.5, data)
 thinkplot.decorate(xlabel="Probability of heads (x)", ylabel="PMF")
 
-# +
+
 # Solution
 
 # As the coin gets less reliable (below `y=0.5`) the distribution gets narrower again.

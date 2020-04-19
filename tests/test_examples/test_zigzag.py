@@ -29,7 +29,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 from __future__ import print_function, division
 
 # %matplotlib inline
@@ -90,7 +90,7 @@ np.mean(sample_sim), lam_per_game
 #
 #
 
-# +
+
 from collections import Counter
 
 
@@ -110,7 +110,7 @@ class Pmf(Counter):
 
 # Here are some functions for plotting PMFs.
 
-# +
+
 plot_options = dict(linewidth=3, alpha=0.6)
 
 
@@ -187,7 +187,7 @@ pmf_goals()
 
 # But plotting PMFs is a bad way to compare distributions.  It's better to use the cumulative distribution function (CDF).
 
-# +
+
 def plot_cdf(sample, **options):
     """Compute and plot the CDF of a sample."""
     pmf = Pmf(sample)
@@ -246,7 +246,7 @@ legend()
 #
 # Soon we will want to use `pymc3` to do inference, which is really what it's for.  But just to get warmed up, I will use it to generate a sample from a Poisson distribution.
 
-# +
+
 model = pm.Model()
 
 with model:
@@ -269,7 +269,7 @@ legend()
 #
 # One of the nice things about the Poisson distribution is that we can compute its CDF and PMF analytically.  We can use the CDF to check, one more time, the previous results.
 
-# +
+
 import scipy.stats as st
 
 xs = np.arange(11)
@@ -329,7 +329,7 @@ poisson_likelihood(goals=[6, 2], mu=2.7)
 #
 # The following class implements Bayes's theorem.
 
-# +
+
 class Suite(Pmf):
     """Represents a set of hypotheses and their probabilities."""
 
@@ -459,7 +459,7 @@ def make_gamma_suite(xs, alpha, beta):
 
 # Here's what it looks like.
 
-# +
+
 prior = make_gamma_suite(hypo_mu, alpha, beta)
 
 prior.plot(label="gamma prior")
@@ -468,7 +468,7 @@ pdf_rate()
 
 # And we can update this prior using the observed data.
 
-# +
+
 posterior = prior.copy()
 posterior.bayes_update(data=6, like_func=poisson_likelihood)
 
@@ -485,7 +485,7 @@ pdf_rate()
 
 # Suppose the same team plays again and scores 2 goals in the second game.  We can perform a second update using the posterior from the first update as the prior for the second.
 
-# +
+
 posterior2 = posterior.copy()
 posterior2.bayes_update(data=2, like_func=poisson_likelihood)
 
@@ -497,7 +497,7 @@ pdf_rate()
 
 # Or, starting with the original prior, we can update with both pieces of data at the same time.
 
-# +
+
 posterior3 = prior.copy()
 posterior3.bayes_update(data=[6, 2], like_func=poisson_likelihood)
 
@@ -556,7 +556,7 @@ gamma_prior.dist.mean()
 
 # And here's the posterior after one update.
 
-# +
+
 gamma_posterior = gamma_prior.bayes_update(6)
 
 gamma_prior.plot(hypo_mu, label="prior")
@@ -677,7 +677,7 @@ print(alpha, beta)
 
 # Now we can draw a sample from the prior predictive distribution:
 
-# +
+
 model = pm.Model()
 
 with model:
@@ -703,7 +703,7 @@ cdf_rates()
 
 # Now let's extend the model to sample from the prior predictive distribution.  This is still a silly way to do it, but it is one more step toward inference.
 
-# +
+
 model = pm.Model()
 
 with model:
@@ -732,7 +732,7 @@ cdf_goals()
 #
 # Instead of generating `goals`, we'll mark goals as `observed` and provide the observed data, `6`:
 
-# +
+
 model = pm.Model()
 
 with model:
@@ -801,7 +801,7 @@ np.mean(sample)
 #
 # Here's a PyMC model that generates `alpha` and `beta` from an exponential distribution.
 
-# +
+
 model = pm.Model()
 
 with model:
@@ -812,7 +812,7 @@ with model:
 
 # Here's what the distributions of `alpha` and `beta` look like.
 
-# +
+
 sample_prior_alpha = trace["alpha"]
 plot_cdf(sample_prior_alpha, label="alpha prior")
 sample_prior_beta = trace["beta"]
@@ -826,7 +826,7 @@ np.mean(sample_prior_alpha)
 
 # Now that we have `alpha` and `beta`, we can generate `mu`.
 
-# +
+
 model = pm.Model()
 
 with model:
@@ -858,7 +858,7 @@ cdf_rates()
 #
 # Ok, last step of the forward process, let's generate some goals.
 
-# +
+
 model = pm.Model()
 
 with model:
@@ -879,7 +879,7 @@ np.mean(sample_prior_goals)
 
 # To see whether that distribution is right, I ran samples using SciPy.
 
-# +
+
 def forward_hierarchical(size=1):
     alpha = st.expon().rvs(size=size)
     beta = st.expon().rvs(size=size)
@@ -902,7 +902,7 @@ np.mean(sample_prior_goals_st)
 #
 # Once we have the forward process working, we only need a small change to run the reverse process.
 
-# +
+
 model = pm.Model()
 
 with model:
@@ -924,7 +924,7 @@ np.mean(sample_post_mu)
 #
 # We can extend the model to estimate different values of `mu` for the two teams.
 
-# +
+
 model = pm.Model()
 
 with model:
@@ -943,7 +943,7 @@ pm.traceplot(trace)
 
 # Here are the posterior distribitions for `mu_WSH` and `mu_VGK`.
 
-# +
+
 sample_post_mu_WSH = trace["mu_WSH"]
 plot_cdf(sample_post_mu_WSH, label="mu_WSH posterior")
 
@@ -979,7 +979,7 @@ data = dict(
 
 # Here's how we can get the data into the model.
 
-# +
+
 model = pm.Model()
 
 with model:
@@ -1025,7 +1025,7 @@ with model:
 WSH = post_pred["WSH18"]
 WSH.shape
 
-# +
+
 WSH = post_pred["WSH18"].flatten()
 VGK = post_pred["VGK18"].flatten()
 

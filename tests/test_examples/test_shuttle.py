@@ -18,7 +18,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 # Configure Jupyter so figures appear in the notebook
 # %matplotlib inline
 
@@ -43,7 +43,7 @@ from thinkbayes import thinkplot
 #
 #
 
-# +
+
 # # !wget https://raw.githubusercontent.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Chapter2_MorePyMC/data/challenger_data.csv
 # -
 
@@ -55,7 +55,7 @@ df
 df["Incident"] = df["Damage Incident"].astype(float)
 df
 
-# +
+
 import matplotlib.pyplot as plt
 
 plt.scatter(df.Temperature, df.Incident, s=75, color="k", alpha=0.5)
@@ -75,7 +75,7 @@ plt.title("Defects of the Space Shuttle O-Rings vs temperature")
 #
 # Hint: the `expit` function from `scipy.special` computes the inverse of the `logit` function.
 
-# +
+
 from scipy.special import expit
 
 
@@ -89,7 +89,7 @@ class Logistic(Suite, Joint):
         return 1
 
 
-# +
+
 # Solution goes here
 # -
 
@@ -119,10 +119,10 @@ thinkplot.decorate(
 
 # According to the posterior distribution, what was the probability of damage when the shuttle launched at 31 degF?
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -
 
@@ -134,7 +134,7 @@ thinkplot.decorate(
 
 import pymc3 as pm
 
-# +
+
 # Solution goes here
 # -
 

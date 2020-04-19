@@ -8,7 +8,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 # Configure Jupyter so figures appear in the notebook
 # %matplotlib inline
 
@@ -35,7 +35,7 @@ from thinkbayes import thinkplot
 #
 # Write class definitions for redditors and links and an update function that updates both objects whenever a redditor casts a vote.
 
-# +
+
 # Solution
 
 # Here's one possible model:
@@ -52,7 +52,7 @@ from thinkbayes import thinkplot
 # Now when a redditor votes on a item, we simultaneously update our
 # belief about the redditor and the item.
 
-# +
+
 # Solution
 
 # Suppose we start with a redditor who has demonstrated some reliability.
@@ -64,7 +64,7 @@ thinkplot.decorate(xlabel="Reliability (R)", ylabel="PMF")
 
 mean_r = redditor.Mean()
 
-# +
+
 # Solution
 
 # And a completely unknown item.
@@ -77,7 +77,7 @@ thinkplot.decorate(xlabel="Quality (Q))", ylabel="PMF")
 mean_q = item.Mean()
 
 
-# +
+
 # Solution
 
 
@@ -99,7 +99,7 @@ class Pair(Suite):
             return 0
 
 
-# +
+
 # Solution
 
 # And here are the results.  Since we knew nothing about the item,
@@ -112,12 +112,12 @@ for r, p1 in redditor.Items():
 
 suite = Pair(d)
 
-# +
+
 # Solution
 
 suite.Update("up")
 
-# +
+
 # Solution
 
 redditor_post = Pmf()
@@ -126,21 +126,21 @@ for (q, r), p in suite.Items():
 
 redditor_post.Total()
 
-# +
+
 thinkplot.Pdf(redditor_post)
 ylim = 0, redditor_post.MaxLike() * 1.05
 thinkplot.decorate(xlabel="Reliability (R)", ylabel="PMF", ylim=ylim)
 
 mean_r = redditor_post.Mean()
 
-# +
+
 item_post = Pmf()
 for (q, r), p in suite.Items():
     item_post[q] += p
 
 item_post.Total()
 
-# +
+
 thinkplot.Pdf(item_post)
 ylim = 0, item_post.MaxLike() * 1.05
 thinkplot.decorate(xlabel="Quality (Q))", ylabel="PMF", ylim=ylim)

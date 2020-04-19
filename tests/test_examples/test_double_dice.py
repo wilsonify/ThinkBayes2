@@ -21,7 +21,7 @@
 # MIT License: https://opensource.org/licenses/MIT
 #
 
-# +
+
 # Configure Jupyter so figures appear in the notebook
 # %matplotlib inline
 
@@ -115,7 +115,7 @@ table.posterior.astype(float)
 #
 # The first term is the posterior probability; the second term is `1/n`.
 
-# +
+
 total = 0
 for _, row in table.iterrows():
     total += row.posterior / row.hypo

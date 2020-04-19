@@ -42,7 +42,7 @@
 # Suppose you are given a strange new coin and you notice that it is unbalanced.  When spun on edge, it seems to land with the "heads" side up more often than the "tails" side.  You might want to estimate the probability of landing "heads" up, which I'll call $x$.
 #
 
-# +
+
 from __future__ import print_function, division
 import thinkbayes
 
@@ -87,7 +87,7 @@ thinkplot.Pdf(posterior)
 
 # With additional data we can do a sequence of updates.  The result shows the cumulative effect of all updates.
 
-# +
+
 results = "HTHHTHHHTTHHHTH"
 for data in results:
     posterior.Update(data)

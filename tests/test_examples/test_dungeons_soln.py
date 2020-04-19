@@ -20,7 +20,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 # Configure Jupyter so figures appear in the notebook
 # %matplotlib inline
 
@@ -59,7 +59,7 @@ from thinkbayes import thinkplot
 #
 # First, simulation.  Here's a function that flips a coin with probability `p`:
 
-# +
+
 from random import random
 
 
@@ -118,7 +118,7 @@ prior.Print()
 
 # Now we can compare the results of simulation and convolution:
 
-# +
+
 thinkplot.Hist(pmf_sample, color="C0")
 thinkplot.Pmf(prior, color="C1")
 
@@ -137,7 +137,7 @@ help(thinkbayes.MakeBinomialPmf)
 
 # And we can confirm that the analytic result matches what we computed by convolution.
 
-# +
+
 binomial = thinkbayes.MakeBinomialPmf(10, 0.7)
 thinkplot.Pmf(prior, color="C1")
 thinkplot.Pmf(binomial, color="C2", linestyle="dotted")
@@ -147,7 +147,7 @@ thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
 
 # Since two players spoke, we can eliminate the possibility of 0 or 1 players:
 
-# +
+
 thinkplot.Pmf(prior, color="gray")
 del prior[0]
 del prior[1]
@@ -194,7 +194,7 @@ thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Maximum of 6 attribu
 
 # If there are `n` players, there are `6*n` attributes.  Here are the distributions for the maximum attribute of `n` players, for a few values of `n`.
 
-# +
+
 for n in range(2, 10, 2):
     cdf_max = cdf_thrice.Max(n * 6)
     thinkplot.Cdf(cdf_max, label="n=%s" % n)
@@ -204,7 +204,7 @@ thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Maximum of 6*n attri
 
 # To check that, I'll compute the CDF for 7 players, and estimate it by simulation.
 
-# +
+
 n = 7
 cdf = cdf_thrice.Max(n * 6)
 thinkplot.Cdf(cdf, label="n=%s" % n)
@@ -237,7 +237,7 @@ def compute_cdf_min(cdf, k):
 
 # Now we can compute the CDF of the minimum attribute for `n` players, for several values of `n`.
 
-# +
+
 for n in range(2, 10, 2):
     cdf_min = compute_cdf_min(cdf_thrice, n * 6)
     thinkplot.Cdf(cdf_min, label="n=%s" % n)
@@ -247,7 +247,7 @@ thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Minimum of 6*n attri
 
 # And again we can check it by comparing to simulation results.
 
-# +
+
 n = 7
 cdf = compute_cdf_min(cdf_thrice, n * 6)
 thinkplot.Cdf(cdf, label="n=%s" % n)
@@ -260,7 +260,7 @@ thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Minimum of 6*n attri
 
 # For efficiency and conciseness, it is helpful to precompute the distributions for the relevant values of `n`, and store them in dictionaries.
 
-# +
+
 like_min = {}
 like_max = {}
 
@@ -282,7 +282,7 @@ for n in range(2, 11):
 #
 # So here's `prob_same` as a function of `n`.
 
-# +
+
 def prob_same(n):
     return 5 / (6 * n - 1)
 

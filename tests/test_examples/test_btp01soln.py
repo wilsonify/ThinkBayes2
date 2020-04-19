@@ -20,7 +20,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 from __future__ import print_function, division
 
 
@@ -42,7 +42,7 @@ from thinkbayes import thinkplot
 # There are two drawers of socks. The first drawer has 40 white socks and 10 black socks; the second drawer has 20 white socks and 30 black socks. We randomly get 2 socks from a drawer, and it turns out to be a pair(same color) but we don't know the color of these socks. What is the chance that we picked the first drawer.
 #
 
-# +
+
 # Solution
 
 pmf = Pmf(["drawer 1", "drawer 2"])
@@ -51,7 +51,7 @@ pmf["drawer 2"] *= (30 / 50) ** 2 + (20 / 50) ** 2
 pmf.Normalize()
 pmf.Print()
 
-# +
+
 # Solution
 
 pmf = Pmf(["drawer 1", "drawer 2"])
@@ -61,7 +61,7 @@ pmf.Normalize()
 pmf.Print()
 
 
-# +
+
 # Solution
 
 
@@ -83,7 +83,7 @@ class Socks(Suite):
             return 1 - like
 
 
-# +
+
 # Solution
 
 n = 50
@@ -93,7 +93,7 @@ for white in range(n + 1):
 socks.Normalize()
 thinkplot.Pdf(socks)
 
-# +
+
 # Solution
 
 socks.Update("pair")
@@ -107,7 +107,7 @@ thinkplot.Config(ylim=[0, 0.03])
 #
 # Two identical twins are members of my chess club, but they never show up on the same day; in fact, they strictly alternate the days they show up.  I can't tell them apart except that one is a better player than the other:  Avery beats me 60% of the time and I beat Blake 70% of the time.  If I play one twin on Monday and win, and the other twin on Tuesday and lose, which twin did I play on which day?
 
-# +
+
 # Solution
 
 pmf = Pmf(["AB", "BA"])
@@ -117,7 +117,7 @@ pmf.Normalize()
 pmf.Print()
 
 
-# +
+
 # Solution
 
 
@@ -141,7 +141,7 @@ class Chess(Suite):
         return total
 
 
-# +
+
 # Solution
 
 chess = Chess(["AB", "BA"])
@@ -167,7 +167,7 @@ chess.Print()
 #
 # There is a 60% chance the admission officer knows nothing, a 25% chance that he knows the parents have been erased, and a 15% chance that the officer knows all of the details. John says that he never had parents and is admitted into the Youth League. What did his admission officer know?
 
-# +
+
 # Solution
 
 officer = {"everything": 0.15, "something": 0.25, "nothing": 0.6}
@@ -201,7 +201,7 @@ class ThoughtPolice(Suite):
 pmf = ThoughtPolice(officer)
 pmf.Print()
 
-# +
+
 # Solution
 
 pmf.Update("none")
@@ -224,7 +224,7 @@ pmf.Print()
 #
 # Given that the robot gets dropped in the environment and senses **red**, what is the probability of it being in each of the six locations?
 
-# +
+
 # Solution
 
 colors = "GRRGGG"
@@ -241,7 +241,7 @@ pmf.Normalize()
 pmf.Print()
 
 
-# +
+
 # Solution
 
 
@@ -261,7 +261,7 @@ class Robot(Suite):
             return 0.2
 
 
-# +
+
 # Solution
 
 robot = Robot(locs)
@@ -275,7 +275,7 @@ robot.Print()
 #
 # The robot moves forward one cell from its previous position and the sensor reads **green**, again with an 80% accuracy rate.  Update the probability of the robot having started in each location.
 
-# +
+
 # Solution
 
 
@@ -297,14 +297,14 @@ class Robot2(Suite):
             return 0.2
 
 
-# +
+
 # Solution
 
 robot = Robot2(locs)
 robot.Update((0, "R"))
 robot.Print()
 
-# +
+
 # Solution
 
 robot.Update((1, "G"))
@@ -317,7 +317,7 @@ robot.Print()
 #
 # I choose a die at random and roll it, and I tell you it came up red.  What is the probability that I rolled the second die (red on 4 sides)?
 
-# +
+
 # Solution
 
 from fractions import Fraction
@@ -325,20 +325,20 @@ from fractions import Fraction
 d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1 (bluish) ")
 d1.Print()
 
-# +
+
 # Solution
 
 d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2 (reddish)")
 d2.Print()
 
-# +
+
 # Solution
 
 dice = Pmf({d1: Fraction(1), d2: Fraction(1)})
 dice.Print()
 
 
-# +
+
 # Solution
 
 
@@ -351,13 +351,13 @@ class Dice(Suite):
         return hypo[data]
 
 
-# +
+
 # Solution
 
 prior = Dice({d1: Fraction(1), d2: Fraction(1)})
 prior.Print()
 
-# +
+
 # Solution
 
 posterior = prior.Copy()
@@ -369,7 +369,7 @@ posterior.Print()
 #
 # Suppose I roll the same die again.  What is the probability I get red?
 
-# +
+
 # Solution
 
 from thinkbayes import MakeMixture
@@ -382,7 +382,7 @@ predictive.Print()
 #
 # Instead of rolling the same die, suppose I choosing a die at random and roll it.  What is the probability that I get red?
 
-# +
+
 # Solution
 
 from thinkbayes import MakeMixture
@@ -397,7 +397,7 @@ predictive.Print()
 #
 # What is the probability that the last die I rolled is the reddish one?
 
-# +
+
 # Solution
 
 # On each roll, there are four possible results, with these probabilities:
@@ -414,7 +414,7 @@ predictive.Print()
 
 # The likelihood ratio is 2 to 1, so we can use that to update the prior:
 
-# +
+
 # Solution
 
 posterior = prior.Copy()
@@ -428,7 +428,7 @@ posterior.Print()
 #
 # Finally, suppose I choose a die and roll it over and over until I get red, then report the outcome.  What is the probability that the die I rolled is the reddish one?
 
-# +
+
 # Solution
 
 # In this case, the likelihood of the data is the same regardless of
@@ -438,7 +438,7 @@ posterior = prior.Copy()
 posterior.Print()
 
 
-# +
+
 # Solution
 
 # In summary, each of the four scenarios yields a different pair of posterior
@@ -461,7 +461,7 @@ posterior.Print()
 #
 # Part 2: Suppose I see a bus go by, but I don't see the destination, and 3 minutes later I see another bus.  What is the probability that the second bus is going to Arlington?
 
-# +
+
 # Solution
 
 
@@ -472,14 +472,14 @@ def generate_times(lam, n=10):
         yield time
 
 
-# +
+
 # Solution
 
 for time in generate_times(20, 10):
     print(time)
 
 
-# +
+
 # Solution
 
 
@@ -493,24 +493,24 @@ def generate_buses(names, lams, n):
         times[i] = next(buses[i])
 
 
-# +
+
 # Solution
 
 next(generate_buses("AB", [20, 30], 10))
 
-# +
+
 # Solution
 
 res = []
 for bus, time in generate_buses("AB", [20, 30], 1000):
     res.append((bus, time))
 
-# +
+
 # Solution
 
 buses, times = zip(*res)
 
-# +
+
 # Solution
 
 hist = Hist(buses)

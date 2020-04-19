@@ -47,7 +47,7 @@
 from __future__ import print_function, division
 
 
-# +
+
 import thinkbayes
 from scipy.special import binom
 
@@ -79,7 +79,7 @@ class Hyrax(thinkbayes.Suite):
 #
 # Next I construct the prior and update it with the data.  I use a uniform prior from 0 to 999.
 
-# +
+
 hypos = range(1, 1000)
 suite = Hyrax(hypos)
 
@@ -102,7 +102,7 @@ print("90% credible interval", suite.CredibleInterval(90))
 
 # The combinatorial expression we computed is the PMF of the hypergeometric distribution, so we can also compute it using `thinkbayes.EvalHypergeomPmf`, which uses `scipy.stats.hypergeom.pmf`.
 
-# +
+
 import thinkbayes
 
 
@@ -129,7 +129,7 @@ class Hyrax2(thinkbayes.Suite):
 
 # And the result is the same:
 
-# +
+
 hypos = range(1, 1000)
 suite = Hyrax2(hypos)
 
@@ -146,7 +146,7 @@ print("90% credible interval", suite.CredibleInterval(90))
 
 # If we run the analysis again with a different prior (running from 0 to 1999), the MAP is the same, but the posterior mean and credible interval are substantially different:
 
-# +
+
 hypos = range(1, 2000)
 suite = Hyrax2(hypos)
 data = 10, 10, 2

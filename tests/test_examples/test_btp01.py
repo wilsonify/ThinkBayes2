@@ -1,26 +1,10 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 2
-#     language: python
-#     name: python2
-# ---
+"""
+Bayes Theorem Problems
+This notebook presents code and exercises from Think Bayes, second edition.
+Copyright 2016 Allen B. Downey
+MIT License: https://opensource.org/licenses/MIT
+"""
 
-# # Bayes Theorem Problems
-#
-# This notebook presents code and exercises from Think Bayes, second edition.
-#
-# Copyright 2016 Allen B. Downey
-#
-# MIT License: https://opensource.org/licenses/MIT
-
-# +
 from __future__ import print_function, division
 
 
@@ -42,19 +26,19 @@ from thinkbayes import thinkplot
 # There are two drawers of socks. The first drawer has 40 white socks and 10 black socks; the second drawer has 20 white socks and 30 black socks. We randomly get 2 socks from a drawer, and it turns out to be a pair(same color) but we don't know the color of these socks. What is the chance that we picked the first drawer.
 #
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -
 
@@ -64,13 +48,13 @@ from thinkbayes import thinkplot
 #
 # Two identical twins are members of my chess club, but they never show up on the same day; in fact, they strictly alternate the days they show up.  I can't tell them apart except that one is a better player than the other:  Avery beats me 60% of the time and I beat Blake 70% of the time.  If I play one twin on Monday and win, and the other twin on Tuesday and lose, which twin did I play on which day?
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -
 
@@ -92,10 +76,10 @@ from thinkbayes import thinkplot
 #
 # There is a 60% chance the admission officer knows nothing, a 25% chance that he knows the parents have been erased, and a 15% chance that the officer knows all of the details. John says that he never had parents and is admitted into the Youth League. What did his admission officer know?
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -
 
@@ -115,13 +99,13 @@ from thinkbayes import thinkplot
 #
 # Given that the robot gets dropped in the environment and senses **red**, what is the probability of it being in each of the six locations?
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -
 
@@ -129,13 +113,13 @@ from thinkbayes import thinkplot
 #
 # The robot moves forward one cell from its previous position and the sensor reads **green**, again with an 80% accuracy rate.  Update the probability of the robot having started in each location.
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -
 
@@ -145,22 +129,22 @@ from thinkbayes import thinkplot
 #
 # I choose a die at random and roll it, and I tell you it came up red.  What is the probability that I rolled the second die (red on 4 sides)?
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -
 
@@ -168,7 +152,7 @@ from thinkbayes import thinkplot
 #
 # Suppose I roll the same die again.  What is the probability I get red?
 
-# +
+
 # Solution goes here
 # -
 
@@ -176,7 +160,7 @@ from thinkbayes import thinkplot
 #
 # Instead of rolling the same die, suppose I choosing a die at random and roll it.  What is the probability that I get red?
 
-# +
+
 # Solution goes here
 # -
 
@@ -186,10 +170,10 @@ from thinkbayes import thinkplot
 #
 # What is the probability that the last die I rolled is the reddish one?
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -
 
@@ -197,10 +181,10 @@ from thinkbayes import thinkplot
 #
 # Finally, suppose I choose a die and roll it over and over until I get red, then report the outcome.  What is the probability that the die I rolled is the reddish one?
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -
 
@@ -214,24 +198,24 @@ from thinkbayes import thinkplot
 #
 # Part 2: Suppose I see a bus go by, but I don't see the destination, and 3 minutes later I see another bus.  What is the probability that the second bus is going to Arlington?
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -

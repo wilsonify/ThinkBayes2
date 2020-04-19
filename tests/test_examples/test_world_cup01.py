@@ -8,7 +8,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 # Configure Jupyter so figures appear in the notebook
 # %matplotlib inline
 
@@ -36,7 +36,7 @@ from scipy.special import gamma
 #
 # Here's what the prior looks like.
 
-# +
+
 from thinkbayes import MakeGammaPmf
 
 xs = np.linspace(0, 8, 101)
@@ -67,7 +67,7 @@ class Soccer(Suite):
         return 1
 
 
-# +
+
 # Solution goes here
 # -
 
@@ -151,10 +151,10 @@ pmf.Mean()
 #
 # 4. What is the probability of scoring 5 or more goals in the remainder of the game?
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -
 
@@ -191,7 +191,7 @@ pred.ProbGreater(4)
 #
 # The following figure shows the different predictive distributions for the different values of `lam`.
 
-# +
+
 for lam, prob in soccer.Items():
     lt = lam * rem_time / 90
     pred = MakePoissonPmf(lt, 14)
@@ -204,7 +204,7 @@ thinkplot.decorate(
 
 # We can compute the mixture of these distributions by making a Meta-Pmf that maps from each Poisson Pmf to its probability.
 
-# +
+
 metapmf = Pmf()
 
 for lam, prob in soccer.Items():
@@ -248,6 +248,6 @@ thinkplot.decorate(
 
 # **Exercise:** Compute the predictive mean and the probability of scoring 5 or more additional goals.
 
-# +
+
 # Solution goes here
 # -

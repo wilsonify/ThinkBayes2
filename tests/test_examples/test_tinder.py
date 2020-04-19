@@ -24,7 +24,7 @@ mu = 1
 pmf = thinkbayes.MakeExponentialPmf(mu, high=1.0)
 thinkplot.Pdf(pmf)
 
-# + active=""
+ active=""
 # Ignore
 # -
 
@@ -32,10 +32,10 @@ mu = 5
 pmf = thinkbayes.MakeExponentialPmf(mu, high=1.0)
 thinkplot.Pdf(pmf)
 
-# + active=""
+ active=""
 # Ignore
 
-# +
+
 metapmf = thinkbayes.Pmf()
 for lam, prob in pmf.Items():
     if lam == 0:
@@ -55,7 +55,7 @@ thinkplot.Pdf(interarrival)
 
 # If we observe someone, we are more likely to land during a longer interval.
 
-# +
+
 observed = interarrival.Copy()
 for val, prob in observed.Items():
     observed[val] *= val
@@ -67,7 +67,7 @@ thinkplot.Pdf(observed)
 
 # If we land during an intererval of duration $x$, the time since last login is uniform between 0 and $x$.  So the distribution of time since last login (`timesince`) is a mixture of uniform distributions.
 
-# +
+
 metapmf = thinkbayes.Pmf()
 for time, prob in observed.Items():
     if time == 0:

@@ -44,7 +44,7 @@
 from __future__ import print_function, division
 
 
-# +
+
 import thinkbayes
 
 
@@ -75,7 +75,7 @@ class Soccer(thinkbayes.Suite):
 #
 # To construct the prior, I'll start with an unrealistic uniform distribution and update it with fake data until the mean matches the observed rate for a single team, 1.34 goals per game.
 
-# +
+
 import numpy
 from thinkbayes import thinkplot
 
@@ -95,7 +95,7 @@ suite.Mean()
 #
 # The next step is to compute the posteriors for the two teams:
 
-# +
+
 germany = suite.Copy(label="Germany")
 argentina = suite.Copy(label="Argentina")
 germany.Update(1)
@@ -137,7 +137,7 @@ print("Bayes factor", k)
 #
 # We don't actually know $\lambda$, but we can use the posterior distribution of $\lambda$ to generate a predictive distribution for the number of additional goals.
 
-# +
+
 def PredictiveDist(suite, duration=1, label="pred"):
     """Computes the distribution of goals scored in a game.
 
@@ -169,7 +169,7 @@ thinkplot.Config(xlabel="predicted # goals", ylabel="probability", xlim=[-0.5, 7
 
 # Using the predictive distributions, we can compute probabilities for the outcomes of a rematch.
 
-# +
+
 win = germany_pred > argentina_pred
 lose = germany_pred < argentina_pred
 tie = 1 - (win + lose)
@@ -184,7 +184,7 @@ print("posterior prob tie", tie)
 germany_pred_overtime = PredictiveDist(germany, 1 / 3, label="germany")
 argentina_pred_overtime = PredictiveDist(argentina, 1 / 3, label="argentina")
 
-# +
+
 win = germany_pred_overtime > argentina_pred_overtime
 lose = germany_pred_overtime < argentina_pred_overtime
 tie = 1 - (win + lose)

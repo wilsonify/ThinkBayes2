@@ -18,7 +18,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 # Configure Jupyter so figures appear in the notebook
 # %matplotlib inline
 
@@ -61,13 +61,13 @@ class LionsTigersBears(Suite, Joint):
         # Fill this in.
 
 
-# +
+
 # Solution goes here
 # -
 
 ps = np.linspace(0, 1, 101)
 
-# +
+
 from itertools import product
 
 
@@ -81,7 +81,7 @@ def enumerate_triples(ps):
 
 # Write a better version of `enumerate_triples` that doesn't run into problems with floating-point.
 
-# +
+
 # Solution goes here
 # -
 
@@ -124,7 +124,7 @@ plot_marginal_cdfs(suite)
 
 # ### Using the Dirichlet object
 
-# +
+
 from thinkbayes import Dirichlet
 
 
@@ -158,14 +158,14 @@ observed = [0, 0, 0, 1, 1, 2]
 k = len(Pmf(observed))
 a = np.ones(k)
 
-# +
+
 model = pm.Model()
 
 with model:
     """FILL THIS IN"""
 
 
-# +
+
 # Solution goes here
 # -
 
@@ -184,10 +184,10 @@ def plot_trace_cdfs(trace):
     thinkplot.decorate(xlabel="Prevalence", ylabel="CDF")
 
 
-# +
+
 # plot_trace_cdfs(trace)
 
-# +
+
 # pmf = Pmf(trace['xs'][0])
 # thinkplot.Hist(pmf)
 # -

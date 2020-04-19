@@ -18,7 +18,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 # Configure Jupyter so figures appear in the notebook
 # %matplotlib inline
 
@@ -61,7 +61,7 @@ thinkplot.decorate(xlabel="x", ylabel="y")
 #
 # Your results will depend on the random data you generated, but in general you should find that the posterior marginal distributions peak near the actual parameters.
 
-# +
+
 from scipy.stats import norm
 
 
@@ -75,7 +75,7 @@ class Regress(Suite, Joint):
         return 1
 
 
-# +
+
 # Solution goes here
 # -
 
@@ -120,22 +120,22 @@ pm.GLM
 thinkplot.plot(xs, ys)
 thinkplot.decorate(xlabel="x", ylabel="y")
 
-# +
+
 import pymc3 as pm
 
 with pm.Model() as model:
     """Fill this in"""
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -
 

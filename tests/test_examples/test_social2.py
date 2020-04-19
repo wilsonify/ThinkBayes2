@@ -20,7 +20,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 # Configure Jupyter so figures appear in the notebook
 # %matplotlib inline
 
@@ -56,27 +56,27 @@ import numpy as np
 #
 # 2. How efficient is this method?  That is, how does the width of the posterior distribution compare to the distribution you would get if 100 people answered the question honestly?
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 
-# +
+
 # Solution goes here
 # -

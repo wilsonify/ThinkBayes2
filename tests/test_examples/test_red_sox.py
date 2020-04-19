@@ -20,7 +20,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 # Configure Jupyter so figures appear in the notebook
 # %matplotlib inline
 
@@ -43,7 +43,7 @@ thinkplot.decorate(xlabel="Prob Red Sox win (x)", ylabel="PDF")
 
 # %psource beta.Update
 
-# +
+
 beta.Update((15, 0))
 posterior = beta.MakePmf()
 
@@ -63,7 +63,7 @@ x = posterior.Random()
 np.sum(np.random.random(7) < x)
 
 
-# +
+
 def simulate(k, dist):
     x = dist.Random()
     return np.sum(np.random.random(k) <= x)

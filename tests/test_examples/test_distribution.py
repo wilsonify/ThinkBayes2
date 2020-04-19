@@ -20,7 +20,7 @@
 #
 # MIT License: http://opensource.org/licenses/MIT
 
-# +
+
 from __future__ import print_function, division
 
 # %matplotlib inline
@@ -36,7 +36,7 @@ from thinkbayes import thinkplot
 import numpy as np
 from numpy.fft import fft, ifft
 
-# +
+
 from inspect import getsourcelines
 
 
@@ -66,7 +66,7 @@ def show_code(func):
 #
 # `thinkbayes2` provides a class called `Pmf` that represents a probability mass function.  Each `Pmf` contains a dictionary named `d` that contains the values and probabilities.  To show how this class is used, I'll create a `Pmf` that represents a six-sided die:
 
-# +
+
 d6 = Pmf()
 for x in range(1, 7):
     d6[x] = 1
@@ -97,7 +97,7 @@ d6[7]
 
 # **Exerise:** Create a `Pmf` that represents a six-sided die that is red on two sides and blue on the other four.
 
-# +
+
 # Solution
 
 die = Pmf(dict(red=2, blue=4))
@@ -202,7 +202,7 @@ thinkplot.Pdf(thrice, color="red")
 #
 # Note: if you represent the outcomes as strings, `AddPmf` concatenates them instead of adding, which actually works.
 
-# +
+
 # Solution
 
 dice = die + die
@@ -258,7 +258,7 @@ cdf[5]
 
 # **Exercise:** If you roll three dice, what is the probability of getting 15 or more?
 
-# +
+
 # Solution
 
 1 - cdf[14]
@@ -293,7 +293,7 @@ cdf.Sample((2, 2))
 
 # **Exercise:** Write a function that takes a `Cdf` object and returns the interquartile range (IQR), which is the difference between the 75th and 25th percentiles.
 
-# +
+
 # Solution
 
 
@@ -335,7 +335,7 @@ best[10]
 #
 # Hint: If the minimum is less than $x$, that means all `k` values must be less than $x$.
 
-# +
+
 # Solution
 
 
@@ -385,7 +385,7 @@ thinkplot.Cdf(worst)
 #
 # Let's see how that works.  Here's a class that represents a characteristic function.
 
-# +
+
 import matplotlib.pyplot as plt
 
 
@@ -480,7 +480,7 @@ sixth.Mean(), sixth.Var()
 #
 # Hint: it might be clearer if you us `np.roll` to put the peak of the CF in the middle.
 
-# +
+
 # Solution
 
 n = len(cf.hs)

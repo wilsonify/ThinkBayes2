@@ -8,7 +8,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 # Configure Jupyter so figures appear in the notebook
 # %matplotlib inline
 
@@ -38,7 +38,7 @@ import pymc3 as pm
 #
 # Here's what the prior looks like.
 
-# +
+
 from thinkbayes import MakeGammaPmf
 
 xs = np.linspace(0, 12, 101)
@@ -75,7 +75,7 @@ prior.Mean()
 
 # Here's the update after the first goal at 11 minutes.
 
-# +
+
 posterior1 = prior.Copy()
 posterior1.Update(11)
 
@@ -90,7 +90,7 @@ posterior1.Mean()
 # Here's the update after the second goal at 23 minutes (the time between first and second goals is 12 minutes).
 #
 
-# +
+
 posterior2 = posterior1.Copy()
 posterior2.Update(12)
 
@@ -108,7 +108,7 @@ from thinkbayes import MakePoissonPmf
 
 # We can compute the mixture of these distributions by making a Meta-Pmf that maps from each Poisson Pmf to its probability.
 
-# +
+
 rem_time = 90 - 23
 
 metapmf = Pmf()
@@ -153,7 +153,7 @@ thinkplot.decorate(
 
 # **Exercise:** Compute the predictive mean and the probability of scoring 5 or more additional goals.
 
-# +
+
 # Solution goes here
 # -
 
@@ -163,14 +163,14 @@ thinkplot.decorate(
 
 cdf_gamma = pmf_gamma.MakeCdf()
 
-# +
+
 mean_rate = 1.3
 
 with pm.Model() as model:
     lam = pm.Gamma("lam", alpha=mean_rate, beta=1)
     trace = pm.sample_prior_predictive(1000)
 
-# +
+
 lam_sample = trace["lam"]
 print(lam_sample.mean())
 
@@ -187,7 +187,7 @@ with pm.Model() as model:
     gap = pm.Exponential("gap", lam)
     trace = pm.sample_prior_predictive(1000)
 
-# +
+
 gap_sample = trace["gap"]
 print(gap_sample.mean())
 cdf_lam = Cdf(gap_sample)
@@ -198,7 +198,7 @@ thinkplot.decorate(xlabel="Time between goals (games)", ylabel="Cdf")
 
 # Now we're ready for the inverse problem, estimating `lam` based on the first observed gap.
 
-# +
+
 first_gap = 11 / 90
 
 with pm.Model() as model:
@@ -209,7 +209,7 @@ with pm.Model() as model:
 
 pm.traceplot(trace)
 
-# +
+
 lam_sample = trace["lam"]
 print(lam_sample.mean())
 print(posterior1.Mean())
@@ -222,7 +222,7 @@ thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
 
 # And here's the inverse problem with both observed gaps.
 
-# +
+
 second_gap = 12 / 90
 
 with pm.Model() as model:
@@ -233,7 +233,7 @@ with pm.Model() as model:
 
 pm.traceplot(trace)
 
-# +
+
 lam_sample = trace["lam"]
 print(lam_sample.mean())
 print(posterior2.Mean())
@@ -249,7 +249,7 @@ thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
 with model:
     post_pred = pm.sample_ppc(trace, samples=1000)
 
-# +
+
 gap_sample = post_pred["gap"].flatten()
 print(gap_sample.mean())
 
@@ -269,7 +269,7 @@ with pm.Model() as model:
 
 pm.traceplot(trace)
 
-# +
+
 lam_sample = trace["lam"]
 print(lam_sample.mean())
 cdf_lam = Cdf(lam_sample)
@@ -283,7 +283,7 @@ thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
 with model:
     post_pred = pm.sample_ppc(trace, samples=3000)
 
-# +
+
 goal_sample = post_pred["goals"].flatten()
 print(goal_sample.mean())
 
@@ -291,7 +291,7 @@ pmf_goals = Pmf(goal_sample)
 thinkplot.Hist(pmf_goals)
 thinkplot.decorate(xlabel="Number of goals", ylabel="Cdf")
 
-# +
+
 from scipy.stats import poisson
 
 
@@ -307,7 +307,7 @@ class Soccer2(thinkbayes.Suite):
         return poisson.pmf(data, hypo)
 
 
-# +
+
 from thinkbayes import MakeGammaPmf
 
 xs = np.linspace(0, 8, 101)
@@ -336,7 +336,7 @@ def PredictiveDist(suite, duration=1, label="pred"):
     return mix
 
 
-# +
+
 germany_pred = PredictiveDist(germany, label="germany")
 
 thinkplot.Hist(germany_pred, width=0.45, align="right")
