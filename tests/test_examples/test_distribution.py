@@ -28,7 +28,7 @@ from __future__ import print_function, division
 
 import warnings
 
-warnings.filterwarnings("ignore")
+
 
 from thinkbayes import Pmf, Cdf
 from thinkbayes import thinkplot

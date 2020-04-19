@@ -10,7 +10,7 @@ from __future__ import print_function, division
 
 import warnings
 
-warnings.filterwarnings("ignore")
+
 
 import numpy as np
 
