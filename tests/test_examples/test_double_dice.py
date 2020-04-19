@@ -1,4 +1,4 @@
-# ---
+
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -10,7 +10,7 @@
 #     display_name: Python 3
 #     language: python
 #     name: python3
-# ---
+
 
 # ## The double dice problem
 #
@@ -34,7 +34,7 @@ import pandas as pd
 from fractions import Fraction
 
 
-# -
+
 
 # ### The BayesTable class
 #
@@ -121,7 +121,7 @@ for _, row in table.iterrows():
     total += row.posterior / row.hypo
 
 total
-# -
+
 
 # This calculation is similar to the first step of the update, so we can also compute it by
 #

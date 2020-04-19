@@ -1,4 +1,4 @@
-# ---
+
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -10,7 +10,7 @@
 #     display_name: Python 3
 #     language: python
 #     name: python3
-# ---
+
 
 # # What is a distribution?
 #
@@ -46,7 +46,7 @@ def show_code(func):
         print(line, end="")
 
 
-# -
+
 
 # ## Playing dice with the universe
 #
@@ -72,7 +72,7 @@ for x in range(1, 7):
     d6[x] = 1
 
 d6.Print()
-# -
+
 
 # Initially the "probabilities" are all 1, so the total probability in the `Pmf` is 6, which doesn't make a lot of sense.  In a proper, meaningful, PMF, the probabilities add up to 1, which implies that one outcome, and only one outcome, will occur (for any given roll of the die).
 #
@@ -103,7 +103,7 @@ d6[7]
 die = Pmf(dict(red=2, blue=4))
 die.Normalize()
 die.Print()
-# -
+
 
 # ## Is that all there is?
 #
@@ -207,7 +207,7 @@ thinkplot.Pdf(thrice, color="red")
 
 dice = die + die
 dice.Print()
-# -
+
 
 # ## Cumulative probabilities
 
@@ -262,7 +262,7 @@ cdf[5]
 # Solution
 
 1 - cdf[14]
-# -
+
 
 # ## Reverse lookup
 #
@@ -303,7 +303,7 @@ def iqr(cdf):
 
 
 iqr(cdf)
-# -
+
 
 # ## Max and min
 #
@@ -345,7 +345,7 @@ def Min(cdf, k):
 
 worst = Min(cdf, 6)
 thinkplot.Cdf(worst)
-# -
+
 
 # ## Characteristic function
 #
@@ -420,7 +420,7 @@ class CharFunc:
         plt.legend()
 
 
-# -
+
 
 # The attribute, `hs`, is the Fourier transform of the `Pmf`, represented as a NumPy array of complex numbers.
 #
@@ -491,7 +491,7 @@ None
 # The result approximates a Gaussian curve because
 # the PMF is approximately Gaussian and the FT of a
 # Gaussian is also Gaussian
-# -
+
 
 # ## Distributions
 #

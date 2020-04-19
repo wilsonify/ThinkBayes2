@@ -1,4 +1,4 @@
-# ---
+
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -10,7 +10,7 @@
 #     display_name: Python 3
 #     language: python
 #     name: python3
-# ---
+
 
 # # Think Bayes
 #
@@ -32,7 +32,7 @@ from thinkbayes import Hist, Pmf, Suite, Beta
 from thinkbayes import thinkplot
 
 
-# -
+
 
 # ## Unreliable observation
 #
@@ -135,4 +135,4 @@ plot_posterior(0.4, data)
 plot_posterior(0.2, data)
 plot_posterior(0.0, data)
 thinkplot.decorate(xlabel="Probability of heads (x)", ylabel="PMF")
-# -
+

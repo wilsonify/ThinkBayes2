@@ -1,4 +1,4 @@
-# ---
+
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -10,7 +10,7 @@
 #     display_name: Python 3
 #     language: python
 #     name: python3
-# ---
+
 
 # # Think Bayes
 #
@@ -33,7 +33,7 @@ import pandas as pd
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
 
-# -
+
 
 # ### The height problem
 #
@@ -50,7 +50,7 @@ from scipy.stats import norm
 dist_height = dict(male=norm(178, 7.7), female=norm(163, 7.3))
 
 
-# -
+
 
 # Write a class that implements `Likelihood` using the frozen distributions.  Here's starter code:
 
@@ -66,7 +66,7 @@ class Height(Suite):
 
 
 # Solution goes here
-# -
+
 
 # Here's the prior.
 
@@ -87,7 +87,7 @@ for hypo, prob in suite.Items():
 
 
 # Solution goes here
-# -
+
 
 # If you are curious, you can derive the mathematical form of this curve from the PDF of the normal distribution.
 
@@ -117,7 +117,7 @@ thinkplot.Pdf(female_height_pmf, label="Female")
 thinkplot.decorate(
     xlabel="Height (cm)", ylabel="PMF", title="Adult residents of the U.S."
 )
-# -
+
 
 # Use `thinkbayes.MakeMixture` to make a `Pmf` that represents the height of all residents of the U.S.
 
@@ -126,19 +126,19 @@ thinkplot.decorate(
 
 
 # Solution goes here
-# -
+
 
 # Write a class that inherits from Suite and Joint, and provides a Likelihood function that computes the probability of the data under a given hypothesis.
 
 
 # Solution goes here
-# -
+
 
 # Write a function that initializes your `Suite` with an appropriate prior.
 
 
 # Solution goes here
-# -
+
 mix = Pmf()
 suite = thinkplot.make_prior(mix)
 suite.Total()
@@ -161,4 +161,4 @@ thinkplot.decorate(
 
 
 # Solution goes here
-# -
+

@@ -1,4 +1,4 @@
-# ---
+
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -10,7 +10,7 @@
 #     display_name: Python 3
 #     language: python
 #     name: python3
-# ---
+
 
 # # Think Bayes
 #
@@ -33,7 +33,7 @@ from thinkbayes import Pmf, Cdf, Suite, Joint
 
 from thinkbayes import thinkplot
 
-# -
+
 
 # ## The Space Shuttle problem
 #
@@ -45,7 +45,7 @@ from thinkbayes import thinkplot
 
 
 # # !wget https://raw.githubusercontent.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Chapter2_MorePyMC/data/challenger_data.csv
-# -
+
 
 columns = ["Date", "Temperature", "Incident"]
 df = pd.read_csv("challenger_data.csv", parse_dates=[0])
@@ -63,7 +63,7 @@ plt.yticks([0, 1])
 plt.ylabel("Damage Incident?")
 plt.xlabel("Outside temperature (Fahrenheit)")
 plt.title("Defects of the Space Shuttle O-Rings vs temperature")
-# -
+
 
 # ### Grid algorithm
 #
@@ -91,7 +91,7 @@ class Logistic(Suite, Joint):
 
 
 # Solution goes here
-# -
+
 
 b0 = np.linspace(0, 50, 101)
 
@@ -124,7 +124,7 @@ thinkplot.decorate(
 
 
 # Solution goes here
-# -
+
 
 # ### MCMC
 #
@@ -136,7 +136,7 @@ import pymc3 as pm
 
 
 # Solution goes here
-# -
+
 
 pm.traceplot(thinkplot.trace)
 

@@ -1,4 +1,4 @@
-# ---
+
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -10,7 +10,7 @@
 #     display_name: Python 3
 #     language: python
 #     name: python3
-# ---
+
 
 # # Think Bayes
 #
@@ -36,7 +36,7 @@ from thinkbayes import MakePoissonPmf, EvalBinomialPmf, MakeMixture
 from thinkbayes import thinkplot
 
 
-# -
+
 
 # ## Lions and Tigers and Bears
 #
@@ -63,7 +63,7 @@ class LionsTigersBears(Suite, Joint):
 
 
 # Solution goes here
-# -
+
 
 ps = np.linspace(0, 1, 101)
 
@@ -77,13 +77,13 @@ def enumerate_triples(ps):
             yield p1, p2, p3
 
 
-# -
+
 
 # Write a better version of `enumerate_triples` that doesn't run into problems with floating-point.
 
 
 # Solution goes here
-# -
+
 
 suite = LionsTigersBears(enumerate_triples(ps))
 
@@ -133,7 +133,7 @@ def DirichletMarginal(dirichlet, i):
 
 
 Dirichlet.Marginal = DirichletMarginal
-# -
+
 
 dirichlet = Dirichlet(3)
 plot_marginal_pmfs(dirichlet)
@@ -167,7 +167,7 @@ with model:
 
 
 # Solution goes here
-# -
+
 
 
 def plot_trace_cdfs(trace):
@@ -190,7 +190,7 @@ def plot_trace_cdfs(trace):
 
 # pmf = Pmf(trace['xs'][0])
 # thinkplot.Hist(pmf)
-# -
+
 
 with model:
     start = pm.find_MAP()

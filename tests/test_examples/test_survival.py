@@ -1,4 +1,4 @@
-# ---
+
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -10,7 +10,7 @@
 #     display_name: Python 3
 #     language: python
 #     name: python3
-# ---
+
 
 # # Think Bayes
 #
@@ -36,7 +36,7 @@ from thinkbayes import thinkplot
 import numpy as np
 
 
-# -
+
 
 # ## The Weibull distribution
 #
@@ -79,7 +79,7 @@ def MakeWeibullPmf(lam, k, high, n=200):
     return Pmf(dict(zip(xs, ps)))
 
 
-# -
+
 
 # SciPy also provides functions to evaluate the Weibull distribution, which I'll use to check my implementation.
 
@@ -91,7 +91,7 @@ k = 1.5
 x = 0.5
 
 weibull_min.pdf(x, k, scale=lam)
-# -
+
 
 EvalWeibullPdf(x, lam, k)
 
@@ -120,7 +120,7 @@ cdf = Cdf(data)
 model = pmf.MakeCdf()
 thinkplot.Cdfs([cdf, model])
 thinkplot.decorate(xlabel="Lifetime", ylabel="CDF")
-# -
+
 
 # **Exercise:** Write a class called `LightBulb` that inherits from `Suite` and `Joint` and provides a `Likelihood` function that takes an observed lifespan as data and a tuple, `(lam, k)`, as a hypothesis.  It should return a likelihood proportional to the probability of the observed lifespan in a Weibull distribution with the given parameters.
 #
@@ -145,7 +145,7 @@ thinkplot.decorate(xlabel="Lifetime", ylabel="CDF")
 
 
 # Solution goes here
-# -
+
 
 # **Exercise:** Now suppose that instead of observing a lifespan, `k`, you observe a lightbulb that has operated for 1 year and is still working.  Write another version of `LightBulb` that takes data in this form and performs an update.
 
@@ -166,7 +166,7 @@ thinkplot.decorate(xlabel="Lifetime", ylabel="CDF")
 
 
 # Solution goes here
-# -
+
 
 # **Exercise:** Now let's put it all together.  Suppose you have 15 lightbulbs installed at different times over a 10 year period.  When you observe them, some have died and some are still working.  Write a version of `LightBulb` that takes data in the form of a `(flag, x)` tuple, where:
 #
@@ -200,7 +200,7 @@ df["end"] = df.start + df.lifespan
 df["age_t"] = t_end - df.start
 
 df.head()
-# -
+
 
 # Now I'll process the DataFrame to generate data in the form we want for the update.
 
@@ -229,13 +229,13 @@ for pair in data:
 
 
 # Solution goes here
-# -
+
 
 # **Exercise:** Suppose you install a light bulb and then you don't check on it for a year, but when you come back, you find that it has burned out.  Extend `LightBulb` to handle this kind of data, too.
 
 
 # Solution goes here
-# -
+
 
 # ## Prediction
 #
@@ -246,7 +246,7 @@ for pair in data:
 
 
 # Solution goes here
-# -
+
 
 # **Exercise:** Now suppose that `lam` and `k` are not known precisely, but we have a `LightBulb` object that represents the joint posterior distribution of the parameters after seeing some data.  Compute the posterior predictive distribution for `c`, the number of bulbs burned out after one year.
 
@@ -255,4 +255,4 @@ for pair in data:
 
 
 # Solution goes here
-# -
+

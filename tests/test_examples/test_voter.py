@@ -1,4 +1,4 @@
-# ---
+
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -10,10 +10,10 @@
 #     display_name: Python 2
 #     language: python
 #     name: python2
-# ---
+
 
 # Think Bayes
-# -----------
+
 #
 # Example problem related to *Think Bayes*
 #

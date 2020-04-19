@@ -1,4 +1,4 @@
-# ---
+
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -10,7 +10,7 @@
 #     display_name: Python 3
 #     language: python
 #     name: python3
-# ---
+
 
 # # Think Bayes
 #
@@ -39,7 +39,7 @@ from thinkbayes import thinkplot
 import pymc3 as pm
 import theano.tensor as T
 
-# -
+
 
 # ### Fake data
 
@@ -83,7 +83,7 @@ class Change(Suite, Joint):
 
 
 # # !wget https://raw.githubusercontent.com/baltimore-sun-data/2018-shootings-analysis/master/BPD_Part_1_Victim_Based_Crime_Data.csv
-# -
+
 
 df = pd.read_csv("BPD_Part_1_Victim_Based_Crime_Data.csv", parse_dates=[0])
 df.head()

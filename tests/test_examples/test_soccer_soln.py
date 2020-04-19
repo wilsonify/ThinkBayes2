@@ -1,4 +1,4 @@
-# ---
+
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -10,10 +10,10 @@
 #     display_name: Python 3
 #     language: python
 #     name: python3
-# ---
+
 
 # The World Cup Problem: Germany v. Argentina
-# -------------------------------------------
+
 #
 # Allen Downey
 #
@@ -60,7 +60,7 @@ class Soccer(thinkbayes.Suite):
         return like
 
 
-# -
+
 
 # `Likelihood` computes the likelihood of `data` given `hypo`, where `data` is an observed time between goals in minutes, and `hypo` is a hypothetical goal-scoring rate in goals per game.
 #
@@ -86,7 +86,7 @@ suite.Update(
 
 thinkplot.Pdf(suite)
 suite.Mean()
-# -
+
 
 # Now that we have a prior, we can update with the time of the first goal, 11 minutes.
 
@@ -132,7 +132,7 @@ def PredRemaining(suite, rem_time):
 
 
 mix = PredRemaining(suite, 90 - 23)
-# -
+
 
 # `PredRemaining` takes the posterior distribution of $\lambda$ and the remaining game time in minutes (I'm ignoring so-called "injury time").
 #

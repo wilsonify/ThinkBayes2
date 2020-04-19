@@ -21,7 +21,7 @@ from thinkbayes import Pmf, Suite
 from thinkbayes import thinkplot as tplt
 
 
-# -
+
 
 # Here's a problem from Joyce, "[How probabilities reflect evidence](http://www-personal.umich.edu/~jjoyce/papers/hpre.pdf)":
 #
@@ -78,7 +78,7 @@ for data in B5G0:
     jacob.Update(data)
 
 jacob.Print()
-# -
+
 
 tplt.Hist(prior, color="gray")
 tplt.Hist(jacob)
@@ -103,7 +103,7 @@ tplt.decorate(xlabel="Urn index (i)", ylabel="PMF")
 tplt.subplot(2)
 tplt.Hist(emily, label="Emily")
 tplt.decorate(xlabel="Urn index (i)", ylabel="PMF")
-# -
+
 
 # What should Jacob believe about Bnext?
 
@@ -117,7 +117,7 @@ for i, prob_i in jacob.Items():
 total
 
 
-# -
+
 
 # Let's make it a function:
 

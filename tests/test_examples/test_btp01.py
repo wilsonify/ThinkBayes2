@@ -17,7 +17,7 @@ import numpy as np
 from thinkbayes import Hist, Pmf, Cdf, Suite, Beta
 from thinkbayes import thinkplot
 
-# -
+
 
 # ## The sock problem
 #
@@ -40,7 +40,7 @@ from thinkbayes import thinkplot
 
 
 # Solution goes here
-# -
+
 
 # ## Chess-playing twins
 #
@@ -56,7 +56,7 @@ from thinkbayes import thinkplot
 
 
 # Solution goes here
-# -
+
 
 # ## 1984
 #
@@ -81,7 +81,7 @@ from thinkbayes import thinkplot
 
 
 # Solution goes here
-# -
+
 
 # ### Where Am I? - The Robot Localization Problem
 #
@@ -107,7 +107,7 @@ from thinkbayes import thinkplot
 
 
 # Solution goes here
-# -
+
 
 # **Part B:** This becomes an extremely useful tool as we begin to move around the map.  Let's try to get a more accurate knowledge of where the robot falls in the world by telling it to move forward one cell.
 #
@@ -121,7 +121,7 @@ from thinkbayes import thinkplot
 
 
 # Solution goes here
-# -
+
 
 # ## Red Dice problems
 #
@@ -146,7 +146,7 @@ from thinkbayes import thinkplot
 
 
 # Solution goes here
-# -
+
 
 # ## Scenario B
 #
@@ -154,7 +154,7 @@ from thinkbayes import thinkplot
 
 
 # Solution goes here
-# -
+
 
 # ## Scenario A
 #
@@ -162,7 +162,7 @@ from thinkbayes import thinkplot
 
 
 # Solution goes here
-# -
+
 
 # ## Scenario C
 #
@@ -175,7 +175,7 @@ from thinkbayes import thinkplot
 
 
 # Solution goes here
-# -
+
 
 # ## Scenario D
 #
@@ -186,7 +186,7 @@ from thinkbayes import thinkplot
 
 
 # Solution goes here
-# -
+
 
 # ## The bus problem
 #
@@ -218,4 +218,4 @@ from thinkbayes import thinkplot
 
 
 # Solution goes here
-# -
+

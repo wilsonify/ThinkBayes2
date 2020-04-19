@@ -26,7 +26,7 @@ from scipy.special import gamma
 
 import pymc3 as pm
 
-# -
+
 
 # ## The World Cup Problem, Part One
 #
@@ -48,7 +48,7 @@ thinkplot.decorate(title="Gamma PDF", xlabel="Goals per game", ylabel="PDF")
 pmf_gamma.Mean()
 
 
-# -
+
 
 
 class Soccer(Suite):
@@ -85,7 +85,7 @@ thinkplot.decorate(
     title="Posterior after 1 goal", xlabel="Goals per game", ylabel="PDF"
 )
 posterior1.Mean()
-# -
+
 
 # Here's the update after the second goal at 23 minutes (the time between first and second goals is 12 minutes).
 #
@@ -102,7 +102,7 @@ thinkplot.decorate(
     title="Posterior after 2 goals", xlabel="Goals per game", ylabel="PDF"
 )
 posterior2.Mean()
-# -
+
 
 from thinkbayes import MakePoissonPmf
 
@@ -118,7 +118,7 @@ for lam, prob in posterior2.Items():
     metapmf[pred] = prob
 
 
-# -
+
 
 # `MakeMixture` takes a Meta-Pmf (a Pmf that contains Pmfs) and returns a single Pmf that represents the weighted mixture of distributions:
 
@@ -155,7 +155,7 @@ thinkplot.decorate(
 
 
 # Solution goes here
-# -
+
 
 # ## MCMC
 #
@@ -178,7 +178,7 @@ cdf_lam = Cdf(lam_sample)
 thinkplot.Cdf(cdf_gamma, label="Prior grid")
 thinkplot.Cdf(cdf_lam, label="Prior MCMC")
 thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
-# -
+
 
 # Let's look at the prior predictive distribution for the time between goals (in games).
 
@@ -194,7 +194,7 @@ cdf_lam = Cdf(gap_sample)
 
 thinkplot.Cdf(cdf_lam)
 thinkplot.decorate(xlabel="Time between goals (games)", ylabel="Cdf")
-# -
+
 
 # Now we're ready for the inverse problem, estimating `lam` based on the first observed gap.
 
@@ -205,7 +205,7 @@ with pm.Model() as model:
     lam = pm.Gamma("lam", alpha=mean_rate, beta=1)
     gap = pm.Exponential("gap", lam, observed=first_gap)
     trace = pm.sample(1000, tune=3000)
-# -
+
 
 pm.traceplot(trace)
 
@@ -218,7 +218,7 @@ cdf_lam = Cdf(lam_sample)
 thinkplot.Cdf(posterior1.MakeCdf(), label="Posterior analytic")
 thinkplot.Cdf(cdf_lam, label="Posterior MCMC")
 thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
-# -
+
 
 # And here's the inverse problem with both observed gaps.
 
@@ -229,7 +229,7 @@ with pm.Model() as model:
     lam = pm.Gamma("lam", alpha=mean_rate, beta=1)
     gap = pm.Exponential("gap", lam, observed=[first_gap, second_gap])
     trace = pm.sample(1000, tune=2000)
-# -
+
 
 pm.traceplot(trace)
 
@@ -242,7 +242,7 @@ cdf_lam = Cdf(lam_sample)
 thinkplot.Cdf(posterior2.MakeCdf(), label="Posterior analytic")
 thinkplot.Cdf(cdf_lam, label="Posterior MCMC")
 thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
-# -
+
 
 # And we can generate a predictive distribution for the time until the next goal (in games).
 
@@ -256,7 +256,7 @@ print(gap_sample.mean())
 cdf_gap = Cdf(gap_sample)
 thinkplot.Cdf(cdf_gap)
 thinkplot.decorate(xlabel="Time between goals (games)", ylabel="Cdf")
-# -
+
 
 # **Exercise:** Use PyMC to write a solution to the second World Cup problem:
 #
@@ -276,7 +276,7 @@ cdf_lam = Cdf(lam_sample)
 
 thinkplot.Cdf(cdf_lam, label="Posterior MCMC")
 thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
-# -
+
 
 # And we can generate a predictive distribution for the time until the next goal (in games).
 
@@ -315,7 +315,7 @@ pmf = MakeGammaPmf(xs, 1.3)
 thinkplot.Pdf(pmf)
 thinkplot.decorate(xlabel="Goal-scoring rate (λ)", ylabel="PMF")
 pmf.Mean()
-# -
+
 
 germany = Soccer2(pmf)
 
@@ -342,7 +342,7 @@ germany_pred = PredictiveDist(germany, label="germany")
 thinkplot.Hist(germany_pred, width=0.45, align="right")
 thinkplot.Hist(pmf_goals, width=0.45, align="left")
 thinkplot.decorate(xlabel="Predicted # goals", ylabel="Pmf")
-# -
+
 
 thinkplot.Cdf(germany_pred.MakeCdf(), label="Grid")
 thinkplot.Cdf(Cdf(goal_sample), label="MCMC")

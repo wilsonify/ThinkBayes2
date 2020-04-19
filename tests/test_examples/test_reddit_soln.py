@@ -19,7 +19,7 @@
 from thinkbayes import Hist, Pmf, Suite, Beta
 from thinkbayes import thinkplot
 
-# -
+
 
 # ## Unreliable evaluators
 #
@@ -146,4 +146,4 @@ ylim = 0, item_post.MaxLike() * 1.05
 thinkplot.decorate(xlabel="Quality (Q))", ylabel="PMF", ylim=ylim)
 
 mean_q = item_post.Mean()
-# -
+

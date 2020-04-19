@@ -1,4 +1,4 @@
-# ---
+
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -10,7 +10,7 @@
 #     display_name: Python 3
 #     language: python
 #     name: python3
-# ---
+
 
 # # Think Bayes
 #
@@ -36,7 +36,7 @@ import numpy as np
 from thinkbayes import thinkplot
 
 
-# -
+
 
 # ## Interpreting medical tests
 #

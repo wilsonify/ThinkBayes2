@@ -1,4 +1,4 @@
-# ---
+
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -10,7 +10,7 @@
 #     display_name: Python 3
 #     language: python
 #     name: python3
-# ---
+
 
 from __future__ import print_function, division
 import thinkbayes
@@ -26,7 +26,7 @@ thinkplot.Pdf(pmf)
 
  active=""
 # Ignore
-# -
+
 
 mu = 5
 pmf = thinkbayes.MakeExponentialPmf(mu, high=1.0)
@@ -45,7 +45,7 @@ for lam, prob in pmf.Items():
 
 interarrival = thinkbayes.MakeMixture(metapmf)
 thinkplot.Pdf(interarrival)
-# -
+
 
 # Ok, let's start here.  Suppose we know $\lambda$.  We can compute the distribution of interarrival times (times between logins).
 
@@ -63,7 +63,7 @@ observed.Normalize()
 
 print(interarrival.Mean(), observed.Mean())
 thinkplot.Pdf(observed)
-# -
+
 
 # If we land during an intererval of duration $x$, the time since last login is uniform between 0 and $x$.  So the distribution of time since last login (`timesince`) is a mixture of uniform distributions.
 
@@ -78,7 +78,7 @@ for time, prob in observed.Items():
 timesince = thinkbayes.MakeMixture(metapmf)
 print(timesince.Mean())
 thinkplot.Pdf(timesince)
-# -
+
 
 # The data is in the form of "time since last login", so we need to be able to look up a time, $t$, and get the probability density at $t$.  But we have a PMF with lots of discrete times in it, so we can't just look it up.  One option: Compute the CDF, generate a sample, and estimate the PDF by KDE:
 

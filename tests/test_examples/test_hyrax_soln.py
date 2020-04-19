@@ -1,7 +1,7 @@
 
 
 # The Rock Hyrax Problem
-# ----------------------
+
 #
 # Allen Downey
 #
@@ -71,7 +71,7 @@ class Hyrax(thinkbayes.Suite):
         return like
 
 
-# -
+
 
 # Again $N$ is the hypothesis and $(K, n, k)$ is the data.  If we've tagged $K$ hyraxes and then caught another $n-k$, the total number of unique hyraxes we're seen is $K + (n - k)$.  For any smaller value of N, the likelihood is 0.
 #
@@ -85,7 +85,7 @@ suite = Hyrax(hypos)
 
 data = 10, 10, 2
 suite.Update(data)
-# -
+
 
 # Here's what the posterior distribution looks like:
 
@@ -125,7 +125,7 @@ class Hyrax2(thinkbayes.Suite):
         return like
 
 
-# -
+
 
 # And the result is the same:
 
@@ -138,7 +138,7 @@ suite.Update(data)
 
 thinkplot.Pdf(suite)
 thinkplot.Config(xlabel="Number of hyraxes", ylabel="PMF", legend=False)
-# -
+
 
 print("Posterior mean", suite.Mean())
 print("Maximum a posteriori estimate", suite.MaximumLikelihood())
@@ -155,6 +155,6 @@ suite.Update(data)
 print("Posterior mean", suite.Mean())
 print("Maximum a posteriori estimate", suite.MaximumLikelihood())
 print("90% credible interval", suite.CredibleInterval(90))
-# -
+
 
 # This difference indicates that we don't have enough data to swamp the priors, so a more definitive answer would require either more data or a prior based on more background information.

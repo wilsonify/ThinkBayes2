@@ -1,4 +1,4 @@
-# ---
+
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -10,7 +10,7 @@
 #     display_name: Python 3
 #     language: python
 #     name: python3
-# ---
+
 
 # ## The pair of dice problem
 #
@@ -35,7 +35,7 @@ from thinkbayes import Pmf, Suite
 from fractions import Fraction
 
 
-# -
+
 
 # ### The BayesTable class
 #
@@ -87,7 +87,7 @@ for die1 in sides:
             hypo.append((die1, die2))
 
 hypo
-# -
+
 
 # Here's a `BayesTable` that represents the hypotheses.
 
@@ -109,7 +109,7 @@ for i, row in table.iterrows():
     table.loc[i, "likelihood"] = 2 / n1 / n2
 
 table
-# -
+
 
 # Now we can use `update` to compute the posterior probabilities:
 
@@ -164,7 +164,7 @@ for i, row in table.iterrows():
     total += row.posterior * p
 
 total
-# -
+
 
 # This calculation is similar to the first step of the update, so we can also compute it by
 #
@@ -181,7 +181,7 @@ for i, row in table2.iterrows():
     table2.loc[i, "likelihood"] = prob_total(11, n1, n2)
 
 table2
-# -
+
 
 table2.update()
 

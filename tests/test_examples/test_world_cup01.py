@@ -24,7 +24,7 @@ from thinkbayes import thinkplot
 import numpy as np
 from scipy.special import gamma
 
-# -
+
 
 # ## The World Cup Problem, Part One
 #
@@ -46,7 +46,7 @@ thinkplot.decorate(title="Gamma PDF", xlabel="Goals per game", ylabel="PDF")
 pmf.Mean()
 
 
-# -
+
 
 # **Exercise:**  Write a class called `Soccer` that extends `Suite` and defines `Likelihood`, which should compute the probability of the data (the time between goals in minutes) for a hypothetical goal-scoring rate, `lam`, in goals per game.
 #
@@ -69,7 +69,7 @@ class Soccer(Suite):
 
 
 # Solution goes here
-# -
+
 
 # Now we can create a `Soccer` object and initialize it with the prior Pmf:
 
@@ -156,7 +156,7 @@ pmf.Mean()
 
 
 # Solution goes here
-# -
+
 
 # ## Computing the predictive distribution
 #
@@ -200,7 +200,7 @@ for lam, prob in soccer.Items():
 thinkplot.decorate(
     title="Distribution of goals, all lambda", xlabel="Goals scored", ylabel="PMF"
 )
-# -
+
 
 # We can compute the mixture of these distributions by making a Meta-Pmf that maps from each Poisson Pmf to its probability.
 
@@ -213,7 +213,7 @@ for lam, prob in soccer.Items():
     metapmf[pred] = prob
 
 
-# -
+
 
 # `MakeMixture` takes a Meta-Pmf (a Pmf that contains Pmfs) and returns a single Pmf that represents the weighted mixture of distributions:
 
@@ -250,4 +250,4 @@ thinkplot.decorate(
 
 
 # Solution goes here
-# -
+

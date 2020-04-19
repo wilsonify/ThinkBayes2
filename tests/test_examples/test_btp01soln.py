@@ -1,4 +1,4 @@
-# ---
+
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -10,7 +10,7 @@
 #     display_name: Python 2
 #     language: python
 #     name: python2
-# ---
+
 
 # # Bayes Theorem Problems
 #
@@ -33,7 +33,7 @@ import numpy as np
 from thinkbayes import Hist, Pmf, Cdf, Suite, Beta
 from thinkbayes import thinkplot
 
-# -
+
 
 # ## The sock problem
 #
@@ -99,7 +99,7 @@ thinkplot.Pdf(socks)
 socks.Update("pair")
 thinkplot.Pdf(socks)
 thinkplot.Config(ylim=[0, 0.03])
-# -
+
 
 # ## Chess-playing twins
 #
@@ -147,7 +147,7 @@ class Chess(Suite):
 chess = Chess(["AB", "BA"])
 chess.Update("WL")
 chess.Print()
-# -
+
 
 # ## 1984
 #
@@ -206,7 +206,7 @@ pmf.Print()
 
 pmf.Update("none")
 pmf.Print()
-# -
+
 
 # ### Where Am I? - The Robot Localization Problem
 #
@@ -269,7 +269,7 @@ robot.Update("R")
 robot.Print()
 
 
-# -
+
 
 # **Part B:** This becomes an extremely useful tool as we begin to move around the map.  Let's try to get a more accurate knowledge of where the robot falls in the world by telling it to move forward one cell.
 #
@@ -309,7 +309,7 @@ robot.Print()
 
 robot.Update((1, "G"))
 robot.Print()
-# -
+
 
 # ## Red Dice problems
 #
@@ -363,7 +363,7 @@ prior.Print()
 posterior = prior.Copy()
 posterior.Update("Red")
 posterior.Print()
-# -
+
 
 # ## Scenario B
 #
@@ -376,7 +376,7 @@ from thinkbayes import MakeMixture
 
 predictive = MakeMixture(posterior)
 predictive.Print()
-# -
+
 
 # ## Scenario A
 #
@@ -389,7 +389,7 @@ from thinkbayes import MakeMixture
 
 predictive = MakeMixture(prior)
 predictive.Print()
-# -
+
 
 # ## Scenario C
 #
@@ -422,7 +422,7 @@ posterior[d1] *= 1
 posterior[d2] *= 2
 posterior.Normalize()
 posterior.Print()
-# -
+
 
 # ## Scenario D
 #
@@ -449,7 +449,7 @@ posterior.Print()
 # B               2/3                              5/9
 # C               2/3                              1
 # D               1/2                              1
-# -
+
 
 # ## The bus problem
 #
@@ -515,4 +515,4 @@ buses, times = zip(*res)
 
 hist = Hist(buses)
 hist["A"] / hist.Total()
-# -
+

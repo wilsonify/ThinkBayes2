@@ -1,4 +1,4 @@
-# ---
+
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -10,7 +10,7 @@
 #     display_name: Python 3
 #     language: python
 #     name: python3
-# ---
+
 
 # # Think Bayes
 #
@@ -32,7 +32,7 @@ from thinkbayes import Pmf, Cdf, Suite, Joint
 
 from thinkbayes import thinkplot
 
-# -
+
 
 # ## Bayesian regression
 #
@@ -77,7 +77,7 @@ class Regress(Suite, Joint):
 
 
 # Solution goes here
-# -
+
 
 params = np.linspace(-4, 4, 21)
 
@@ -137,6 +137,6 @@ with pm.Model() as model:
 
 
 # Solution goes here
-# -
+
 
 # The posterior distributions for these parameters should be similar to what we got with the grid algorithm.

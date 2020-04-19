@@ -1,4 +1,4 @@
-# ---
+
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -10,10 +10,10 @@
 #     display_name: Python 3
 #     language: python
 #     name: python3
-# ---
+
 
 # The ThinkBayes2 framework
-# -------------------------
+
 #
 # Allen Downey
 #
@@ -56,7 +56,7 @@ class Coin(thinkbayes.Suite):
             return 1 - x
 
 
-# -
+
 
 # I'm importing `print_function` and `division` so this code should be compatible with Python 2 and Python 3.
 #
@@ -95,7 +95,7 @@ for data in results:
 thinkplot.Pdf(posterior)
 
 
-# -
+
 
 # This distribution shows what what we should believe about $x$ after seeing this data (based on the assumption of a uniform prior).
 #

@@ -21,7 +21,7 @@ from thinkbayes import thinkplot
 
 import numpy as np
 
-# -
+
 
 # ## The dinner party
 #
@@ -50,7 +50,7 @@ thinkplot.decorate(xlabel="Number of sneezers", ylabel="Pmf")
 pmf.Mean()
 
 
-# -
+
 
 # ## The Gluten Problem
 #
@@ -123,4 +123,4 @@ thinkplot.decorate(xlabel="Number who are gluten sensitive", ylabel="Pmf")
 # Solution
 
 posterior.CredibleInterval(95)
-# -
+

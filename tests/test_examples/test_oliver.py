@@ -12,7 +12,7 @@
 
 from thinkbayes import Pmf, Suite
 
-# -
+
 
 # Here is another problem from MacKay’s *Information Theory, Inference, and Learning Algorithms*:
 #
