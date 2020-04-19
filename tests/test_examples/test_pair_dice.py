@@ -1,4 +1,3 @@
-
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -33,8 +32,6 @@ from thinkbayes import thinkplot
 from thinkbayes import Pmf, Suite
 
 from fractions import Fraction
-
-
 
 
 # ### The BayesTable class
@@ -88,7 +85,6 @@ for die1 in sides:
 
 hypo
 
-
 # Here's a `BayesTable` that represents the hypotheses.
 
 table = BayesTable(hypo)
@@ -109,7 +105,6 @@ for i, row in table.iterrows():
     table.loc[i, "likelihood"] = 2 / n1 / n2
 
 table
-
 
 # Now we can use `update` to compute the posterior probabilities:
 
@@ -165,7 +160,6 @@ for i, row in table.iterrows():
 
 total
 
-
 # This calculation is similar to the first step of the update, so we can also compute it by
 #
 # 1) Creating a new table with the posteriors from `table`.
@@ -181,7 +175,6 @@ for i, row in table2.iterrows():
     table2.loc[i, "likelihood"] = prob_total(11, n1, n2)
 
 table2
-
 
 table2.update()
 

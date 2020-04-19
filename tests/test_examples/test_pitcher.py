@@ -1,4 +1,3 @@
-
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -31,9 +30,6 @@
 from thinkbayes import Pmf, Suite
 
 from thinkbayes import thinkplot
-
-
-
 
 
 class Subclass(Suite):

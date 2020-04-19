@@ -1,4 +1,3 @@
-
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -34,8 +33,6 @@ import pandas as pd
 import numpy as np
 
 from thinkbayes import thinkplot
-
-
 
 
 # ## Interpreting medical tests
@@ -127,7 +124,6 @@ pmf = compute_ppv(base_rate, sensitivity, specificity)
 
 ages = [40, 50, 60, 70, 80]
 rates = pd.Series([2.65, 4.28, 5.70, 6.76, 8.51], index=ages)
-
 
 for age, rate in rates.items():
     pmf = compute_ppv(rate, sensitivity, specificity)

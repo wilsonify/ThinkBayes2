@@ -1,4 +1,3 @@
-
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -38,8 +37,6 @@ from thinkbayes import thinkplot
 
 import pymc3 as pm
 import theano.tensor as T
-
-
 
 # ### Fake data
 

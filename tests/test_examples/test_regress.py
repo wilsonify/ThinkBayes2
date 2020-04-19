@@ -1,4 +1,3 @@
-
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -31,8 +30,6 @@ import numpy as np
 from thinkbayes import Pmf, Cdf, Suite, Joint
 
 from thinkbayes import thinkplot
-
-
 
 # ## Bayesian regression
 #
@@ -73,7 +70,6 @@ class Regress(Suite, Joint):
         hypo: slope, inter, sigma
         """
         return 1
-
 
 
 # Solution goes here
@@ -120,12 +116,10 @@ pm.GLM
 thinkplot.plot(xs, ys)
 thinkplot.decorate(xlabel="x", ylabel="y")
 
-
 import pymc3 as pm
 
 with pm.Model() as model:
     """Fill this in"""
-
 
 # Solution goes here
 

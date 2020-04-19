@@ -1,4 +1,3 @@
-
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -33,8 +32,6 @@ import pandas as pd
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
 
-
-
 # ### The height problem
 #
 # For adult male residents of the US, the mean and standard deviation of height are 178 cm and 7.7 cm.  For adult female residents the corresponding stats are 163 cm and 7.3 cm.  Suppose you learn that someone is 170 cm tall.  What is the probability that they are male?
@@ -50,8 +47,6 @@ from scipy.stats import norm
 dist_height = dict(male=norm(178, 7.7), female=norm(163, 7.3))
 
 
-
-
 # Write a class that implements `Likelihood` using the frozen distributions.  Here's starter code:
 
 
@@ -62,7 +57,6 @@ class Height(Suite):
         hypo: 'male' or 'female'
         """
         return 1
-
 
 
 # Solution goes here
@@ -110,14 +104,12 @@ male_height_pmf = Pmf(dict(zip(hs, ps)))
 ps = dist_height["female"].pdf(hs)
 female_height_pmf = Pmf(dict(zip(hs, ps)))
 
-
 thinkplot.Pdf(male_height_pmf, label="Male")
 thinkplot.Pdf(female_height_pmf, label="Female")
 
 thinkplot.decorate(
     xlabel="Height (cm)", ylabel="PMF", title="Adult residents of the U.S."
 )
-
 
 # Use `thinkbayes.MakeMixture` to make a `Pmf` that represents the height of all residents of the U.S.
 
@@ -161,4 +153,3 @@ thinkplot.decorate(
 
 
 # Solution goes here
-

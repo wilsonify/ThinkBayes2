@@ -1,5 +1,3 @@
-
-
 # # Think Bayes
 #
 # This notebook presents example code and exercise solutions for Think Bayes.
@@ -18,8 +16,6 @@
 # import classes from thinkbayes
 from thinkbayes import Hist, Pmf, Suite, Beta
 from thinkbayes import thinkplot
-
-
 
 # ## Unreliable evaluators
 #
@@ -64,7 +60,6 @@ thinkplot.decorate(xlabel="Reliability (R)", ylabel="PMF")
 
 mean_r = redditor.Mean()
 
-
 # Solution
 
 # And a completely unknown item.
@@ -75,7 +70,6 @@ thinkplot.Pdf(item)
 thinkplot.decorate(xlabel="Quality (Q))", ylabel="PMF")
 
 mean_q = item.Mean()
-
 
 
 # Solution
@@ -99,7 +93,6 @@ class Pair(Suite):
             return 0
 
 
-
 # Solution
 
 # And here are the results.  Since we knew nothing about the item,
@@ -112,11 +105,9 @@ for r, p1 in redditor.Items():
 
 suite = Pair(d)
 
-
 # Solution
 
 suite.Update("up")
-
 
 # Solution
 
@@ -126,13 +117,11 @@ for (q, r), p in suite.Items():
 
 redditor_post.Total()
 
-
 thinkplot.Pdf(redditor_post)
 ylim = 0, redditor_post.MaxLike() * 1.05
 thinkplot.decorate(xlabel="Reliability (R)", ylabel="PMF", ylim=ylim)
 
 mean_r = redditor_post.Mean()
-
 
 item_post = Pmf()
 for (q, r), p in suite.Items():
@@ -140,10 +129,8 @@ for (q, r), p in suite.Items():
 
 item_post.Total()
 
-
 thinkplot.Pdf(item_post)
 ylim = 0, item_post.MaxLike() * 1.05
 thinkplot.decorate(xlabel="Quality (Q))", ylabel="PMF", ylim=ylim)
 
 mean_q = item_post.Mean()
-

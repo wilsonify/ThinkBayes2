@@ -1,4 +1,3 @@
-
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -34,8 +33,6 @@ import thinkbayes
 from thinkbayes import thinkplot
 
 import numpy as np
-
-
 
 
 # ## The Weibull distribution
@@ -79,8 +76,6 @@ def MakeWeibullPmf(lam, k, high, n=200):
     return Pmf(dict(zip(xs, ps)))
 
 
-
-
 # SciPy also provides functions to evaluate the Weibull distribution, which I'll use to check my implementation.
 
 
@@ -91,7 +86,6 @@ k = 1.5
 x = 0.5
 
 weibull_min.pdf(x, k, scale=lam)
-
 
 EvalWeibullPdf(x, lam, k)
 
@@ -120,7 +114,6 @@ cdf = Cdf(data)
 model = pmf.MakeCdf()
 thinkplot.Cdfs([cdf, model])
 thinkplot.decorate(xlabel="Lifetime", ylabel="CDF")
-
 
 # **Exercise:** Write a class called `LightBulb` that inherits from `Suite` and `Joint` and provides a `Likelihood` function that takes an observed lifespan as data and a tuple, `(lam, k)`, as a hypothesis.  It should return a likelihood proportional to the probability of the observed lifespan in a Weibull distribution with the given parameters.
 #
@@ -201,7 +194,6 @@ df["age_t"] = t_end - df.start
 
 df.head()
 
-
 # Now I'll process the DataFrame to generate data in the form we want for the update.
 
 
@@ -214,7 +206,6 @@ for i, row in df.iterrows():
 
 for pair in data:
     print(pair)
-
 
 # Solution goes here
 
@@ -255,4 +246,3 @@ for pair in data:
 
 
 # Solution goes here
-

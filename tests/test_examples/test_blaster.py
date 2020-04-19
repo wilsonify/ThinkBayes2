@@ -129,7 +129,9 @@ def test_blaster32(prior):
     blaster.Update(2)
     thinkplot.Pdf(blaster)
 
-    assert prior.Mean() > blaster.Mean()  # The posterior mean and MAP are lower than in the prior.
+    assert (
+            prior.Mean() > blaster.Mean()
+    )  # The posterior mean and MAP are lower than in the prior.
 
 
 def test_blaster35(prior):
@@ -148,7 +150,9 @@ def test_blaster35(prior):
     blaster.Update(2)
     thinkplot.Pdf(blaster)
 
-    assert prior.MAP() > blaster.MAP()  # The posterior mean and MAP are lower than in the prior.
+    assert (
+            prior.MAP() > blaster.MAP()
+    )  # The posterior mean and MAP are lower than in the prior.
 
 
 def test_blaster4():
@@ -173,7 +177,9 @@ def test_blaster4():
     x1 = 0.3
     x2 = 0.4
 
-    result = 0.3 * stats.binom.pmf(k_cont, n_const, x1) + 0.7 * stats.binom.pmf(k_cont, n_const, x2)
+    result = 0.3 * stats.binom.pmf(k_cont, n_const, x1) + 0.7 * stats.binom.pmf(
+        k_cont, n_const, x2
+    )
     assert result
 
 
@@ -273,7 +279,9 @@ def test_blaster7():
     metapmf = Pmf({pmf1: 0.3, pmf2: 0.7})
     metapmf.Print()
 
-    ks = [metapmf.Random().Random() for _ in range(1000)]  # Here's how we can draw samples from the meta-Pmf:
+    ks = [
+        metapmf.Random().Random() for _ in range(1000)
+    ]  # Here's how we can draw samples from the meta-Pmf:
 
     pmf = Pmf(ks)
     thinkplot.Hist(pmf)  # And here are the results, one more time:

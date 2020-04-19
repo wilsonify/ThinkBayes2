@@ -1,4 +1,3 @@
-
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -56,8 +55,6 @@ class Coin(thinkbayes.Suite):
             return 1 - x
 
 
-
-
 # I'm importing `print_function` and `division` so this code should be compatible with Python 2 and Python 3.
 #
 # The `Likelihood` function computes the likelihood of the data under a given hypothesis.  In this example, `data` is a string, either `"H"` or `"T"`; `hypo` is the hypothetical value of $x$ in the range 0 to 100.
@@ -93,8 +90,6 @@ for data in results:
     posterior.Update(data)
 
 thinkplot.Pdf(posterior)
-
-
 
 
 # This distribution shows what what we should believe about $x$ after seeing this data (based on the assumption of a uniform prior).
@@ -146,6 +141,5 @@ class Suite(Pmf):
             like = self.Likelihood(data, hypo)
             self.Mult(hypo, like)
         return self.Normalize()
-
 
 # As far as the implementation goes, that's all there is to it.  But if you are not sure how or why it works, you should read [Chapter 3](http://www.greenteapress.com/thinkbayes/html/thinkbayes004.html) and [Chapter 4](http://www.greenteapress.com/thinkbayes/html/thinkbayes005.html) of Think Bayes.

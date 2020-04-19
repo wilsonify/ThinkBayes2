@@ -56,7 +56,7 @@ class BayesTable(pd.DataFrame):
         raise NotImplementedError("Not supported for BayesTable!")
 
 
-@pytest.fixture(name='table')
+@pytest.fixture(name="table")
 def table_fixture():
     return BayesTable(["Bowl 1", "Bowl 2"])
 
@@ -110,6 +110,9 @@ def test_bayestable4(table):
     table.mult()
     table.norm()
     table2 = table.reset()
-    table2.likelihood = [1 / 4, 1 / 2]  # Here are the likelihoods for the second update.
+    table2.likelihood = [
+        1 / 4,
+        1 / 2,
+    ]  # Here are the likelihoods for the second update.
     table2.bayesian_update()  # We could run `mult` and `norm` again, or run `update`, which does both steps.
     assert table2.shape == (2, 5)

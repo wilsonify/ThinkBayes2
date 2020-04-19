@@ -1,4 +1,3 @@
-
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -33,8 +32,6 @@ from thinkbayes import Pmf, Cdf, Suite, Joint
 
 from thinkbayes import thinkplot
 
-
-
 # ## The Space Shuttle problem
 #
 # Here's a problem from [Bayesian Methods for Hackers](http://nbviewer.jupyter.org/github/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/blob/master/Chapter2_MorePyMC/Ch2_MorePyMC_PyMC2.ipynb)
@@ -55,7 +52,6 @@ df
 df["Incident"] = df["Damage Incident"].astype(float)
 df
 
-
 import matplotlib.pyplot as plt
 
 plt.scatter(df.Temperature, df.Incident, s=75, color="k", alpha=0.5)
@@ -63,7 +59,6 @@ plt.yticks([0, 1])
 plt.ylabel("Damage Incident?")
 plt.xlabel("Outside temperature (Fahrenheit)")
 plt.title("Defects of the Space Shuttle O-Rings vs temperature")
-
 
 # ### Grid algorithm
 #
@@ -87,7 +82,6 @@ class Logistic(Suite, Joint):
         hypo: b0, b1
         """
         return 1
-
 
 
 # Solution goes here
@@ -133,7 +127,6 @@ thinkplot.decorate(
 # As a challege, try writing the model more explicitly, rather than using the GLM module.
 
 import pymc3 as pm
-
 
 # Solution goes here
 

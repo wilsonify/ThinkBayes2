@@ -7,17 +7,12 @@ MIT License: https://opensource.org/licenses/MIT
 
 from __future__ import print_function, division
 
-
 import warnings
-
-
 
 import numpy as np
 
 from thinkbayes import Hist, Pmf, Cdf, Suite, Beta
 from thinkbayes import thinkplot
-
-
 
 # ## The sock problem
 #
@@ -218,4 +213,3 @@ from thinkbayes import thinkplot
 
 
 # Solution goes here
-

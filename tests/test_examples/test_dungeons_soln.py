@@ -1,4 +1,3 @@
-
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -33,8 +32,6 @@ from thinkbayes import Pmf, Suite
 import thinkbayes
 from thinkbayes import thinkplot
 
-
-
 # ### The Dungeons and Dragons club
 #
 # Suppose there are 10 people in my *Dungeons and Dragons* club; on any game day, each of them has a 70% chance of showing up.
@@ -65,8 +62,6 @@ from random import random
 
 def flip(p):
     return random() < p
-
-
 
 
 # We can use it to flip a coin for each member of the club.
@@ -124,7 +119,6 @@ thinkplot.Pmf(prior, color="C1")
 
 thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
 
-
 # Finally, we can use an analytic distribution.  The distribution we just computed is the [binomial distribution](https://en.wikipedia.org/wiki/Binomial_distribution), which has the following PMF:
 #
 # $ PMF(k; n, p) = P(k ~|~ n, p) = {n \choose k}\,p^{k}(1-p)^{n-k}$
@@ -144,7 +138,6 @@ thinkplot.Pmf(binomial, color="C2", linestyle="dotted")
 
 thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
 
-
 # Since two players spoke, we can eliminate the possibility of 0 or 1 players:
 
 
@@ -155,7 +148,6 @@ prior.Normalize()
 thinkplot.Pmf(prior, color="C1")
 
 thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
-
 
 # ### Likelihood
 #
@@ -201,7 +193,6 @@ for n in range(2, 10, 2):
 
 thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Maximum of 6*n attributes")
 
-
 # To check that, I'll compute the CDF for 7 players, and estimate it by simulation.
 
 
@@ -213,8 +204,6 @@ sample_max = [max(cdf_thrice.Sample(42)) for i in range(1000)]
 thinkplot.Cdf(thinkbayes.Cdf(sample_max), label="sample")
 
 thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Maximum of 6*n attributes")
-
-
 
 
 # Looks good.
@@ -244,7 +233,6 @@ for n in range(2, 10, 2):
 
 thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Minimum of 6*n attributes")
 
-
 # And again we can check it by comparing to simulation results.
 
 
@@ -256,7 +244,6 @@ sample_min = [min(cdf_thrice.Sample(42)) for i in range(1000)]
 thinkplot.Cdf(thinkbayes.Cdf(sample_min), label="sample")
 
 thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Minimum of 6*n attributes")
-
 
 # For efficiency and conciseness, it is helpful to precompute the distributions for the relevant values of `n`, and store them in dictionaries.
 
@@ -270,8 +257,6 @@ for n in range(2, 11):
     cdf_max = cdf_thrice.Max(n * 6)
     like_max[n] = cdf_max.MakePmf()
     print(like_min[n][5], like_max[n][16])
-
-
 
 
 # The output shows that the particular data we saw is symmetric: the chance that 16 is the maximum is the same as the chance that 5 is the minimum.
@@ -289,8 +274,6 @@ def prob_same(n):
 
 for n in range(2, 11):
     print(n, prob_same(n))
-
-
 
 
 # ### The update

@@ -1,4 +1,3 @@
-
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -43,8 +42,6 @@
 # first a little house-keeping
 from __future__ import print_function, division
 
-
-
 import thinkbayes
 
 
@@ -61,8 +58,6 @@ class Soccer(thinkbayes.Suite):
         lam = hypo
         like = thinkbayes.EvalPoissonPmf(goals, lam)
         return like
-
-
 
 
 # `Likelihood` computes the likelihood of `data` given `hypo`, where `data` is an observed number of goals, and `hypo` is a hypothetical goal-scoring rate in goals per game.  We can compute the likelihood of the data by evaluating the Poisson probability mass function (PMF).
@@ -88,7 +83,6 @@ suite.Update(
 thinkplot.Pdf(suite)
 suite.Mean()
 
-
 # According to this prior, the goal-scoring rates are always greater than zero, with the most likely value (a priori) near 0.5.  Goal scoring rates greater than 5 are considered unlikely.
 #
 # ### Step 2: Comparing posteriors
@@ -103,7 +97,6 @@ argentina.Update(0)
 
 print("posterior mean Germany", germany.Mean())
 print("posterior mean Argentina", argentina.Mean())
-
 
 # `Update` invokes the likelihood function for each hypothetical value of $\lambda$ and updates the distribution accordingly.
 #
@@ -155,8 +148,6 @@ def PredictiveDist(suite, duration=1, label="pred"):
 germany_pred = PredictiveDist(germany, label="germany")
 argentina_pred = PredictiveDist(argentina, label="argentina")
 
-
-
 # `PredictiveDist` takes the posterior distribution of $\lambda$ and a duration (in units of games).
 #
 # It loops through the hypotheses in `suite`, computes the predictive distribution of goals for each hypothesis, and assembles a "meta-Pmf" which is a Pmf that maps from each predictive distribution to its probability.
@@ -178,12 +169,10 @@ print("posterior prob Germany wins rematch", win)
 print("posterior prob Argentina wins rematch", lose)
 print("posterior prob tie", tie)
 
-
 # If the score is tied after 90 minutes the teams play an additional 30 minute period.  We can use `PredictiveDist` again to compute the distribution of scores after 1/3 of a game:
 
 germany_pred_overtime = PredictiveDist(germany, 1 / 3, label="germany")
 argentina_pred_overtime = PredictiveDist(argentina, 1 / 3, label="argentina")
-
 
 win = germany_pred_overtime > argentina_pred_overtime
 lose = germany_pred_overtime < argentina_pred_overtime
@@ -192,7 +181,6 @@ tie = 1 - (win + lose)
 print("posterior prob Germany wins rematch", win)
 print("posterior prob Argentina wins rematch", lose)
 print("posterior prob tie", tie)
-
 
 print("Total prob Germany wins a rematch", 0.45 + 0.32 * 0.26)
 

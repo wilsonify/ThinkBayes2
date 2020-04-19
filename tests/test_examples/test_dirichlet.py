@@ -1,4 +1,3 @@
-
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -36,8 +35,6 @@ from thinkbayes import MakePoissonPmf, EvalBinomialPmf, MakeMixture
 from thinkbayes import thinkplot
 
 
-
-
 # ## Lions and Tigers and Bears
 #
 # Suppose we visit a wild animal preserve where we know that the only animals are lions and tigers and bears, but we don't know how many of each there are.
@@ -61,12 +58,10 @@ class LionsTigersBears(Suite, Joint):
         # Fill this in.
 
 
-
 # Solution goes here
 
 
 ps = np.linspace(0, 1, 101)
-
 
 from itertools import product
 
@@ -75,8 +70,6 @@ def enumerate_triples(ps):
     for p1, p2, p3 in product(ps, ps, ps):
         if p1 + p2 + p3 == 1:
             yield p1, p2, p3
-
-
 
 
 # Write a better version of `enumerate_triples` that doesn't run into problems with floating-point.
@@ -134,7 +127,6 @@ def DirichletMarginal(dirichlet, i):
 
 Dirichlet.Marginal = DirichletMarginal
 
-
 dirichlet = Dirichlet(3)
 plot_marginal_pmfs(dirichlet)
 
@@ -158,16 +150,13 @@ observed = [0, 0, 0, 1, 1, 2]
 k = len(Pmf(observed))
 a = np.ones(k)
 
-
 model = pm.Model()
 
 with model:
     """FILL THIS IN"""
 
 
-
 # Solution goes here
-
 
 
 def plot_trace_cdfs(trace):
@@ -182,7 +171,6 @@ def plot_trace_cdfs(trace):
     thinkplot.Cdf(cdf_bear, label="bears")
 
     thinkplot.decorate(xlabel="Prevalence", ylabel="CDF")
-
 
 
 # plot_trace_cdfs(trace)

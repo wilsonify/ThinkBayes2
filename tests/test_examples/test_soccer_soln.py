@@ -1,4 +1,3 @@
-
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -60,8 +59,6 @@ class Soccer(thinkbayes.Suite):
         return like
 
 
-
-
 # `Likelihood` computes the likelihood of `data` given `hypo`, where `data` is an observed time between goals in minutes, and `hypo` is a hypothetical goal-scoring rate in goals per game.
 #
 # After converting `hypo` to goals per minute, we can compute the likelihood of the data by evaluating the exponential probability density function (PDF).  The result is a density, and therefore not a true probability.  But the result from `Likelihood` only needs to be proportional to the probability of the data; it doesn't have to be a probability.
@@ -86,7 +83,6 @@ suite.Update(
 
 thinkplot.Pdf(suite)
 suite.Mean()
-
 
 # Now that we have a prior, we can update with the time of the first goal, 11 minutes.
 
@@ -132,7 +128,6 @@ def PredRemaining(suite, rem_time):
 
 
 mix = PredRemaining(suite, 90 - 23)
-
 
 # `PredRemaining` takes the posterior distribution of $\lambda$ and the remaining game time in minutes (I'm ignoring so-called "injury time").
 #

@@ -1,5 +1,3 @@
-
-
 # # Think Bayes
 #
 # This notebook presents example code and exercise solutions for Think Bayes.
@@ -24,8 +22,6 @@ from thinkbayes import thinkplot
 import numpy as np
 from scipy.special import gamma
 
-
-
 # ## The World Cup Problem, Part One
 #
 # >In the 2014 FIFA World Cup, Germany played Brazil in a semifinal match. Germany scored after 11 minutes and again at the 23 minute mark. At that point in the match, how many goals would you expect Germany to score after 90 minutes? What was the probability that they would score 5 more goals (as, in fact, they did)?
@@ -46,8 +42,6 @@ thinkplot.decorate(title="Gamma PDF", xlabel="Goals per game", ylabel="PDF")
 pmf.Mean()
 
 
-
-
 # **Exercise:**  Write a class called `Soccer` that extends `Suite` and defines `Likelihood`, which should compute the probability of the data (the time between goals in minutes) for a hypothetical goal-scoring rate, `lam`, in goals per game.
 #
 # Hint: For a given value of `lam`, the time between goals is distributed exponentially.
@@ -65,7 +59,6 @@ class Soccer(Suite):
         data: interarrival time in minutes
         """
         return 1
-
 
 
 # Solution goes here
@@ -201,7 +194,6 @@ thinkplot.decorate(
     title="Distribution of goals, all lambda", xlabel="Goals scored", ylabel="PMF"
 )
 
-
 # We can compute the mixture of these distributions by making a Meta-Pmf that maps from each Poisson Pmf to its probability.
 
 
@@ -211,8 +203,6 @@ for lam, prob in soccer.Items():
     lt = lam * rem_time / 90
     pred = MakePoissonPmf(lt, 15)
     metapmf[pred] = prob
-
-
 
 
 # `MakeMixture` takes a Meta-Pmf (a Pmf that contains Pmfs) and returns a single Pmf that represents the weighted mixture of distributions:
@@ -250,4 +240,3 @@ thinkplot.decorate(
 
 
 # Solution goes here
-

@@ -1,4 +1,3 @@
-
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -30,8 +29,6 @@
 # import classes from thinkbayes
 from thinkbayes import Hist, Pmf, Suite, Beta
 from thinkbayes import thinkplot
-
-
 
 
 # ## Unreliable observation
@@ -70,7 +67,6 @@ class UnreliableCoin(Suite):
             return x * (1 - y) + (1 - x) * y
 
 
-
 # Solution
 
 # Now let's initialize an UnreliableCoin with `y=0.9`:
@@ -78,7 +74,6 @@ class UnreliableCoin(Suite):
 prior = range(0, 101)
 suite = UnreliableCoin(prior, y=0.9)
 thinkplot.Pdf(suite)
-
 
 # Solution
 
@@ -88,7 +83,6 @@ for outcome in "HHHTTTTTTT":
     suite.Update(outcome)
 
 thinkplot.Pdf(suite)
-
 
 
 # Solution
@@ -105,7 +99,6 @@ def plot_posterior(y, data):
     thinkplot.Pdf(suite, label="y=%g" % y)
 
 
-
 # Solution
 
 # The posterior distribution gets wider as the measurement gets less reliable.
@@ -116,14 +109,12 @@ plot_posterior(0.8, data)
 plot_posterior(0.6, data)
 thinkplot.decorate(xlabel="Probability of heads (x)", ylabel="PMF")
 
-
 # Solution
 
 # At `y=0.5`, the measurement provides no information, so the posterior equals the prior:
 
 plot_posterior(0.5, data)
 thinkplot.decorate(xlabel="Probability of heads (x)", ylabel="PMF")
-
 
 # Solution
 
@@ -135,4 +126,3 @@ plot_posterior(0.4, data)
 plot_posterior(0.2, data)
 plot_posterior(0.0, data)
 thinkplot.decorate(xlabel="Probability of heads (x)", ylabel="PMF")
-

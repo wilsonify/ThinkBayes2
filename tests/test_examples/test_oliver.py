@@ -1,5 +1,3 @@
-
-
 # ## Oliver's blood
 #
 # Copyright 2018 Allen B. Downey
@@ -11,8 +9,6 @@
 # %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
 from thinkbayes import Pmf, Suite
-
-
 
 # Here is another problem from MacKay’s *Information Theory, Inference, and Learning Algorithms*:
 #

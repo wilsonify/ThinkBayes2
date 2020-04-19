@@ -1,4 +1,3 @@
-
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -23,17 +22,12 @@
 
 from __future__ import print_function, division
 
-
 import warnings
-
-
 
 import numpy as np
 
 from thinkbayes import Hist, Pmf, Cdf, Suite, Beta
 from thinkbayes import thinkplot
-
-
 
 # ## The sock problem
 #
@@ -51,7 +45,6 @@ pmf["drawer 2"] *= (30 / 50) ** 2 + (20 / 50) ** 2
 pmf.Normalize()
 pmf.Print()
 
-
 # Solution
 
 pmf = Pmf(["drawer 1", "drawer 2"])
@@ -59,7 +52,6 @@ pmf["drawer 1"] *= (40 / 50) * (39 / 49) + (10 / 50) * (9 / 49)
 pmf["drawer 2"] *= (30 / 50) * (29 / 49) + (20 / 50) * (19 / 49)
 pmf.Normalize()
 pmf.Print()
-
 
 
 # Solution
@@ -75,13 +67,12 @@ class Socks(Suite):
         white, black = hypo
         total = white + black
         like = white / total * (white - 1) / (total - 1) + black / total * (
-            black - 1
+                black - 1
         ) / (total - 1)
         if data == "pair":
             return like
         else:
             return 1 - like
-
 
 
 # Solution
@@ -93,13 +84,11 @@ for white in range(n + 1):
 socks.Normalize()
 thinkplot.Pdf(socks)
 
-
 # Solution
 
 socks.Update("pair")
 thinkplot.Pdf(socks)
 thinkplot.Config(ylim=[0, 0.03])
-
 
 # ## Chess-playing twins
 #
@@ -117,12 +106,10 @@ pmf.Normalize()
 pmf.Print()
 
 
-
 # Solution
 
 
 class Chess(Suite):
-
     prob_I_beat = dict(A=0.4, B=0.7)
 
     def Likelihood(self, data, hypo):
@@ -141,13 +128,11 @@ class Chess(Suite):
         return total
 
 
-
 # Solution
 
 chess = Chess(["AB", "BA"])
 chess.Update("WL")
 chess.Print()
-
 
 # ## 1984
 #
@@ -201,12 +186,10 @@ class ThoughtPolice(Suite):
 pmf = ThoughtPolice(officer)
 pmf.Print()
 
-
 # Solution
 
 pmf.Update("none")
 pmf.Print()
-
 
 # ### Where Am I? - The Robot Localization Problem
 #
@@ -241,12 +224,10 @@ pmf.Normalize()
 pmf.Print()
 
 
-
 # Solution
 
 
 class Robot(Suite):
-
     colors = "GRRGGG"
 
     def Likelihood(self, data, hypo):
@@ -261,14 +242,11 @@ class Robot(Suite):
             return 0.2
 
 
-
 # Solution
 
 robot = Robot(locs)
 robot.Update("R")
 robot.Print()
-
-
 
 
 # **Part B:** This becomes an extremely useful tool as we begin to move around the map.  Let's try to get a more accurate knowledge of where the robot falls in the world by telling it to move forward one cell.
@@ -280,7 +258,6 @@ robot.Print()
 
 
 class Robot2(Suite):
-
     colors = "GRRGGG"
 
     def Likelihood(self, data, hypo):
@@ -297,19 +274,16 @@ class Robot2(Suite):
             return 0.2
 
 
-
 # Solution
 
 robot = Robot2(locs)
 robot.Update((0, "R"))
 robot.Print()
 
-
 # Solution
 
 robot.Update((1, "G"))
 robot.Print()
-
 
 # ## Red Dice problems
 #
@@ -325,18 +299,15 @@ from fractions import Fraction
 d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1 (bluish) ")
 d1.Print()
 
-
 # Solution
 
 d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2 (reddish)")
 d2.Print()
 
-
 # Solution
 
 dice = Pmf({d1: Fraction(1), d2: Fraction(1)})
 dice.Print()
-
 
 
 # Solution
@@ -351,19 +322,16 @@ class Dice(Suite):
         return hypo[data]
 
 
-
 # Solution
 
 prior = Dice({d1: Fraction(1), d2: Fraction(1)})
 prior.Print()
-
 
 # Solution
 
 posterior = prior.Copy()
 posterior.Update("Red")
 posterior.Print()
-
 
 # ## Scenario B
 #
@@ -377,7 +345,6 @@ from thinkbayes import MakeMixture
 predictive = MakeMixture(posterior)
 predictive.Print()
 
-
 # ## Scenario A
 #
 # Instead of rolling the same die, suppose I choosing a die at random and roll it.  What is the probability that I get red?
@@ -389,7 +356,6 @@ from thinkbayes import MakeMixture
 
 predictive = MakeMixture(prior)
 predictive.Print()
-
 
 # ## Scenario C
 #
@@ -423,7 +389,6 @@ posterior[d2] *= 2
 posterior.Normalize()
 posterior.Print()
 
-
 # ## Scenario D
 #
 # Finally, suppose I choose a die and roll it over and over until I get red, then report the outcome.  What is the probability that the die I rolled is the reddish one?
@@ -436,7 +401,6 @@ posterior.Print()
 
 posterior = prior.Copy()
 posterior.Print()
-
 
 
 # Solution
@@ -472,12 +436,10 @@ def generate_times(lam, n=10):
         yield time
 
 
-
 # Solution
 
 for time in generate_times(20, 10):
     print(time)
-
 
 
 # Solution
@@ -493,11 +455,9 @@ def generate_buses(names, lams, n):
         times[i] = next(buses[i])
 
 
-
 # Solution
 
 next(generate_buses("AB", [20, 30], 10))
-
 
 # Solution
 
@@ -505,14 +465,11 @@ res = []
 for bus, time in generate_buses("AB", [20, 30], 1000):
     res.append((bus, time))
 
-
 # Solution
 
 buses, times = zip(*res)
-
 
 # Solution
 
 hist = Hist(buses)
 hist["A"] / hist.Total()
-

@@ -1,4 +1,3 @@
-
 # jupyter:
 #   jupytext:
 #     text_representation:
@@ -34,8 +33,6 @@ from thinkbayes import thinkplot
 
 import numpy as np
 
-
-
 beta = Beta(5, 5)
 prior = beta.MakePmf()
 thinkplot.Pdf(prior)
@@ -51,7 +48,6 @@ thinkplot.Pdf(prior, color="gray", label="prior")
 thinkplot.Pdf(posterior, label="posterior")
 thinkplot.decorate(xlabel="Prob Red Sox win (x)", ylabel="PDF")
 
-
 posterior.Mean()
 
 posterior.MAP()
@@ -63,14 +59,12 @@ x = posterior.Random()
 np.sum(np.random.random(7) < x)
 
 
-
 def simulate(k, dist):
     x = dist.Random()
     return np.sum(np.random.random(k) <= x)
 
 
 simulate(7, posterior)
-
 
 sample = [simulate(7, posterior) for i in range(100000)]
 thinkplot.Hist(Pmf(sample))
