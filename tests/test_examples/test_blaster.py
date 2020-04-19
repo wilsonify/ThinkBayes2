@@ -5,11 +5,6 @@ Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-# **Exercise**:
-# Assuming again that the distribution of `x` in the population of designs is well-modeled by a beta distribution
-# with parameters α=2 and β=3, what the distribution if `k` if I choose a random Alien Blaster and fire 10 shots?
-
-
 from __future__ import print_function, division
 
 import logging
@@ -106,13 +101,11 @@ def test_blaster2():
 
 def test_blaster31(prior):
     """
-    # If we start with a uniform prior, we can see what the likelihood function looks like:
-    # A tie is most likely if they are both terrible shots or both very good.
-    #
-    # Is this data good or bad; that is, does it increase or decrease your estimate of $x$ for the Alien Blaster 10K?
-    #
-    # Now let's run it with the specified prior and
-    # see what happens when we multiply the convex prior and the concave posterior:
+    If we start with a uniform prior, we can see what the likelihood function looks like:
+    A tie is most likely if they are both terrible shots or both very good.
+    Is this data good or bad; that is, does it increase or decrease your estimate of $x$ for the Alien Blaster 10K?
+    Now let's run it with the specified prior and
+    see what happens when we multiply the convex prior and the concave posterior:
 
     :return:
     """
@@ -126,8 +119,8 @@ def test_blaster31(prior):
 
 def test_blaster32(prior):
     """
-    # Now let's run it with the specified prior and
-    # see what happens when we multiply the convex prior and the concave posterior:
+    Now let's run it with the specified prior and
+    see what happens when we multiply the convex prior and the concave posterior:
 
     :return:
     """
@@ -141,12 +134,10 @@ def test_blaster32(prior):
 
 def test_blaster35(prior):
     """
-    # A tie is most likely if they are both terrible shots or both very good.
-    #
-    # Is this data good or bad; that is, does it increase or decrease your estimate of $x$ for the Alien Blaster 10K?
-    #
-    # Now let's run it with the specified prior and
-    # see what happens when we multiply the convex prior and the concave posterior:
+    A tie is most likely if they are both terrible shots or both very good.
+    Is this data good or bad; that is, does it increase or decrease your estimate of $x$ for the Alien Blaster 10K?
+    Now let's run it with the specified prior and
+    see what happens when we multiply the convex prior and the concave posterior:
 
     So if we learn that the new design is "consistent", it is more likely to be consistently bad (in this case).
 
