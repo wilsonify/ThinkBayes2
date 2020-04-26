@@ -1399,7 +1399,9 @@ class Suite(Pmf):
 
         returns: the normalizing constant
         """
+        logging.debug("%r", f"data={data}")
         for hypo in self.Values():
+            logging.debug("%r", f"hypo={hypo}")
             like = self.Likelihood(data, hypo)
             self.Mult(hypo, like)
         return self.Normalize()
