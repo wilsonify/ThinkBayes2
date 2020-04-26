@@ -134,12 +134,20 @@ def test_mcmc(suite):
     k = len(Pmf(observed))
     a = np.ones(k)
 
-    model = pm.Model()
+    def create_model(data):
+        with pm.Model() as model:
+            k = len(Pmf(observed))
+            a = np.ones(k)
+            p = pm.Dirichlet('p', a, shape=a.shape)
+            c = pm.Categorical('c', p, observed=data, shape=1)
+        return model
+
+    model = create_model(observed)
 
     with model:
-        """FILL THIS IN"""
-
-    # Solution goes here
+        step = pm.Metropolis(model.vars)
+        trace = dict(ps=pm.sample(200, step))
+        # a = pm.traceplot(trace)
 
     def plot_trace_cdfs(trace):
         rows = trace["ps"].transpose()
@@ -162,7 +170,7 @@ def test_mcmc(suite):
     with model:
         start = pm.find_MAP()
         step = pm.Metropolis()
-        trace = pm.sample(1000, start=start, step=step, tune=1000)
+        trace = dict(ps=pm.sample(1000, start=start, step=step, tune=1000))
 
     pm.traceplot(trace)
 
