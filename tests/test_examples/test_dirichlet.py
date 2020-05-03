@@ -3,6 +3,7 @@ Think Bayes
 Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 import numpy as np
 import pandas as pd
@@ -150,7 +151,7 @@ def test_mcmc(suite):
         # a = pm.traceplot(trace)
 
     def plot_trace_cdfs(trace):
-        rows = trace["ps"].transpose()
+        rows = np.asarray(trace).transpose()
 
         cdf_lion = Cdf(rows[0])
         cdf_tiger = Cdf(rows[1])
@@ -170,12 +171,12 @@ def test_mcmc(suite):
     with model:
         start = pm.find_MAP()
         step = pm.Metropolis()
-        trace = dict(ps=pm.sample(1000, start=start, step=step, tune=1000))
+        trace = pm.sample(1000, start=start, step=step, tune=1000)
 
-    pm.traceplot(trace)
+    # pm.traceplot(trace)
 
-    plot_trace_cdfs(trace)
+    # plot_trace_cdfs(trace)
 
     thinkplot.PrePlot(6)
     plot_marginal_cdfs(dirichlet)
-    plot_trace_cdfs(trace)
+    # plot_trace_cdfs(trace)
