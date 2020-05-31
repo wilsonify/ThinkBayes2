@@ -300,7 +300,7 @@ def test_precompute(cdf_thrice):
         print(like_min[n][5], like_max[n][16])
 
 
-def test_min_max_same(prior):
+def test_min_max_same():
     """
     Finally, we need the probability that the minimum and maximum are held by the same person.
     If there are `n` players, there are `6*n` attributes.
@@ -314,6 +314,8 @@ def test_min_max_same(prior):
         print(n, prob_same(n))
 
     # Here's the prior we computed above.
+    player = coin(0.7)
+    prior = sum([player] * 10)
 
     suite = Dungeons(prior)
     thinkplot.Hist(suite)
