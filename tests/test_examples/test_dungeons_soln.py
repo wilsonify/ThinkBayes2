@@ -4,11 +4,18 @@ This notebook presents example code and exercise solutions for Think Bayes.
 Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
-
+import pytest
 from thinkbayes import Pmf, Suite
 import thinkbayes
 from thinkbayes import thinkplot
 from random import random
+
+like_min = {}
+like_max = {}
+
+
+def prob_same(n):
+    return 5 / (6 * n - 1)
 
 
 class Dungeons(Suite):
@@ -63,20 +70,33 @@ def flip(p):
     return random() < p
 
 
+def compute_cdf_min(cdf, k):
+    """CDF of the min of k samples from cdf.
+
+    cdf: Cdf object
+    k: number of samples
+
+    returns: new Cdf object
+    """
+    cdf_min = cdf.Copy()
+    cdf_min.ps = 1 - (1 - cdf_min.ps) ** k
+    return cdf_min
+
+
 def test_flip():
     """
     We can use it to flip a coin for each member of the club.
     # And count the number that show up on game day.
     """
-    flips = [flip(0.7) for i in range(10)]
-    assert sum(flips) == 6
+    flips = [flip(0.7) for _ in range(10)]
+    assert sum(flips) == 8
 
 
 def game_day(n, p):
     """
     Let's encapsulate that in a function that simulates a game day.
     """
-    flips = [flip(p) for i in range(n)]
+    flips = [flip(p) for _ in range(n)]
     return sum(flips)
 
 
@@ -85,11 +105,9 @@ def test_game_day():
     # If we run that function many times, we get a sample from the distribution of the number of players.
     """
     game_day(10, 0.7)
-    sample = [game_day(10, 0.7) for i in range(1000)]
+    sample = [game_day(10, 0.7) for _ in range(1000)]
     pmf_sample = Pmf(sample)
     thinkplot.Hist(pmf_sample)
-
-
 
 
 def coin(p):
@@ -102,12 +120,14 @@ def coin(p):
     """
     return Pmf({1: p, 0: 1 - p})
 
+
 def test_conv():
     """
     Here's what it looks like.
     """
     player = coin(0.7)
     player.Print()
+
 
 def test_add():
     """
@@ -116,20 +136,24 @@ def test_add():
     player = coin(0.7)
     (player + player).Print()
 
-def test_mult():
+
+@pytest.fixture(name="prior")
+def prior_fixture():
     """
     If we have 10 players, we can get the prior distribution like this:
     """
     player = coin(0.7)
     prior = sum([player] * 10)
     prior.Print()
+    return prior
+
 
 def test_compare():
     """
     Now we can compare the results of simulation and convolution:
     """
     game_day(10, 0.7)
-    sample = [game_day(10, 0.7) for i in range(1000)]
+    sample = [game_day(10, 0.7) for _ in range(1000)]
     pmf_sample = Pmf(sample)
 
     thinkplot.Hist(pmf_sample, color="C0")
@@ -140,8 +164,9 @@ def test_compare():
     thinkplot.Pmf(prior, color="C1")
     thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
 
-def test_analytic():
-    """
+
+def test_analytic(prior):
+    r"""
     Finally, we can use an analytic distribution.
     The distribution we just computed is the
     [binomial distribution](https://en.wikipedia.org/wiki/Binomial_distribution),
@@ -151,170 +176,164 @@ def test_analytic():
     And we can confirm that the analytic result matches what we computed by convolution.
     """
 
-binomial = thinkbayes.MakeBinomialPmf(10, 0.7)
-thinkplot.Pmf(prior, color="C1")
-thinkplot.Pmf(binomial, color="C2", linestyle="dotted")
-
-thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
-
-# Since two players spoke, we can eliminate the possibility of 0 or 1 players:
+    binomial = thinkbayes.MakeBinomialPmf(10, 0.7)
+    thinkplot.Pmf(prior, color="C1")
+    thinkplot.Pmf(binomial, color="C2", linestyle="dotted")
+    thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
 
 
-thinkplot.Pmf(prior, color="gray")
-del prior[0]
-del prior[1]
-prior.Normalize()
-thinkplot.Pmf(prior, color="C1")
-
-thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
-
-# ### Likelihood
-#
-# There are three components of the likelihood function:
-#
-# * The probability that the highest attribute is 16.
-#
-# * The probability that the lowest attribute is 5.
-#
-# * The probability that the lowest and highest attributes are held by different players.
-#
-# To compute the first component, we have to compute the distribution of the maximum of $6n$ attributes, where $n$ is the number of players.
-#
-# Here is the distribution for a single die.
-
-d6 = Pmf([1, 2, 3, 4, 5, 6])
-d6.Print()
-
-# And here's the distribution for the sum of three dice.
-
-thrice = sum([d6] * 3)
-thinkplot.Pdf(thrice)
-thinkplot.decorate(xlabel="Attribute", ylabel="PMF")
-
-# Here's the CDF for the sum of three dice.
-
-cdf_thrice = thrice.MakeCdf()
-thinkplot.Cdf(cdf_thrice)
-thinkplot.decorate(xlabel="Attribute", ylabel="CDF")
-
-# The `Max` method raises the CDF to a power.  So here's the CDF for the maximum of six attributes.
-
-cdf_max_6 = cdf_thrice.Max(6)
-thinkplot.Cdf(cdf_max_6)
-thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Maximum of 6 attributes")
-
-# If there are `n` players, there are `6*n` attributes.  Here are the distributions for the maximum attribute of `n` players, for a few values of `n`.
-
-
-for n in range(2, 10, 2):
-    cdf_max = cdf_thrice.Max(n * 6)
-    thinkplot.Cdf(cdf_max, label="n=%s" % n)
-
-thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Maximum of 6*n attributes")
-
-# To check that, I'll compute the CDF for 7 players, and estimate it by simulation.
-
-
-n = 7
-cdf = cdf_thrice.Max(n * 6)
-thinkplot.Cdf(cdf, label="n=%s" % n)
-
-sample_max = [max(cdf_thrice.Sample(42)) for i in range(1000)]
-thinkplot.Cdf(thinkbayes.Cdf(sample_max), label="sample")
-
-thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Maximum of 6*n attributes")
-
-
-# Looks good.
-#
-# Now, to compute the minimum, I have to write my own function, because `Cdf` doesn't provide a `Min` function.
-
-
-def compute_cdf_min(cdf, k):
-    """CDF of the min of k samples from cdf.
-    
-    cdf: Cdf object
-    k: number of samples
-    
-    returns: new Cdf object
+def test_eliminate(prior):
     """
-    cdf_min = cdf.Copy()
-    cdf_min.ps = 1 - (1 - cdf_min.ps) ** k
-    return cdf_min
+    Since two players spoke, we can eliminate the possibility of 0 or 1 players:
+    """
+    thinkplot.Pmf(prior, color="gray")
+    del prior[0]
+    del prior[1]
+    prior.Normalize()
+    thinkplot.Pmf(prior, color="C1")
+    thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
 
 
-# Now we can compute the CDF of the minimum attribute for `n` players, for several values of `n`.
+@pytest.fixture(name="thrice")
+def thrice_fixture():
+    """
+    Likelihood
+    There are three components of the likelihood function:
+    * The probability that the highest attribute is 16.
+    * The probability that the lowest attribute is 5.
+    * The probability that the lowest and highest attributes are held by different players.
+    To compute the first component,
+    we have to compute the distribution of the maximum of $6n$ attributes, where $n$ is the number of players.
+    Here is the distribution for a single die and the sum of three dice.
+    """
+    d6 = Pmf([1, 2, 3, 4, 5, 6])
+    d6.Print()
+    thrice = sum([d6] * 3)
+    thinkplot.Pdf(thrice)
+    thinkplot.decorate(xlabel="Attribute", ylabel="PMF")
+    return thrice
 
 
-for n in range(2, 10, 2):
-    cdf_min = compute_cdf_min(cdf_thrice, n * 6)
-    thinkplot.Cdf(cdf_min, label="n=%s" % n)
-
-thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Minimum of 6*n attributes")
-
-# And again we can check it by comparing to simulation results.
+@pytest.fixture(name="cdf_thrice")
+def cdf_thrice_fixture(thrice):
+    return thrice.MakeCdf()
 
 
-n = 7
-cdf = compute_cdf_min(cdf_thrice, n * 6)
-thinkplot.Cdf(cdf, label="n=%s" % n)
+def test_cdf_max(cdf_thrice):
+    """
+    Here's the CDF for the sum of three dice.
+    The `Max` method raises the CDF to a power.  So here's the CDF for the maximum of six attributes.
+    """
 
-sample_min = [min(cdf_thrice.Sample(42)) for i in range(1000)]
-thinkplot.Cdf(thinkbayes.Cdf(sample_min), label="sample")
-
-thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Minimum of 6*n attributes")
-
-# For efficiency and conciseness, it is helpful to precompute the distributions for the relevant values of `n`, and store them in dictionaries.
-
-
-like_min = {}
-like_max = {}
-
-for n in range(2, 11):
-    cdf_min = compute_cdf_min(cdf_thrice, n * 6)
-    like_min[n] = cdf_min.MakePmf()
-    cdf_max = cdf_thrice.Max(n * 6)
-    like_max[n] = cdf_max.MakePmf()
-    print(like_min[n][5], like_max[n][16])
+    thinkplot.Cdf(cdf_thrice)
+    thinkplot.decorate(xlabel="Attribute", ylabel="CDF")
+    cdf_max_6 = cdf_thrice.Max(6)
+    thinkplot.Cdf(cdf_max_6)
+    thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Maximum of 6 attributes")
 
 
-# The output shows that the particular data we saw is symmetric: the chance that 16 is the maximum is the same as the chance that 5 is the minimum.
-#
-# Finally, we need the probability that the minimum and maximum are held by the same person.  If there are `n` players, there are `6*n` attributes.
-#
-# Let's call the player with the highest attribute Max.  What is the chance that Max also has the lowest attribute?  Well Max has 5 more attributes, out of a total of `6*n-1` remaining attributes.
-#
-# So here's `prob_same` as a function of `n`.
+def test_n_cdf_max(cdf_thrice):
+    """
+    If there are `n` players, there are `6*n` attributes.
+    Here are the distributions for the maximum attribute of `n` players, for a few values of `n`.
+    """
+
+    for n in range(2, 10, 2):
+        cdf_max = cdf_thrice.Max(n * 6)
+        thinkplot.Cdf(cdf_max, label="n=%s" % n)
+
+    thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Maximum of 6*n attributes")
 
 
-def prob_same(n):
-    return 5 / (6 * n - 1)
+def test_n_sim(cdf_thrice):
+    """
+    To check that, I'll compute the CDF for 7 players, and estimate it by simulation.
+    """
+
+    n = 7
+    cdf = cdf_thrice.Max(n * 6)
+    thinkplot.Cdf(cdf, label="n=%s" % n)
+    sample_max = [max(cdf_thrice.Sample(42)) for _ in range(1000)]
+    thinkplot.Cdf(thinkbayes.Cdf(sample_max), label="sample")
+    thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Maximum of 6*n attributes")
 
 
-for n in range(2, 11):
-    print(n, prob_same(n))
+def test_compute_cdf_min(cdf_thrice):
+    """
+    Now, to compute the minimum, I have to write my own function, because `Cdf` doesn't provide a `Min` function.
+    Now we can compute the CDF of the minimum attribute for `n` players, for several values of `n`.
+    """
 
-# Here's the prior we computed above.
+    for n in range(2, 10, 2):
+        cdf_min = compute_cdf_min(cdf_thrice, n * 6)
+        thinkplot.Cdf(cdf_min, label="n=%s" % n)
 
-suite = Dungeons(prior)
-thinkplot.Hist(suite)
-thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
-suite.Mean()
+    thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Minimum of 6*n attributes")
 
-# And here's the update based on the data in the problem statement.
 
-suite.Update((5, 16, False))
+def test_compute_cdf_min_sim(cdf_thrice):
+    # And again we can check it by comparing to simulation results.
+    n = 7
+    cdf = compute_cdf_min(cdf_thrice, n * 6)
+    thinkplot.Cdf(cdf, label="n=%s" % n)
 
-# Here's the posterior.
+    sample_min = [min(cdf_thrice.Sample(42)) for _ in range(1000)]
+    thinkplot.Cdf(thinkbayes.Cdf(sample_min), label="sample")
 
-thinkplot.Hist(suite)
-thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
-suite.Mean()
+    thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Minimum of 6*n attributes")
 
-suite.Print()
 
-# Based on the data, I am 94% sure there are between 5 and 9 players.
+def test_precompute(cdf_thrice):
+    """
+    For efficiency and conciseness,
+    it is helpful to precompute the distributions for the relevant values of `n`, and store them in dictionaries.
 
-suite.CredibleInterval()
+    The output shows that the particular data we saw is symmetric:
+    the chance that 16 is the maximum is the same as the chance that 5 is the minimum.
+    """
 
-sum(suite[n] for n in [5, 6, 7, 8, 9])
+    for n in range(2, 11):
+        cdf_min = compute_cdf_min(cdf_thrice, n * 6)
+        like_min[n] = cdf_min.MakePmf()
+        cdf_max = cdf_thrice.Max(n * 6)
+        like_max[n] = cdf_max.MakePmf()
+        print(like_min[n][5], like_max[n][16])
+
+
+def test_min_max_same(prior):
+    """
+    Finally, we need the probability that the minimum and maximum are held by the same person.
+    If there are `n` players, there are `6*n` attributes.
+    Let's call the player with the highest attribute Max.
+    What is the chance that Max also has the lowest attribute?
+    Well Max has 5 more attributes, out of a total of `6*n-1` remaining attributes.
+    So here's `prob_same` as a function of `n`.
+    """
+
+    for n in range(2, 11):
+        print(n, prob_same(n))
+
+    # Here's the prior we computed above.
+
+    suite = Dungeons(prior)
+    thinkplot.Hist(suite)
+    thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
+    suite.Mean()
+
+    # And here's the update based on the data in the problem statement.
+
+    suite.Update((5, 16, False))
+
+    # Here's the posterior.
+
+    thinkplot.Hist(suite)
+    thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
+    suite.Mean()
+
+    suite.Print()
+
+    # Based on the data, I am 94% sure there are between 5 and 9 players.
+
+    suite.CredibleInterval()
+
+    sum(suite[n] for n in [5, 6, 7, 8, 9])
