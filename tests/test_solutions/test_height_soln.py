@@ -1,125 +1,70 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
-
-# # Think Bayes
-#
-# This notebook presents code and exercises from Think Bayes, second edition.
-#
-# Copyright 2018 Allen B. Downey
-#
-# MIT License: https://opensource.org/licenses/MIT
-
-# +
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
-
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
+"""
+Think Bayes
+This notebook presents code and exercises from Think Bayes, second edition.
+Copyright 2018 Allen B. Downey
+MIT License: https://opensource.org/licenses/MIT
+"""
 
 import numpy as np
 import pandas as pd
 
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
-
-# -
-
-# ### The height problem
-#
-# For adult male residents of the US, the mean and standard deviation of height are 178 cm and 7.7 cm.  For adult female residents the corresponding stats are 163 cm and 7.3 cm.  Suppose you learn that someone is 170 cm tall.  What is the probability that they are male?
-#
-# Run this analysis again for a range of observed heights and plot a curve that shows P(male) versus height.  What is the mathematical form of this function?
-
-# To represent the likelihood functions, I'll use `norm` from `scipy.stats`, which returns a "frozen" random variable (RV) that represents a normal distribution with given parameters.
-#
-
-# +
 from scipy.stats import norm
 
-dist_height = dict(male=norm(178, 7.7), female=norm(163, 7.3))
-
-
-# -
-
-# Write a class that implements `Likelihood` using the frozen distributions.  Here's starter code:
-
 
 class Height(Suite):
+    """
+    The height problem
+    For adult male residents of the US, the mean and standard deviation of height are 178 cm and 7.7 cm.
+    For adult female residents the corresponding stats are 163 cm and 7.3 cm.
+    Suppose you learn that someone is 170 cm tall.
+    What is the probability that they are male?
+
+    Run this analysis again for a range of observed heights and plot a curve that shows P(male) versus height.
+    What is the mathematical form of this function?
+    To represent the likelihood functions,
+    I'll use `norm` from `scipy.stats`, which returns a "frozen" random variable (RV)
+    that represents a normal distribution with given parameters.
+    """
+
     def Likelihood(self, data, hypo):
         """
         data: height in cm
         hypo: 'male' or 'female'
         """
-        return 1
-
-
-# +
-# Solution
-
-
-class Height(Suite):
-    def Likelihood(self, data, hypo):
-        """
-        data: height in cm
-        hypo: 'male' or 'female'
-        """
+        self.dist_height = dict(male=norm(178, 7.7), female=norm(163, 7.3))
         height = data
-        return dist_height[hypo].pdf(height)
+        return self.dist_height[hypo].pdf(height)
+
+    def prob_male(self, height):
+        """
+        Compute the probability of being male as a function of height, for a range of values between 150 and 200.
+        """
+        self.Update(height)
+        return self["male"]
 
 
-# -
-
-# Here's the prior.
-
-suite = Height(dict(male=0.49, female=0.51))
-for hypo, prob in suite.Items():
-    print(hypo, prob)
-
-# And the update:
-
-suite.Update(170)
-for hypo, prob in suite.Items():
-    print(hypo, prob)
-
-
-# Compute the probability of being male as a function of height, for a range of values between 150 and 200.
-
-# +
-# Solution
-
-
-def prob_male(height):
+def test_Height():
     suite = Height(dict(male=0.49, female=0.51))
-    suite.Update(height)
-    return suite["male"]
+    for hypo, prob in suite.Items():
+        print(hypo, prob)
+
+    suite.Update(170)
+    for hypo, prob in suite.Items():
+        print(hypo, prob)
 
 
-# +
-# Solution
+def test_prob_male():
+    heights = np.linspace(130, 210)
+    series = pd.Series(index=heights)
+    suite = Height(dict(male=0.49, female=0.51))
+    for height in heights:
+        series[height] = suite.prob_male(height)
+    thinkplot.plot(series)
+    thinkplot.decorate(xlabel="Height (cm)", ylabel="Probability of being male")
 
-heights = np.linspace(130, 210)
-series = pd.Series(index=heights)
 
-for height in heights:
-    series[height] = prob_male(height)
-
-# +
-# Solution
-
-thinkplot.plot(series)
-thinkplot.decorate(xlabel="Height (cm)", ylabel="Probability of being male")
-# -
 
 # If you are curious, you can derive the mathematical form of this curve from the PDF of the normal distribution.
 
@@ -182,11 +127,11 @@ thinkplot.decorate(
 
 class Heights(Suite, Joint):
     def Likelihood(self, data, hypo):
-        """
+        '''
         
         data: who is taller, 'A' or 'B'?
         hypo: h1, h2
-        """
+        '''
         h1, h2 = hypo
         if data == "A":
             return 1 if h1 > h2 else 0
@@ -272,12 +217,12 @@ B = mix
 
 
 def faceoff(player1, player2, data):
-    """Compute the posterior distributions for both players.
+    '''Compute the posterior distributions for both players.
     
     player1: Pmf
     player2: Pmf
     data: margin by which player1 beats player2
-    """
+    '''
     joint = make_prior(player1, player2)
     joint.Update(data)
     return joint.Marginal(0), joint.Marginal(1)
@@ -307,10 +252,10 @@ A.Mean()
 
 # Now we can compute the total probability of being male,
 # conditioned on the posterior distribution of height.
-
+height_instance = Height()
 total = 0
 for h, p in A.Items():
-    total += p * prob_male(h)
+    total += p * height_instance.prob_male(h)
 total
 
 # +
