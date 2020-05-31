@@ -10,13 +10,6 @@ import thinkbayes
 from thinkbayes import thinkplot
 from random import random
 
-like_min = {}
-like_max = {}
-
-
-def prob_same(n):
-    return 5 / (6 * n - 1)
-
 
 class Dungeons(Suite):
     """
@@ -40,6 +33,23 @@ class Dungeons(Suite):
 
     """
 
+    def __init__(self, obj=None, label=None):
+        super().__init__(obj, label)
+
+        self.flips = [self.flip(0.7) for _ in range(10)]
+
+        d6 = Pmf([1, 2, 3, 4, 5, 6])
+        thrice = sum([d6] * 3)
+        cdf_thrice = thrice.MakeCdf()
+        self.like_min = {}
+        self.like_max = {}
+        for n in range(2, 11):
+            cdf_min = self.compute_cdf_min(cdf_thrice, n * 6)
+            self.like_min[n] = cdf_min.MakePmf()
+            cdf_max = cdf_thrice.Max(n * 6)
+            self.like_max[n] = cdf_max.MakePmf()
+            print(self.like_min[n][5], self.like_max[n][16])
+
     def Likelihood(self, data, hypo):
         """Probability of the data given the hypothesis.
 
@@ -52,60 +62,55 @@ class Dungeons(Suite):
         lowest, highest, same = data
         n = hypo
 
-        p = prob_same(n)
+        p = self.prob_same(n)
         like = p if same else 1 - p
 
-        like *= like_min[n][lowest]
-        like *= like_max[n][highest]
+        like *= self.like_min[n][lowest]
+        like *= self.like_max[n][highest]
 
         return like
 
+    @staticmethod
+    def prob_same(n):
+        return 5 / (6 * n - 1)
 
-def flip(p):
-    """
-    First, simulation.  Here's a function that flips a coin with probability `p`:
-    :param p:
-    :return:
-    """
-    return random() < p
+    @staticmethod
+    def compute_cdf_min(cdf, k):
+        """CDF of the min of k samples from cdf.
 
+        cdf: Cdf object
+        k: number of samples
 
-def compute_cdf_min(cdf, k):
-    """CDF of the min of k samples from cdf.
+        returns: new Cdf object
+        """
+        cdf_min = cdf.Copy()
+        cdf_min.ps = 1 - (1 - cdf_min.ps) ** k
+        return cdf_min
 
-    cdf: Cdf object
-    k: number of samples
+    @staticmethod
+    def flip(p):
+        """
+        First, simulation.  Here's a function that flips a coin with probability `p`:
+        :param p:
+        :return:
+        """
+        return random() < p
 
-    returns: new Cdf object
-    """
-    cdf_min = cdf.Copy()
-    cdf_min.ps = 1 - (1 - cdf_min.ps) ** k
-    return cdf_min
-
-
-def test_flip():
-    """
-    We can use it to flip a coin for each member of the club.
-    # And count the number that show up on game day.
-    """
-    flips = [flip(0.7) for _ in range(10)]
-    assert sum(flips) == 8
-
-
-def game_day(n, p):
-    """
-    Let's encapsulate that in a function that simulates a game day.
-    """
-    flips = [flip(p) for _ in range(n)]
-    return sum(flips)
+    def game_day(self, n, p):
+        """
+        Let's encapsulate that in a function that simulates a game day.
+        """
+        flips = [self.flip(p) for _ in range(n)]
+        return sum(flips)
 
 
 def test_game_day():
     """
     # If we run that function many times, we get a sample from the distribution of the number of players.
     """
-    game_day(10, 0.7)
-    sample = [game_day(10, 0.7) for _ in range(1000)]
+    dungeon_instance = Dungeons()
+    dungeon_instance.game_day(10, 0.7)
+    sample = [dungeon_instance.game_day(10, 0.7) for _ in range(1000)]
     pmf_sample = Pmf(sample)
     thinkplot.Hist(pmf_sample)
 
@@ -152,8 +157,9 @@ def test_compare():
     """
     Now we can compare the results of simulation and convolution:
     """
-    game_day(10, 0.7)
-    sample = [game_day(10, 0.7) for _ in range(1000)]
+    dungeon_instance = Dungeons()
+    dungeon_instance.game_day(10, 0.7)
+    sample = [dungeon_instance.game_day(10, 0.7) for _ in range(1000)]
     pmf_sample = Pmf(sample)
 
     thinkplot.Hist(pmf_sample, color="C0")
@@ -219,6 +225,36 @@ def cdf_thrice_fixture(thrice):
     return thrice.MakeCdf()
 
 
+@pytest.fixture(name="like_min")
+def like_min_fixture(cdf_thrice):
+    dungeon_instance = Dungeons()
+    like_min = {}
+    like_max = {}
+
+    for n in range(2, 11):
+        cdf_min = dungeon_instance.compute_cdf_min(cdf_thrice, n * 6)
+        like_min[n] = cdf_min.MakePmf()
+        cdf_max = cdf_thrice.Max(n * 6)
+        like_max[n] = cdf_max.MakePmf()
+        print(like_min[n][5], like_max[n][16])
+    return like_min
+
+
+@pytest.fixture(name="like_max")
+def like_max_fixture(cdf_thrice):
+    like_min = {}
+    like_max = {}
+    dungeon_instance = Dungeons()
+
+    for n in range(2, 11):
+        cdf_min = dungeon_instance.compute_cdf_min(cdf_thrice, n * 6)
+        like_min[n] = cdf_min.MakePmf()
+        cdf_max = cdf_thrice.Max(n * 6)
+        like_max[n] = cdf_max.MakePmf()
+        print(like_min[n][5], like_max[n][16])
+    return like_max
+
+
 def test_cdf_max(cdf_thrice):
     """
     Here's the CDF for the sum of three dice.
@@ -263,18 +299,21 @@ def test_compute_cdf_min(cdf_thrice):
     Now, to compute the minimum, I have to write my own function, because `Cdf` doesn't provide a `Min` function.
     Now we can compute the CDF of the minimum attribute for `n` players, for several values of `n`.
     """
-
+    dungeon_instance = Dungeons()
     for n in range(2, 10, 2):
-        cdf_min = compute_cdf_min(cdf_thrice, n * 6)
+        cdf_min = dungeon_instance.compute_cdf_min(cdf_thrice, n * 6)
         thinkplot.Cdf(cdf_min, label="n=%s" % n)
 
     thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Minimum of 6*n attributes")
 
 
 def test_compute_cdf_min_sim(cdf_thrice):
-    # And again we can check it by comparing to simulation results.
+    """
+    And again we can check it by comparing to simulation results.
+    """
+    dungeon_instance = Dungeons()
     n = 7
-    cdf = compute_cdf_min(cdf_thrice, n * 6)
+    cdf = dungeon_instance.compute_cdf_min(cdf_thrice, n * 6)
     thinkplot.Cdf(cdf, label="n=%s" % n)
 
     sample_min = [min(cdf_thrice.Sample(42)) for _ in range(1000)]
@@ -283,7 +322,7 @@ def test_compute_cdf_min_sim(cdf_thrice):
     thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Minimum of 6*n attributes")
 
 
-def test_precompute(cdf_thrice):
+def test_precompute(cdf_thrice, like_min, like_max):
     """
     For efficiency and conciseness,
     it is helpful to precompute the distributions for the relevant values of `n`, and store them in dictionaries.
@@ -291,16 +330,16 @@ def test_precompute(cdf_thrice):
     The output shows that the particular data we saw is symmetric:
     the chance that 16 is the maximum is the same as the chance that 5 is the minimum.
     """
-
+    dungeon_instance = Dungeons()
     for n in range(2, 11):
-        cdf_min = compute_cdf_min(cdf_thrice, n * 6)
+        cdf_min = dungeon_instance.compute_cdf_min(cdf_thrice, n * 6)
         like_min[n] = cdf_min.MakePmf()
         cdf_max = cdf_thrice.Max(n * 6)
         like_max[n] = cdf_max.MakePmf()
         print(like_min[n][5], like_max[n][16])
 
 
-def test_min_max_same():
+def test_min_max_same(d6):
     """
     Finally, we need the probability that the minimum and maximum are held by the same person.
     If there are `n` players, there are `6*n` attributes.
@@ -309,33 +348,23 @@ def test_min_max_same():
     Well Max has 5 more attributes, out of a total of `6*n-1` remaining attributes.
     So here's `prob_same` as a function of `n`.
     """
+    dungeon_instance = Dungeons()
 
-    for n in range(2, 11):
-        print(n, prob_same(n))
+    dungeon_instance.game_day(10, 0.7)
 
-    # Here's the prior we computed above.
     player = coin(0.7)
+
     prior = sum([player] * 10)
 
-    suite = Dungeons(prior)
-    thinkplot.Hist(suite)
-    thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
-    suite.Mean()
+    del prior[0]
+    del prior[1]
+    prior.Normalize()
 
-    # And here's the update based on the data in the problem statement.
+    suite = Dungeons(prior)
 
     suite.Update((5, 16, False))
 
-    # Here's the posterior.
-
-    thinkplot.Hist(suite)
-    thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
-    suite.Mean()
-
-    suite.Print()
-
-    # Based on the data, I am 94% sure there are between 5 and 9 players.
-
-    suite.CredibleInterval()
-
-    sum(suite[n] for n in [5, 6, 7, 8, 9])
+    ci = suite.CredibleInterval()
+    print(ci)
+    result = sum(suite[n] for n in range(ci[0], ci[1] + 1))
+    assert result == pytest.approx(0.9, abs=0.1)
