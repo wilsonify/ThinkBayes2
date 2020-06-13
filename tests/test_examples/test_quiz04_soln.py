@@ -1,41 +1,14 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
+"""
+Think Bayes
+This notebook presents code and exercises from Think Bayes, second edition.
+Copyright 2018 Allen B. Downey
+MIT License: https://opensource.org/licenses/MIT
+"""
 
-# # Think Bayes
-#
-# This notebook presents code and exercises from Think Bayes, second edition.
-#
-# Copyright 2018 Allen B. Downey
-#
-# MIT License: https://opensource.org/licenses/MIT
-
-# +
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
-
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
-
-import math
 import numpy as np
-
 from thinkbayes import Pmf, Suite, Joint
 import thinkbayes
 from thinkbayes import thinkplot
-
-
-# -
 
 
 class Battleship(Suite, Joint):
@@ -49,24 +22,25 @@ class Battleship(Suite, Joint):
         return p if result == "hit" else 1 - p
 
 
-gap = thinkbayes.MakeNormalPmf(7, 1, 3)
-thinkplot.plot(gap)
+def test_battle():
+    gap = thinkbayes.MakeNormalPmf(7, 1, 3)
+    thinkplot.plot(gap)
 
-metapmf = thinkbayes.Pmf()
-for t, p in gap.Items():
-    arrivals = thinkbayes.MakePoissonPmf(1.3 * t, 25)
-    thinkplot.plot(arrivals, color="C0", linewidth=0.1)
-    thinkbayes.metapmf[arrivals] = p
+    metapmf = thinkbayes.Pmf()
+    for t, p in gap.Items():
+        arrivals = thinkbayes.MakePoissonPmf(1.3 * t, 25)
+        thinkplot.plot(arrivals, color="C0", linewidth=0.1)
+        metapmf[arrivals] = p
 
-metapmf = thinkbayes.Pmf()
-for t, p in gap.Items():
-    arrivals = thinkbayes.MakePoissonPmf(1.3 * t, 25)
-    thinkplot.plot(arrivals, color="C0", linewidth=0.1)
-    metapmf[arrivals] = p
+    metapmf = thinkbayes.Pmf()
+    for t, p in gap.Items():
+        arrivals = thinkbayes.MakePoissonPmf(1.3 * t, 25)
+        thinkplot.plot(arrivals, color="C0", linewidth=0.1)
+        metapmf[arrivals] = p
 
-mix = thinkbayes.MakeMixture(metapmf)
-mix.Mean()
-thinkplot.Hist(mix)
-thinkplot.decorate(xlabel="Number of passengers", ylabel="PMF")
+    mix = thinkbayes.MakeMixture(metapmf)
+    mix.Mean()
+    thinkplot.Hist(mix)
+    thinkplot.decorate(xlabel="Number of passengers", ylabel="PMF")
 
-mix[10]
+    mix[10]

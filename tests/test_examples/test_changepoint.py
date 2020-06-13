@@ -3,6 +3,7 @@ Think Bayes
 Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 import os
 
 import numpy as np
@@ -86,9 +87,9 @@ class Change(Suite, Joint):
 
 @pytest.fixture(name="crime_data_df")
 def crime_data_fixture():
-    crime_data_df = pd.read_csv(os.path.join(DATADIR, "BPD_Part_1_Victim_Based_Crime_Data.csv"), parse_dates=[0])
-    crime_data_df.head()
-    crime_data_df.shape
+    logging.debug("%r", f"DATADIR = {DATADIR}")
+    crime_data_file_path = os.path.join(DATADIR, "BPD_Part_1_Victim_Based_Crime_Data.csv")
+    crime_data_df = pd.read_csv(crime_data_file_path, parse_dates=['CrimeDate'])
     return crime_data_df
 
 
@@ -124,7 +125,7 @@ def test_shootings(crime_data_df):
     counts = counts.reindex(index, fill_value=0)
     counts.head()
 
-    counts.plot()
+    counts.plot.line()
     thinkplot.decorate(xlabel="Date", ylabel="Number of shootings")
     from matplotlib import pyplot as plt
     # plt.savefig("Number of shootings.png")
