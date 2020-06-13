@@ -260,7 +260,7 @@ def test_blaster6():
 
     pmf = Pmf(ks)
     thinkplot.Hist(pmf)  # And the results look similar.
-    assert np.mean(ks) == pytest.approx(3.7, abs=0.1)
+    assert np.mean(ks) == pytest.approx(3.7, abs=0.2)
 
 
 def test_blaster7():
