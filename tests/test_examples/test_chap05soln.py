@@ -1,16 +1,3 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
 
 # # Think Bayes: Chapter 5
 #
@@ -20,13 +7,13 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 from __future__ import print_function, division
 
 
 import warnings
 
-warnings.filterwarnings("ignore")
+
 
 import numpy as np
 
@@ -34,7 +21,7 @@ from thinkbayes import Pmf, Cdf, Suite, Beta
 from thinkbayes import thinkplot
 
 
-# -
+
 
 # ## Odds
 #
@@ -109,13 +96,13 @@ post_prob
 #
 # So the likelihood ratio is:
 
-# +
+
 like1 = 0.01
 like2 = 2 * 0.6 * 0.01
 
 likelihood_ratio = like1 / like2
 likelihood_ratio
-# -
+
 
 # Since the ratio is less than 1, it is evidence *against* the hypothesis that Oliver left blood at the scence.
 #
@@ -130,15 +117,15 @@ Probability(post_odds)
 #
 # Notice that evidence with the same strength has a different effect on probability, depending on where you started.
 
-# +
+
 # Solution
 
 post_odds = Odds(0.9) * like1 / like2
 Probability(post_odds)
 
-# +
+
 # Solution
 
 post_odds = Odds(0.1) * like1 / like2
 Probability(post_odds)
-# -
+

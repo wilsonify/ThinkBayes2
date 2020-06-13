@@ -1,16 +1,3 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
 
 # # Think Bayes
 #
@@ -20,20 +7,16 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
 
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
-# import classes from thinkbayes
+
+
 from thinkbayes import Hist, Pmf, Suite, Beta
 from thinkbayes import thinkplot
 
 import numpy as np
 
-# -
+
 
 # ## Comparing distributions
 #
@@ -67,7 +50,7 @@ thinkplot.Config(xlabel="x", ylabel="Probability")
 #
 # I'll start with sampling.  The Beta object provides a method that draws a random value from a Beta distribution:
 
-# +
+
 iters = 1000
 count = 0
 for _ in range(iters):
@@ -77,7 +60,7 @@ for _ in range(iters):
         count += 1
 
 count / iters
-# -
+
 
 # `Beta` also provides `Sample`, which returns a NumPy array, so we an perform the comparisons using array operations:
 
@@ -118,7 +101,7 @@ pmf1.ProbLess(pmf2)
 #
 # I'll do it by sampling first.
 
-# +
+
 import random
 
 
@@ -126,13 +109,13 @@ def flip(p):
     return random.random() < p
 
 
-# -
+
 
 # `flip` returns True with probability `p` and False with probability `1-p`
 #
 # Now we can simulate 1000 rematches and count wins and losses.
 
-# +
+
 iters = 1000
 wins = 0
 losses = 0
@@ -154,7 +137,7 @@ for _ in range(iters):
         losses += 1
 
 wins / iters, losses / iters
-# -
+
 
 # Or, realizing that the distribution of `k` is binomial, we can simplify the code using NumPy:
 
@@ -168,7 +151,7 @@ np.mean(rhode_rematch < wei_rematch)
 
 # Alternatively, we can make a mixture that represents the distribution of `k`, taking into account our uncertainty about `x`:
 
-# +
+
 from thinkbayes import MakeBinomialPmf
 
 
@@ -181,7 +164,7 @@ def MakeBinomialMix(pmf, label=""):
     return mix
 
 
-# -
+
 
 rhode_rematch = MakeBinomialMix(rhode.MakePmf(), label="Rhode")
 wei_rematch = MakeBinomialMix(wei.MakePmf(), label="Wei")
@@ -193,7 +176,7 @@ rhode_rematch.ProbGreater(wei_rematch), rhode_rematch.ProbLess(wei_rematch)
 
 # Alternatively, we could use MakeMixture:
 
-# +
+
 from thinkbayes import MakeMixture
 
 
@@ -205,7 +188,7 @@ def MakeBinomialMix2(pmf):
     return MakeMixture(binomials)
 
 
-# -
+
 
 # Here's how we use it.
 
@@ -263,26 +246,26 @@ thinkplot.Pdf(pmf)
 
 # **Exercise:**  The Pmf class also provides the `-` operator, which computes the distribution of the difference in values from two distributions.  Use the distributions from the previous section to compute the distribution of the differential between Rhode and Wei in a rematch.  On average, how many clays should we expect Rhode to win by?  What is the probability that Rhode wins by 10 or more?
 
-# +
+
 # Solution
 
 pmf = rhode_rematch - wei_rematch
 thinkplot.Pdf(pmf)
 
-# +
+
 # Solution
 
 # On average, we expect Rhode to win by about 1 clay.
 
 pmf.Mean(), pmf.Median(), pmf.Mode()
 
-# +
+
 # Solution
 
 # But there is, according to this model, a 2% chance that she could win by 10.
 
 sum([p for (x, p) in pmf.Items() if x >= 10])
-# -
+
 
 # ## Distribution of maximum
 #

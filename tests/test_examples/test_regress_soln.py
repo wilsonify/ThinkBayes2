@@ -1,16 +1,4 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
+
 
 # # Think Bayes
 #
@@ -18,21 +6,17 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
 
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
+
 
 import numpy as np
 
-# import classes from thinkbayes
+
 from thinkbayes import Pmf, Cdf, Suite, Joint
 
 from thinkbayes import thinkplot
 
-# -
+
 
 # ## Bayesian regression
 #
@@ -61,7 +45,7 @@ thinkplot.decorate(xlabel="x", ylabel="y")
 #
 # Your results will depend on the random data you generated, but in general you should find that the posterior marginal distributions peak near the actual parameters.
 
-# +
+
 from scipy.stats import norm
 
 
@@ -75,7 +59,7 @@ class Regress(Suite, Joint):
         return 1
 
 
-# +
+
 # Solution
 
 from scipy.stats import norm
@@ -97,7 +81,7 @@ class Regress(Suite, Joint):
         return like
 
 
-# -
+
 
 params = np.linspace(-4, 4, 21)
 
@@ -140,13 +124,13 @@ pm.GLM
 thinkplot.plot(xs, ys)
 thinkplot.decorate(xlabel="x", ylabel="y")
 
-# +
+
 import pymc3 as pm
 
 with pm.Model() as model:
     """Fill this in"""
 
-# +
+
 # Solution
 
 
@@ -159,7 +143,7 @@ with pm.Model() as model:
     y = pm.Normal("y", mu=y_est, sd=sigma, observed=ys)
     trace = pm.sample_prior_predictive(100)
 
-# +
+
 # Solution
 
 for y_prior in trace["y"]:
@@ -167,7 +151,7 @@ for y_prior in trace["y"]:
 
 thinkplot.decorate(xlabel="x", ylabel="y")
 
-# +
+
 # Solution
 
 with pm.Model() as model:
@@ -179,10 +163,10 @@ with pm.Model() as model:
     y = pm.Normal("y", mu=y_est, sd=sigma, observed=ys)
     trace = pm.sample(1000, tune=2000)
 
-# +
+
 # Solution
 
 pm.traceplot(trace)
-# -
+
 
 # The posterior distributions for these parameters should be similar to what we got with the grid algorithm.

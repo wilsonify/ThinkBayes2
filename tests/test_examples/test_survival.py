@@ -10,13 +10,9 @@
 # MIT License: https://opensource.org/licenses/MIT
 
 
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
 
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
-# import classes from thinkbayes
+
 from thinkbayes import Pmf, Cdf, Suite, Joint
 
 import thinkbayes

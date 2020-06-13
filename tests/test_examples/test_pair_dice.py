@@ -9,11 +9,7 @@
 #
 
 
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
 
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
 import numpy as np
 import pandas as pd

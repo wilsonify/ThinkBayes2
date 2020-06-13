@@ -1,16 +1,3 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
 
 # # Think Bayes
 #
@@ -20,20 +7,16 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
 
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
-# import classes from thinkbayes
+
+
 from thinkbayes import Pmf, Beta
 from thinkbayes import thinkplot
 
 import numpy as np
 
-# -
+
 
 # ## The skeet problem
 #
@@ -43,7 +26,7 @@ import numpy as np
 #
 # As always, you will have to make some modeling decisions, but one approach is to estimate, for each shooter, the probability of hitting a skeet.  Then, to estimate the probability that Rhode is a better shooter, you can draw samples from the two posterior distributions and compare them.  To estimate the probability of winning a rematch, you could draw samples from the posterior distributions and simulate a round of 25 shots.
 
-# +
+
 # Solution
 
 # Here's a Beta distribution that represents Rhode's probability
@@ -52,7 +35,7 @@ import numpy as np
 rhode_beta = Beta(1, 1, label="Rhode")
 rhode_beta.Update((22, 11))
 
-# +
+
 # Solution
 
 # And another Beta for Wei
@@ -60,7 +43,7 @@ rhode_beta.Update((22, 11))
 wei_beta = Beta(1, 1, label="Wei")
 wei_beta.Update((21, 12))
 
-# +
+
 # Solution
 
 # Here's what the posteriors look like
@@ -69,7 +52,7 @@ thinkplot.Pdf(rhode_beta.MakePmf())
 thinkplot.Pdf(wei_beta.MakePmf())
 thinkplot.Config(xlabel="x", ylabel="Probability")
 
-# +
+
 # Solution
 
 # To estimate the probability of superiority, we can
@@ -78,21 +61,21 @@ thinkplot.Config(xlabel="x", ylabel="Probability")
 rhode_sample = rhode_beta.Sample(10000)
 wei_sample = wei_beta.Sample(10000)
 
-# +
+
 # Solution
 
 # The probability that Rhode is a better shooter is about 60%
 
 np.mean(rhode_sample > wei_sample)
 
-# +
+
 # Solution
 
 # The probability that Wei is a better shooter is about 40%
 
 np.mean(rhode_sample < wei_sample)
 
-# +
+
 # Solution
 
 # To simulate a rematch, we can draw `p` from the posterior
@@ -102,7 +85,7 @@ np.mean(rhode_sample < wei_sample)
 rhode_rematch = np.random.binomial(25, rhode_sample)
 thinkplot.Hist(Pmf(rhode_rematch))
 
-# +
+
 # Solution
 
 # The probability that Rhode wins a rematch (without going
@@ -111,14 +94,14 @@ thinkplot.Hist(Pmf(rhode_rematch))
 wei_rematch = np.random.binomial(25, wei_sample)
 np.mean(rhode_rematch > wei_rematch)
 
-# +
+
 # Solution
 
 # The probability that Wei wins the rematch is about 39%
 
 np.mean(rhode_rematch < wei_rematch)
 
-# +
+
 # Solution
 
 # And the chance that the rematch also goes to sudden death is
@@ -128,4 +111,4 @@ np.mean(rhode_rematch < wei_rematch)
 # that Rhode winds is about 56%
 
 np.mean(rhode_rematch == wei_rematch)
-# -
+

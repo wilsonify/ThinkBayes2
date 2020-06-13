@@ -8,7 +8,7 @@ import logging
 import numpy as np
 import pandas as pd
 from itertools import product
-# import classes from thinkbayes
+
 import pytest
 from thinkbayes import Pmf, Cdf, Suite, Joint
 

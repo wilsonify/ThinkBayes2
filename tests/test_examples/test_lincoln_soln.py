@@ -1,16 +1,3 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
 
 # # Think Bayes
 #
@@ -20,21 +7,17 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
 
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
-# import classes from thinkbayes
+
+
 from thinkbayes import Suite, Joint
 from thinkbayes import thinkplot
 
 import numpy as np
 
 
-# -
+
 
 # ## The Lincoln index problem
 #
@@ -127,7 +110,7 @@ class Lincoln(Suite, Joint):
         return part1 * part2
 
 
-# +
+
 from itertools import product
 
 ns = range(32, 350)
@@ -135,12 +118,12 @@ ps = np.linspace(0, 1, 31)
 hypos = product(ns, ps, ps)
 
 suite = Lincoln(hypos)
-# -
+
 
 data = 20, 15, 3
 suite.Update(data)
 
-# +
+
 n_marginal = suite.Marginal(0)
 
 print("post mean n", n_marginal.Mean())
@@ -149,7 +132,7 @@ print("MAP n", n_marginal.MaximumLikelihood())
 thinkplot.Pdf(n_marginal, label="n")
 thinkplot.decorate(xlabel="Number of bugs", ylabel="PMF")
 
-# +
+
 p1_marginal = suite.Marginal(1, label="p1")
 p2_marginal = suite.Marginal(2, label="p2")
 
@@ -163,4 +146,4 @@ thinkplot.Pdf(p1_marginal)
 thinkplot.Pdf(p2_marginal)
 
 thinkplot.decorate(xlabel="Probability of finding a bug", ylabel="PMF")
-# -
+

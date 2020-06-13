@@ -1,18 +1,3 @@
-# -*- coding: utf-8 -*-
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
-
 # # Think Bayes: Chapter 9
 #
 # This notebook presents code and exercises from Think Bayes, second edition.
@@ -21,13 +6,13 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 from __future__ import print_function, division
 
 
 import warnings
 
-warnings.filterwarnings("ignore")
+
 
 import math
 import numpy as np
@@ -35,7 +20,7 @@ import numpy as np
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
 
-# -
+
 
 # ## Improving Reading Ability
 #
@@ -49,12 +34,12 @@ from thinkbayes import thinkplot
 
 # I'll use Pandas to load the data into a DataFrame.
 
-# +
+
 import pandas as pd
 
 df = pd.read_csv("../data/drp_scores.csv", skiprows=21, delimiter="\t")
 df.head()
-# -
+
 
 # And use `groupby` to compute the means for the two groups.
 
@@ -64,7 +49,7 @@ for name, group in grouped:
 
 # The `Normal` class provides a `Likelihood` function that computes the likelihood of a sample from a normal distribution.
 
-# +
+
 from scipy.stats import norm
 from thinkbayes import EvalNormalPdf
 
@@ -81,7 +66,7 @@ class Normal(Suite, Joint):
         return np.prod(likes)
 
 
-# -
+
 
 # The prior distributions for `mu` and `sigma` are uniform.
 
@@ -90,13 +75,13 @@ sigmas = np.linspace(5, 30, 101)
 
 # I use `itertools.product` to enumerate all pairs of `mu` and `sigma`.
 
-# +
+
 from itertools import product
 
 control = Normal(product(mus, sigmas))
 data = df[df.Treatment == "Control"].Response
 control.Update(data)
-# -
+
 
 # After the update, we can plot the probability of each `mu`-`sigma` pair as a contour plot.
 
@@ -117,14 +102,14 @@ thinkplot.Config(xlabel="sigma", ylabel="Pmf")
 
 # **Exercise:** Run this analysis again for the control group.  What is the distribution of the difference between the groups?  What is the probability that the average "reading power" for the treatment group is higher?  What is the probability that the variance of the treatment group is higher?
 
-# +
+
 # Solution
 
 treated = Normal(product(mus, sigmas))
 data = df[df.Treatment == "Treated"].Response
 treated.Update(data)
 
-# +
+
 # Solution
 
 # Here's the posterior joint distribution for the treated group
@@ -132,7 +117,7 @@ treated.Update(data)
 thinkplot.Contour(treated, pcolor=True)
 thinkplot.Config(xlabel="mu", ylabel="Pmf")
 
-# +
+
 # Solution
 
 # The marginal distribution of mu
@@ -141,7 +126,7 @@ pmf_mu1 = treated.Marginal(0)
 thinkplot.Pdf(pmf_mu1)
 thinkplot.Config(xlabel="mu", ylabel="Pmf")
 
-# +
+
 # Solution
 
 # The marginal distribution of sigma
@@ -150,7 +135,7 @@ pmf_sigma1 = treated.Marginal(1)
 thinkplot.Pdf(pmf_sigma1)
 thinkplot.Config(xlabel="sigma", ylabel="Pmf")
 
-# +
+
 # Solution
 
 # Now we can compute the distribution of the difference between groups
@@ -158,7 +143,7 @@ thinkplot.Config(xlabel="sigma", ylabel="Pmf")
 pmf_diff = pmf_mu1 - pmf_mu0
 pmf_diff.Mean(), pmf_diff.MAP()
 
-# +
+
 # Solution
 
 # And CDF_diff(0), which is the probability that the difference is <= 0
@@ -168,7 +153,7 @@ cdf_diff = pmf_diff.MakeCdf()
 thinkplot.Cdf(cdf_diff)
 cdf_diff[0]
 
-# +
+
 # Solution
 
 # Or we could directly compute the probability that mu is
@@ -176,7 +161,7 @@ cdf_diff[0]
 
 pmf_mu1.ProbGreater(pmf_mu0)
 
-# +
+
 # Solution
 
 # Finally, here's the probability that the standard deviation
@@ -185,7 +170,7 @@ pmf_mu1.ProbGreater(pmf_mu0)
 pmf_sigma1.ProbGreater(pmf_sigma0)
 
 
-# +
+
 # It looks like there is a high probability that the mean of
 # the treatment group is higher, and the most likely size of
 # the effect is 9-10 points.
@@ -193,7 +178,7 @@ pmf_sigma1.ProbGreater(pmf_sigma0)
 # It looks like the variance of the treated group is substantially
 # smaller, which suggests that the treatment might be helping
 # low scorers more than high scorers.
-# -
+
 
 # ## Paintball
 
@@ -280,18 +265,18 @@ def StrafingSpeed(alpha, beta, x):
 
 # The prior probabilities for `alpha` and `beta` are uniform.
 
-# +
+
 alphas = range(0, 31)
 betas = range(1, 51)
 locations = range(0, 31)
 
 suite = Paintball(alphas, betas, locations)
 suite.UpdateSet([15, 16, 18, 21])
-# -
+
 
 # To visualize the joint posterior, I take slices for a few values of `beta` and plot the conditional distributions of `alpha`.  If the shooter is close to the wall, we can be somewhat confident of his position.  The farther away he is, the less certain we are.
 
-# +
+
 locations = range(0, 31)
 alpha = 10
 betas = [10, 20, 40]
@@ -303,11 +288,11 @@ for beta in betas:
     thinkplot.Pdf(pmf)
 
 thinkplot.Config(xlabel="Distance", ylabel="Prob")
-# -
+
 
 # Here are the marginal posterior distributions for `alpha` and `beta`.
 
-# +
+
 marginal_alpha = suite.Marginal(0, label="alpha")
 marginal_beta = suite.Marginal(1, label="beta")
 
@@ -320,11 +305,11 @@ thinkplot.Cdf(Cdf(marginal_alpha))
 thinkplot.Cdf(Cdf(marginal_beta))
 
 thinkplot.Config(xlabel="Distance", ylabel="Prob")
-# -
+
 
 # To visualize the joint posterior, I take slices for a few values of `beta` and plot the conditional distributions of `alpha`.  If the shooter is close to the wall, we can be somewhat confident of his position.  The farther away he is, the less certain we are.
 
-# +
+
 betas = [10, 20, 40]
 thinkplot.PrePlot(num=len(betas))
 
@@ -334,19 +319,19 @@ for beta in betas:
     thinkplot.Pdf(cond)
 
 thinkplot.Config(xlabel="Distance", ylabel="Prob")
-# -
+
 
 # Another way to visualize the posterio distribution: a pseudocolor plot of probability as a function of `alpha` and `beta`.
 
-# +
+
 thinkplot.Contour(suite.GetDict(), contour=False, pcolor=True)
 
 thinkplot.Config(xlabel="alpha", ylabel="beta", axis=[0, 30, 0, 20])
-# -
+
 
 # Here's another visualization that shows posterior credible regions.
 
-# +
+
 d = dict((pair, 0) for pair in suite.Values())
 
 percentages = [75, 50, 25]
@@ -361,7 +346,7 @@ thinkplot.Text(17, 15, "50", color="white")
 thinkplot.Text(17, 30, "75")
 
 thinkplot.Config(xlabel="alpha", ylabel="beta", legend=False)
-# -
+
 
 
 # **Exercise:** From [John D. Cook](http://www.johndcook.com/blog/2010/07/13/lincoln-index/)
@@ -372,7 +357,7 @@ thinkplot.Config(xlabel="alpha", ylabel="beta", legend=False)
 #
 # So if the first tester finds 20 bugs, the second finds 15, and they find 3 in common, we estimate that there are about 100 bugs.  What is the Bayesian estimate of the number of errors based on this data?
 
-# +
+
 # Solution
 
 from scipy.special import binom as choose
@@ -405,7 +390,7 @@ class Lincoln(Suite, Joint):
         return part1 * part2
 
 
-# +
+
 # Solution
 
 data = 20, 15, 3
@@ -419,19 +404,19 @@ for n in range(32, 350):
 suite = Lincoln(hypos)
 suite.Update(data)
 
-# +
+
 # Solution
 
 n_marginal = suite.Marginal(0)
 thinkplot.Pmf(n_marginal, label="n")
 thinkplot.Config(xlabel="number of bugs", ylabel="PMF")
 
-# +
+
 # Solution
 
 print("post mean n", n_marginal.Mean())
 print("MAP n", n_marginal.MAP())
-# -
+
 
 # **Exercise:** The GPS problem.  According to [Wikipedia]()
 #
@@ -465,7 +450,7 @@ print("MAP n", n_marginal.MAP())
 #
 # At this point, how certain are you about your location?
 
-# +
+
 # Solution
 
 from thinkbayes import EvalNormalPdf
@@ -488,7 +473,7 @@ class Gps(Suite, Joint):
         return like
 
 
-# +
+
 # Solution
 
 from itertools import product
@@ -497,12 +482,12 @@ coords = np.linspace(-100, 100, 101)
 joint = Gps(product(coords, coords))
 joint.Update((51, -15))
 
-# +
+
 # Solution
 
 joint.Update((48, 90))
 
-# +
+
 # Solution
 
 pairs = [
@@ -518,7 +503,7 @@ pairs = [
 
 joint.UpdateSet(pairs)
 
-# +
+
 # Solution
 
 thinkplot.PrePlot(2)
@@ -527,12 +512,12 @@ pdfy = joint.Marginal(1)
 thinkplot.Pdf(pdfx, label="posterior x")
 thinkplot.Pdf(pdfy, label="posterior y")
 
-# +
+
 # Solution
 
 print(pdfx.Mean(), pdfx.Std())
 print(pdfy.Mean(), pdfy.Std())
-# -
+
 
 # **Exercise:** [The Flea Beetle problem from DASL](http://lib.stat.cmu.edu/DASL/Datafiles/FleaBeetles.html)
 #
@@ -572,14 +557,14 @@ print(pdfy.Mean(), pdfy.Std())
 # 5. Use the function to classify each of the specimens in the table and see how many you get right.
 #
 
-# +
+
 import pandas as pd
 
 df = pd.read_csv("../data/flea_beetles.csv", delimiter="\t")
 df.head()
 
 
-# -
+
 
 
 def plot_cdfs(df, col):
@@ -594,7 +579,7 @@ plot_cdfs(df, "Width")
 
 plot_cdfs(df, "Angle")
 
-# +
+
 from thinkbayes import EvalNormalPdf
 
 
@@ -620,7 +605,7 @@ class Beetle(Suite, Joint):
         return total
 
 
-# +
+
 from itertools import product
 
 
@@ -632,7 +617,7 @@ def MakeWidthSuite(data):
     return suite
 
 
-# -
+
 
 groups = df.groupby("Species")
 
@@ -672,14 +657,14 @@ class Species:
         return like1 * like2
 
 
-# +
+
 species = {}
 
 for name, group in groups:
     suite_width = MakeWidthSuite(group.Width)
     suite_angle = MakeAngleSuite(group.Angle)
     species[name] = Species(name, suite_width, suite_angle)
-# -
+
 
 species["Con"].Likelihood((145, 14))
 

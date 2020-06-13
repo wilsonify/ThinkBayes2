@@ -1,16 +1,4 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
+
 
 # # Think Bayes
 #
@@ -18,24 +6,20 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
 
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
+
 
 import numpy as np
 import pandas as pd
 
-# import classes from thinkbayes
+
 from thinkbayes import Pmf, Cdf, Suite, Joint
 
 from thinkbayes import MakePoissonPmf, EvalBinomialPmf, MakeMixture
 
 from thinkbayes import thinkplot
 
-# -
+
 
 # ## Cats and rats and elephants
 #
@@ -49,7 +33,7 @@ from thinkbayes import thinkplot
 #
 # I'll start by enumerating all possible zoos with `itertools`.
 
-# +
+
 from itertools import combinations
 
 
@@ -60,7 +44,7 @@ def power_set(s):
             yield "".join(combo)
 
 
-# -
+
 
 # Now we can enumerate only the zoos that are possible, given a set of animals known to be present.
 
@@ -82,7 +66,7 @@ def enumerate_zoos(all_species, present):
 
 # Here are the possible zoos.
 
-# +
+
 species = "LTBCRE"
 present = "LTB"
 
@@ -90,7 +74,7 @@ for n, zoo in enumerate_zoos(species, present):
     print(n, zoo)
 
 
-# -
+
 
 # To represent the prior and posterior distributions I'll use a hierarchical model with one Dirichlet object for each possible zoo.
 #
@@ -154,7 +138,7 @@ p = d4.random()
 
 # Now we can compute the probability of the data, given these prevalences, using the multinomial distribution.
 
-# +
+
 from scipy.stats import multinomial
 
 data = [3, 2, 1, 0]
@@ -162,7 +146,7 @@ m = sum(data)
 multinomial(m, p).pmf(data)
 
 
-# -
+
 
 # Since I only observed 3 species, and my hypothetical zoo has 4, I had to zero-pad the data.  Here's a function that makes that easier:
 
@@ -223,14 +207,14 @@ suite = Zoo(
 )
 
 
-# +
+
 def print_zoos(suite):
     for d, p in suite.Items():
         print(p, d.label)
 
 
 print_zoos(suite)
-# -
+
 
 # We can update the top level of the hierarchy by calling `Update`
 

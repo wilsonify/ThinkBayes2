@@ -1,16 +1,3 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
 
 # # Think Bayes
 #
@@ -20,21 +7,17 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
 
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
-# import classes from thinkbayes
+
+
 from thinkbayes import Pmf, Suite, Beta
 from thinkbayes import thinkplot
 
 import numpy as np
 
 
-# -
+
 
 # ## The social desirability problem
 #
@@ -57,7 +40,7 @@ import numpy as np
 #
 # 2. How efficient is this method?  That is, how does the width of the posterior distribution compare to the distribution you would get if 100 people answered the question honestly?
 
-# +
+
 # Solution
 
 
@@ -75,7 +58,7 @@ class Social(Suite):
             return 1 - p_yes
 
 
-# +
+
 # Solution
 
 prior = np.linspace(0, 1, 101)
@@ -84,7 +67,7 @@ suite = Social(prior)
 thinkplot.Pdf(suite, label="Prior")
 thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
 
-# +
+
 # Solution
 
 for i in range(55):
@@ -93,18 +76,18 @@ for i in range(55):
 for i in range(45):
     suite.Update("NO")
 
-# +
+
 # Solution
 
 thinkplot.Pdf(suite, label="Posterior")
 thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
 
-# +
+
 # Solution
 
 suite.Mean(), suite.MAP()
 
-# +
+
 # Solution
 
 # For comparison, what would we think if we had been able
@@ -117,7 +100,7 @@ thinkplot.Pdf(beta.MakePmf(), label="Direct", color="gray")
 thinkplot.Pdf(suite, label="Randomized")
 thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
 
-# +
+
 # Solution
 
 # To see how efficient this method is, we can divide the sample size for
@@ -131,8 +114,8 @@ thinkplot.Pdf(beta.MakePmf(), label="Direct", color="gray")
 thinkplot.Pdf(suite, label="Randomized")
 thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
 
-# +
+
 # Solution
 
 # So the effective sample size is about 25.
-# -
+

@@ -1,18 +1,3 @@
-# -*- coding: utf-8 -*-
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
-
 # # Think Bayes
 #
 # This notebook presents code and exercises from Think Bayes, second edition.
@@ -21,12 +6,8 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
 
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
+
 
 import math
 import numpy as np
@@ -34,7 +15,7 @@ import numpy as np
 from thinkbayes import Hist, Pmf, Suite, Beta
 from thinkbayes import thinkplot
 
-# -
+
 
 # ### The Alien Blaster problem
 #
@@ -46,7 +27,7 @@ from thinkbayes import thinkplot
 #
 # Is this data good or bad; that is, does it increase or decrease your estimate of x for the Alien Blaster 9000?
 
-# +
+
 # Solution
 
 # Here's the prior
@@ -56,7 +37,7 @@ thinkplot.Pdf(prior.MakePmf())
 thinkplot.decorate(xlabel="Probability of hit", ylabel="PMF")
 prior.Mean()
 
-# +
+
 # Solution
 
 # And here's the likelhood function
@@ -83,7 +64,7 @@ class AlienBlaster(Suite):
         return np.sum(likes)
 
 
-# +
+
 # Solution
 
 # If we start with a uniform prior,
@@ -95,7 +76,7 @@ blaster.Update(2)
 thinkplot.Pdf(blaster)
 thinkplot.decorate(xlabel="Probability of hit", ylabel="PMF")
 
-# +
+
 # Solution
 
 # Now let's run it with the specified prior and
@@ -109,24 +90,24 @@ blaster.Update(2)
 thinkplot.Pdf(blaster)
 thinkplot.decorate(xlabel="Probability of hit", ylabel="PMF")
 
-# +
+
 # Solution
 
 # The posterior mean is lower
 
 prior.Mean(), blaster.Mean()
 
-# +
+
 # Solution
 
 # So is the MAP
 
 prior.MAP(), blaster.MAP()
 
-# +
+
 # So if we learn that the new design is "consistent",
 # it is more likely to be consistently bad (in this case).
-# -
+
 
 # ### Part Two
 
@@ -140,7 +121,7 @@ prior.MAP(), blaster.MAP()
 # what is the probability of hitting exactly 3?  Again, you can write a
 # number, mathematical expression, or Python code.
 
-# +
+
 k = 3
 n = 10
 x1 = 0.3
@@ -149,7 +130,7 @@ x2 = 0.4
 0.3 * binom.pmf(k, n, x1) + 0.7 * binom.pmf(k, n, x2)
 
 
-# -
+
 
 # The answer is a value drawn from the mixture of the two distributions.
 
@@ -162,7 +143,7 @@ x2 = 0.4
 #
 # 3. Store the values of `k` you generate and plot their distribution.
 
-# +
+
 def flip(p):
     return np.random.random() < p
 
@@ -178,7 +159,7 @@ for i in range(1000):
     else:
         k = simulate_shots(n, x2)
     ks.append(k)
-# -
+
 
 # Here's what the distribution looks like.
 
@@ -205,7 +186,7 @@ np.mean(ks)
 
 # One more way to do the same thing is to make a meta-Pmf, which contains the two binomial `Pmf` objects:
 
-# +
+
 from thinkbayes import MakeBinomialPmf
 
 pmf1 = MakeBinomialPmf(n, x1)
@@ -213,7 +194,7 @@ pmf2 = MakeBinomialPmf(n, x2)
 
 metapmf = Pmf({pmf1: 0.3, pmf2: 0.7})
 metapmf.Print()
-# -
+
 
 # Here's how we can draw samples from the meta-Pmf:
 
@@ -252,13 +233,13 @@ np.mean(ks)
 #
 # In the example, each Pmf is associated with a value of `x` (probability of hitting a target).  The inner loop enumerates the values of `k` (number of targets hit after 10 shots).
 
-# +
+
 from thinkbayes import MakeMixture
 
 mix = MakeMixture(metapmf)
 thinkplot.Hist(mix)
 mix.Mean()
-# -
+
 
 mix[3]
 

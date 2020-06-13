@@ -1,16 +1,3 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
 
 # # Think Bayes
 #
@@ -20,12 +7,8 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
 
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
+
 
 import math
 import numpy as np
@@ -33,7 +16,7 @@ import numpy as np
 from thinkbayes import Pmf, Cdf, Suite
 from thinkbayes import thinkplot
 
-# -
+
 
 # ### The flea beetle problem
 #
@@ -69,14 +52,14 @@ from thinkbayes import thinkplot
 
 # We can read the data from this file:
 
-# +
+
 import pandas as pd
 
 df = pd.read_csv("../data/flea_beetles.csv", delimiter="\t")
 df.head()
 
 
-# -
+
 
 # Here's what the distributions of width look like.
 
@@ -119,7 +102,7 @@ for name, group in grouped:
 #
 # To support the likelihood function, I'll make a dictionary for each attribute that contains a `norm` object for each species.
 
-# +
+
 from scipy.stats import norm
 
 dist_width = {}
@@ -129,7 +112,7 @@ for name, group in grouped:
     dist_angle[name] = norm(group.Angle.mean(), group.Angle.std())
 
 
-# -
+
 
 # Now we can write the likelihood function concisely.
 

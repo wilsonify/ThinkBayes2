@@ -1,17 +1,3 @@
-# -*- coding: utf-8 -*-
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
 
 # # Think Bayes
 #
@@ -21,12 +7,8 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
 
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
+
 
 import math
 import numpy as np
@@ -35,7 +17,7 @@ import pandas as pd
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
 
-# -
+
 
 # ### The August birthday problem
 #
@@ -62,13 +44,13 @@ from thinkbayes import thinkplot
 
 # Here's the data from the table.
 
-# +
+
 totals = np.array(
     [32690, 31238, 34405, 34565, 34977, 34415, 36577, 36319, 35353, 34405, 31285, 31617]
 )
 
 diagnosed = np.array([265, 280, 307, 312, 317, 287, 320, 309, 225, 240, 232, 243])
-# -
+
 
 # I'll roll the data so September comes first.
 
@@ -94,7 +76,7 @@ thinkplot.decorate(xlabel="Months after cutoff", ylabel="Diagnosis rate per 10,0
 #
 # I'll use a beta distribution to compute the posterior credible interval for each of these rates.
 
-# +
+
 import scipy.stats
 
 pcount = 1
@@ -104,7 +86,7 @@ for (x, d, t) in zip(xs, diagnosed, totals):
     b = t - d + pcount
     ci = scipy.stats.beta(a, b).ppf([0.025, 0.975])
     res.append(ci * 10000)
-# -
+
 
 # By transposing the results, we can get them into two arrays for plotting.
 
@@ -116,7 +98,7 @@ high
 
 # Here's what the plot looks like with error bars.
 
-# +
+
 import matplotlib.pyplot as plt
 
 
@@ -125,7 +107,7 @@ def errorbar(xs, low, high, **options):
         plt.vlines(x, l, h, **options)
 
 
-# -
+
 
 errorbar(xs, low, high, color="gray", alpha=0.7)
 thinkplot.plot(xs, rates)
@@ -135,14 +117,14 @@ thinkplot.decorate(xlabel="Months after cutoff", ylabel="Diagnosis rate per 10,0
 #
 # But for now I will proceed with a linear logistic model.  The following table shows log odds of diagnosis for each month, which I will use to lay out a grid for parameter estimation.
 
-# +
+
 from scipy.special import expit, logit
 
 for (x, d, t) in zip(xs, diagnosed, totals):
     print(x, logit(d / t))
 
 
-# -
+
 
 # Here's a Suite that estimates the parameters of a logistic regression model, `b0` and `b1`.
 
@@ -160,7 +142,7 @@ class August(Suite, Joint):
 
 # The prior distributions are uniform over a grid that covers the most likely values.
 
-# +
+
 from itertools import product
 
 b0 = np.linspace(-4.75, -5.1, 101)
@@ -168,7 +150,7 @@ b1 = np.linspace(-0.05, 0.05, 101)
 hypos = product(b0, b1)
 
 suite = August(hypos)
-# -
+
 
 # Here's the update.
 
@@ -177,7 +159,7 @@ for data in zip(xs, diagnosed, totals):
 
 # Here's the posterior marginal distribution for `b0`.
 
-# +
+
 pmf0 = suite.Marginal(0)
 b0 = pmf0.Mean()
 print(b0)
@@ -188,11 +170,11 @@ thinkplot.decorate(
     xlabel="Intercept log odds (b0)",
     ylabel="Pdf",
 )
-# -
+
 
 # And the posterior marginal distribution for `b1`.
 
-# +
+
 pmf1 = suite.Marginal(1)
 b1 = pmf1.Mean()
 print(b1)
@@ -201,11 +183,11 @@ thinkplot.Pdf(pmf1)
 thinkplot.decorate(
     title="Posterior marginal distribution", xlabel="Slope log odds (b0)", ylabel="Pdf"
 )
-# -
+
 
 # Let's see what the posterior regression lines look like, superimposed on the data.
 
-# +
+
 for i in range(100):
     b0, b1 = suite.Random()
     ys = expit(b0 + b1 * xs) * 10000
@@ -217,7 +199,7 @@ thinkplot.plot(xs, rates)
 thinkplot.decorate(xlabel="Months after cutoff", ylabel="Diagnosis rate per 10,000")
 
 
-# -
+
 
 # Most of these regression lines fall within the credible intervals of the observed rates, so in that sense it seems like this model is not ruled out by the data.
 #
@@ -238,7 +220,7 @@ def posterior_predictive(x):
 
 # Here are posterior predictive CDFs for diagnosis rates.
 
-# +
+
 pmf0 = posterior_predictive(0)
 thinkplot.Cdf(pmf0.MakeCdf(), label="September")
 
@@ -250,7 +232,7 @@ thinkplot.decorate(
     xlabel="Diagnosis rate per 10,000",
     ylabel="CDF",
 )
-# -
+
 
 pmf0.Mean()
 
@@ -270,7 +252,7 @@ def posterior_predictive_diff():
     return pmf
 
 
-# +
+
 pmf_diff = posterior_predictive_diff()
 thinkplot.Cdf(pmf_diff.MakeCdf())
 
@@ -279,7 +261,7 @@ thinkplot.decorate(
     xlabel="11 month increase in diagnosis rate per 10,000",
     ylabel="CDF",
 )
-# -
+
 
 # To summarize, we can compute the mean and 95% credible interval for this difference.
 

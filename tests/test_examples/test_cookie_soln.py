@@ -1,17 +1,3 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
-
 # # Think Bayes
 #
 # This notebook presents example code and exercise solutions for Think Bayes.
@@ -20,17 +6,13 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
 
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
-# import classes from thinkbayes
+
+
 from thinkbayes import Hist, Pmf, Suite
 
-# -
+
 
 # ## The cookie problem
 #
@@ -54,7 +36,7 @@ from thinkbayes import Hist, Pmf, Suite
 #
 # To represent the state of a Bowl, you might want to use the `Hist` class from `thinkbayes2`.
 
-# +
+
 # Solution
 
 # We'll need an object to keep track of the number of cookies in each bowl.
@@ -65,7 +47,7 @@ bowl2 = Hist(dict(vanilla=20, chocolate=20))
 
 bowl1.Print()
 
-# +
+
 # Solution
 
 # Now I'll make a Pmf that contains the two bowls, giving them equal probability.
@@ -74,7 +56,7 @@ pmf = Pmf([bowl1, bowl2])
 pmf.Print()
 
 
-# +
+
 # Solution
 
 # Here's a likelihood function that takes `hypo`, which is one of
@@ -92,7 +74,7 @@ def likelihood(hypo, data):
     return like
 
 
-# +
+
 # Solution
 
 # Now for the update.  We have to loop through the hypotheses and
@@ -105,7 +87,7 @@ def update(pmf, data):
     return pmf.Normalize()
 
 
-# +
+
 # Solution
 
 # Here's the first update.  The posterior probabilities are the
@@ -115,7 +97,7 @@ def update(pmf, data):
 update(pmf, "vanilla")
 pmf.Print()
 
-# +
+
 # Solution
 
 # So when we update again with a chocolate cookies, we get different
@@ -124,7 +106,7 @@ pmf.Print()
 update(pmf, "chocolate")
 pmf.Print()
 
-# +
+
 # Solution
 
 # If we get 10 more chocolate cookies, that eliminates Bowl 1 completely

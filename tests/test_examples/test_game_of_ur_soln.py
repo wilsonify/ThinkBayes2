@@ -1,16 +1,3 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
 
 # # Think Bayes
 #
@@ -20,17 +7,13 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
 
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
+
 
 from thinkbayes import Pmf, Cdf, Suite
 from thinkbayes import thinkplot
 
-# -
+
 
 # ### The Game of Ur problem
 #
@@ -98,7 +81,7 @@ thinkplot.decorate(xlabel="Number of rolls to get to space 13", ylabel="PMF")
 #
 # `pmf_13` is the probability of being on space 13 after `n` rolls.
 
-# +
+
 pmf_13 = Pmf()
 for n in range(4, 15):
     pmf_n = sum([roll] * n)
@@ -106,7 +89,7 @@ for n in range(4, 15):
 
 pmf_13.Print()
 pmf_13.Total()
-# -
+
 
 # The total probability of the data is very close to 1/2, but it's not obvious (to me) why.
 #

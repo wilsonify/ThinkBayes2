@@ -1,16 +1,3 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
 
 # # Think Bayes: Chapter 11
 #
@@ -20,13 +7,13 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 from __future__ import print_function, division
 
 
 import warnings
 
-warnings.filterwarnings("ignore")
+
 
 import math
 import numpy as np
@@ -35,7 +22,7 @@ from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
 
 
-# -
+
 
 # ## The Euro problem
 #
@@ -61,13 +48,13 @@ class Euro(Suite):
 
 # If we know the coin is fair, we can evaluate the likelihood of the data directly.
 
-# +
+
 data = 140, 110
 
 suite = Euro()
 like_f = suite.Likelihood(data, 50)
 print("p(D|F)", like_f)
-# -
+
 
 # If we cheat an pretend that the alternative hypothesis is exactly the observed proportion, we can compute the likelihood of the data and the likelihood ratio, relative to the fair coin.
 

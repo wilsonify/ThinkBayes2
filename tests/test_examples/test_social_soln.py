@@ -1,17 +1,3 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
-
 # # Think Bayes
 #
 # This notebook presents example code and exercise solutions for Think Bayes.
@@ -20,120 +6,101 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
 
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
-
-# import classes from thinkbayes
 from thinkbayes import Pmf, Suite, Beta
 from thinkbayes import thinkplot
 
 import numpy as np
 
 
-# -
+def test_social():
+    # ## The social desirability problem
+    #
+    # Whenever you survey people about sensitive issues, you have to deal with [social desirability bias](https://en.wikipedia.org/wiki/Social_desirability_bias), which is the tendency of people to shade their answers in the direction they think shows them in the most positive light.
+    #
+    # One of the ways to improve the quality of the results is to collect responses in indirect ways.  For example, [here's a clever way one research group estimated the prevalence of atheists](https://fivethirtyeight.com/features/way-more-americans-may-be-atheists-than-we-thought/).
+    #
+    # Another way is [randomized response](https://en.wikipedia.org/wiki/Randomized_response), as described in [this presentation](http://www.soz.unibe.ch/ueber_uns/personen/jann/presentations_by_ben_jann/e131361/e131381/rrt_online07_kassel08_ger.pdf) or [this video](https://www.youtube.com/watch?v=nwJ0qY_rP0A).
+    #
+    # As an example, suppose you ask 100 people to flip a coin and:
+    #
+    # * If they get heads, they report YES.
+    #
+    # * If they get tails, they honestly answer the question "Do you believe in God?"
+    #
+    # And suppose you get 80 YESes and 20 NOs.
+    #
+    # 1. Estimate the prevalence of believers in the surveyed population (by which, as always, I mean compute a posterior distribution).
+    #
+    # 2. How efficient is this method?  That is, how does the width of the posterior distribution compare to the distribution you would get if 100 people answered the question honestly?
 
-# ## The social desirability problem
-#
-# Whenever you survey people about sensitive issues, you have to deal with [social desirability bias](https://en.wikipedia.org/wiki/Social_desirability_bias), which is the tendency of people to shade their answers in the direction they think shows them in the most positive light.
-#
-# One of the ways to improve the quality of the results is to collect responses in indirect ways.  For example, [here's a clever way one research group estimated the prevalence of atheists](https://fivethirtyeight.com/features/way-more-americans-may-be-atheists-than-we-thought/).
-#
-# Another way is [randomized response](https://en.wikipedia.org/wiki/Randomized_response), as described in [this presentation](http://www.soz.unibe.ch/ueber_uns/personen/jann/presentations_by_ben_jann/e131361/e131381/rrt_online07_kassel08_ger.pdf) or [this video](https://www.youtube.com/watch?v=nwJ0qY_rP0A).
-#
-# As an example, suppose you ask 100 people to flip a coin and:
-#
-# * If they get heads, they report YES.
-#
-# * If they get tails, they honestly answer the question "Do you believe in God?"
-#
-# And suppose you get 80 YESes and 20 NOs.
-#
-# 1. Estimate the prevalence of believers in the surveyed population (by which, as always, I mean compute a posterior distribution).
-#
-# 2. How efficient is this method?  That is, how does the width of the posterior distribution compare to the distribution you would get if 100 people answered the question honestly?
+    # Solution
 
-# +
-# Solution
+    class Social(Suite):
+        def Likelihood(self, data, hypo):
+            """
+            data: outcome of unreliable measurement, either 'YES' or 'NO'
+            hypo: actual proportion of the thing we're measuring
+            """
+            p = hypo
+            p_yes = 0.5 + p / 2
+            if data == "YES":
+                return p_yes
+            else:
+                return 1 - p_yes
 
+    # Solution
 
-class Social(Suite):
-    def Likelihood(self, data, hypo):
-        """
-        data: outcome of unreliable measurement, either 'YES' or 'NO'
-        hypo: actual proportion of the thing we're measuring
-        """
-        p = hypo
-        p_yes = 0.5 + p / 2
-        if data == "YES":
-            return p_yes
-        else:
-            return 1 - p_yes
+    prior = np.linspace(0, 1, 101)
+    suite = Social(prior)
 
+    thinkplot.Pdf(suite, label="Prior")
+    thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
 
-# +
-# Solution
+    # Solution
 
-prior = np.linspace(0, 1, 101)
-suite = Social(prior)
+    for i in range(80):
+        suite.Update("YES")
 
-thinkplot.Pdf(suite, label="Prior")
-thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
+    for i in range(20):
+        suite.Update("NO")
 
-# +
-# Solution
+    # Solution
 
-for i in range(80):
-    suite.Update("YES")
+    thinkplot.Pdf(suite, label="Posterior")
+    thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
 
-for i in range(20):
-    suite.Update("NO")
+    # Solution
 
-# +
-# Solution
+    suite.Mean(), suite.MAP()
 
-thinkplot.Pdf(suite, label="Posterior")
-thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
+    # Solution
 
-# +
-# Solution
+    # For comparison, what would we think if we had been able
+    # to survey 100 people directly?
 
-suite.Mean(), suite.MAP()
+    beta = Beta(1, 1)
+    beta.Update((60, 40))
+    thinkplot.Pdf(beta.MakePmf(), label="Direct", color="gray")
 
-# +
-# Solution
+    thinkplot.Pdf(suite, label="Randomized")
+    thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
 
-# For comparison, what would we think if we had been able
-# to survey 100 people directly?
+    # Solution
 
-beta = Beta(1, 1)
-beta.Update((60, 40))
-thinkplot.Pdf(beta.MakePmf(), label="Direct", color="gray")
+    # To see how efficient this method is, we can divide the sample size for
+    # the direct method by a factor.  It looks like we lose a factor of $2 \sqrt{2}$.
 
-thinkplot.Pdf(suite, label="Randomized")
-thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
+    factor = 2 * np.sqrt(2)
+    beta = Beta(1, 1)
+    beta.Update((60 / factor, 40 / factor))
+    thinkplot.Pdf(beta.MakePmf(), label="Direct", color="gray")
 
-# +
-# Solution
+    thinkplot.Pdf(suite, label="Randomized")
+    thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
 
-# To see how efficient this method is, we can divide the sample size for
-# the direct method by a factor.  It looks like we lose a factor of $2 \sqrt{2}$.
+    # Solution
 
-factor = 2 * np.sqrt(2)
-beta = Beta(1, 1)
-beta.Update((60 / factor, 40 / factor))
-thinkplot.Pdf(beta.MakePmf(), label="Direct", color="gray")
+    # So the effective sample size is about 35.
 
-thinkplot.Pdf(suite, label="Randomized")
-thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
-
-# +
-# Solution
-
-# So the effective sample size is about 35.
-
-100 / 2 / np.sqrt(2)
-# -
+    100 / 2 / np.sqrt(2)

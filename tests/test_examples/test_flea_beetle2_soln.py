@@ -1,17 +1,4 @@
-# -*- coding: utf-8 -*-
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
+
 
 # # Think Bayes
 #
@@ -21,12 +8,8 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
 
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
+
 
 import math
 import numpy as np
@@ -34,7 +17,7 @@ import numpy as np
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
 
-# -
+
 
 # ### The flea beetle problem
 #
@@ -73,14 +56,14 @@ from thinkbayes import thinkplot
 
 measurements = (140, 15)
 
-# +
+
 import pandas as pd
 
 df = pd.read_csv("../data/flea_beetles.csv", delimiter="\t")
 df.head()
 
 
-# -
+
 
 
 def plot_cdfs(df, col):
@@ -97,7 +80,7 @@ plot_cdfs(df, "Angle")
 
 # The following class estimates the mean and standard deviation of a normal distribution, given the data:
 
-# +
+
 from scipy.stats import norm
 from thinkbayes import EvalNormalPdf
 
@@ -124,11 +107,11 @@ class Beetle(Suite, Joint):
         return total
 
 
-# -
+
 
 # Now we can estimate parameters for the widths, for each of the three species.
 
-# +
+
 from itertools import product
 
 
@@ -140,7 +123,7 @@ def MakeWidthSuite(data):
     return suite
 
 
-# -
+
 
 groups = df.groupby("Species")
 
@@ -188,14 +171,14 @@ class Species:
         return like1 * like2
 
 
-# +
+
 species = {}
 
 for name, group in groups:
     suite_width = MakeWidthSuite(group.Width)
     suite_angle = MakeAngleSuite(group.Angle)
     species[name] = Species(name, suite_width, suite_angle)
-# -
+
 
 # For example, here's the likelihood of the data given that the species is 'Con'
 
@@ -222,14 +205,14 @@ for hypo, prob in suite.Items():
 #
 # Based on [this example](https://docs.pymc.io/notebooks/LKJ.html)
 
-# +
+
 from warnings import simplefilter
 
 simplefilter("ignore", FutureWarning)
 
 import pymc3 as pm
 
-# +
+
 N = 10000
 
 μ_actual = np.array([1, -2])
@@ -237,7 +220,7 @@ N = 10000
 
 x = np.random.multivariate_normal(μ_actual, Σ_actual, size=N)
 
-# +
+
 df["Width10"] = df.Width / 10
 
 observed = {}
@@ -245,7 +228,7 @@ for name, group in df.groupby("Species"):
     observed[name] = group[["Width10", "Angle"]].values
     print(name)
     print(np.cov(np.transpose(observed[name])))
-# -
+
 
 x = observed["Con"]
 
@@ -271,16 +254,16 @@ pm.traceplot(trace)
 
 Σ_post = trace["Σ"].mean(axis=0)
 
-# +
+
 from statsmodels.stats.moment_helpers import cov2corr
 
 from scipy.stats import multivariate_normal
 
-# -
+
 
 cov2corr(Σ_post)
 
-# +
+
 measured = (14, 15)
 
 total = 0
@@ -290,7 +273,7 @@ for row in trace:
 total / len(trace)
 
 
-# -
+
 
 
 def compute_posterior_likelihood(measured, species):

@@ -1,16 +1,3 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
 
 # # Think Bayes: Chapter 3
 #
@@ -20,7 +7,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 from __future__ import print_function, division
 
 
@@ -28,7 +15,7 @@ from thinkbayes import thinkplot
 from thinkbayes import Hist, Pmf, Suite, Cdf
 
 
-# -
+
 
 # ## The Dice problem
 #
@@ -57,14 +44,14 @@ suite.Print()
 
 # And here's what it looks like after more data:
 
-# +
+
 for roll in [6, 8, 7, 7, 5, 4]:
     suite.Update(roll)
 
 suite.Print()
 
 
-# -
+
 
 # ## The train problem
 #
@@ -92,7 +79,7 @@ thinkplot.Pdf(suite)
 
 # And here's how we can compute the posterior mean
 
-# +
+
 def Mean(suite):
     total = 0
     for hypo, prob in suite.Items():
@@ -101,7 +88,7 @@ def Mean(suite):
 
 
 Mean(suite)
-# -
+
 
 # Or we can just use the method
 
@@ -133,7 +120,7 @@ def MakePosterior(high, dataset, constructor=Train):
 
 # Let's run it with the same dataset and several uniform priors
 
-# +
+
 dataset = [30, 60, 90]
 
 for high in [500, 1000, 2000]:
@@ -141,7 +128,7 @@ for high in [500, 1000, 2000]:
     print(high, suite.Mean())
 
 
-# -
+
 
 # The results are quite sensitive to the prior, even with several observations.
 
@@ -169,7 +156,7 @@ thinkplot.Pdf(suite2)
 
 # Now let's see what the posteriors look like after observing one train.
 
-# +
+
 dataset = [60]
 high = 1000
 
@@ -184,29 +171,29 @@ for constructor, label in zip(constructors, labels):
     thinkplot.Pmf(suite)
 
 thinkplot.Config(xlabel="Number of trains", ylabel="Probability")
-# -
+
 
 # The power law gives less prior probability to high values, which yields lower posterior means, and less sensitivity to the upper bound.
 
-# +
+
 dataset = [30, 60, 90]
 
 for high in [500, 1000, 2000]:
     suite = MakePosterior(high, dataset, Train2)
     print(high, suite.Mean())
-# -
+
 
 # ## Credible intervals
 #
 # To compute credible intervals, we can use the `Percentile` method on the posterior.
 
-# +
+
 hypos = range(1, 1001)
 suite = Train(hypos)
 suite.Update(60)
 
 suite.Percentile(5), suite.Percentile(95)
-# -
+
 
 # If you have to compute more than a few percentiles, it is more efficient to compute a CDF.
 #
@@ -242,7 +229,7 @@ cdf.Percentile(5), cdf.Percentile(95)
 # As an exercise, implement the likelihood function for this variation
 # of the locomotive problem, and compare the results.
 
-# +
+
 # Solution
 
 # Suppose Company A has N trains and all other companies have M.

@@ -1,42 +1,24 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
-
 # # Think Bayes
 #
 # Copyright 2018 Allen B. Downey
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
 
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
+
 
 import numpy as np
 import pandas as pd
 
 import matplotlib.pyplot as plt
 
-# import classes from thinkbayes
+
 from thinkbayes import Pmf, Cdf, Suite, Joint
 
 from thinkbayes import thinkplot
 
 
-# -
+
 
 # ## Lions and Tigers and Bears
 #
@@ -61,7 +43,7 @@ class LionsTigersBears(Suite, Joint):
         # Fill this in.
 
 
-# +
+
 # Solution
 
 
@@ -81,13 +63,13 @@ class LionsTigersBears(Suite, Joint):
             return p3
 
 
-# -
+
 
 ps = np.linspace(0, 1, 101)
 
 # Here's a simple way to find eligible triplets, but it is inefficient, and it runs into problems with floating-point approximations.
 
-# +
+
 from itertools import product
 
 
@@ -97,11 +79,11 @@ def enumerate_triples(ps):
             yield p1, p2, p3
 
 
-# -
+
 
 # As an exercise, write a better version of `enumerate_triples`.
 
-# +
+
 # Solution
 
 from itertools import product
@@ -115,7 +97,7 @@ def enumerate_triples(ps):
         yield p1, p2, p3
 
 
-# -
+
 
 # Now we can initialize the suite.
 
@@ -176,7 +158,7 @@ suite.Copy().Update("B")
 #
 # The following is a [monkey patch](https://en.wikipedia.org/wiki/Monkey_patch) that gives `Dirichlet` objects a `Marginal` method.
 
-# +
+
 from thinkbayes import Dirichlet
 
 
@@ -185,7 +167,7 @@ def DirichletMarginal(dirichlet, i):
 
 
 Dirichlet.Marginal = DirichletMarginal
-# -
+
 
 # Here are the priors:
 
@@ -216,14 +198,14 @@ plot_marginal_cdfs(suite)
 #
 # Exercise: Implement this model using MCMC.  You might want to start with [this example](http://christianherta.de/lehre/dataScience/bayesian/Multinomial-Dirichlet.slides.php).
 
-# +
+
 import warnings
 
 warnings.simplefilter("ignore", FutureWarning)
 
 import pymc3 as pm
 
-# -
+
 
 # Here's the data.
 
@@ -233,7 +215,7 @@ a = np.ones(k)
 
 # Here's the MCMC model:
 
-# +
+
 # Solution
 
 model = pm.Model()
@@ -244,14 +226,14 @@ with model:
 
 model
 
-# +
+
 # Solution
 
 with model:
     start = pm.find_MAP()
     step = pm.Metropolis()
     trace = pm.sample(1000, start=start, step=step, tune=1000)
-# -
+
 
 # Check the traceplot
 
@@ -295,7 +277,7 @@ animals = ["lions", "tigers", "bears"]
 c = np.array([3, 2, 1])
 a = np.array([1, 1, 1])
 
-# +
+
 warnings.simplefilter("ignore", UserWarning)
 
 with pm.Model() as model:
@@ -303,7 +285,7 @@ with pm.Model() as model:
     ps = pm.Dirichlet("ps", a=a, shape=3)
     # Observed data is a multinomial distribution with 6 trials
     xs = pm.Multinomial("xs", n=6, p=ps, shape=3, observed=c)
-# -
+
 
 model
 
@@ -325,9 +307,9 @@ summary
 
 # We can also use `plot_posterior` to get a better view of the results.
 
-# +
+
 ax = pm.plot_posterior(trace, varnames=["ps"])
 
 for i, a in enumerate(animals):
     ax[i].set_title(a)
-# -
+

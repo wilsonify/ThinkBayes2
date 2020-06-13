@@ -1,17 +1,3 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
-
 # # Think Bayes
 #
 # This notebook presents example code and exercise solutions for Think Bayes.
@@ -20,29 +6,25 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
 
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
 
-# import classes from thinkbayes
+
+
 from thinkbayes import Hist, Pmf, Suite
 
-# -
+
 
 # ## The Pmf class
 #
 # I'll start by making a Pmf that represents the outcome of a six-sided die.  Initially there are 6 values with equal probability.
 
-# +
+
 pmf = Pmf()
 for x in [1, 2, 3, 4, 5, 6]:
     pmf[x] = 1
 
 pmf.Print()
-# -
+
 
 # To be true probabilities, they have to add up to 1.  So we can normalize the Pmf:
 
@@ -152,7 +134,7 @@ pmf.Print()
 
 # But this implementation is more general; it can handle any sequence of data.
 
-# +
+
 dataset = ["vanilla", "chocolate", "vanilla"]
 for data in dataset:
     pmf.Update(data)
@@ -160,7 +142,7 @@ for data in dataset:
 pmf.Print()
 
 
-# -
+
 
 # ## The Monty Hall problem
 #
@@ -337,7 +319,7 @@ suite.Print()
 
 # **Exercise:**  Now suppose you draw an M&M from `bag2` and it's blue.  What does that mean?  Run the update to see what happens.
 
-# +
+
 # Solution
 
 # throws ValueError: Normalize: total probability is zero.

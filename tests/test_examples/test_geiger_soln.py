@@ -1,16 +1,3 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
 
 # # Think Bayes
 #
@@ -18,17 +5,13 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
-# Configure Jupyter so figures appear in the notebook
-# %matplotlib inline
 
-# Configure Jupyter to display the assigned value after an assignment
-# %config InteractiveShell.ast_node_interactivity='last_expr_or_assign'
+
 
 import numpy as np
 import pandas as pd
 
-# import classes from thinkbayes
+
 from thinkbayes import Pmf, Cdf, Suite, Joint
 
 from thinkbayes import MakePoissonPmf, EvalBinomialPmf, MakeMixture
@@ -36,7 +19,7 @@ from thinkbayes import MakePoissonPmf, EvalBinomialPmf, MakeMixture
 from thinkbayes import thinkplot
 
 
-# -
+
 
 # ## The Geiger counter problem
 #
@@ -63,7 +46,7 @@ class Logistic(Suite, Joint):
         return 1
 
 
-# +
+
 r = 160
 k = 15
 f = 0.1
@@ -71,7 +54,7 @@ f = 0.1
 pmf = MakePoissonPmf(r, high=500)
 thinkplot.Hist(pmf)
 
-# +
+
 total = 0
 for n, p in pmf.Items():
     total += p * EvalBinomialPmf(k, n, f)
@@ -79,7 +62,7 @@ for n, p in pmf.Items():
 total
 
 
-# -
+
 
 
 def compute_likelihood(k, r, f):
@@ -101,7 +84,7 @@ likes.plot()
 thinkplot.decorate(xlabel="Counter particles (n)", ylabel="PMF")
 
 
-# +
+
 # Solution
 
 
@@ -120,7 +103,7 @@ class Logistic(Suite, Joint):
         return compute_likelihood(k, r, self.f)
 
 
-# -
+
 
 rs = np.linspace(0, 300, 51)
 
@@ -143,7 +126,7 @@ thinkplot.decorate(
 
 import pymc3 as pm
 
-# +
+
 # Solution
 
 f = 0.1
@@ -154,7 +137,7 @@ with model:
     n = pm.Poisson("n", r)
     k = pm.Binomial("k", n, f, observed=15)
     trace = pm.sample_prior_predictive(1000)
-# -
+
 
 thinkplot.Cdf(Cdf(trace["r"]))
 
@@ -179,7 +162,7 @@ thinkplot.Cdf(Cdf(r_sample))
 
 # ### Grid algorithm, version 2
 
-# +
+
 # Solution
 
 
@@ -197,11 +180,11 @@ class Logistic(Suite, Joint):
         return EvalBinomialPmf(k, n, self.f)
 
 
-# -
+
 
 rs = np.linspace(0, 300, 51)
 
-# +
+
 suite = Logistic()
 
 for r in rs:
@@ -210,7 +193,7 @@ for r in rs:
         suite[r, n] += p
 
 suite.Normalize()
-# -
+
 
 suite.Update(15)
 
@@ -261,13 +244,13 @@ class Detector(Suite):
         return EvalBinomialPmf(k, n, self.f)
 
 
-# +
+
 r = 160
 k = 15
 f = 0.1
 
 suite = Detector(r, f)
-# -
+
 
 suite.Update(15)
 
@@ -291,13 +274,13 @@ suite = Emitter(detectors)
 
 suite.Update(15)
 
-# +
+
 pmf_r = Pmf()
 for detector, p in suite.Items():
     pmf_r[detector.r] = p
 
 thinkplot.Pdf(pmf_r)
-# -
+
 
 mix = MakeMixture(suite)
 

@@ -1,17 +1,3 @@
-# ---
-# jupyter:
-#   jupytext:
-#     text_representation:
-#       extension: .py
-#       format_name: light
-#       format_version: '1.5'
-#       jupytext_version: 1.4.0
-#   kernelspec:
-#     display_name: Python 3
-#     language: python
-#     name: python3
-# ---
-
 # # Think Bayes solutions: Chapter 4
 #
 # This notebook presents solutions to exercises in Think Bayes.
@@ -20,13 +6,13 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 
-# +
+
 from __future__ import print_function, division
 
 
 import warnings
 
-warnings.filterwarnings("ignore")
+
 
 import numpy as np
 
@@ -34,7 +20,7 @@ from thinkbayes import Pmf, Cdf, Suite
 from thinkbayes import thinkplot
 
 
-# -
+
 
 # ## The Euro problem
 #
@@ -59,13 +45,13 @@ class Euro(Suite):
 
 # We can make a uniform prior and update it with 140 heads and 110 tails:
 
-# +
+
 suite = Euro(range(0, 101))
 dataset = "H" * 140 + "T" * 110
 
 for data in dataset:
     suite.Update(data)
-# -
+
 
 # And here's what the posterior looks like.
 
@@ -121,7 +107,7 @@ def TrianglePrior(label="triangle"):
 
 # Here's what they look like:
 
-# +
+
 triangle = TrianglePrior()
 uniform = UniformPrior()
 suites = [triangle, uniform]
@@ -130,7 +116,7 @@ thinkplot.Pdfs(suites)
 thinkplot.Config(xlabel="x", ylabel="Probability")
 
 
-# -
+
 
 # If we update them both with the same data:
 
@@ -194,7 +180,7 @@ thinkplot.Pdf(suite)
 #
 # Also, given the parameters of the prior and the data, we can compute the parameters of the posterior directly.  The following class represents a Beta distribution and provides a constant-time Update method.
 
-# +
+
 from scipy import special
 
 
@@ -292,7 +278,7 @@ class Beta:
         return xs
 
 
-# -
+
 
 # Here's how we use it.
 
@@ -312,7 +298,7 @@ thinkplot.Pdf(beta.MakePmf())
 #
 # Hint: A Beta distribution with parameters `(1, 1)` is uniform from 0 to 1.
 
-# +
+
 # Solution
 
 # Here's the uniform prior
@@ -320,7 +306,7 @@ thinkplot.Pdf(beta.MakePmf())
 uniform = Beta(1, 1, label="uniform")
 thinkplot.Pdf(uniform.MakePmf())
 
-# +
+
 # Solution
 
 # And here's what it looks like after the update
@@ -328,7 +314,7 @@ thinkplot.Pdf(uniform.MakePmf())
 uniform.Update(dataset)
 thinkplot.Pdf(beta.MakePmf())
 
-# +
+
 # Solution
 
 # Here's a beta prior with precounts chosen to represent
@@ -337,7 +323,7 @@ thinkplot.Pdf(beta.MakePmf())
 beta = Beta(100, 100, label="beta")
 thinkplot.Pdf(beta.MakePmf())
 
-# +
+
 # Solution
 
 # And here's what it looks like after the update
@@ -345,7 +331,7 @@ thinkplot.Pdf(beta.MakePmf())
 beta.Update(dataset)
 thinkplot.Pdf(beta.MakePmf())
 
-# +
+
 # Solution
 
 # Comparing the two, we see that the (more) informative
