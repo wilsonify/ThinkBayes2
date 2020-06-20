@@ -36,22 +36,22 @@ class _Brewer(object):
     Shades of blue that look good in color and can be distinguished
     in grayscale (up to a point).
 
-    Borrowed from http://colorbrewer2.org/
+    Borrowed from https://colorbrewer2.org/
     """
 
     color_iter = None
 
     colors_list = [
-                 "#f7fbff",
-                 "#deebf7",
-                 "#c6dbef",
-                 "#9ecae1",
-                 "#6baed6",
-                 "#4292c6",
-                 "#2171b5",
-                 "#08519c",
-                 "#08306b",
-             ][::-1]
+                      "#f7fbff",
+                      "#deebf7",
+                      "#c6dbef",
+                      "#9ecae1",
+                      "#6baed6",
+                      "#4292c6",
+                      "#2171b5",
+                      "#08519c",
+                      "#08306b",
+                  ][::-1]
 
     # lists that indicate which colors to use depending on how many are used
     which_colors = [
@@ -383,8 +383,8 @@ def Hist(hist, **options):
 
     # see if the values support arithmetic
     try:
-        xs[0] - xs[0]
-    except TypeError:
+        assert "__sub__" in dir(xs)
+    except AssertionError:
         # if not, replace values with numbers
         labels = [str(x) for x in xs]
         xs = np.arange(len(xs))
