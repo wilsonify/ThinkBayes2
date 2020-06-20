@@ -5,7 +5,7 @@ Copyright 2014 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from __future__ import print_function
+
 
 import math
 import matplotlib

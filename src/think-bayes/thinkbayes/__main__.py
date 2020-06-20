@@ -15,7 +15,7 @@ Pdf: represents a continuous probability density function
 
 """
 
-from __future__ import print_function, division
+
 
 import bisect
 import copy

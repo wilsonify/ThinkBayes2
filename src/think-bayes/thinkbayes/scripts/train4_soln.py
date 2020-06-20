@@ -5,7 +5,7 @@ Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from __future__ import print_function, division
+
 
 from dice import Dice
 from src import thinkplot
