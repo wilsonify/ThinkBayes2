@@ -129,6 +129,7 @@ def test_mcmc(suite):
     [this example](http://christianherta.de/lehre/dataScience/bayesian/Multinomial-Dirichlet.slides.php).
     """
     import pymc3 as pm
+
     dirichlet = Dirichlet(3)
 
     observed = [0, 0, 0, 1, 1, 2]
@@ -139,8 +140,8 @@ def test_mcmc(suite):
         with pm.Model() as model:
             k = len(Pmf(observed))
             a = np.ones(k)
-            p = pm.Dirichlet('p', a, shape=a.shape)
-            c = pm.Categorical('c', p, observed=data, shape=1)
+            p = pm.Dirichlet("p", a, shape=a.shape)
+            c = pm.Categorical("c", p, observed=data, shape=1)
         return model
 
     model = create_model(observed)

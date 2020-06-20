@@ -25,7 +25,6 @@ you can do it by computing whichever representation is easiest to figure out.
 """
 
 
-
 import pytest
 from thinkbayes import Pmf, Cdf
 from thinkbayes import thinkplot

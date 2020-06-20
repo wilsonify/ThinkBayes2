@@ -1,4 +1,3 @@
-
 import thinkbayes
 from thinkbayes import thinkplot
 

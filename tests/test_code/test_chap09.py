@@ -193,16 +193,22 @@ def test_reading(drp_scores_df):
     for name, group in grouped:
         print(name, group.Response.mean())
 
-    mus = np.linspace(20, 80, 10)  # The prior distributions for `mu` and `sigma` are uniform.
+    mus = np.linspace(
+        20, 80, 10
+    )  # The prior distributions for `mu` and `sigma` are uniform.
     sigmas = np.linspace(5, 30, 10)
     control = Normal(product(mus, sigmas))
     data = df[df.Treatment == "Control"].Response
     control.Update(data)
 
-    thinkplot.Contour(control, pcolor=True)  # plot the probability of each `mu`-`sigma` pair as a contour plot.
+    thinkplot.Contour(
+        control, pcolor=True
+    )  # plot the probability of each `mu`-`sigma` pair as a contour plot.
     thinkplot.Config(xlabel="mu", ylabel="sigma")
 
-    pmf_mu0 = control.Marginal(0)  # And then we can extract the marginal distribution of `mu`
+    pmf_mu0 = control.Marginal(
+        0
+    )  # And then we can extract the marginal distribution of `mu`
     thinkplot.Pdf(pmf_mu0)
     thinkplot.Config(xlabel="mu", ylabel="Pmf")
 
@@ -245,7 +251,9 @@ def test_paintball():
 
     thinkplot.Config(xlabel="Distance", ylabel="Prob")
 
-    marginal_alpha = suite.Marginal(0, label="alpha")  # Here are the marginal posterior distributions
+    marginal_alpha = suite.Marginal(
+        0, label="alpha"
+    )  # Here are the marginal posterior distributions
     marginal_beta = suite.Marginal(1, label="beta")
 
     print("alpha CI", marginal_alpha.CredibleInterval(50))
@@ -268,8 +276,9 @@ def test_paintball():
 
     thinkplot.Config(xlabel="Distance", ylabel="Prob")
 
-    thinkplot.Contour(suite.GetDict(), contour=False,
-                      pcolor=True)  # Another way to visualize the posterior distribution
+    thinkplot.Contour(
+        suite.GetDict(), contour=False, pcolor=True
+    )  # Another way to visualize the posterior distribution
 
     thinkplot.Config(xlabel="alpha", ylabel="beta", axis=[0, 30, 0, 20])
 
@@ -340,6 +349,7 @@ def test_flea_beetles(flea_beetles_df):
     suite.Update((145, 14))
     for hypo, prob in suite.Items():
         print(hypo, prob)
+
 
 # **Exercise:** Run this analysis again for the control group.
 # What is the distribution of the difference between the groups?

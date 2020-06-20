@@ -11,10 +11,7 @@ from scipy.stats import norm
 from thinkbayes import Pmf, Suite, Joint, MakeMixture, MakeJoint
 from thinkbayes import thinkplot
 
-dist_height = dict(
-    male=norm(178, 7.7),
-    female=norm(163, 7.3)
-)
+dist_height = dict(male=norm(178, 7.7), female=norm(163, 7.3))
 
 
 class Height(Suite):
@@ -44,7 +41,6 @@ class Height(Suite):
 
 
 class Heights(Suite, Joint):
-
     def Likelihood(self, data, hypo):
         """
 
@@ -52,14 +48,13 @@ class Heights(Suite, Joint):
         hypo: h1, h2
         """
         h1, h2 = hypo
-        if data == 'A':
+        if data == "A":
             return 1 if h1 > h2 else 0
         else:
             return 1 if h2 > h1 else 0
 
 
 class Heights2(Suite, Joint):
-
     def Likelihood(self, data, hypo):
         """
 
@@ -67,9 +62,9 @@ class Heights2(Suite, Joint):
         hypo: (MF1, h1), (MF2, h2)
         """
         (_, h1), (_, h2) = hypo
-        if data == 'A':
+        if data == "A":
             return 1 if h1 > h2 else 0
-        if data == 'B':
+        if data == "B":
             return 1 if h2 > h1 else 0
 
 
@@ -85,7 +80,7 @@ def make_prior(A, B):
 def prob_male(height):
     suite = Height(dict(male=0.49, female=0.51))
     suite.Update(height)
-    return suite['male']
+    return suite["male"]
 
 
 def faceoff(player1, player2, data):
@@ -116,32 +111,31 @@ def test_one():
         series[height] = prob_male(height)
 
     thinkplot.plot(series)
-    thinkplot.decorate(xlabel='Height (cm)',
-                       ylabel='Probability of being male')
+    thinkplot.decorate(xlabel="Height (cm)", ylabel="Probability of being male")
 
 
 def test_two():
     hs = np.linspace(130, 210)
-    ps = dist_height['male'].pdf(hs)
+    ps = dist_height["male"].pdf(hs)
     male_height_pmf = Pmf(dict(zip(hs, ps)))
 
-    ps = dist_height['female'].pdf(hs)
+    ps = dist_height["female"].pdf(hs)
     female_height_pmf = Pmf(dict(zip(hs, ps)))
 
-    thinkplot.Pdf(male_height_pmf, label='Male')
-    thinkplot.Pdf(female_height_pmf, label='Female')
+    thinkplot.Pdf(male_height_pmf, label="Male")
+    thinkplot.Pdf(female_height_pmf, label="Female")
 
-    thinkplot.decorate(xlabel='Height (cm)',
-                       ylabel='PMF',
-                       title='Adult residents of the U.S.')
+    thinkplot.decorate(
+        xlabel="Height (cm)", ylabel="PMF", title="Adult residents of the U.S."
+    )
 
 
 def test_three():
     hs = np.linspace(130, 210)
-    ps = dist_height['male'].pdf(hs)
+    ps = dist_height["male"].pdf(hs)
     male_height_pmf = Pmf(dict(zip(hs, ps)))
 
-    ps = dist_height['female'].pdf(hs)
+    ps = dist_height["female"].pdf(hs)
     female_height_pmf = Pmf(dict(zip(hs, ps)))
 
     metapmf = Pmf({male_height_pmf: 0.49, female_height_pmf: 0.51})
@@ -149,17 +143,17 @@ def test_three():
     mix.Mean()
 
     thinkplot.Pdf(mix)
-    thinkplot.decorate(xlabel='Height (cm)',
-                       ylabel='PMF',
-                       title='Adult residents of the U.S.')
+    thinkplot.decorate(
+        xlabel="Height (cm)", ylabel="PMF", title="Adult residents of the U.S."
+    )
 
 
 def test_four():
     hs = np.linspace(130, 210)
-    ps = dist_height['male'].pdf(hs)
+    ps = dist_height["male"].pdf(hs)
     male_height_pmf = Pmf(dict(zip(hs, ps)))
 
-    ps = dist_height['female'].pdf(hs)
+    ps = dist_height["female"].pdf(hs)
     female_height_pmf = Pmf(dict(zip(hs, ps)))
 
     metapmf = Pmf({male_height_pmf: 0.49, female_height_pmf: 0.51})
@@ -170,17 +164,19 @@ def test_four():
     suite.Total()
 
     thinkplot.Contour(suite)
-    thinkplot.decorate(xlabel='B Height (cm)',
-                       ylabel='A Height (cm)',
-                       title='Posterior joint distribution')
+    thinkplot.decorate(
+        xlabel="B Height (cm)",
+        ylabel="A Height (cm)",
+        title="Posterior joint distribution",
+    )
 
 
 def test_five():
     hs = np.linspace(130, 210)
-    ps = dist_height['male'].pdf(hs)
+    ps = dist_height["male"].pdf(hs)
     male_height_pmf = Pmf(dict(zip(hs, ps)))
 
-    ps = dist_height['female'].pdf(hs)
+    ps = dist_height["female"].pdf(hs)
     female_height_pmf = Pmf(dict(zip(hs, ps)))
 
     metapmf = Pmf({male_height_pmf: 0.49, female_height_pmf: 0.51})
@@ -192,17 +188,19 @@ def test_five():
     suite.Update(0)
 
     thinkplot.Contour(suite)
-    thinkplot.decorate(xlabel='B Height (cm)',
-                       ylabel='A Height (cm)',
-                       title='Posterior joint distribution')
+    thinkplot.decorate(
+        xlabel="B Height (cm)",
+        ylabel="A Height (cm)",
+        title="Posterior joint distribution",
+    )
 
 
 def test_six():
     hs = np.linspace(130, 210)
-    ps = dist_height['male'].pdf(hs)
+    ps = dist_height["male"].pdf(hs)
     male_height_pmf = Pmf(dict(zip(hs, ps)))
 
-    ps = dist_height['female'].pdf(hs)
+    ps = dist_height["female"].pdf(hs)
     female_height_pmf = Pmf(dict(zip(hs, ps)))
 
     metapmf = Pmf({male_height_pmf: 0.49, female_height_pmf: 0.51})
@@ -216,21 +214,21 @@ def test_six():
     posterior_a = suite.Marginal(0)
     posterior_b = suite.Marginal(1)
 
-    thinkplot.Pdf(posterior_a, label='A')
-    thinkplot.Pdf(posterior_b, label='B')
-    thinkplot.decorate(xlabel='Height (cm)',
-                       ylabel='PMF',
-                       title='Posterior marginal distributions')
+    thinkplot.Pdf(posterior_a, label="A")
+    thinkplot.Pdf(posterior_b, label="B")
+    thinkplot.decorate(
+        xlabel="Height (cm)", ylabel="PMF", title="Posterior marginal distributions"
+    )
 
     posterior_a.Mean(), posterior_b.Mean()
 
 
 def test_seven():
     hs = np.linspace(130, 210)
-    ps = dist_height['male'].pdf(hs)
+    ps = dist_height["male"].pdf(hs)
     male_height_pmf = Pmf(dict(zip(hs, ps)))
 
-    ps = dist_height['female'].pdf(hs)
+    ps = dist_height["female"].pdf(hs)
     female_height_pmf = Pmf(dict(zip(hs, ps)))
 
     metapmf = Pmf({male_height_pmf: 0.49, female_height_pmf: 0.51})
@@ -240,9 +238,9 @@ def test_seven():
     B = mix
 
     for i in range(8):
-        A, _ = faceoff(A, B, 'A')
+        A, _ = faceoff(A, B, "A")
 
-    A, B = faceoff(A, B, 'B');
+    A, B = faceoff(A, B, "B")
 
     thinkplot.Pdf(A)
     A.Mean()
@@ -250,10 +248,10 @@ def test_seven():
 
 def test_eight():
     hs = np.linspace(130, 210)
-    ps = dist_height['male'].pdf(hs)
+    ps = dist_height["male"].pdf(hs)
     male_height_pmf = Pmf(dict(zip(hs, ps)))
 
-    ps = dist_height['female'].pdf(hs)
+    ps = dist_height["female"].pdf(hs)
     female_height_pmf = Pmf(dict(zip(hs, ps)))
 
     metapmf = Pmf({male_height_pmf: 0.49, female_height_pmf: 0.51})
@@ -269,10 +267,10 @@ def test_eight():
 
     annotated_mix = Suite()
     for h, p in male_height_pmf.Items():
-        annotated_mix['M', h] = p * 0.49
+        annotated_mix["M", h] = p * 0.49
 
     for h, p in female_height_pmf.Items():
-        annotated_mix['F', h] = p * 0.51
+        annotated_mix["F", h] = p * 0.51
 
     annotated_mix.Total()
 
@@ -282,12 +280,12 @@ def test_eight():
         return joint.Marginal(0), joint.Marginal(1)
 
     A = annotated_mix
-    B = annotated_mix;
+    B = annotated_mix
 
     for i in range(8):
-        A, _ = faceoff(A, B, 'A')
+        A, _ = faceoff(A, B, "A")
 
-    A, _ = faceoff(A, B, 'B');
+    A, _ = faceoff(A, B, "B")
 
     A_male = Joint(A).Marginal(0)
 

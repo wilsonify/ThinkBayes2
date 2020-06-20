@@ -34,7 +34,9 @@ def six_sided_die_pmf():
 
 @pytest.fixture
 def drp_scores_df():
-    return pd.read_csv(os.path.join(DATADIR, "drp_scores.csv"), skiprows=21, delimiter="\t")
+    return pd.read_csv(
+        os.path.join(DATADIR, "drp_scores.csv"), skiprows=21, delimiter="\t"
+    )
 
 
 @pytest.fixture

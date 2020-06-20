@@ -36,7 +36,7 @@ class Socks(Suite):
         white, black = hypo
         total = white + black
         like = white / total * (white - 1) / (total - 1) + black / total * (
-                black - 1
+            black - 1
         ) / (total - 1)
         if data == "pair":
             return like
@@ -57,6 +57,7 @@ class Chess(Suite):
     If I play one twin on Monday and win, and the other twin on Tuesday and lose,
     which twin did I play on which day?
     """
+
     prob_I_beat = dict(A=0.4, B=0.7)
 
     def Likelihood(self, data, hypo):
@@ -126,7 +127,7 @@ class ThoughtPolice(Suite):
             else:
                 return 1
         else:
-            data == 'good comrades'
+            data == "good comrades"
         if hypo == "everything":
             return 0
         elif hypo == "something":
@@ -164,6 +165,7 @@ class Robot(Suite):
     what is the probability of it being in each of the six locations?
 
     """
+
     colors = "GRRGGG"
 
     def Likelihood(self, data, hypo):
@@ -190,6 +192,7 @@ class Robot2(Suite):
     Update the probability of the robot having started in each location.
 
     """
+
     colors = "GRRGGG"
 
     def Likelihood(self, data, hypo):

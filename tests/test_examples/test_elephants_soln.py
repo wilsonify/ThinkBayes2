@@ -173,7 +173,10 @@ def test_elephant():
     # We can construct the prior by enumerating the possible zoos.
 
     suite = Zoo(
-        [Dirichlet(n, label="".join(zoo)) for n, zoo in enumerate_zoos(species, present)]
+        [
+            Dirichlet(n, label="".join(zoo))
+            for n, zoo in enumerate_zoos(species, present)
+        ]
     )
 
     def print_zoos(suite):

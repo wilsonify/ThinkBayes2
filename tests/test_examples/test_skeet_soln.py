@@ -1,4 +1,3 @@
-
 # # Think Bayes
 #
 # This notebook presents example code and exercise solutions for Think Bayes.
@@ -8,14 +7,10 @@
 # MIT License: https://opensource.org/licenses/MIT
 
 
-
-
-
 from thinkbayes import Pmf, Beta
 from thinkbayes import thinkplot
 
 import numpy as np
-
 
 
 # ## The skeet problem
@@ -111,4 +106,3 @@ np.mean(rhode_rematch < wei_rematch)
 # that Rhode winds is about 56%
 
 np.mean(rhode_rematch == wei_rematch)
-

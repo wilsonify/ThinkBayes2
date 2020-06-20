@@ -40,7 +40,20 @@ def test_birthday_problem():
     # Here's the data from the table.
 
     totals = np.array(
-        [32690, 31238, 34405, 34565, 34977, 34415, 36577, 36319, 35353, 34405, 31285, 31617]
+        [
+            32690,
+            31238,
+            34405,
+            34565,
+            34977,
+            34415,
+            36577,
+            36319,
+            35353,
+            34405,
+            31285,
+            31617,
+        ]
     )
 
     diagnosed = np.array([265, 280, 307, 312, 317, 287, 320, 309, 225, 240, 232, 243])
@@ -156,7 +169,9 @@ def test_birthday_problem():
     thinkplot.Pdf(pmf1)
 
     thinkplot.decorate(
-        title="Posterior marginal distribution", xlabel="Slope log odds (b0)", ylabel="Pdf"
+        title="Posterior marginal distribution",
+        xlabel="Slope log odds (b0)",
+        ylabel="Pdf",
     )
 
     # Let's see what the posterior regression lines look like, superimposed on the data.

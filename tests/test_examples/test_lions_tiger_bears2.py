@@ -57,7 +57,9 @@ def test_ltb2():
 
     data = az.from_pymc3(
         trace=trace,
-        coords={"animal": np.array(["lion", "tiger", "bear", "cats", "rats", "elephants"])},
+        coords={
+            "animal": np.array(["lion", "tiger", "bear", "cats", "rats", "elephants"])
+        },
         dims={"mix": ["animal"], "next_seen": ["animal"]},
     )
 

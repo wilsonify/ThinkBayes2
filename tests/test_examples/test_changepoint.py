@@ -26,49 +26,49 @@ TESTDIR = os.path.abspath(PARDIR)
 DATADIR = os.path.join(TESTDIR, "data")
 
 
-@pytest.fixture(name='n')
+@pytest.fixture(name="n")
 def n_fixture(n):
     n = 60
     return n
 
 
-@pytest.fixture(name='t1')
+@pytest.fixture(name="t1")
 def t1_fixture(t1):
     t1 = 30
     return t1
 
 
-@pytest.fixture(name='t2')
+@pytest.fixture(name="t2")
 def t2_fixture(n, t1):
     t2 = n - t1
     return t2
 
 
-@pytest.fixture(name='lam1')
+@pytest.fixture(name="lam1")
 def lam1_fixture():
     lam1 = 4
     return lam1
 
 
-@pytest.fixture(name='lam2')
+@pytest.fixture(name="lam2")
 def lam2_fixture():
     lam2 = 2
     return lam2
 
 
-@pytest.fixture(name='before')
+@pytest.fixture(name="before")
 def before_fixture(lam1, t1):
     before = poisson(lam1).rvs(t1)
     return before
 
 
-@pytest.fixture(name='after')
+@pytest.fixture(name="after")
 def after_fixture(lam2, t2):
     after = poisson(lam2).rvs(t2)
     return after
 
 
-@pytest.fixture(name='data')
+@pytest.fixture(name="data")
 def data_fixture(before, after):
     data = np.concatenate([before, after])
     return data
@@ -88,8 +88,10 @@ class Change(Suite, Joint):
 @pytest.fixture(name="crime_data_df")
 def crime_data_fixture():
     logging.debug("%r", f"DATADIR = {DATADIR}")
-    crime_data_file_path = os.path.join(DATADIR, "BPD_Part_1_Victim_Based_Crime_Data.csv")
-    crime_data_df = pd.read_csv(crime_data_file_path, parse_dates=['CrimeDate'])
+    crime_data_file_path = os.path.join(
+        DATADIR, "BPD_Part_1_Victim_Based_Crime_Data.csv"
+    )
+    crime_data_df = pd.read_csv(crime_data_file_path, parse_dates=["CrimeDate"])
     return crime_data_df
 
 
@@ -128,4 +130,5 @@ def test_shootings(crime_data_df):
     counts.plot.line()
     thinkplot.decorate(xlabel="Date", ylabel="Number of shootings")
     from matplotlib import pyplot as plt
+
     # plt.savefig("Number of shootings.png")

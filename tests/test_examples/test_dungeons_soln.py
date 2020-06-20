@@ -265,7 +265,9 @@ def test_cdf_max(cdf_thrice):
     thinkplot.decorate(xlabel="Attribute", ylabel="CDF")
     cdf_max_6 = cdf_thrice.Max(6)
     thinkplot.Cdf(cdf_max_6)
-    thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Maximum of 6 attributes")
+    thinkplot.decorate(
+        xlabel="Attribute", ylabel="CDF", title="Maximum of 6 attributes"
+    )
 
 
 def test_n_cdf_max(cdf_thrice):
@@ -278,7 +280,9 @@ def test_n_cdf_max(cdf_thrice):
         cdf_max = cdf_thrice.Max(n * 6)
         thinkplot.Cdf(cdf_max, label="n=%s" % n)
 
-    thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Maximum of 6*n attributes")
+    thinkplot.decorate(
+        xlabel="Attribute", ylabel="CDF", title="Maximum of 6*n attributes"
+    )
 
 
 def test_n_sim(cdf_thrice):
@@ -291,7 +295,9 @@ def test_n_sim(cdf_thrice):
     thinkplot.Cdf(cdf, label="n=%s" % n)
     sample_max = [max(cdf_thrice.Sample(42)) for _ in range(1000)]
     thinkplot.Cdf(thinkbayes.Cdf(sample_max), label="sample")
-    thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Maximum of 6*n attributes")
+    thinkplot.decorate(
+        xlabel="Attribute", ylabel="CDF", title="Maximum of 6*n attributes"
+    )
 
 
 def test_compute_cdf_min(cdf_thrice):
@@ -304,7 +310,9 @@ def test_compute_cdf_min(cdf_thrice):
         cdf_min = dungeon_instance.compute_cdf_min(cdf_thrice, n * 6)
         thinkplot.Cdf(cdf_min, label="n=%s" % n)
 
-    thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Minimum of 6*n attributes")
+    thinkplot.decorate(
+        xlabel="Attribute", ylabel="CDF", title="Minimum of 6*n attributes"
+    )
 
 
 def test_compute_cdf_min_sim(cdf_thrice):
@@ -319,7 +327,9 @@ def test_compute_cdf_min_sim(cdf_thrice):
     sample_min = [min(cdf_thrice.Sample(42)) for _ in range(1000)]
     thinkplot.Cdf(thinkbayes.Cdf(sample_min), label="sample")
 
-    thinkplot.decorate(xlabel="Attribute", ylabel="CDF", title="Minimum of 6*n attributes")
+    thinkplot.decorate(
+        xlabel="Attribute", ylabel="CDF", title="Minimum of 6*n attributes"
+    )
 
 
 def test_precompute(cdf_thrice, like_min, like_max):
