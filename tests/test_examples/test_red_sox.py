@@ -5,11 +5,9 @@ Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from thinkbayes import Pmf, Beta, MakeBinomialPmf
-
-from thinkbayes import thinkplot
-
 import numpy as np
+from thinkbayes import Pmf, Beta
+from thinkbayes import thinkplot
 
 
 def test_beta():

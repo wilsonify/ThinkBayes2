@@ -5,8 +5,10 @@ Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from thinkbayes import Hist, Pmf, Suite
+from scipy.special import binom
+from thinkbayes import Suite
 from thinkbayes import thinkplot
+
 
 # ### The Grizzly Bear Problem
 #
@@ -20,7 +22,6 @@ from thinkbayes import thinkplot
 #
 # We also need a prior distribution for the population.  As a starting place, let's suppose that, prior to this study, an expert in this domain would have estimated that the population is between 100 and 500, and equally likely to be any value in that range.
 #
-
 # Solution:
 #
 # Define:
@@ -37,11 +38,7 @@ from thinkbayes import thinkplot
 # For given values of N, K, and n, the distribution of k is the hypergeometric distribution:
 #
 # $PMF(k) = {K \choose k}{N-K \choose n-k}/{N \choose n}$
-
-
 # Solution
-
-from scipy.special import binom
 
 
 def test_Grizzly():

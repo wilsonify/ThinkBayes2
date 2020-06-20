@@ -5,7 +5,7 @@ Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from thinkbayes import Hist, Pmf, Suite, MakeMixture
+from thinkbayes import Pmf
 
 
 def test_vote():

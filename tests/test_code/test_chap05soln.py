@@ -5,13 +5,6 @@ Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-import warnings
-
-import numpy as np
-
-from thinkbayes import Pmf, Cdf, Suite, Beta
-from thinkbayes import thinkplot
-
 
 def test_chapt5():
     # ## Odds

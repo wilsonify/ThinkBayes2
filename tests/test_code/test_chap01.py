@@ -2,7 +2,6 @@
 This notebook presents example code and exercise solutions for Think Bayes.
 """
 
-import pandas as pd
 import numpy as np
 
 

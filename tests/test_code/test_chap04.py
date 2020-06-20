@@ -2,11 +2,10 @@
 This is based on a notebook from Think Bayes : Chapter 4.
 """
 
-
 import numpy as np
+from scipy import special
 from thinkbayes import Pmf, Cdf, Suite
 from thinkbayes import thinkplot
-from scipy import special
 
 
 class Euro(Suite):

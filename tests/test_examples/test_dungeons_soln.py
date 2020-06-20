@@ -4,11 +4,12 @@ This notebook presents example code and exercise solutions for Think Bayes.
 Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
-import pytest
-from thinkbayes import Pmf, Suite
-import thinkbayes
-from thinkbayes import thinkplot
 from random import random
+
+import pytest
+import thinkbayes
+from thinkbayes import Pmf, Suite
+from thinkbayes import thinkplot
 
 
 class Dungeons(Suite):

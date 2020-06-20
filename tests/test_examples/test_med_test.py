@@ -5,12 +5,9 @@ Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from thinkbayes import Pmf, Suite
-
-import pandas as pd
 import numpy as np
-
-from thinkbayes import thinkplot
+import pandas as pd
+from thinkbayes import Pmf
 
 
 def test_interpreting_medical_tests():

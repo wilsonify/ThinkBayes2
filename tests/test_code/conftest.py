@@ -1,8 +1,9 @@
 import os
+
 import pandas as pd
 import pytest
 import thinkbayes
-from thinkbayes import Hist, Pmf, Suite
+from thinkbayes import Pmf
 from thinkbayes.utils import read_gss
 
 CONFTESTDIR = os.path.abspath(os.path.dirname(__file__))

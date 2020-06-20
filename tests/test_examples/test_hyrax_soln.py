@@ -5,10 +5,9 @@ Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from thinkbayes import Hist, Pmf, Suite
-from thinkbayes import thinkplot
-
 from scipy.special import binom
+from thinkbayes import Suite
+from thinkbayes import thinkplot
 
 
 class Hyrax(Suite):

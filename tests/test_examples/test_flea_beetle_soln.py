@@ -5,11 +5,10 @@ Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-import math
-import numpy as np
-
-from thinkbayes import Pmf, Cdf, Suite
+import pandas as pd
+from thinkbayes import Cdf, Suite
 from thinkbayes import thinkplot
+
 
 # ### The flea beetle problem
 #
@@ -42,11 +41,7 @@ from thinkbayes import thinkplot
 #
 # Species: Species of flea beetle from the genus Chaetocnema
 #
-
 # We can read the data from this file:
-
-
-import pandas as pd
 
 
 def test_flea_beetles():

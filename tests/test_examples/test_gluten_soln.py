@@ -5,9 +5,8 @@ Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from thinkbayes import Hist, Pmf, Suite, Beta
+from thinkbayes import Suite
 from thinkbayes import thinkplot
-import numpy as np
 
 
 def test_dinner_party():

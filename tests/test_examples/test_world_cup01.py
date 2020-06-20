@@ -5,13 +5,9 @@ Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from thinkbayes import Pmf, Suite
-
-import thinkbayes
-from thinkbayes import thinkplot
-
 import numpy as np
-from scipy.special import gamma
+from thinkbayes import Pmf, Suite
+from thinkbayes import thinkplot
 
 
 def test_wc3():

@@ -5,27 +5,20 @@ Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-import warnings
-
-import math
 import numpy as np
-
-from thinkbayes import Pmf, Cdf, Suite, Joint
+from scipy.stats import poisson
+from thinkbayes import Pmf, Suite
 from thinkbayes import thinkplot
 
-# ## Warm-up exercises
 
+# ## Warm-up exercises
 # **Exercise:** Suppose that goal scoring in hockey is well modeled by a
 # Poisson process, and that the long-run goal-scoring rate of the
 # Boston Bruins against the Vancouver Canucks is 2.9 goals per game.
 # In their next game, what is the probability
 # that the Bruins score exactly 3 goals?  Plot the PMF of `k`, the number
 # of goals they score in a game.
-
-
 # Solution
-
-from scipy.stats import poisson
 
 
 def test_chapt7():

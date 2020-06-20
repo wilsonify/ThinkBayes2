@@ -5,7 +5,9 @@ Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from thinkbayes import Hist, Pmf, Suite
+from sympy import symbols
+from thinkbayes import Pmf
+
 
 # **Exercise:** Let's consider [a more general version of the Monty Hall problem](https://en.wikipedia.org/wiki/Monty_Hall_problem#Other_host_behaviors) where Monty is more unpredictable.  As before, Monty never opens the door you chose (let's call it A) and never opens the door with the prize.  So if you choose the door with the prize, Monty has to decide which door to open.  Suppose he opens B with probability `p` and C with probability `1-p`.
 #
@@ -14,8 +16,6 @@ from thinkbayes import Hist, Pmf, Suite
 # 2.  What if Monty opens C?
 #
 # Hint: you might want to use SymPy to do the algebra for you.
-
-from sympy import symbols
 
 
 def test_monty():

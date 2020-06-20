@@ -6,11 +6,8 @@ MIT License: https://opensource.org/licenses/MIT
 
 import numpy as np
 import pandas as pd
-
-from thinkbayes import Pmf, Cdf, Suite, Joint
-
 from thinkbayes import MakePoissonPmf, EvalBinomialPmf, MakeMixture
-
+from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
 
 

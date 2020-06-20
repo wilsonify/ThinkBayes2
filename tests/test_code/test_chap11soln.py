@@ -5,13 +5,7 @@ Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-import warnings
-
-import math
-import numpy as np
-
-from thinkbayes import Pmf, Cdf, Suite, Joint
-from thinkbayes import thinkplot
+from thinkbayes import Suite
 
 
 def test_euro_problem():

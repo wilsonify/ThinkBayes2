@@ -5,7 +5,6 @@ Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-import math
 import numpy as np
 
 from thinkbayes import Hist, Pmf, Suite, Beta

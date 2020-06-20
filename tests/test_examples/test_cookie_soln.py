@@ -4,7 +4,7 @@ This notebook presents example code and exercise solutions for Think Bayes.
 Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
-from thinkbayes import Hist, Pmf, Suite
+from thinkbayes import Hist, Pmf
 
 
 def test_cookie_problem():

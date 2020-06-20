@@ -1,8 +1,7 @@
 """
 This is based on a notebook of example code from Think Bayes.
 """
-import thinkbayes
-from thinkbayes import Hist, Pmf, Suite
+from thinkbayes import Pmf, Suite
 
 
 class Cookie(Pmf):

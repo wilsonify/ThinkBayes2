@@ -5,15 +5,11 @@ Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from thinkbayes import Pmf, Cdf, Suite, MakeGammaPmf
-
-import thinkbayes
-from thinkbayes import thinkplot
-
 import numpy as np
-from scipy.special import gamma
-
 import pymc3 as pm
+import thinkbayes
+from thinkbayes import Pmf, Cdf, Suite
+from thinkbayes import thinkplot
 
 
 # ## The World Cup Problem, Part One

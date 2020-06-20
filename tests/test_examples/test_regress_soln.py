@@ -6,7 +6,7 @@ MIT License: https://opensource.org/licenses/MIT
 
 import numpy as np
 
-from thinkbayes import Pmf, Cdf, Suite, Joint
+from thinkbayes import Suite, Joint
 
 from thinkbayes import thinkplot
 
@@ -38,8 +38,6 @@ def test_bayes_reg():
     # As an exercise, fill in this likelihood function, then test it using the code below.
     #
     # Your results will depend on the random data you generated, but in general you should find that the posterior marginal distributions peak near the actual parameters.
-
-    from scipy.stats import norm
 
     class Regress(Suite, Joint):
         def Likelihood(self, data, hypo):

@@ -6,8 +6,8 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 import math
-import numpy as np
 
+import numpy as np
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
 
@@ -39,7 +39,6 @@ def test_improving_reading_ability():
     # The `Normal` class provides a `Likelihood` function that computes the likelihood of a sample from a normal distribution.
 
     from scipy.stats import norm
-    from thinkbayes import EvalNormalPdf
 
     class Normal(Suite, Joint):
         def Likelihood(self, data, hypo):
@@ -397,8 +396,6 @@ def test_improving_reading_ability():
     # At this point, how certain are you about your location?
 
     # Solution
-
-    from thinkbayes import EvalNormalPdf
 
     class Gps(Suite, Joint):
         """Represents hypotheses about your location in the field."""

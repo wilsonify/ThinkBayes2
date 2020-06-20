@@ -4,11 +4,7 @@ Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-import math
-import numpy as np
-
-from thinkbayes import Pmf, Cdf, Suite, Joint
-from thinkbayes import thinkplot
+from thinkbayes import Suite
 
 
 class Euro(Suite):

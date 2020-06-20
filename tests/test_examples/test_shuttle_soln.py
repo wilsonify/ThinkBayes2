@@ -9,9 +9,7 @@ import os
 
 import numpy as np
 import pandas as pd
-
-from thinkbayes import Pmf, Cdf, Suite, Joint
-
+from thinkbayes import Suite, Joint
 from thinkbayes import thinkplot
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
@@ -60,8 +58,6 @@ def test_shuttle():
     # and each datum being a temperature `T` and a boolean outcome `fail`, which is true is there was damage and false otherwise.
     #
     # Hint: the `expit` function from `scipy.special` computes the inverse of the `logit` function.
-
-    from scipy.special import expit
 
     class Logistic(Suite, Joint):
         def Likelihood(self, data, hypo):

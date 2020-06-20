@@ -7,11 +7,9 @@
 # MIT License: https://opensource.org/licenses/MIT
 
 
+import numpy as np
 from thinkbayes import Pmf, Beta
 from thinkbayes import thinkplot
-
-import numpy as np
-
 
 # ## The skeet problem
 #
@@ -30,14 +28,12 @@ import numpy as np
 rhode_beta = Beta(1, 1, label="Rhode")
 rhode_beta.Update((22, 11))
 
-
 # Solution
 
 # And another Beta for Wei
 
 wei_beta = Beta(1, 1, label="Wei")
 wei_beta.Update((21, 12))
-
 
 # Solution
 
@@ -47,7 +43,6 @@ thinkplot.Pdf(rhode_beta.MakePmf())
 thinkplot.Pdf(wei_beta.MakePmf())
 thinkplot.Config(xlabel="x", ylabel="Probability")
 
-
 # Solution
 
 # To estimate the probability of superiority, we can
@@ -56,20 +51,17 @@ thinkplot.Config(xlabel="x", ylabel="Probability")
 rhode_sample = rhode_beta.Sample(10000)
 wei_sample = wei_beta.Sample(10000)
 
-
 # Solution
 
 # The probability that Rhode is a better shooter is about 60%
 
 np.mean(rhode_sample > wei_sample)
 
-
 # Solution
 
 # The probability that Wei is a better shooter is about 40%
 
 np.mean(rhode_sample < wei_sample)
-
 
 # Solution
 
@@ -80,7 +72,6 @@ np.mean(rhode_sample < wei_sample)
 rhode_rematch = np.random.binomial(25, rhode_sample)
 thinkplot.Hist(Pmf(rhode_rematch))
 
-
 # Solution
 
 # The probability that Rhode wins a rematch (without going
@@ -89,13 +80,11 @@ thinkplot.Hist(Pmf(rhode_rematch))
 wei_rematch = np.random.binomial(25, wei_sample)
 np.mean(rhode_rematch > wei_rematch)
 
-
 # Solution
 
 # The probability that Wei wins the rematch is about 39%
 
 np.mean(rhode_rematch < wei_rematch)
-
 
 # Solution
 

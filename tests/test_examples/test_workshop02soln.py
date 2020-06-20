@@ -10,8 +10,6 @@ import numpy as np
 from thinkbayes import Suite
 from thinkbayes import thinkplot
 
-import warnings
-
 
 def test_bandit():
     # ## The likelihood function

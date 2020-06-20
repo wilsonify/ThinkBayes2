@@ -5,7 +5,6 @@ Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
 import logging
 
 import numpy as np
@@ -129,7 +128,7 @@ def test_blaster32(prior):
     thinkplot.Pdf(blaster)
 
     assert (
-        prior.Mean() > blaster.Mean()
+            prior.Mean() > blaster.Mean()
     )  # The posterior mean and MAP are lower than in the prior.
 
 
@@ -150,7 +149,7 @@ def test_blaster35(prior):
     thinkplot.Pdf(blaster)
 
     assert (
-        prior.MAP() > blaster.MAP()
+            prior.MAP() > blaster.MAP()
     )  # The posterior mean and MAP are lower than in the prior.
 
 

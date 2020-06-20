@@ -4,13 +4,11 @@ Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 import numpy as np
-import pandas as pd
-
+from scipy.special import gamma
+from thinkbayes import MakeMixture
 from thinkbayes import Pmf, Cdf, Suite, Joint
-
-from thinkbayes import MakePoissonPmf, EvalBinomialPmf, MakeMixture
-
 from thinkbayes import thinkplot
+
 
 # ## The rain in Boston problem
 #
@@ -44,13 +42,9 @@ from thinkbayes import thinkplot
 #
 # 5. Generate a predictive distribution for the amount of rain we will get tomorrow (assuming that it rains at all).  What is the predictive mean?
 #
-
 # ### Solution
 #
 # First, here's a function to evaluate the gamma PDF.
-
-
-from scipy.special import gamma
 
 
 def test_gamma():

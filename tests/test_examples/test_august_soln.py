@@ -5,11 +5,9 @@ Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-import math
 import numpy as np
-import pandas as pd
 
-from thinkbayes import Pmf, Cdf, Suite, Joint
+from thinkbayes import Pmf, Suite, Joint
 from thinkbayes import thinkplot
 
 

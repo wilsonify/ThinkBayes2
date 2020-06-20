@@ -3,15 +3,14 @@ This is based on code and exercises from Think Bayes: Chapter 7.
 """
 
 import numpy as np
-from thinkbayes import Pmf, Cdf, Suite, Joint
-from thinkbayes import thinkplot
-
-from thinkbayes import MakeNormalPmf
 from thinkbayes import EvalPoissonPmf
+from thinkbayes import MakeExponentialPmf
 from thinkbayes import MakeGammaPmf
 from thinkbayes import MakeMixture
+from thinkbayes import MakeNormalPmf
 from thinkbayes import MakePoissonPmf
-from thinkbayes import MakeExponentialPmf
+from thinkbayes import Pmf, Suite
+from thinkbayes import thinkplot
 
 
 class Hockey(Suite):

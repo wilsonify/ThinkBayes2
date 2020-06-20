@@ -2,10 +2,7 @@
 This is based on code and exercises from Think Bayes: Chapter 5 second edition.
 """
 
-import numpy as np
 import pytest
-from thinkbayes import Pmf, Cdf, Suite, Beta
-from thinkbayes import thinkplot
 
 
 def Odds(p):

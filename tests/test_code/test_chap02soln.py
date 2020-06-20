@@ -5,7 +5,7 @@ Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from thinkbayes import Hist, Pmf, Suite
+from thinkbayes import Pmf, Suite
 
 
 def test_pmf_class():

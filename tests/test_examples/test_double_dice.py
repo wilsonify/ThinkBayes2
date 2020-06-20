@@ -5,11 +5,10 @@ using the table method, with a Pandas DataFrame as the table.
 Copyright 2018 Allen Downey
 MIT License: https://opensource.org/licenses/MIT
 """
-import numpy as np
-import pandas as pd
-
 from fractions import Fraction
 
+import numpy as np
+import pandas as pd
 import pytest
 
 

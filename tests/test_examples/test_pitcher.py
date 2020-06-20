@@ -5,7 +5,7 @@ Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from thinkbayes import Pmf, Suite
+from thinkbayes import Suite
 
 from thinkbayes import thinkplot
 

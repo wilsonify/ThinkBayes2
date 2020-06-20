@@ -6,11 +6,8 @@ MIT License: https://opensource.org/licenses/MIT
 
 import numpy as np
 import pandas as pd
-
-from thinkbayes import thinkplot
 from thinkbayes import Pmf, Suite
-
-from fractions import Fraction
+from thinkbayes import thinkplot
 
 
 def test_BayesTable():

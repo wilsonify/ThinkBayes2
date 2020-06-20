@@ -5,10 +5,9 @@ Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
+import numpy as np
 from thinkbayes import Suite, Joint
 from thinkbayes import thinkplot
-
-import numpy as np
 
 
 def test_lincoln_index_problem():

@@ -5,9 +5,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 import numpy as np
-import pandas as pd
-
-import matplotlib.pyplot as plt
 
 from thinkbayes import Pmf, Cdf, Suite, Joint
 
@@ -56,8 +53,6 @@ def test_ltb():
     ps = np.linspace(0, 1, 101)
 
     # Here's a simple way to find eligible triplets, but it is inefficient, and it runs into problems with floating-point approximations.
-
-    from itertools import product
 
     def enumerate_triples(ps):
         for p1, p2, p3 in product(ps, ps, ps):

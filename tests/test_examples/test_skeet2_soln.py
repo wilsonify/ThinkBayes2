@@ -5,10 +5,9 @@ Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from thinkbayes import Hist, Pmf, Suite, Beta
-from thinkbayes import thinkplot
-
 import numpy as np
+from thinkbayes import Pmf, Beta
+from thinkbayes import thinkplot
 
 
 def test_comparing_distributions():

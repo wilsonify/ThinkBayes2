@@ -24,16 +24,14 @@ Conversely, if you are trying to find the distribution of a random variable,
 you can do it by computing whichever representation is easiest to figure out.
 """
 
+from inspect import getsourcelines
 
+import matplotlib.pyplot as plt
+import numpy as np
 import pytest
+from numpy.fft import fft, ifft
 from thinkbayes import Pmf, Cdf
 from thinkbayes import thinkplot
-
-import numpy as np
-from numpy.fft import fft, ifft
-
-from inspect import getsourcelines
-import matplotlib.pyplot as plt
 
 
 def show_code(func):

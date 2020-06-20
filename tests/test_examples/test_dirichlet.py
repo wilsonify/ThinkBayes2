@@ -3,18 +3,14 @@ Think Bayes
 Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
-import logging
 
-import numpy as np
-import pandas as pd
 from itertools import product
 
+import numpy as np
 import pytest
-from thinkbayes import Pmf, Cdf, Suite, Joint
-
-from thinkbayes import MakePoissonPmf, EvalBinomialPmf, MakeMixture
-from thinkbayes import thinkplot
 from thinkbayes import Dirichlet
+from thinkbayes import Pmf, Cdf, Suite, Joint
+from thinkbayes import thinkplot
 
 
 def DirichletMarginal(dirichlet, i):

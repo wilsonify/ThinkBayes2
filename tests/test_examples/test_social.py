@@ -7,11 +7,6 @@
 # MIT License: https://opensource.org/licenses/MIT
 
 
-from thinkbayes import Pmf, Suite, Beta
-from thinkbayes import thinkplot
-
-import numpy as np
-
 # ## The social desirability problem
 #
 # Whenever you survey people about sensitive issues, you have to deal with [social desirability bias](https://en.wikipedia.org/wiki/Social_desirability_bias), which is the tendency of people to shade their answers in the direction they think shows them in the most positive light.

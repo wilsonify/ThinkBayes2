@@ -7,9 +7,9 @@ Assuming that every animal had an equal chance to appear in our sample, estimate
 What is the probability that the next animal we see is a bear?
 """
 
+import arviz as az
 import numpy as np
 import pymc3 as pm
-import arviz as az
 
 
 def test_ltb():

@@ -2,8 +2,8 @@
 This is based on a notebook of example code from Think Bayes.
 """
 
+from thinkbayes import Pmf, Suite, Cdf
 from thinkbayes import thinkplot
-from thinkbayes import Hist, Pmf, Suite, Cdf
 
 
 class Dice(Suite):

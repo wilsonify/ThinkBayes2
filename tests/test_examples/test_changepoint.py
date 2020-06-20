@@ -9,16 +9,9 @@ import os
 import numpy as np
 import pandas as pd
 import pytest
-
 from scipy.stats import poisson
-
-from thinkbayes import Pmf, Cdf, Suite, Joint
-
-import thinkbayes
+from thinkbayes import Suite, Joint
 from thinkbayes import thinkplot
-
-import pymc3 as pm
-import theano.tensor as T
 
 CURDIR = os.path.dirname(__file__)
 PARDIR = os.path.join(CURDIR, os.pardir)
@@ -129,6 +122,5 @@ def test_shootings(crime_data_df):
 
     counts.plot.line()
     thinkplot.decorate(xlabel="Date", ylabel="Number of shootings")
-    from matplotlib import pyplot as plt
 
     # plt.savefig("Number of shootings.png")

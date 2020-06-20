@@ -6,13 +6,13 @@ MIT License: https://opensource.org/licenses/MIT
 
 """
 
+from fractions import Fraction
 
 import numpy as np
 import pytest
-from thinkbayes import Hist, Pmf, Cdf, Suite, Beta
-from thinkbayes import thinkplot
-from fractions import Fraction
+from thinkbayes import Hist, Pmf, Suite
 from thinkbayes import MakeMixture
+from thinkbayes import thinkplot
 
 
 class Socks(Suite):
@@ -36,7 +36,7 @@ class Socks(Suite):
         white, black = hypo
         total = white + black
         like = white / total * (white - 1) / (total - 1) + black / total * (
-            black - 1
+                black - 1
         ) / (total - 1)
         if data == "pair":
             return like

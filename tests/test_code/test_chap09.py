@@ -4,14 +4,14 @@ Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
 import math
+from itertools import product
+
 import numpy as np
-from thinkbayes import Pmf, Cdf, Suite, Joint
-from thinkbayes import thinkplot
 from scipy.stats import norm
 from thinkbayes import EvalNormalPdf
-from itertools import product
+from thinkbayes import Pmf, Cdf, Suite, Joint
+from thinkbayes import thinkplot
 
 
 class Normal(Suite, Joint):
@@ -349,7 +349,6 @@ def test_flea_beetles(flea_beetles_df):
     suite.Update((145, 14))
     for hypo, prob in suite.Items():
         print(hypo, prob)
-
 
 # **Exercise:** Run this analysis again for the control group.
 # What is the distribution of the difference between the groups?

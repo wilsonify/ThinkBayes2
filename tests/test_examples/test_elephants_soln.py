@@ -4,14 +4,12 @@ Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
+from itertools import combinations
+
 import numpy as np
-import pandas as pd
-
-from thinkbayes import Pmf, Cdf, Suite, Joint
-
-from thinkbayes import MakePoissonPmf, EvalBinomialPmf, MakeMixture
-
+from thinkbayes import Pmf, Suite
 from thinkbayes import thinkplot
+
 
 # ## Cats and rats and elephants
 #
@@ -20,13 +18,9 @@ from thinkbayes import thinkplot
 # One day we visit a zoo and see 3 lions, 2 tigers, and one bear.  Assuming that every animal in the zoo has an equal chance to be seen, what is the probability that the next animal we see is an elephant?
 #
 #
-
 # ## Solution
 #
 # I'll start by enumerating all possible zoos with `itertools`.
-
-
-from itertools import combinations
 
 
 def test_elephant():

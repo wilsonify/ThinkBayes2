@@ -5,8 +5,8 @@ Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
+from thinkbayes import Pmf, Suite, Cdf
 from thinkbayes import thinkplot
-from thinkbayes import Hist, Pmf, Suite, Cdf
 
 
 def test_dice_problem():

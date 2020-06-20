@@ -11,10 +11,9 @@ Copyright 2018 Allen Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pymc3 as pm
-
-import matplotlib.pyplot as plt
 
 
 def test_hockey():

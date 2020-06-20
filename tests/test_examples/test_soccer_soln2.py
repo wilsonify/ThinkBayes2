@@ -33,7 +33,6 @@ inherits from `thinkbayes.Suite` and provides an appropriate `Likelihood` functi
 first a little house-keeping
 """
 
-
 import thinkbayes
 
 
