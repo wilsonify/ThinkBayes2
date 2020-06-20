@@ -193,8 +193,8 @@ def test_reading(drp_scores_df):
     for name, group in grouped:
         print(name, group.Response.mean())
 
-    mus = np.linspace(20, 80, 101)  # The prior distributions for `mu` and `sigma` are uniform.
-    sigmas = np.linspace(5, 30, 101)
+    mus = np.linspace(20, 80, 10)  # The prior distributions for `mu` and `sigma` are uniform.
+    sigmas = np.linspace(5, 30, 10)
     control = Normal(product(mus, sigmas))
     data = df[df.Treatment == "Control"].Response
     control.Update(data)
