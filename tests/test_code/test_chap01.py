@@ -52,7 +52,7 @@ def test_total(gss):
     (gss.indus10 == 6870).mean()
 
     subset = gss.dropna(subset=["sex", "polviews", "partyid", "indus10"])
-    subset.shape
+    assert subset.shape == (50287, 19)
 
     female = gss.sex == 2
     values(female)
