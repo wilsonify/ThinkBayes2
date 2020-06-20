@@ -309,8 +309,8 @@ def test_flea_beetles(flea_beetles_df):
         print(name, suite.PredictiveProb(137))
 
     def MakeAngleSuite(data):
-        mus = np.linspace(8, 16, 101)
-        sigmas = np.linspace(0.1, 2, 101)
+        mus = np.linspace(8, 16, 10)
+        sigmas = np.linspace(0.1, 2, 10)
         suite = Beetle(product(mus, sigmas))
         suite.Update(data)
         return suite
