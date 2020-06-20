@@ -127,7 +127,7 @@ class ThoughtPolice(Suite):
             else:
                 return 1
         else:
-            data == "good comrades"
+            data = "good comrades"
         if hypo == "everything":
             return 0
         elif hypo == "something":
