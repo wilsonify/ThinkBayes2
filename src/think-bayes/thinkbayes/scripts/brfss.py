@@ -5,11 +5,11 @@ Copyright 2010 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
 import math
 import sys
-import pandas
+
 import numpy as np
+import pandas
 
 from src import thinkbayes2, thinkplot
 

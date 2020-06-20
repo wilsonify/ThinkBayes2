@@ -7,18 +7,16 @@ Copyright 2013 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
 import csv
 import json
-import numpy
 import os
 import sys
+from datetime import datetime, time
+from time import sleep
+
+import numpy
 import redis
 import urllib2
-
-from datetime import datetime, time
-
-from time import sleep
 
 
 class Redis(object):

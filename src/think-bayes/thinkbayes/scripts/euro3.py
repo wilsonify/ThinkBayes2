@@ -5,7 +5,6 @@ Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
 """This file contains a partial solution to a problem from
 MacKay, "Information Theory, Inference, and Learning Algorithms."
 

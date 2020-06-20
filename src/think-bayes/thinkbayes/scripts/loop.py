@@ -1,4 +1,5 @@
-import sys, os
+import os
+import sys
 from glob import glob
 
 
@@ -16,10 +17,12 @@ def main(script, files="*.py"):
 
         # cmd = '2to3 -w -f print %s' % (file,)
         cmd = "sed -i 's/Gaussian/Normal/g' %s" % (file,)
-        print cmd
+        print
+        cmd
 
         res, stat = pipe(cmd)
-        print res, stat
+        print
+        res, stat
 
 
 if __name__ == "__main__":

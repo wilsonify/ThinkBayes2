@@ -5,14 +5,14 @@ Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
 import math
-import numpy
 import random
 import sys
 
 import correlation
 import matplotlib.pyplot as pyplot
+import numpy
+
 from src import thinkbayes2, thinkplot
 
 INTERVAL = 245 / 365.0

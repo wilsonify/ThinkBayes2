@@ -5,10 +5,9 @@ Copyright 2014 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
 from variability import *
 
-from src import thinkbayes2, thinkplot
+from src import thinkbayes2
 
 
 def RunEstimate(update_func, num_points=31, median_flag=False):

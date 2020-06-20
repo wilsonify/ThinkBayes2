@@ -5,22 +5,19 @@ Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
-import matplotlib.pyplot as pyplot
-import numpy
-
 import csv
 import random
 import shelve
 import sys
 import time
+import warnings
+
+import matplotlib.pyplot as pyplot
+import numpy
 
 from src import thinkbayes2, thinkplot
 
-import warnings
-
 warnings.simplefilter("error", RuntimeWarning)
-
 
 FORMATS = ["pdf", "eps", "png"]
 
@@ -1059,7 +1056,7 @@ class Species3(Species2):
         row = gammas[:m]
 
         # col is the cumulative sum of gammas
-        col = numpy.cumsum(gammas)[self.ns[0] - 1 :]
+        col = numpy.cumsum(gammas)[self.ns[0] - 1:]
 
         # each row of the array is a set of ps, normalized
         # for each hypothetical value of n
@@ -1186,7 +1183,7 @@ class Species5(Species2):
         gammas = numpy.random.gamma(self.params)
 
         # sums is the cumulative sum of p, for each value of n
-        sums = numpy.cumsum(gammas)[self.ns[0] - 1 :]
+        sums = numpy.cumsum(gammas)[self.ns[0] - 1:]
 
         # get p for the mth species, for each value of n
         ps = gammas[i - 1] / sums

@@ -18,7 +18,7 @@ observer = MongoObserver(url=mongo_url)
 
 ex.observers.append(observer)
 ex.add_config(
-    {"C": 1.0, "gamma": 0.7, "kernel": "rbf", "seed": 42,}
+    {"C": 1.0, "gamma": 0.7, "kernel": "rbf", "seed": 42, }
 )
 
 

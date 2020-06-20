@@ -5,10 +5,9 @@ Copyright 2014 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
+import numpy
 
 from src import thinkbayes2, thinkplot
-
-import numpy
 
 """
 Bayesian solution to the Lincoln index, described in a blog
@@ -107,7 +106,6 @@ class Lincoln(thinkbayes2.Suite, thinkbayes2.Joint):
 
 
 def main():
-
     data = 20, 15, 3
     probs = numpy.linspace(0, 1, 31)
     hypos = []

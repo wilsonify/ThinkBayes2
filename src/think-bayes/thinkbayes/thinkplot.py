@@ -5,17 +5,15 @@ Copyright 2014 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
 import math
+import warnings
+
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-
-from chart_studio import plotly
 import pandas
-
-import warnings
 import thinkbayes
+from chart_studio import plotly
 
 
 # customize some matplotlib attributes
@@ -44,16 +42,16 @@ class _Brewer(object):
     color_iter = None
 
     colors = [
-        "#f7fbff",
-        "#deebf7",
-        "#c6dbef",
-        "#9ecae1",
-        "#6baed6",
-        "#4292c6",
-        "#2171b5",
-        "#08519c",
-        "#08306b",
-    ][::-1]
+                 "#f7fbff",
+                 "#deebf7",
+                 "#c6dbef",
+                 "#9ecae1",
+                 "#6baed6",
+                 "#4292c6",
+                 "#2171b5",
+                 "#08519c",
+                 "#08306b",
+             ][::-1]
 
     # lists that indicate which colors to use depending on how many are used
     which_colors = [

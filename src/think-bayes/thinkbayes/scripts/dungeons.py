@@ -5,7 +5,6 @@ Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
 import random
 
 from src import thinkbayes2, thinkplot

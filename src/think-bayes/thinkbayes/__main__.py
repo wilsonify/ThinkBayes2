@@ -15,7 +15,6 @@ Pdf: represents a continuous probability density function
 
 """
 
-
 import bisect
 import copy
 import logging

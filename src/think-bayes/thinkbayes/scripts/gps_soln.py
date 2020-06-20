@@ -5,11 +5,11 @@ Copyright 2014 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
+from itertools import product
 
 import numpy
-from src import thinkbayes2, thinkplot
 
-from itertools import product
+from src import thinkbayes2, thinkplot
 
 
 class Gps(thinkbayes2.Suite, thinkbayes2.Joint):

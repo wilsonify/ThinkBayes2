@@ -5,14 +5,13 @@ Copyright 2013 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
-from src import thinkbayes2, thinkplot
-
-import numpy
-
 import math
 import random
 import sys
+
+import numpy
+
+from src import thinkbayes2, thinkplot
 
 FORMATS = ["pdf", "eps", "png", "jpg"]
 

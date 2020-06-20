@@ -5,8 +5,8 @@ Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
 from dice import Dice
+
 from src import thinkplot
 
 

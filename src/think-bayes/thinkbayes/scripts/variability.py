@@ -5,20 +5,15 @@ Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
 import math
-import numpy
-import pickle
-import numpy
 import random
-import scipy
 
 import brfss
+import matplotlib.pyplot as pyplot
+import numpy
+import scipy
 
 from src import thinkbayes2, thinkplot
-
-import matplotlib.pyplot as pyplot
-
 
 NUM_SIGMAS = 1
 
@@ -490,7 +485,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 """ Results:
 

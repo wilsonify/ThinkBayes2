@@ -5,13 +5,12 @@ Copyright 2013 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
 import csv
-import numpy as np
-from src import thinkbayes2, thinkplot
 
 import matplotlib.pyplot as pyplot
+import numpy as np
 
+from src import thinkbayes2, thinkplot
 
 FORMATS = ["png", "pdf", "eps"]
 

@@ -5,7 +5,6 @@ Copyright 2014 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
 import math
 import sys
 
@@ -178,7 +177,6 @@ def MakeCrediblePlot(suite):
 
 
 def main(script):
-
     alphas = range(0, 31)
     betas = range(1, 51)
     locations = range(0, 31)

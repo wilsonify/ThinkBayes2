@@ -5,14 +5,11 @@ Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
 import csv
 import math
-import numpy
 import sys
 
-import matplotlib
-import matplotlib.pyplot as pyplot
+import numpy
 
 from src import thinkbayes2, thinkplot
 

@@ -5,7 +5,6 @@ Copyright 2014 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
 from src import thinkbayes2
 
 

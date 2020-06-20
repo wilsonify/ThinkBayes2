@@ -5,12 +5,11 @@ Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
 import math
 
 import columns
+
 from src import thinkbayes2, thinkplot
-import src.thinkbayes2
 
 USE_SUMMARY_DATA = True
 
