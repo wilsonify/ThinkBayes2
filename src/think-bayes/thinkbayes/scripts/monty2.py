@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 from src.thinkbayes2 import Suite
 
 
@@ -19,17 +18,17 @@ class Monty(Suite):
         """
         if hypo == data:
             return 0
-        elif hypo == 'A':
+        elif hypo == "A":
             return 0.5
         else:
             return 1
 
 
 def main():
-    suite = Monty('ABC')
-    suite.Update('B')
+    suite = Monty("ABC")
+    suite.Update("B")
     suite.Print()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

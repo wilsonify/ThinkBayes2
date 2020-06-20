@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 from variability import *
 
 from src import thinkbayes2, thinkplot
@@ -19,7 +18,7 @@ def RunEstimate(update_func, num_points=31, median_flag=False):
     num_points: number of points in the Suite (in each dimension)
     """
     d = ReadHeights(nrows=None)
-    labels = {1:'male', 2:'female'}
+    labels = {1: "male", 2: "female"}
 
     suites = {}
     for key, xs in d.items():
@@ -33,11 +32,11 @@ def RunEstimate(update_func, num_points=31, median_flag=False):
         suite = Height(mus, sigmas, label)
         suites[label] = suite
         update_func(suite, xs)
-        print('MAP', suite.MaximumLikelihood())
+        print("MAP", suite.MaximumLikelihood())
 
     # joint distributions of mu and sigma for men and women
-    suite1 = suites['male']
-    suite2 = suites['female']
+    suite1 = suites["male"]
+    suite2 = suites["female"]
 
     # TODO: compute and plot the distribution of d
 
@@ -46,11 +45,9 @@ def main():
     random.seed(17)
 
     func = UpdateSuite5
-    median_flag = (func == UpdateSuite5)
+    median_flag = func == UpdateSuite5
     RunEstimate(func, median_flag=median_flag)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
-
-

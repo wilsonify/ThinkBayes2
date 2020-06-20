@@ -6,13 +6,12 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 import math
 import sys
 
 from src import thinkbayes2, thinkplot
 
-FORMATS = ['pdf', 'eps', 'png']
+FORMATS = ["pdf", "eps", "png"]
 
 
 def StrafingSpeed(alpha, beta, x):
@@ -25,7 +24,7 @@ def StrafingSpeed(alpha, beta, x):
     Returns: derivative of x with respect to theta
     """
     theta = math.atan2(x - alpha, beta)
-    speed = beta / math.cos(theta)**2
+    speed = beta / math.cos(theta) ** 2
     return speed
 
 
@@ -64,9 +63,7 @@ class Paintball(thinkbayes2.Suite, thinkbayes2.Joint):
         locations: possible locations along the wall
         """
         self.locations = locations
-        pairs = [(alpha, beta) 
-                 for alpha in alphas 
-                 for beta in betas]
+        pairs = [(alpha, beta) for alpha in alphas for beta in betas]
         thinkbayes2.Suite.__init__(self, pairs)
 
     def Likelihood(self, data, hypo):
@@ -84,7 +81,7 @@ class Paintball(thinkbayes2.Suite, thinkbayes2.Joint):
         return like
 
 
-def MakePmfPlot(alpha = 10):
+def MakePmfPlot(alpha=10):
     """Plots Pmf of location for a range of betas."""
     locations = range(0, 31)
 
@@ -93,13 +90,10 @@ def MakePmfPlot(alpha = 10):
 
     for beta in betas:
         pmf = MakeLocationPmf(alpha, beta, locations)
-        pmf.name = 'beta = %d' % beta
+        pmf.name = "beta = %d" % beta
         thinkplot.Pdf(pmf)
 
-    thinkplot.Save('paintball1',
-                   xlabel='Distance',
-                   ylabel='Prob',
-                   formats=FORMATS)
+    thinkplot.Save("paintball1", xlabel="Distance", ylabel="Prob", formats=FORMATS)
 
 
 def MakePosteriorPlot(suite):
@@ -108,45 +102,40 @@ def MakePosteriorPlot(suite):
     suite: posterior joint distribution of location
     """
     marginal_alpha = suite.Marginal(0)
-    marginal_alpha.name = 'alpha'
+    marginal_alpha.name = "alpha"
     marginal_beta = suite.Marginal(1)
-    marginal_beta.name = 'beta'
+    marginal_beta.name = "beta"
 
-    print('alpha CI', marginal_alpha.CredibleInterval(50))
-    print('beta CI', marginal_beta.CredibleInterval(50))
+    print("alpha CI", marginal_alpha.CredibleInterval(50))
+    print("beta CI", marginal_beta.CredibleInterval(50))
 
     thinkplot.PrePlot(num=2)
 
-    #thinkplot.Pmf(marginal_alpha)
-    #thinkplot.Pmf(marginal_beta)
-    
+    # thinkplot.Pmf(marginal_alpha)
+    # thinkplot.Pmf(marginal_beta)
+
     thinkplot.Cdf(thinkbayes2.MakeCdfFromPmf(marginal_alpha))
     thinkplot.Cdf(thinkbayes2.MakeCdfFromPmf(marginal_beta))
-    
-    thinkplot.Save('paintball2',
-                   xlabel='Distance',
-                   ylabel='Prob',
-                   loc=4,
-                   formats=FORMATS)
+
+    thinkplot.Save(
+        "paintball2", xlabel="Distance", ylabel="Prob", loc=4, formats=FORMATS
+    )
 
 
 def MakeConditionalPlot(suite):
     """Plots marginal CDFs for alpha conditioned on beta.
 
     suite: posterior joint distribution of location
-    """    
+    """
     betas = [10, 20, 40]
     thinkplot.PrePlot(num=len(betas))
 
     for beta in betas:
         cond = suite.Conditional(0, 1, beta)
-        cond.name = 'beta = %d' % beta
+        cond.name = "beta = %d" % beta
         thinkplot.Pdf(cond)
 
-    thinkplot.Save('paintball3',
-                   xlabel='Distance',
-                   ylabel='Prob',
-                   formats=FORMATS)
+    thinkplot.Save("paintball3", xlabel="Distance", ylabel="Prob", formats=FORMATS)
 
 
 def MakeContourPlot(suite):
@@ -156,11 +145,13 @@ def MakeContourPlot(suite):
     """
     thinkplot.Contour(suite.GetDict(), contour=False, pcolor=True)
 
-    thinkplot.Save('paintball4',
-                   xlabel='alpha',
-                   ylabel='beta',
-                   axis=[0, 30, 0, 20],
-                   formats=FORMATS)
+    thinkplot.Save(
+        "paintball4",
+        xlabel="alpha",
+        ylabel="beta",
+        axis=[0, 30, 0, 20],
+        formats=FORMATS,
+    )
 
 
 def MakeCrediblePlot(suite):
@@ -177,15 +168,13 @@ def MakeCrediblePlot(suite):
             d[pair] += 1
 
     thinkplot.Contour(d, contour=False, pcolor=True)
-    thinkplot.Text(17, 4, '25', color='white')
-    thinkplot.Text(17, 15, '50', color='white')
-    thinkplot.Text(17, 30, '75')
+    thinkplot.Text(17, 4, "25", color="white")
+    thinkplot.Text(17, 15, "50", color="white")
+    thinkplot.Text(17, 30, "75")
 
-    thinkplot.Save('paintball5',
-                   xlabel='alpha',
-                   ylabel='beta',
-                   formats=FORMATS,
-                   legend=False)
+    thinkplot.Save(
+        "paintball5", xlabel="alpha", ylabel="beta", formats=FORMATS, legend=False
+    )
 
 
 def main(script):
@@ -208,5 +197,5 @@ def main(script):
     MakePmfPlot()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(*sys.argv)

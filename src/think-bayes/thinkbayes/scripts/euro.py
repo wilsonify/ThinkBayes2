@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 """This file contains a partial solution to a problem from
 MacKay, "Information Theory, Inference, and Learning Algorithms."
 
@@ -37,10 +36,10 @@ class Euro(thinkbayes2.Suite):
         data: string 'H' or 'T'
         """
         x = hypo / 100.0
-        if data == 'H':
+        if data == "H":
             return x
         else:
-            return 1-x
+            return 1 - x
 
 
 class Euro2(thinkbayes2.Suite):
@@ -54,7 +53,7 @@ class Euro2(thinkbayes2.Suite):
         """
         x = hypo / 100.0
         heads, tails = data
-        like = x**heads * (1-x)**tails
+        like = x ** heads * (1 - x) ** tails
         return like
 
 
@@ -70,7 +69,7 @@ def TrianglePrior():
     for x in range(0, 51):
         suite.Set(x, x)
     for x in range(51, 101):
-        suite.Set(x, 100-x) 
+        suite.Set(x, 100 - x)
     suite.Normalize()
     return suite
 
@@ -82,7 +81,7 @@ def RunUpdate(suite, heads=140, tails=110):
     heads: int
     tails: int
     """
-    dataset = 'H' * heads + 'T' * tails
+    dataset = "H" * heads + "T" * tails
 
     for data in dataset:
         suite.Update(data)
@@ -92,15 +91,15 @@ def Summarize(suite):
     """Prints summary statistics for the suite."""
     print(suite.Prob(50))
 
-    print('MLE', suite.MaximumLikelihood())
+    print("MLE", suite.MaximumLikelihood())
 
-    print('Mean', suite.Mean())
-    print('Median', suite.Percentile(50)) 
+    print("Mean", suite.Mean())
+    print("Median", suite.Percentile(50))
 
-    print('5th %ile', suite.Percentile(5)) 
-    print('95th %ile', suite.Percentile(95)) 
+    print("5th %ile", suite.Percentile(5))
+    print("95th %ile", suite.Percentile(95))
 
-    print('CI', suite.CredibleInterval(90))
+    print("CI", suite.CredibleInterval(90))
 
 
 def PlotSuites(suites, root):
@@ -113,22 +112,19 @@ def PlotSuites(suites, root):
     thinkplot.PrePlot(len(suites))
     thinkplot.Pmfs(suites)
 
-    thinkplot.Save(root=root,
-                   xlabel='x',
-                   ylabel='Probability',
-                   formats=['pdf', 'eps'])
+    thinkplot.Save(root=root, xlabel="x", ylabel="Probability", formats=["pdf", "eps"])
 
 
 def main():
     # make the priors
     suite1 = UniformPrior()
-    suite1.name = 'uniform'
+    suite1.name = "uniform"
 
     suite2 = TrianglePrior()
-    suite2.name = 'triangle'
+    suite2.name = "triangle"
 
     # plot the priors
-    PlotSuites([suite1, suite2], 'euro2')
+    PlotSuites([suite1, suite2], "euro2")
 
     # update
     RunUpdate(suite1)
@@ -138,9 +134,9 @@ def main():
     Summarize(suite2)
 
     # plot the posteriors
-    PlotSuites([suite1], 'euro1')
-    PlotSuites([suite1, suite2], 'euro3')
+    PlotSuites([suite1], "euro1")
+    PlotSuites([suite1, suite2], "euro3")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

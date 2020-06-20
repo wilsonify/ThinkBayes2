@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 from src import thinkbayes2
 
 
@@ -37,21 +36,21 @@ def main():
     # instantiate the suite
     suite = Cookie([bowl1, bowl2])
 
-    print('After 1 vanilla')
-    suite.Update('vanilla')
+    print("After 1 vanilla")
+    suite.Update("vanilla")
     for hypo, prob in suite.Items():
         print(hypo, prob)
 
-    print('\nAfter 1 vanilla, 1 chocolate')
-    suite.Update('chocolate')
+    print("\nAfter 1 vanilla, 1 chocolate")
+    suite.Update("chocolate")
     for hypo, prob in suite.Items():
         print(hypo, prob)
 
-    print('\nAfter 1 vanilla, 1 chocolate, 1 vanilla')
-    suite.Update('vanilla')
+    print("\nAfter 1 vanilla, 1 chocolate, 1 vanilla")
+    suite.Update("vanilla")
     for hypo, prob in suite.Items():
         print(hypo, prob)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

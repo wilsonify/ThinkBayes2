@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 import math
 import matplotlib
 import matplotlib.pyplot as plt
@@ -41,24 +40,34 @@ class _Brewer(object):
 
     Borrowed from http://colorbrewer2.org/
     """
+
     color_iter = None
 
-    colors = ['#f7fbff', '#deebf7', '#c6dbef',
-              '#9ecae1', '#6baed6', '#4292c6',
-              '#2171b5', '#08519c', '#08306b'][::-1]
+    colors = [
+        "#f7fbff",
+        "#deebf7",
+        "#c6dbef",
+        "#9ecae1",
+        "#6baed6",
+        "#4292c6",
+        "#2171b5",
+        "#08519c",
+        "#08306b",
+    ][::-1]
 
     # lists that indicate which colors to use depending on how many are used
-    which_colors = [[],
-                    [1],
-                    [1, 3],
-                    [0, 2, 4],
-                    [0, 2, 4, 6],
-                    [0, 2, 3, 5, 6],
-                    [0, 2, 3, 4, 5, 6],
-                    [0, 1, 2, 3, 4, 5, 6],
-                    [0, 1, 2, 3, 4, 5, 6, 7],
-                    [0, 1, 2, 3, 4, 5, 6, 7, 8],
-                    ]
+    which_colors = [
+        [],
+        [1],
+        [1, 3],
+        [0, 2, 4],
+        [0, 2, 4, 6],
+        [0, 2, 3, 5, 6],
+        [0, 2, 3, 4, 5, 6],
+        [0, 1, 2, 3, 4, 5, 6],
+        [0, 1, 2, 3, 4, 5, 6, 7],
+        [0, 1, 2, 3, 4, 5, 6, 7, 8],
+    ]
 
     current_figure = None
 
@@ -76,7 +85,7 @@ class _Brewer(object):
         """
         for i in cls.which_colors[num]:
             yield cls.colors[i]
-        raise StopIteration('Ran out of colors in _Brewer.')
+        raise StopIteration("Ran out of colors in _Brewer.")
 
     @classmethod
     def InitIter(cls, num):
@@ -108,18 +117,18 @@ class _Brewer(object):
 def _UnderrideColor(options):
     """If color is not in the options, chooses a color.
     """
-    if 'color' in options:
+    if "color" in options:
         return options
 
     # get the current color iterator; if there is none, init one
     color_iter = _Brewer.GetIter(5)
 
     try:
-        options['color'] = next(color_iter)
+        options["color"] = next(color_iter)
     except (StopIteration, RuntimeError):
         # if you run out of colors, initialize the color iterator
         # and try again
-        warnings.warn('Ran out of colors.  Starting over.')
+        warnings.warn("Ran out of colors.  Starting over.")
         _Brewer.ClearIter()
         _UnderrideColor(options)
 
@@ -146,16 +155,17 @@ def PrePlot(num=None, rows=None, cols=None):
         rows = 1
 
     # resize the image, depending on the number of rows and cols
-    size_map = {(1, 1): (8, 6),
-                (1, 2): (12, 6),
-                (1, 3): (12, 6),
-                (1, 4): (12, 5),
-                (1, 5): (12, 4),
-                (2, 2): (10, 10),
-                (2, 3): (16, 10),
-                (3, 1): (8, 10),
-                (4, 1): (8, 12),
-                }
+    size_map = {
+        (1, 1): (8, 6),
+        (1, 2): (12, 6),
+        (1, 3): (12, 6),
+        (1, 4): (12, 5),
+        (1, 5): (12, 4),
+        (2, 2): (10, 10),
+        (2, 3): (16, 10),
+        (3, 1): (8, 10),
+        (4, 1): (8, 12),
+    }
 
     if (rows, cols) in size_map:
         fig = plt.gcf()
@@ -219,7 +229,7 @@ def Figure(**options):
     plt.figure(**options)
 
 
-def Plot(obj, ys=None, style='', **options):
+def Plot(obj, ys=None, style="", **options):
     """Plots a line.
 
     Args:
@@ -229,13 +239,13 @@ def Plot(obj, ys=None, style='', **options):
       options: keyword args passed to plt.plot
     """
 
-    label = getattr(obj, 'label', '_nolegend_')
+    label = getattr(obj, "label", "_nolegend_")
     options = _UnderrideColor(options)
     options = _Underride(options, linewidth=3, alpha=0.7, label=label)
 
     xs = obj
     if ys is None:
-        if hasattr(obj, 'Render'):
+        if hasattr(obj, "Render"):
             xs, ys = obj.Render()
         if isinstance(obj, pandas.Series):
             ys = obj.values
@@ -310,8 +320,7 @@ def Scatter(xs, ys=None, **options):
     ys: y values
     options: options passed to plt.scatter
     """
-    options = _Underride(options, color='blue', alpha=0.2,
-                         s=30, edgecolors='none')
+    options = _Underride(options, color="blue", alpha=0.2, s=30, edgecolors="none")
 
     if ys is None and isinstance(xs, pandas.Series):
         ys = xs.values
@@ -338,8 +347,8 @@ def Pdf(pdf, **options):
       pdf: Pdf, Pmf, or Hist object
       options: keyword args passed to plt.plot
     """
-    low, high = options.pop('low', None), options.pop('high', None)
-    n = options.pop('n', 101)
+    low, high = options.pop("low", None), options.pop("high", None)
+    n = options.pop("n", 101)
     xs, ps = pdf.Render()
     options = _Underride(options, label=pdf.label)
     Plot(xs, ps, **options)
@@ -383,22 +392,23 @@ def Hist(hist, **options):
         xs = np.arange(len(xs))
         plt.xticks(xs + 0.5, labels)
 
-    if 'width' not in options:
+    if "width" not in options:
         try:
-            options['width'] = 0.9 * np.diff(xs).min()
+            options["width"] = 0.9 * np.diff(xs).min()
         except TypeError:
-            warnings.warn("Hist: Can't compute bar width automatically."
-                          "Check for non-numeric types in Hist."
-                          "Or try providing width option."
-                          )
+            warnings.warn(
+                "Hist: Can't compute bar width automatically."
+                "Check for non-numeric types in Hist."
+                "Or try providing width option."
+            )
 
     options = _Underride(options, label=hist.label)
-    options = _Underride(options, align='center')
-    if options['align'] == 'left':
-        options['align'] = 'edge'
-    elif options['align'] == 'right':
-        options['align'] = 'edge'
-        options['width'] *= -1
+    options = _Underride(options, align="center")
+    if options["align"] == "left":
+        options["align"] = "edge"
+    elif options["align"] == "right":
+        options["align"] = "edge"
+        options["width"] *= -1
 
     Bar(xs, ys, **options)
 
@@ -427,14 +437,16 @@ def Pmf(pmf, **options):
     xs, ys = pmf.Render()
     low, high = min(xs), max(xs)
 
-    width = options.pop('width', None)
+    width = options.pop("width", None)
     if width is None:
         try:
             width = np.diff(xs).min()
         except TypeError:
-            warnings.warn("Pmf: Can't compute bar width automatically."
-                          "Check for non-numeric types in Pmf."
-                          "Or try providing width option.")
+            warnings.warn(
+                "Pmf: Can't compute bar width automatically."
+                "Check for non-numeric types in Pmf."
+                "Or try providing width option."
+            )
     points = []
 
     lastx = np.nan
@@ -453,10 +465,10 @@ def Pmf(pmf, **options):
     points.append((lastx, 0))
     pxs, pys = zip(*points)
 
-    align = options.pop('align', 'center')
-    if align == 'center':
+    align = options.pop("align", "center")
+    if align == "center":
         pxs = np.array(pxs) - width / 2.0
-    if align == 'right':
+    if align == "right":
         pxs = np.array(pxs) - width
 
     options = _Underride(options, label=pmf.label)
@@ -507,36 +519,36 @@ def Cdf(cdf, complement=False, transform=None, **options):
     xs = np.asarray(xs)
     ps = np.asarray(ps)
 
-    scale = dict(xscale='linear', yscale='linear')
+    scale = dict(xscale="linear", yscale="linear")
 
-    for s in ['xscale', 'yscale']:
+    for s in ["xscale", "yscale"]:
         if s in options:
             scale[s] = options.pop(s)
 
-    if transform == 'exponential':
+    if transform == "exponential":
         complement = True
-        scale['yscale'] = 'log'
+        scale["yscale"] = "log"
 
-    if transform == 'pareto':
+    if transform == "pareto":
         complement = True
-        scale['yscale'] = 'log'
-        scale['xscale'] = 'log'
+        scale["yscale"] = "log"
+        scale["xscale"] = "log"
 
     if complement:
         ps = [1.0 - p for p in ps]
 
-    if transform == 'weibull':
+    if transform == "weibull":
         xs = np.delete(xs, -1)
         ps = np.delete(ps, -1)
         ps = [-math.log(1.0 - p) for p in ps]
-        scale['xscale'] = 'log'
-        scale['yscale'] = 'log'
+        scale["xscale"] = "log"
+        scale["yscale"] = "log"
 
-    if transform == 'gumbel':
+    if transform == "gumbel":
         xs = np.delete(xs, 0)
         ps = np.delete(ps, 0)
         ps = [-math.log(p) for p in ps]
-        scale['yscale'] = 'log'
+        scale["yscale"] = "log"
 
     options = _Underride(options, label=cdf.label)
     Plot(xs, ps, **options)
@@ -641,10 +653,9 @@ def Text(x, y, s, **options):
     s: string
     options: keyword args passed to plt.text
     """
-    options = _Underride(options,
-                         fontsize=16,
-                         verticalalignment='top',
-                         horizontalalignment='left')
+    options = _Underride(
+        options, fontsize=16, verticalalignment="top", horizontalalignment="left"
+    )
     plt.text(x, y, s, **options)
 
 
@@ -658,39 +669,49 @@ def Config(**options):
     Pulls options out of the option dictionary and passes them to
     the corresponding plt functions.
     """
-    names = ['title', 'xlabel', 'ylabel', 'xscale', 'yscale',
-             'xticks', 'yticks', 'axis', 'xlim', 'ylim']
+    names = [
+        "title",
+        "xlabel",
+        "ylabel",
+        "xscale",
+        "yscale",
+        "xticks",
+        "yticks",
+        "axis",
+        "xlim",
+        "ylim",
+    ]
 
     for name in names:
         if name in options:
             getattr(plt, name)(options[name])
 
     global LEGEND
-    LEGEND = options.get('legend', LEGEND)
+    LEGEND = options.get("legend", LEGEND)
 
     if LEGEND:
         global LOC
-        LOC = options.get('loc', LOC)
-        frameon = options.get('frameon', True)
+        LOC = options.get("loc", LOC)
+        frameon = options.get("frameon", True)
 
-        warnings.filterwarnings('error', category=UserWarning)
+        warnings.filterwarnings("error", category=UserWarning)
         try:
             plt.legend(loc=LOC, frameon=frameon)
         except UserWarning:
             pass
-        warnings.filterwarnings('default', category=UserWarning)
+        warnings.filterwarnings("default", category=UserWarning)
 
     # x and y ticklabels can be made invisible
-    val = options.get('xticklabels', None)
+    val = options.get("xticklabels", None)
     if val is not None:
-        if val == 'invisible':
+        if val == "invisible":
             ax = plt.gca()
             labels = ax.get_xticklabels()
             plt.setp(labels, visible=False)
 
-    val = options.get('yticklabels', None)
+    val = options.get("yticklabels", None)
     if val is not None:
-        if val == 'invisible':
+        if val == "invisible":
             ax = plt.gca()
             labels = ax.get_yticklabels()
             plt.setp(labels, visible=False)
@@ -714,8 +735,8 @@ def decorate(**options):
     And you can use `loc` to indicate the location of the legend
     (the default value is 'best')
     """
-    loc = options.pop('loc', 'best')
-    if options.pop('legend', True):
+    loc = options.pop("loc", "best")
+    if options.pop("legend", True):
         legend(loc=loc)
 
     plt.gca().set(**options)
@@ -729,7 +750,7 @@ def legend(**options):
     https://matplotlib.org/api/_as_gen/matplotlib.pyplot.legend.html
 
     """
-    _Underride(options, loc='best')
+    _Underride(options, loc="best")
 
     ax = plt.gca()
     handles, labels = ax.get_legend_handles_labels()
@@ -744,7 +765,7 @@ def Show(**options):
 
     options: keyword args used to invoke various plt functions
     """
-    clf = options.pop('clf', True)
+    clf = options.pop("clf", True)
     Config(**options)
     plt.show()
     if clf:
@@ -758,7 +779,7 @@ def Plotly(**options):
 
     options: keyword args used to invoke various plt functions
     """
-    clf = options.pop('clf', True)
+    clf = options.pop("clf", True)
     Config(**options)
 
     url = plotly.plot_mpl(plt.gcf())
@@ -777,20 +798,20 @@ def Save(root=None, formats=None, **options):
       formats: list of string formats
       options: keyword args used to invoke various plt functions
     """
-    clf = options.pop('clf', True)
+    clf = options.pop("clf", True)
 
     save_options = {}
-    for option in ['bbox_inches', 'pad_inches']:
+    for option in ["bbox_inches", "pad_inches"]:
         if option in options:
             save_options[option] = options.pop(option)
 
     Config(**options)
 
     if formats is None:
-        formats = ['pdf', 'png']
+        formats = ["pdf", "png"]
 
     try:
-        formats.remove('plotly')
+        formats.remove("plotly")
         Plotly(clf=False)
     except ValueError:
         pass
@@ -802,7 +823,7 @@ def Save(root=None, formats=None, **options):
         Clf()
 
 
-def SaveFormat(root, fmt='eps', **options):
+def SaveFormat(root, fmt="eps", **options):
     """Writes the current figure to a file in the given format.
 
     Args:
@@ -810,8 +831,8 @@ def SaveFormat(root, fmt='eps', **options):
       fmt: string format
     """
     _Underride(options, dpi=300)
-    filename = '%s.%s' % (root, fmt)
-    print('Writing', filename)
+    filename = "%s.%s" % (root, fmt)
+    print("Writing", filename)
     plt.savefig(filename, format=fmt, **options)
 
 
@@ -856,5 +877,5 @@ def main():
         print(color)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

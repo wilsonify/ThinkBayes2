@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 import csv
 import math
 import numpy
@@ -18,7 +17,7 @@ import matplotlib.pyplot as pyplot
 from src import thinkbayes2, thinkplot
 
 
-def ReadScale(filename='sat_scale.csv', col=2):
+def ReadScale(filename="sat_scale.csv", col=2):
     """Reads a CSV file of SAT scales (maps from raw score to standard score).
 
     Args:
@@ -27,12 +26,13 @@ def ReadScale(filename='sat_scale.csv', col=2):
 
     Returns: thinkbayes.Interpolator object
     """
+
     def ParseRange(s):
         """Parse a range of values in the form 123-456
 
         s: string
         """
-        t = [int(x) for x in s.split('-')]
+        t = [int(x) for x in s.split("-")]
         return 1.0 * sum(t) / len(t)
 
     fp = open(filename)
@@ -44,7 +44,7 @@ def ReadScale(filename='sat_scale.csv', col=2):
         try:
             raw = int(t[col])
             raws.append(raw)
-            score = ParseRange(t[col+1])
+            score = ParseRange(t[col + 1])
             scores.append(score)
         except ValueError:
             pass
@@ -54,7 +54,7 @@ def ReadScale(filename='sat_scale.csv', col=2):
     return thinkbayes2.Interpolator(raws, scores)
 
 
-def ReadRanks(filename='sat_ranks.csv'):
+def ReadRanks(filename="sat_ranks.csv"):
     """Reads a CSV file of SAT scores.
 
     Args:
@@ -97,6 +97,7 @@ class Exam(object):
     Contains the distribution of scaled scores and an
     Interpolator that maps between scaled and raw scores.
     """
+
     def __init__(self):
         self.scale = ReadScale()
 
@@ -106,7 +107,7 @@ class Exam(object):
         self.raw = self.ReverseScale(score_pmf)
         self.max_score = max(self.raw.Values())
         self.prior = DivideValues(self.raw, denom=self.max_score)
-        
+
         center = -0.05
         width = 1.8
         self.difficulties = MakeDifficulties(center, width, self.max_score)
@@ -125,16 +126,16 @@ class Exam(object):
         if constructor is Sat:
             PlotJointDist(a_sat, b_sat)
 
-        top = TopLevel('AB')
+        top = TopLevel("AB")
         top.Update((a_sat, b_sat))
         top.Print()
 
-        ratio = top.Prob('A') / top.Prob('B')
-        
-        print('Likelihood ratio', ratio)
+        ratio = top.Prob("A") / top.Prob("B")
+
+        print("Likelihood ratio", ratio)
 
         posterior = ratio / (ratio + 1)
-        print('Posterior', posterior)
+        print("Posterior", posterior)
 
         if constructor is Sat2:
             ComparePosteriorPredictive(a_sat, b_sat)
@@ -157,18 +158,20 @@ class Exam(object):
         thinkplot.Clf()
         thinkplot.PrePlot(num=2)
 
-        cdf = thinkbayes2.Cdf(self.raw, label='data')
+        cdf = thinkbayes2.Cdf(self.raw, label="data")
         thinkplot.Cdf(cdf)
 
         efficacies = thinkbayes2.MakeNormalPmf(0, 1.5, 3)
         pmf = self.MakeRawScoreDist(efficacies)
-        cdf = thinkbayes2.Cdf(pmf, label='model')
+        cdf = thinkbayes2.Cdf(pmf, label="model")
         thinkplot.Cdf(cdf)
-        
-        thinkplot.Save(root='sat_calibrate',
-                       xlabel='raw score',
-                       ylabel='CDF',
-                       formats=['pdf', 'eps'])
+
+        thinkplot.Save(
+            root="sat_calibrate",
+            xlabel="raw score",
+            ylabel="CDF",
+            formats=["pdf", "eps"],
+        )
 
     def PmfCorrect(self, efficacy):
         """Returns the PMF of number of correct responses.
@@ -181,7 +184,7 @@ class Exam(object):
     def Lookup(self, raw):
         """Looks up a raw score and returns a scaled score."""
         return self.scale.Lookup(raw)
-        
+
     def Reverse(self, score):
         """Looks up a scaled score and returns a raw score.
 
@@ -189,7 +192,7 @@ class Exam(object):
         """
         raw = self.scale.Reverse(score)
         return raw if raw > 0 else 0
-        
+
     def ReverseScale(self, pmf):
         """Applies the reverse scale to the values of a PMF.
 
@@ -238,15 +241,17 @@ class Sat(thinkbayes2.Suite):
         thinkplot.Clf()
         thinkplot.PrePlot(num=2)
 
-        cdf1 = thinkbayes2.Cdf(self, label='posterior %d' % self.score)
-        cdf2 = thinkbayes2.Cdf(other, label='posterior %d' % other.score)
+        cdf1 = thinkbayes2.Cdf(self, label="posterior %d" % self.score)
+        cdf2 = thinkbayes2.Cdf(other, label="posterior %d" % other.score)
 
         thinkplot.Cdfs([cdf1, cdf2])
-        thinkplot.Save(xlabel='p_correct',
-                       ylabel='CDF',
-                       axis=[0.7, 1.0, 0.0, 1.0],
-                       root='sat_posteriors_p_corr',
-                       formats=['pdf', 'eps'])
+        thinkplot.Save(
+            xlabel="p_correct",
+            ylabel="CDF",
+            axis=[0.7, 1.0, 0.0, 1.0],
+            root="sat_posteriors_p_corr",
+            formats=["pdf", "eps"],
+        )
 
 
 class Sat2(thinkbayes2.Suite):
@@ -277,7 +282,7 @@ class Sat2(thinkbayes2.Suite):
         """Returns the distribution of raw scores expected on a re-test."""
         raw_pmf = self.exam.MakeRawScoreDist(self)
         return raw_pmf
-    
+
     def PlotPosteriors(self, other):
         """Plots posterior distributions of efficacy.
 
@@ -286,15 +291,17 @@ class Sat2(thinkbayes2.Suite):
         thinkplot.Clf()
         thinkplot.PrePlot(num=2)
 
-        cdf1 = thinkbayes2.Cdf(self, label='posterior %d' % self.score)
-        cdf2 = thinkbayes2.Cdf(other, label='posterior %d' % other.score)
+        cdf1 = thinkbayes2.Cdf(self, label="posterior %d" % self.score)
+        cdf2 = thinkbayes2.Cdf(other, label="posterior %d" % other.score)
 
         thinkplot.Cdfs([cdf1, cdf2])
-        thinkplot.Save(xlabel='efficacy',
-                       ylabel='CDF',
-                       axis=[0, 4.6, 0.0, 1.0],
-                       root='sat_posteriors_eff',
-                       formats=['pdf', 'eps'])
+        thinkplot.Save(
+            xlabel="efficacy",
+            ylabel="CDF",
+            axis=[0, 4.6, 0.0, 1.0],
+            root="sat_posteriors_eff",
+            formats=["pdf", "eps"],
+        )
 
 
 def PlotJointDist(pmf1, pmf2, thresh=0.8):
@@ -303,6 +310,7 @@ def PlotJointDist(pmf1, pmf2, thresh=0.8):
     pmf1, pmf2: posterior distributions
     thresh: lower bound of the range to be plotted
     """
+
     def Clean(pmf):
         """Removes values below thresh."""
         vals = [val for val in pmf.Values() if val < thresh]
@@ -312,17 +320,18 @@ def PlotJointDist(pmf1, pmf2, thresh=0.8):
     Clean(pmf2)
     pmf = thinkbayes2.MakeJoint(pmf1, pmf2)
 
-    thinkplot.Figure(figsize=(6, 6))    
+    thinkplot.Figure(figsize=(6, 6))
     thinkplot.Contour(pmf, contour=False, pcolor=True)
 
-    thinkplot.Plot([thresh, 1.0], [thresh, 1.0],
-                   color='gray', alpha=0.2, linewidth=4)
+    thinkplot.Plot([thresh, 1.0], [thresh, 1.0], color="gray", alpha=0.2, linewidth=4)
 
-    thinkplot.Save(root='sat_joint',
-                   xlabel='p_correct Alice',
-                   ylabel='p_correct Bob',
-                   axis=[thresh, 1.0, thresh, 1.0],
-                   formats=['pdf', 'eps'])
+    thinkplot.Save(
+        root="sat_joint",
+        xlabel="p_correct Alice",
+        ylabel="p_correct Bob",
+        axis=[thresh, 1.0, thresh, 1.0],
+        formats=["pdf", "eps"],
+    )
 
 
 def ComparePosteriorPredictive(a_sat, b_sat):
@@ -334,18 +343,18 @@ def ComparePosteriorPredictive(a_sat, b_sat):
     a_pred = a_sat.MakePredictiveDist()
     b_pred = b_sat.MakePredictiveDist()
 
-    #thinkplot.Clf()
-    #thinkplot.Pmfs([a_pred, b_pred])
-    #thinkplot.Show()
+    # thinkplot.Clf()
+    # thinkplot.Pmfs([a_pred, b_pred])
+    # thinkplot.Show()
 
     a_like = thinkbayes2.PmfProbGreater(a_pred, b_pred)
     b_like = thinkbayes2.PmfProbLess(a_pred, b_pred)
     c_like = thinkbayes2.PmfProbEqual(a_pred, b_pred)
 
-    print('Posterior predictive')
-    print('A', a_like)
-    print('B', b_like)
-    print('C', c_like)
+    print("Posterior predictive")
+    print("A", a_like)
+    print("B", b_like)
+    print("C", c_like)
 
 
 def PlotPriorDist(pmf):
@@ -356,13 +365,12 @@ def PlotPriorDist(pmf):
     thinkplot.Clf()
     thinkplot.PrePlot(num=1)
 
-    cdf1 = thinkbayes2.Cdf(pmf, label='prior')
+    cdf1 = thinkbayes2.Cdf(pmf, label="prior")
 
     thinkplot.Cdf(cdf1)
-    thinkplot.Save(root='sat_prior',
-                   xlabel='p_correct',
-                   ylabel='CDF',
-                   formats=['pdf', 'eps'])
+    thinkplot.Save(
+        root="sat_prior", xlabel="p_correct", ylabel="CDF", formats=["pdf", "eps"]
+    )
 
 
 class TopLevel(thinkbayes2.Suite):
@@ -382,8 +390,8 @@ class TopLevel(thinkbayes2.Suite):
         a_like += c_like / 2
         b_like += c_like / 2
 
-        self.Mult('A', a_like)
-        self.Mult('B', b_like)
+        self.Mult("A", a_like)
+        self.Mult("B", b_like)
 
         self.Normalize()
 
@@ -408,7 +416,7 @@ def BinaryPmf(p):
     """
     pmf = thinkbayes2.Pmf()
     pmf.Set(1, p)
-    pmf.Set(0, 1-p)
+    pmf.Set(0, 1 - p)
     return pmf
 
 
@@ -433,7 +441,7 @@ def MakeDifficulties(center, width, n):
 
     Returns: list of n floats between center-width and center+width
     """
-    low, high = center-width, center+width
+    low, high = center - width, center + width
     return numpy.linspace(low, high, n)
 
 
@@ -443,11 +451,11 @@ def ProbCorrectTable():
     difficulties = [-1.85, -0.05, 1.75]
 
     for eff in efficacies:
-        print('%0.2f & ' % eff, end=' ') 
+        print("%0.2f & " % eff, end=" ")
         for diff in difficulties:
             p = ProbCorrect(eff, diff)
-            print('%0.2f & ' % p, end=' ') 
-        print(r'\\')
+            print("%0.2f & " % p, end=" ")
+        print(r"\\")
 
 
 def main(script):
@@ -463,5 +471,5 @@ def main(script):
     exam.CompareScores(780, 740, constructor=Sat2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(*sys.argv)

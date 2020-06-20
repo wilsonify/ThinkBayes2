@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 import numpy
 from src import thinkbayes2, thinkplot
 
@@ -25,7 +24,7 @@ class Soccer(thinkbayes2.Suite):
         like = thinkbayes2.EvalPoissonPmf(goals, lam)
         return like
 
-    def PredictiveDist(self, label='pred'):
+    def PredictiveDist(self, label="pred"):
         """Computes the distribution of goals scored in a game.
 
         returns: new Pmf (mixture of Poissons)
@@ -44,16 +43,16 @@ def main():
 
     # start with a prior based on a pseudo observation
     # chosen to yield the right prior mean
-    suite1 = Soccer(hypos, label='Germany')
+    suite1 = Soccer(hypos, label="Germany")
     suite1.Update(0.34)
-    suite2 = suite1.Copy(label='Argentina')
+    suite2 = suite1.Copy(label="Argentina")
 
     # update with the results of World Cup 2014 final
     suite1.Update(1)
     suite2.Update(0)
 
-    print('posterior mean Germany', suite1.Mean())
-    print('posterior mean Argentina', suite2.Mean())
+    print("posterior mean Germany", suite1.Mean())
+    print("posterior mean Argentina", suite2.Mean())
 
     # plot the posteriors
     thinkplot.PrePlot(2)
@@ -62,26 +61,26 @@ def main():
 
     # compute posterior prob Germany is better than Argentina
     post_prob = suite1 > suite2
-    print('posterior prob Germany > Argentina', post_prob)
+    print("posterior prob Germany > Argentina", post_prob)
 
     prior_odds = 1
     post_odds = post_prob / (1 - post_prob)
     k = post_odds / prior_odds
-    print('Bayes factor', k)    
+    print("Bayes factor", k)
 
     # compute predictive distributions for goals scored in a rematch
-    pred1 = suite1.PredictiveDist(label='Germany')
-    pred2 = suite2.PredictiveDist(label='Argentina')
-    
+    pred1 = suite1.PredictiveDist(label="Germany")
+    pred2 = suite2.PredictiveDist(label="Argentina")
+
     # plot the predictive distributions
     thinkplot.PrePlot(2)
     thinkplot.Pdfs([pred1, pred2])
     thinkplot.Show()
 
     # compute predictive probability of winning rematch
-    print('posterior prob Germany wins rematch', pred1 > pred2)
-    print('posterior prob Argentina wins rematch', pred2 > pred1)
+    print("posterior prob Germany wins rematch", pred1 > pred2)
+    print("posterior prob Argentina wins rematch", pred2 > pred1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

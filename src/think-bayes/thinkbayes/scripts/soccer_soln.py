@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 import numpy
 from src import thinkbayes2, thinkplot
 
@@ -36,7 +35,7 @@ class Soccer(thinkbayes2.Suite):
             lt = lam * rem_time / 90
             pred = thinkbayes2.MakePoissonPmf(lt, 15)
             metapmf[pred] = prob
-            #thinkplot.Pdf(pred, color='gray', alpha=0.1, linewidth=0.5)
+            # thinkplot.Pdf(pred, color='gray', alpha=0.1, linewidth=0.5)
 
         mix = thinkbayes2.MakeMixture(metapmf)
         mix += score
@@ -54,22 +53,22 @@ def main():
 
     # start with a prior based on the mean interarrival time
     suite.Update(mean_interarrival)
-    thinkplot.Pdf(suite, label='prior')
-    print('prior mean', suite.Mean())
+    thinkplot.Pdf(suite, label="prior")
+    print("prior mean", suite.Mean())
 
     suite.Update(11)
-    thinkplot.Pdf(suite, label='posterior 1')
-    print('after one goal', suite.Mean())
+    thinkplot.Pdf(suite, label="posterior 1")
+    print("after one goal", suite.Mean())
 
     suite.Update(12)
-    thinkplot.Pdf(suite, label='posterior 2')
-    print('after two goals', suite.Mean())
+    thinkplot.Pdf(suite, label="posterior 2")
+    print("after two goals", suite.Mean())
 
     thinkplot.Show()
 
     # plot the predictive distribution
-    suite.PredRemaining(90-23, 2)
+    suite.PredRemaining(90 - 23, 2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

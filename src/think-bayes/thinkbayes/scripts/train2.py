@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 from dice import Dice
 from src import thinkplot
 
@@ -24,7 +23,7 @@ def Mean(suite):
 
 
 def MakePosterior(high, dataset):
-    hypos = range(1, high+1)
+    hypos = range(1, high + 1)
     suite = Train(hypos)
     suite.name = str(high)
 
@@ -42,10 +41,8 @@ def main():
         suite = MakePosterior(high, dataset)
         print(high, suite.Mean())
 
-    thinkplot.Save(root='train2',
-                   xlabel='Number of trains',
-                   ylabel='Probability')
+    thinkplot.Save(root="train2", xlabel="Number of trains", ylabel="Probability")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

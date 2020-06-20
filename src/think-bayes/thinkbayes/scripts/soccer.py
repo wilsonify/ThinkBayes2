@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 import numpy
 from src import thinkbayes2, thinkplot
 
@@ -36,15 +35,15 @@ def main():
     hypos = numpy.linspace(0, 12, 201)
     suite = Soccer(hypos)
 
-    thinkplot.Pdf(suite, label='prior')
-    print('prior mean', suite.Mean())
+    thinkplot.Pdf(suite, label="prior")
+    print("prior mean", suite.Mean())
 
     suite.Update(11)
-    thinkplot.Pdf(suite, label='posterior 1')
-    print('after one goal', suite.Mean())
+    thinkplot.Pdf(suite, label="posterior 1")
+    print("after one goal", suite.Mean())
 
     thinkplot.Show()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

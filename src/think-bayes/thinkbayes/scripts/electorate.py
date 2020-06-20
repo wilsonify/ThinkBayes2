@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 import numpy
 from src import thinkbayes2, thinkplot
 
@@ -28,14 +27,14 @@ def main():
     hypos = numpy.linspace(0, 100, 101)
     suite = Electorate(hypos)
 
-    thinkplot.Pdf(suite, label='prior')
+    thinkplot.Pdf(suite, label="prior")
 
     data = 1.1, 3.7, 53
     suite.Update(data)
 
-    thinkplot.Pdf(suite, label='posterior')
+    thinkplot.Pdf(suite, label="posterior")
     thinkplot.Show()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

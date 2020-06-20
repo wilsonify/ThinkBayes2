@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 import math
 
 from src import thinkbayes2, thinkplot
@@ -53,12 +52,12 @@ def Update(p, q, correct):
 
 def main():
     p1 = thinkbayes2.MakeNormalPmf(0, 1, 3, n=101)
-    p1.label = 'p1'
-    p2 = p1.Copy(label='p2')
+    p1.label = "p1"
+    p2 = p1.Copy(label="p2")
 
     q1 = thinkbayes2.MakeNormalPmf(-1, 1, 3, n=101)
-    q1.label = 'q1'
-    q2 = q1.Copy(label='q2')
+    q1.label = "q1"
+    q2 = q1.Copy(label="q2")
 
     p1, q1 = Update(p1, q1, True)
     p1, q2 = Update(p1, q2, True)
@@ -73,9 +72,9 @@ def main():
     thinkplot.Pmfs([q1, q2])
     thinkplot.Show()
 
-    print('Prob p1 > p2', p1 > p2)
-    print('Prob q1 > q2', q1 > q2)
+    print("Prob p1 > p2", p1 > p2)
+    print("Prob q1 > q2", q1 > q2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

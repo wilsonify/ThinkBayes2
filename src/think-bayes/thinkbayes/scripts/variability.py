@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 import math
 import numpy
 import pickle
@@ -23,6 +22,7 @@ import matplotlib.pyplot as pyplot
 
 NUM_SIGMAS = 1
 
+
 class Height(thinkbayes2.Suite, thinkbayes2.Joint):
     """Hypotheses about parameters of the distribution of height."""
 
@@ -33,9 +33,7 @@ class Height(thinkbayes2.Suite, thinkbayes2.Joint):
         sigmas: sequence of possible sigmas
         label: string label for the Suite
         """
-        pairs = [(mu, sigma) 
-                 for mu in mus
-                 for sigma in sigmas]
+        pairs = [(mu, sigma) for mu in mus for sigma in sigmas]
 
         thinkbayes2.Suite.__init__(self, pairs, label=label)
 
@@ -83,7 +81,7 @@ class Height(thinkbayes2.Suite, thinkbayes2.Joint):
         for hypo in self.Values():
             mu, sigma = hypo
             total = Summation(xs, mu)
-            loglike = -n * math.log(sigma) - total / 2 / sigma**2
+            loglike = -n * math.log(sigma) - total / 2 / sigma ** 2
             self.Incr(hypo, loglike)
 
     def LogUpdateSetMeanVar(self, data):
@@ -111,7 +109,7 @@ class Height(thinkbayes2.Suite, thinkbayes2.Joint):
 
         # compute summary stats
         median, s = MedianS(xs, num_sigmas=NUM_SIGMAS)
-        print('median, s', median, s)
+        print("median, s", median, s)
 
         self.LogUpdateSetABC(n, median, s)
 
@@ -129,8 +127,8 @@ class Height(thinkbayes2.Suite, thinkbayes2.Joint):
             stderr_m = sigma / math.sqrt(n)
             loglike = EvalNormalLogPdf(m, mu, stderr_m)
 
-            #compute log likelihood of s, given hypo
-            stderr_s = sigma / math.sqrt(2 * (n-1))
+            # compute log likelihood of s, given hypo
+            stderr_s = sigma / math.sqrt(2 * (n - 1))
             loglike += EvalNormalLogPdf(s, sigma, stderr_s)
 
             self.Incr(hypo, loglike)
@@ -156,6 +154,7 @@ def FindPriorRanges(xs, num_points, num_stderrs=3.0, median_flag=False):
     
     Returns: sequence of mus, sequence of sigmas    
     """
+
     def MakeRange(estimate, stderr):
         """Makes a linear range around the estimate.
 
@@ -165,7 +164,7 @@ def FindPriorRanges(xs, num_points, num_stderrs=3.0, median_flag=False):
         returns: numpy array of float
         """
         spread = stderr * num_stderrs
-        array = numpy.linspace(estimate-spread, estimate+spread, num_points)
+        array = numpy.linspace(estimate - spread, estimate + spread, num_points)
         return array
 
     # estimate mean and stddev of xs
@@ -176,13 +175,13 @@ def FindPriorRanges(xs, num_points, num_stderrs=3.0, median_flag=False):
         m = numpy.mean(xs)
         s = numpy.std(xs)
 
-    print('classical estimators', m, s)
+    print("classical estimators", m, s)
 
     # compute ranges for m and s
     stderr_m = s / math.sqrt(n)
     mus = MakeRange(m, stderr_m)
 
-    stderr_s = s / math.sqrt(2 * (n-1))
+    stderr_s = s / math.sqrt(2 * (n - 1))
     sigmas = MakeRange(s, stderr_s)
 
     return mus, sigmas
@@ -200,7 +199,7 @@ def Summation(xs, mu, cache={}):
     try:
         return cache[xs, mu]
     except KeyError:
-        ds = [(x-mu)**2 for x in xs]
+        ds = [(x - mu) ** 2 for x in xs]
         total = sum(ds)
         cache[xs, mu] = total
         return total
@@ -215,7 +214,7 @@ def CoefVariation(suite):
     """
     pmf = thinkbayes2.Pmf()
     for (m, s), p in suite.Items():
-        pmf.Incr(s/m, p)
+        pmf.Incr(s / m, p)
     return pmf
 
 
@@ -231,11 +230,11 @@ def PlotCdfs(d, labels):
     for key, xs in d.items():
         mu = thinkbayes2.Mean(xs)
         xs = thinkbayes2.Jitter(xs, 1.3)
-        xs = [x-mu for x in xs]
+        xs = [x - mu for x in xs]
         cdf = thinkbayes2.MakeCdfFromList(xs)
         thinkplot.Cdf(cdf, label=labels[key])
     thinkplot.Show()
-                  
+
 
 def PlotPosterior(suite, pcolor=False, contour=True):
     """Makes a contour plot.
@@ -245,10 +244,12 @@ def PlotPosterior(suite, pcolor=False, contour=True):
     thinkplot.Clf()
     thinkplot.Contour(suite.GetDict(), pcolor=pcolor, contour=contour)
 
-    thinkplot.Save(root='variability_posterior_%s' % suite.label,
-                   title='Posterior joint distribution',
-                   xlabel='Mean height (cm)',
-                   ylabel='Stddev (cm)')
+    thinkplot.Save(
+        root="variability_posterior_%s" % suite.label,
+        title="Posterior joint distribution",
+        xlabel="Mean height (cm)",
+        ylabel="Stddev (cm)",
+    )
 
 
 def PlotCoefVariation(suites):
@@ -262,20 +263,18 @@ def PlotCoefVariation(suites):
     pmfs = {}
     for label, suite in suites.items():
         pmf = CoefVariation(suite)
-        print('CV posterior mean', pmf.Mean())
+        print("CV posterior mean", pmf.Mean())
         cdf = thinkbayes2.MakeCdfFromPmf(pmf, label)
         thinkplot.Cdf(cdf)
-    
+
         pmfs[label] = pmf
 
-    thinkplot.Save(root='variability_cv',
-                   xlabel='Coefficient of variation',
-                   ylabel='Probability')
+    thinkplot.Save(
+        root="variability_cv", xlabel="Coefficient of variation", ylabel="Probability"
+    )
 
-    print('female bigger', thinkbayes2.PmfProbGreater(pmfs['female'],
-                                                      pmfs['male']))
-    print('male bigger', thinkbayes2.PmfProbGreater(pmfs['male'],
-                                                    pmfs['female']))
+    print("female bigger", thinkbayes2.PmfProbGreater(pmfs["female"], pmfs["male"]))
+    print("male bigger", thinkbayes2.PmfProbGreater(pmfs["male"], pmfs["female"]))
 
 
 def PlotOutliers(samples):
@@ -289,10 +288,12 @@ def PlotOutliers(samples):
 
     thinkplot.Clf()
     thinkplot.Cdfs(cdfs)
-    thinkplot.Save(root='variability_cdfs',
-                   title='CDF of height',
-                   xlabel='Reported height (cm)',
-                   ylabel='CDF')
+    thinkplot.Save(
+        root="variability_cdfs",
+        title="CDF of height",
+        xlabel="Reported height (cm)",
+        ylabel="CDF",
+    )
 
 
 def PlotMarginals(suite):
@@ -320,8 +321,8 @@ def ReadHeights(nrows=None):
 
     nrows: number of rows to read
     """
-    resp = brfss.ReadBrfss(nrows=nrows).dropna(subset=['sex', 'htm3'])
-    groups = resp.groupby('sex')
+    resp = brfss.ReadBrfss(nrows=nrows).dropna(subset=["sex", "htm3"])
+    groups = resp.groupby("sex")
 
     d = {}
     for name, group in groups:
@@ -408,8 +409,8 @@ def MedianIPR(xs, p):
     cdf = thinkbayes2.MakeCdfFromList(xs)
     median = cdf.Percentile(50)
 
-    alpha = (1-p) / 2
-    ipr = cdf.Value(1-alpha) - cdf.Value(alpha)
+    alpha = (1 - p) / 2
+    ipr = cdf.Value(1 - alpha) - cdf.Value(alpha)
     return median, ipr
 
 
@@ -426,6 +427,7 @@ def MedianS(xs, num_sigmas):
 
     return median, s
 
+
 def Summarize(xs):
     """Prints summary statistics from a sequence of values.
 
@@ -433,8 +435,8 @@ def Summarize(xs):
     """
     # print smallest and largest
     xs.sort()
-    print('smallest', xs[:10])
-    print('largest', xs[-10:])
+    print("smallest", xs[:10])
+    print("largest", xs[-10:])
 
     # print median and interquartile range
     cdf = thinkbayes2.MakeCdfFromList(xs)
@@ -448,7 +450,7 @@ def RunEstimate(update_func, num_points=31, median_flag=False):
     num_points: number of points in the Suite (in each dimension)
     """
     d = ReadHeights(nrows=None)
-    labels = {1:'male', 2:'female'}
+    labels = {1: "male", 2: "female"}
 
     # PlotCdfs(d, labels)
 
@@ -464,14 +466,14 @@ def RunEstimate(update_func, num_points=31, median_flag=False):
         suite = Height(mus, sigmas, label)
         suites[label] = suite
         update_func(suite, xs)
-        print('MLE', suite.MaximumLikelihood())
+        print("MLE", suite.MaximumLikelihood())
 
         PlotPosterior(suite)
 
         pmf_m = suite.Marginal(0)
         pmf_s = suite.Marginal(1)
-        print('marginal mu', pmf_m.Mean(), pmf_m.Var())
-        print('marginal sigma', pmf_s.Mean(), pmf_s.Var())
+        print("marginal mu", pmf_m.Mean(), pmf_m.Var())
+        print("marginal sigma", pmf_s.Mean(), pmf_s.Var())
 
         # PlotMarginals(suite)
 
@@ -482,11 +484,11 @@ def main():
     random.seed(17)
 
     func = UpdateSuite5
-    median_flag = (func == UpdateSuite5)
+    median_flag = func == UpdateSuite5
     RunEstimate(func, median_flag=median_flag)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
 
 
@@ -529,4 +531,3 @@ marginal mu 163.1805214 7.9399898468e-07
 marginal sigma 7.29969524118 3.26257030869e-14
 
 """
-

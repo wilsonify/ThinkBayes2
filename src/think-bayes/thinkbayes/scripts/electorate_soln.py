@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 import numpy
 from src import thinkbayes2, thinkplot
 
@@ -31,16 +30,18 @@ def main():
     suite = Electorate(hypos)
 
     thinkplot.PrePlot(3)
-    thinkplot.Pdf(suite, label='prior')
+    thinkplot.Pdf(suite, label="prior")
 
     data = 1.1, 3.7, 53
     suite.Update(data)
-    thinkplot.Pdf(suite, label='posterior1')
-    thinkplot.Save(root='electorate1',
-                   xlabel='percentage of electorate',
-                   ylabel='PMF',
-                   formats=['png'],
-                   clf=False)
+    thinkplot.Pdf(suite, label="posterior1")
+    thinkplot.Save(
+        root="electorate1",
+        xlabel="percentage of electorate",
+        ylabel="PMF",
+        formats=["png"],
+        clf=False,
+    )
 
     print(suite.Mean())
     print(suite.Std())
@@ -49,16 +50,18 @@ def main():
     data = -2.3, 4.1, 49
     suite.Update(data)
 
-    thinkplot.Pdf(suite, label='posterior2')
-    thinkplot.Save(root='electorate2',
-                   xlabel='percentage of electorate',
-                   ylabel='PMF',
-                   formats=['png'])
+    thinkplot.Pdf(suite, label="posterior2")
+    thinkplot.Save(
+        root="electorate2",
+        xlabel="percentage of electorate",
+        ylabel="PMF",
+        formats=["png"],
+    )
 
     print(suite.Mean())
     print(suite.Std())
     print(suite.ProbLess(50))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 from dice import Dice
 from src import thinkplot
 
@@ -17,13 +16,14 @@ class Train(Dice):
     The likelihood function for the train problem is the same as
     for the Dice problem.
     """
+
     def Likelihood(self, data, hypo):
         N = hypo
         k, m = data
         if N < m:
             return 0
 
-        return m ** (k-1) / N**k
+        return m ** (k - 1) / N ** k
 
 
 def main():
@@ -32,12 +32,11 @@ def main():
 
     data = 3, 70
     suite.Update(data)
-    print('posterior mean', suite.Mean())
+    print("posterior mean", suite.Mean())
 
-    thinkplot.Pmf(suite, label='after 70')
-    thinkplot.Show(xlabel='Number of trains',
-                   ylabel='PMF')
+    thinkplot.Pmf(suite, label="after 70")
+    thinkplot.Show(xlabel="Number of trains", ylabel="PMF")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

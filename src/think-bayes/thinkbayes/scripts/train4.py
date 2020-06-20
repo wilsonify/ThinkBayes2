@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 from dice import Dice
 from src import thinkplot
 
@@ -25,13 +24,12 @@ def main():
 
     for data in [32, 54, 70]:
         suite.Update(data)
-        thinkplot.Pmf(suite, label='after %d' % data)
+        thinkplot.Pmf(suite, label="after %d" % data)
 
-    thinkplot.Show(xlabel='Number of trains',
-                   ylabel='PMF')
+    thinkplot.Show(xlabel="Number of trains", ylabel="PMF")
 
-    print('posterior mean', suite.Mean())
+    print("posterior mean", suite.Mean())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -8,7 +8,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 import csv
 import json
 import numpy
@@ -25,20 +24,19 @@ from time import sleep
 class Redis(object):
     """Provides access to a Redis instance on Redis To Go"""
 
-    host = 'dory.redistogo.com'
+    host = "dory.redistogo.com"
     port = 10534
 
     def __init__(self):
         try:
-            password = os.environ['REDIS_AUTH']
+            password = os.environ["REDIS_AUTH"]
         except KeyError:
-            print('Environment variable REDIS_AUTH is not set.')
+            print("Environment variable REDIS_AUTH is not set.")
             sys.exit()
-        
-        self.r = redis.StrictRedis(host=self.host, 
-                                   port=self.port,
-                                   password=password,
-                                   db=0)
+
+        self.r = redis.StrictRedis(
+            host=self.host, port=self.port, password=password, db=0
+        )
 
     def WriteTrainSpotting(self, timestamp, tripid, seconds, live=True):
         """Writes a trainspotting event to the database.
@@ -54,7 +52,7 @@ class Redis(object):
         print(dt, tripid, seconds, timestamp)
 
         if live:
-            self.r.sadd('days', day)
+            self.r.sadd("days", day)
             self.r.sadd(day, tripid)
             self.r.zadd(tripid, seconds, timestamp)
 
@@ -66,7 +64,7 @@ class Redis(object):
 
         Returns: map from string day to unsorted list of arrival datetimes
         """
-        days = self.r.smembers('days')
+        days = self.r.smembers("days")
         print(days)
 
         start_time = time(hour=start_hour)
@@ -97,6 +95,7 @@ class Redis(object):
         pred_dt = datetime.fromtimestamp(pred_ts)
         return pred_dt
 
+
 class TrainSpotting(object):
     """Represents one observation of a train."""
 
@@ -104,9 +103,9 @@ class TrainSpotting(object):
         self.timestamp = int(t[0])
         self.tripid = t[2]
         self.seconds = int(t[6])
-    
 
-def ReadCsv(url = 'http://developer.mbta.com/lib/rthr/red.csv'):
+
+def ReadCsv(url="http://developer.mbta.com/lib/rthr/red.csv"):
     """Reads data from the red line.
 
     Returns: list of TrainSpotting objects
@@ -116,8 +115,10 @@ def ReadCsv(url = 'http://developer.mbta.com/lib/rthr/red.csv'):
 
     tss = []
     for t in reader:
-        if t[5] != 'Kendall/MIT': continue        
-        if t[3] != 'Braintree': continue
+        if t[5] != "Kendall/MIT":
+            continue
+        if t[3] != "Braintree":
+            continue
 
         ts = TrainSpotting(t)
         tss.append(ts)
@@ -127,7 +128,7 @@ def ReadCsv(url = 'http://developer.mbta.com/lib/rthr/red.csv'):
 
 
 def ReadJson():
-    url = 'http://developer.mbta.com/lib/rthr/red.json'
+    url = "http://developer.mbta.com/lib/rthr/red.json"
     json_text = urllib2.urlopen(url).read()
     json_obj = json.loads(json_text)
     print(json_obj)
@@ -153,11 +154,11 @@ def Loop(red, start_time, end_time, delay=60):
     """
     if datetime.now() < start_time:
         diff = start_time - datetime.now()
-        print('Sleeping', diff)
+        print("Sleeping", diff)
         sleep(diff.total_seconds())
 
     while datetime.now() < end_time:
-        print('Collecting')
+        print("Collecting")
         ReadAndStore(red)
         sleep(delay)
 
@@ -189,21 +190,21 @@ def GetInterarrivals(arrival_map):
     return interarrival_seconds
 
 
-def main(script, command='collect'):
+def main(script, command="collect"):
     red = Redis()
 
-    if command == 'collect':
+    if command == "collect":
         start = TodayAt(16)
         end = TodayAt(18)
 
         print(start, end)
         Loop(red, start, end)
-        
-    elif command == 'report':
+
+    elif command == "report":
         arrival_map = red.FindArrivals()
         interarrivals = GetInterarrivals(arrival_map)
         print(repr(interarrivals))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(*sys.argv)

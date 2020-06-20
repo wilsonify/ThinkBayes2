@@ -16,7 +16,6 @@ Pdf: represents a continuous probability density function
 """
 
 
-
 import bisect
 import copy
 import logging
@@ -2259,7 +2258,9 @@ class Beta:
     def MakeCdf(self, steps=101):
         """Returns the CDF of this distribution."""
         xs = [i / (steps - 1.0) for i in range(steps)]
-        ps = scipy.special.betainc(self.alpha, self.beta, xs)  # pylint: disable=no-member
+        ps = scipy.special.betainc(
+            self.alpha, self.beta, xs
+        )  # pylint: disable=no-member
         cdf = Cdf(xs, ps)
         return cdf
 
@@ -2269,7 +2270,9 @@ class Beta:
         ps: scalar, array, or list of [0-100]
         """
         ps = np.asarray(ps) / 100
-        xs = scipy.special.betaincinv(self.alpha, self.beta, ps)  # pylint: disable=no-member
+        xs = scipy.special.betaincinv(
+            self.alpha, self.beta, ps
+        )  # pylint: disable=no-member
         return xs
 
 

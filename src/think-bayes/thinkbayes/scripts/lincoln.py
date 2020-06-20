@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 from src import thinkbayes2, thinkplot
 
 import numpy
@@ -55,6 +54,7 @@ is.
 
 """
 
+
 def choose(n, k, d={}):
     """The binomial coefficient "n choose k".
 
@@ -74,9 +74,10 @@ def choose(n, k, d={}):
     try:
         return d[n, k]
     except KeyError:
-        res = choose(n-1, k) + choose(n-1, k-1)
+        res = choose(n - 1, k) + choose(n - 1, k - 1)
         d[n, k] = res
         return res
+
 
 def binom(k, n, p):
     """Computes the rest of the binomial PMF.
@@ -85,7 +86,7 @@ def binom(k, n, p):
     n: number of attempts
     p: probability of a hit
     """
-    return p**k * (1-p)**(n-k)
+    return p ** k * (1 - p) ** (n - k)
 
 
 class Lincoln(thinkbayes2.Suite, thinkbayes2.Joint):
@@ -101,7 +102,7 @@ class Lincoln(thinkbayes2.Suite, thinkbayes2.Joint):
         k1, k2, c = data
 
         part1 = choose(n, k1) * binom(k1, n, p1)
-        part2 = choose(k1, c) * choose(n-k1, k2-c) * binom(k2, n, p2)
+        part2 = choose(k1, c) * choose(n - k1, k2 - c) * binom(k2, n, p2)
         return part1 * part2
 
 
@@ -120,15 +121,14 @@ def main():
 
     n_marginal = suite.Marginal(0)
 
-    thinkplot.Pmf(n_marginal, label='n')
-    thinkplot.Save(root='lincoln1',
-                   xlabel='number of bugs',
-                   ylabel='PMF',
-                   formats=['pdf', 'png'])
+    thinkplot.Pmf(n_marginal, label="n")
+    thinkplot.Save(
+        root="lincoln1", xlabel="number of bugs", ylabel="PMF", formats=["pdf", "png"]
+    )
 
-    print('post mean n', n_marginal.Mean())
-    print('MAP n', n_marginal.MaximumLikelihood())
-    
-    
-if __name__ == '__main__':
+    print("post mean n", n_marginal.Mean())
+    print("MAP n", n_marginal.MaximumLikelihood())
+
+
+if __name__ == "__main__":
     main()

@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 import numpy
 from src import thinkbayes2, thinkplot
 
@@ -57,10 +56,10 @@ def main():
     suite.Update(data)
     suite2.Update(data)
 
-    thinkplot.Pdf(suite, label='binomial')
-    thinkplot.Pdf(suite, label='hypergeom')
+    thinkplot.Pdf(suite, label="binomial")
+    thinkplot.Pdf(suite, label="hypergeom")
     thinkplot.Show()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

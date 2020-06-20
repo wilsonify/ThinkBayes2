@@ -17,12 +17,9 @@ mongo_url = f"mongodb://{mongo_user}:{mongo_pwd}@{mongo_host}:{mongo_port}/{mong
 observer = MongoObserver(url=mongo_url)
 
 ex.observers.append(observer)
-ex.add_config({
-    "C": 1.0,
-    "gamma": 0.7,
-    "kernel": "rbf",
-    "seed": 42,
-})
+ex.add_config(
+    {"C": 1.0, "gamma": 0.7, "kernel": "rbf", "seed": 42,}
+)
 
 
 def get_model(C, gamma, kernel):

@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 import csv
 
 
@@ -34,7 +33,7 @@ def write_csv(filename, header, data):
     header: list of strings
     data: list of rows
     """
-    fp = open(filename, 'w')
+    fp = open(filename, "w")
     writer = csv.writer(fp)
     writer.writerow(header)
 
@@ -83,4 +82,3 @@ def make_object(row, names, constructor):
         setattr(obj, name, val)
     obj.clean()
     return obj
-

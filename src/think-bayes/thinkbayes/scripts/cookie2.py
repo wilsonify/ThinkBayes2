@@ -6,7 +6,6 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 
-
 from src.thinkbayes2 import Pmf
 
 
@@ -34,9 +33,9 @@ class Cookie(Pmf):
         self.Normalize()
 
     mixes = {
-        'Bowl 1':dict(vanilla=0.75, chocolate=0.25),
-        'Bowl 2':dict(vanilla=0.5, chocolate=0.5),
-        }
+        "Bowl 1": dict(vanilla=0.75, chocolate=0.25),
+        "Bowl 2": dict(vanilla=0.5, chocolate=0.5),
+    }
 
     def Likelihood(self, data, hypo):
         """The likelihood of the data under the hypothesis.
@@ -50,15 +49,15 @@ class Cookie(Pmf):
 
 
 def main():
-    hypos = ['Bowl 1', 'Bowl 2']
+    hypos = ["Bowl 1", "Bowl 2"]
 
     pmf = Cookie(hypos)
 
-    pmf.Update('vanilla')
+    pmf.Update("vanilla")
 
     for hypo, prob in pmf.Items():
         print(hypo, prob)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

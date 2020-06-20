@@ -1,10 +1,9 @@
-
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
 import re
+
 
 class FixedWidthVariables(object):
     """Represents a set of variables in a fixed width file."""
@@ -22,11 +21,11 @@ class FixedWidthVariables(object):
         self.variables = variables
 
         # note: by default, subtract 1 from colspecs
-        self.colspecs = variables[['start', 'end']] - index_base
+        self.colspecs = variables[["start", "end"]] - index_base
 
         # convert colspecs to a list of pair of int
         self.colspecs = self.colspecs.astype(np.int).values.tolist()
-        self.names = variables['name']
+        self.names = variables["name"]
 
     def read_fixed_width(self, filename, **options):
         """Reads a fixed width ASCII file.
@@ -35,10 +34,7 @@ class FixedWidthVariables(object):
 
         returns: DataFrame
         """
-        df = pd.read_fwf(filename,
-                             colspecs=self.colspecs,
-                             names=self.names,
-                             **options)
+        df = pd.read_fwf(filename, colspecs=self.colspecs, names=self.names, **options)
         return df
 
 
@@ -50,32 +46,33 @@ def read_stata_dict(dct_file, **options):
 
     returns: FixedWidthVariables object
     """
-    type_map = dict(byte=int, int=int, long=int, float=float,
-                    double=float, numeric=float)
+    type_map = dict(
+        byte=int, int=int, long=int, float=float, double=float, numeric=float
+    )
 
     var_info = []
     with open(dct_file, **options) as f:
         for line in f:
-            match = re.search( r'_column\(([^)]*)\)', line)
+            match = re.search(r"_column\(([^)]*)\)", line)
             if not match:
                 continue
             start = int(match.group(1))
             t = line.split()
             vtype, name, fstring = t[1:4]
             name = name.lower()
-            if vtype.startswith('str'):
+            if vtype.startswith("str"):
                 vtype = str
             else:
                 vtype = type_map[vtype]
-            long_desc = ' '.join(t[4:]).strip('"')
+            long_desc = " ".join(t[4:]).strip('"')
             var_info.append((start, vtype, name, fstring, long_desc))
 
-    columns = ['start', 'type', 'name', 'fstring', 'desc']
+    columns = ["start", "type", "name", "fstring", "desc"]
     variables = pd.DataFrame(var_info, columns=columns)
 
     # fill in the end column by shifting the start column
-    variables['end'] = variables.start.shift(-1)
-    variables.loc[len(variables)-1, 'end'] = 0
+    variables["end"] = variables.start.shift(-1)
+    variables.loc[len(variables) - 1, "end"] = 0
 
     dct = FixedWidthVariables(variables, index_base=1)
     return dct
@@ -92,6 +89,7 @@ def read_stata(dct_name, dat_name, **options):
     df = dct.read_fixed_width(dat_name, **options)
     return df
 
+
 def read_gss(dirname):
     """Reads GSS files from the given directory.
     
@@ -99,10 +97,10 @@ def read_gss(dirname):
     
     returns: DataFrame
     """
-    dct = read_stata_dict(dirname + '/GSS.dct')
-    gss = dct.read_fixed_width(dirname + '/GSS.dat.gz',
-                               compression='gzip')
+    dct = read_stata_dict(dirname + "/GSS.dct")
+    gss = dct.read_fixed_width(dirname + "/GSS.dat.gz", compression="gzip")
     return gss
+
 
 def sample_rows(df, nrows, replace=False):
     """Choose a sample of rows from a DataFrame.
@@ -128,7 +126,7 @@ def resample_rows(df):
     return sample_rows(df, len(df), replace=True)
 
 
-def resample_rows_weighted(df, column='finalwgt'):
+def resample_rows_weighted(df, column="finalwgt"):
     """Resamples a DataFrame using probabilities proportional to given column.
 
     df: DataFrame
@@ -143,7 +141,7 @@ def resample_rows_weighted(df, column='finalwgt'):
     return sample
 
 
-def resample_by_year(df, column='wtssall'):
+def resample_by_year(df, column="wtssall"):
     """Resample rows within each year.
 
     df: DataFrame
@@ -151,9 +149,8 @@ def resample_by_year(df, column='wtssall'):
 
     returns DataFrame
     """
-    grouped = df.groupby('year')
-    samples = [resample_rows_weighted(group, column)
-               for _, group in grouped]
+    grouped = df.groupby("year")
+    samples = [resample_rows_weighted(group, column) for _, group in grouped]
     sample = pd.concat(samples, ignore_index=True)
     return sample
 
@@ -205,9 +202,9 @@ def round_into_bins(df, var, bin_width, high=None, low=0):
     if high is None:
         high = df[var].max()
 
-    bins = np.arange(low, high+bin_width, bin_width)
+    bins = np.arange(low, high + bin_width, bin_width)
     indices = np.digitize(df[var], bins)
-    return bins[indices-1]
+    return bins[indices - 1]
 
 
 def underride(d, **options):
@@ -234,8 +231,8 @@ def decorate(**options):
     And you can use `loc` to indicate the location of the legend
     (the default value is 'best')
     """
-    loc = options.pop('loc', 'best')
-    if options.pop('legend', True):
+    loc = options.pop("loc", "best")
+    if options.pop("legend", True):
         legend(loc=loc)
 
     plt.gca().set(**options)
@@ -247,9 +244,9 @@ def legend(**options):
     options are passed to plt.legend()
     https://matplotlib.org/api/_as_gen/matplotlib.pyplot.legend.html
     """
-    underride(options, loc='best')
+    underride(options, loc="best")
 
     ax = plt.gca()
     handles, labels = ax.get_legend_handles_labels()
-    #TODO: don't draw if there are none
+    # TODO: don't draw if there are none
     ax.legend(handles, labels, **options)
