@@ -6,6 +6,7 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 import numpy as np
+import pytest
 
 from thinkbayes import Hist, Pmf, Suite, Beta
 from thinkbayes import thinkplot
@@ -214,6 +215,6 @@ def test_alien_blaster_problem():
     thinkplot.Hist(mix)
     mix.Mean()
 
-    mix[3]
+    assert mix[3] == pytest.approx(0.23, abs=0.1)
 
     # **Exercise**: Assuming again that the distribution of `x` in the population of designs is well-modeled by a beta distribution with parameters α=2 and β=3, what the distribution if `k` if I choose a random Alien Blaster and fire 10 shots?
