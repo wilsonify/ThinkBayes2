@@ -23,7 +23,7 @@ It provides wrappers for some of the functions in Matplotlib,
 and includes functions like `Pdf` that known how to plot `Suites` and other objects from thinkbayes.
 """
 
-from __future__ import print_function, division
+
 import thinkbayes
 from thinkbayes import thinkplot
 

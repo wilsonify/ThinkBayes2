@@ -7,7 +7,7 @@
 # MIT License: https://opensource.org/licenses/MIT
 
 
-from __future__ import print_function, division
+
 import numpy as np
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot

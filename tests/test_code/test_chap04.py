@@ -2,7 +2,7 @@
 This is based on a notebook from Think Bayes : Chapter 4.
 """
 
-from __future__ import print_function, division
+
 import numpy as np
 from thinkbayes import Pmf, Cdf, Suite
 from thinkbayes import thinkplot

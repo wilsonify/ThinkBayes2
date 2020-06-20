@@ -1,4 +1,4 @@
-from __future__ import print_function, division
+
 import thinkbayes
 from thinkbayes import thinkplot
 

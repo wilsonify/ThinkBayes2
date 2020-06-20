@@ -1,7 +1,7 @@
 """
 This is based on a notebook of example code from Think Bayes.
 """
-from __future__ import print_function, division
+
 from thinkbayes import thinkplot
 from thinkbayes import Hist, Pmf, Suite, Cdf
 

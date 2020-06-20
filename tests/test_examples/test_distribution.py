@@ -24,7 +24,7 @@ Conversely, if you are trying to find the distribution of a random variable,
 you can do it by computing whichever representation is easiest to figure out.
 """
 
-from __future__ import print_function, division
+
 
 import pytest
 from thinkbayes import Pmf, Cdf

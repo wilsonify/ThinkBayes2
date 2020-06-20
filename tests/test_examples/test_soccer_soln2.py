@@ -32,7 +32,7 @@ To compute the distribution of $\lambda$ we can define a new class that
 inherits from `thinkbayes.Suite` and provides an appropriate `Likelihood` function:
 first a little house-keeping
 """
-from __future__ import print_function, division
+
 
 import thinkbayes
 

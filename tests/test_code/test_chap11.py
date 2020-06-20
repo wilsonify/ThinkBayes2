@@ -3,7 +3,7 @@ This notebook presents code and exercises from Think Bayes: Chapter 11
 Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
-from __future__ import print_function, division
+
 import math
 import numpy as np
 
