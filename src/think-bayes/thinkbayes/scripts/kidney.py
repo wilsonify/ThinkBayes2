@@ -6,11 +6,10 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 import math
-import random
 import sys
 
 import matplotlib.pyplot as pyplot
-import numpy
+import numpy as np
 import thinkbayes
 from thinkbayes import thinkplot
 
@@ -79,7 +78,7 @@ def MakeCdf():
     n = 53.0
     freqs = [0, 2, 31, 42, 48, 51, 52, 53]
     ps = [freq / n for freq in freqs]
-    xs = numpy.arange(-1.5, 6.5, 1.0)
+    xs = np.arange(-1.5, 6.5, 1.0)
 
     cdf = thinkbayes.Cdf(xs, ps)
     return cdf
@@ -172,14 +171,14 @@ def CorrelatedGenerator(cdf, rho):
         return y
 
     # for the first value, choose from a Normal and transform it
-    x = random.gauss(0, 1)
+    x = np.random.normal(0, 1)
     yield Transform(x)
 
     # for subsequent values, choose from the conditional distribution
     # based on the previous value
     sigma = math.sqrt(1 - rho ** 2)
     while True:
-        x = random.gauss(x * rho, sigma)
+        x = np.random.normal(x * rho, sigma)
         yield Transform(x)
 
 
@@ -215,7 +214,7 @@ def GenerateRdt(pc, lam1, lam2):
     With prob pc, generate a negative value with param lam2;
     otherwise generate a positive value with param lam1.
     """
-    if random.random() < pc:
+    if np.random.random() < pc:
         return -random.expovariate(lam2)
     else:
         return random.expovariate(lam1)
@@ -260,9 +259,9 @@ def ModelCdf(pc=0.35, lam1=0.79, lam2=5.0):
     Returns: list of xs, list of ys
     """
     cdf = thinkbayes.EvalExponentialCdf
-    x1 = numpy.arange(-2, 0, 0.1)
+    x1 = np.arange(-2, 0, 0.1)
     y1 = [pc * (1 - cdf(-x, lam2)) for x in x1]
-    x2 = numpy.arange(0, 7, 0.1)
+    x2 = np.arange(0, 7, 0.1)
     y2 = [pc + (1 - pc) * cdf(x, lam1) for x in x2]
     return list(x1) + list(x2), y1 + y2
 
@@ -476,7 +475,7 @@ class Calculator(object):
         for seq in sequences:
             n = len(seq)
             age = n * INTERVAL
-            ts = numpy.linspace(-age, 0, n)
+            ts = np.linspace(-age, 0, n)
             PlotSequence(ts, seq, color)
 
     def PlotBuckets(self):
@@ -628,7 +627,7 @@ def PlotSequences(sequences):
     for seq in sequences:
         n = len(seq)
         age = n * INTERVAL
-        ts = numpy.linspace(0, age, n)
+        ts = np.linspace(0, age, n)
         PlotSequence(ts, seq)
 
     thinkplot.Save(
@@ -759,7 +758,7 @@ def main(script):
 
     SimpleModel()
 
-    random.seed(17)
+    np.random.seed(17)
 
     cdf = MakeCdf()
 
