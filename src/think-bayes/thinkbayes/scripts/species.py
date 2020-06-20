@@ -6,14 +6,13 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 import csv
-import random
 import shelve
 import sys
 import time
 import warnings
 
 import matplotlib.pyplot as pyplot
-import numpy
+import numpy as np
 import thinkbayes
 from thinkbayes import thinkplot
 
@@ -113,7 +112,7 @@ class Subject(object):
         species_seq = []
         for k, species in sorted(self.species):
 
-            if random.random() < prob_bogus(k, r):
+            if np.random.random() < prob_bogus(k, r):
                 continue
             species_seq.append((k, species))
         self.species = species_seq
@@ -165,7 +164,7 @@ class Subject(object):
         """
         counts = self.GetCounts()
         total = sum(counts)
-        prevalences = numpy.array(counts, dtype=numpy.float) / total
+        prevalences = np.array(counts, dtype=numpy.float) / total
         return prevalences
 
     def Process(self, low=None, high=500, conc=1, iters=100):
@@ -366,7 +365,7 @@ class Subject(object):
         for count, species in self.species:
             t.extend([species] * count)
 
-        random.shuffle(t)
+        np.random.shuffle(t)
         reads = t[:num_reads]
 
         subject = Subject(self.code)
@@ -425,7 +424,7 @@ class Subject(object):
 
             if frac_flag:
                 frac_seen = len(seen) / float(n)
-                frac_seen += random.uniform(-jitter, jitter)
+                frac_seen += np.random.uniform(-jitter, jitter)
                 curve.append((i + 1, frac_seen))
             else:
                 num_new = len(seen) - m
@@ -665,7 +664,7 @@ def JitterCurve(curve, dx=0.2, dy=0.3):
     dx and dy control the amplitude of the noise in each dimension.
     """
     curve = [
-        (x + random.uniform(-dx, dx), y + random.uniform(-dy, dy)) for x, y in curve
+        (x + np.random.uniform(-dx, dx), y + np.random.uniform(-dy, dy)) for x, y in curve
     ]
     return curve
 
@@ -814,8 +813,8 @@ class Species2(object):
     def __init__(self, ns, conc=1, iters=1000):
         self.ns = ns
         self.conc = conc
-        self.probs = numpy.ones(len(ns), dtype=numpy.float)
-        self.params = numpy.ones(self.ns[-1], dtype=numpy.float) * conc
+        self.probs = np.ones(len(ns), dtype=np.float)
+        self.params = np.ones(self.ns[-1], dtype=np.float) * conc
         self.iters = iters
         self.num_reads = 0
         self.m = 0
@@ -829,7 +828,7 @@ class Species2(object):
         singletons = data.count(1)
         num = m - singletons
         print(m, singletons, num)
-        addend = numpy.ones(num, dtype=numpy.float) * 1
+        addend = np.ones(num, dtype=np.float) * 1
         print(len(addend))
         print(len(self.params[singletons:m]))
         self.params[singletons:m] += addend
@@ -842,7 +841,7 @@ class Species2(object):
         """
         self.num_reads += sum(data)
 
-        like = numpy.zeros(len(self.ns), dtype=numpy.float)
+        like = np.zeros(len(self.ns), dtype=np.float)
         for _ in range(self.iters):
             like += self.SampleLikelihood(data)
 
@@ -862,21 +861,21 @@ class Species2(object):
 
         Returns: numpy array of m likelihoods
         """
-        gammas = numpy.random.gamma(self.params)
+        gammas = np.random.gamma(self.params)
 
         m = len(data)
         row = gammas[:m]
-        col = numpy.cumsum(gammas)
+        col = np.cumsum(gammas)
 
         log_likes = []
         for n in self.ns:
             ps = row / col[n - 1]
-            terms = numpy.log(ps) * data
+            terms = np.log(ps) * data
             log_like = terms.sum()
             log_likes.append(log_like)
 
-        log_likes -= numpy.max(log_likes)
-        likes = numpy.exp(log_likes)
+        log_likes -= np.max(log_likes)
+        likes = np.exp(log_likes)
 
         coefs = [thinkbayes.BinomialCoef(n, m) for n in self.ns]
         likes *= coefs
@@ -995,7 +994,7 @@ class Species2(object):
 
         params = self.Unbias(n, self.m, q_desired)
 
-        gammas = numpy.random.gamma(params)
+        gammas = np.random.gamma(params)
         gammas /= gammas.sum()
         return gammas
 
@@ -1033,7 +1032,7 @@ class Species3(Species2):
         data: list of observations
         """
         # sample the likelihoods and add them up
-        like = numpy.zeros(len(self.ns), dtype=numpy.float)
+        like = np.zeros(len(self.ns), dtype=np.float)
         for _ in range(self.iters):
             like += self.SampleLikelihood(data)
 
@@ -1049,29 +1048,29 @@ class Species3(Species2):
         data: list of observations
         """
         # get a random sample
-        gammas = numpy.random.gamma(self.params)
+        gammas = np.random.gamma(self.params)
 
         # row is just the first m elements of gammas
         m = len(data)
         row = gammas[:m]
 
         # col is the cumulative sum of gammas
-        col = numpy.cumsum(gammas)[self.ns[0] - 1:]
+        col = np.cumsum(gammas)[self.ns[0] - 1:]
 
         # each row of the array is a set of ps, normalized
         # for each hypothetical value of n
-        array = row / col[:, numpy.newaxis]
+        array = row / col[:, np.newaxis]
 
         # computing the multinomial PDF under a log transform
         # take the log of the ps and multiply by the data
-        terms = numpy.log(array) * data
+        terms = np.log(array) * data
 
         # add up the rows
         log_likes = terms.sum(axis=1)
 
         # before exponentiating, scale into a reasonable range
-        log_likes -= numpy.max(log_likes)
-        likes = numpy.exp(log_likes)
+        log_likes -= np.max(log_likes)
+        likes = np.exp(log_likes)
 
         # correct for the number of ways we could see m species
         # out of a possible n
@@ -1093,7 +1092,7 @@ class Species4(Species):
 
         # loop through the species and update one at a time
         for i in range(m):
-            one = numpy.zeros(i + 1)
+            one = np.zeros(i + 1)
             one[i] = data[i]
 
             # call the parent class
@@ -1160,7 +1159,7 @@ class Species5(Species2):
             return
 
         # sample the likelihoods and add them up
-        likes = numpy.zeros(len(self.ns), dtype=numpy.float)
+        likes = np.zeros(len(self.ns), dtype=np.float)
         for _ in range(self.iters):
             likes += self.SampleLikelihood(i, count)
 
@@ -1181,18 +1180,18 @@ class Species5(Species2):
         """
         i, count = args
         # get a random sample of p
-        gammas = numpy.random.gamma(self.params)
+        gammas = np.random.gamma(self.params)
 
         # sums is the cumulative sum of p, for each value of n
-        sums = numpy.cumsum(gammas)[self.ns[0] - 1:]
+        sums = np.cumsum(gammas)[self.ns[0] - 1:]
 
         # get p for the mth species, for each value of n
         ps = gammas[i - 1] / sums
-        log_likes = numpy.log(ps) * count
+        log_likes = np.log(ps) * count
 
         # before exponentiating, scale into a reasonable range
-        log_likes -= numpy.max(log_likes)
-        likes = numpy.exp(log_likes)
+        log_likes -= np.max(log_likes)
+        likes = np.exp(log_likes)
 
         return likes
 
@@ -1418,8 +1417,7 @@ def RandomSeed(x):
 
     x: int seed
     """
-    random.seed(x)
-    numpy.random.seed(x)
+    np.random.seed(x)
 
 
 def GenerateFakeSample(n, r, tr, conc=1):
@@ -1542,7 +1540,7 @@ def ExpectedMaxPrev(m, conc=1, iters=100):
         prevalences = dirichlet.Random()
         t.append(max(prevalences))
 
-    return numpy.mean(t)
+    return np.mean(t)
 
 
 class Calibrator(object):
@@ -1554,9 +1552,9 @@ class Calibrator(object):
         self.conc = conc
 
         self.ps = range(10, 100, 10)
-        self.total_n = numpy.zeros(len(self.ps))
-        self.total_q = numpy.zeros(len(self.ps))
-        self.total_l = numpy.zeros(len(self.ps))
+        self.total_n = np.zeros(len(self.ps))
+        self.total_q = np.zeros(len(self.ps))
+        self.total_l = np.zeros(len(self.ps))
 
         self.n_seq = []
         self.q_seq = []
@@ -1757,7 +1755,7 @@ def ScoreVector(cdf, ps, actual):
         score = Score(low, high, actual)
         scores.append(score)
 
-    return numpy.array(scores)
+    return np.array(scores)
 
 
 def Score(low, high, n):
@@ -1789,7 +1787,7 @@ def FakeSubject(n=300, conc=0.1, num_reads=400, prevalences=None):
     n: number of species
     conc: concentration parameter
     num_reads: number of reads
-    prevalences: numpy array of prevalences (overrides n and conc)
+    prevalences: np array of prevalences (overrides n and conc)
     """
     # generate random prevalences
     if prevalences is None:
