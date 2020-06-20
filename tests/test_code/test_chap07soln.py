@@ -8,6 +8,8 @@ import logging
 
 import numpy as np
 from scipy.stats import poisson
+from thinkbayes import MakeMixture
+from thinkbayes import MakeNormalPmf
 from thinkbayes import Pmf, Suite
 from thinkbayes import thinkplot
 
@@ -53,7 +55,6 @@ def test_chapt7():
     thinkplot.Config(xlabel="Number of goals", ylabel="PMF", xlim=[-0.5, 22.5])
     logging.info("%r", f"total[9] = {total[9]}")
 
-
     # Solution
 
     EvalPoissonPmf(9, 3 * 2.9)
@@ -90,7 +91,7 @@ def test_chapt7():
 
     # Solution
 
-    1 - EvalExponentialCdf(1, 2.6)
+    logging.info("%r", f"1 - EvalExponentialCdf(1, 2.6) = {1 - EvalExponentialCdf(1, 2.6)}")
 
     # Solution
 
@@ -101,9 +102,6 @@ def test_chapt7():
     # The `Hockey` suite contains hypotheses about the goal scoring rate for one team against the other.  The prior is Gaussian, with mean and variance based on previous games in the league.
     #
     # The Likelihood function takes as data the number of goals scored in a game.
-
-    from thinkbayes import MakeNormalPmf
-    from thinkbayes import EvalPoissonPmf
 
     class Hockey(Suite):
         """Represents hypotheses about the scoring rate for a team."""
@@ -154,12 +152,10 @@ def test_chapt7():
     thinkplot.Pdf(suite2)
     thinkplot.Config(xlabel="Goals per game", ylabel="Probability")
 
-    suite1.Mean(), suite2.Mean()
+    logging.info("%r", f"suite1.Mean() = {suite1.Mean()}")
+    logging.info("%r", f"suite2.Mean() = {suite2.Mean()}")
 
     # To predict the number of goals scored in the next game we can compute, for each hypothetical value of $\lambda$, a Poisson distribution of goals scored, then make a weighted mixture of Poissons:
-
-    from thinkbayes import MakeMixture
-    from thinkbayes import MakePoissonPmf
 
     def MakeGoalPmf(suite, high=10):
         """Makes the distribution of goals scored, given distribution of lam.
@@ -188,7 +184,8 @@ def test_chapt7():
     thinkplot.Pmf(goal_dist2)
     thinkplot.Config(xlabel="Goals", ylabel="Probability", xlim=[-0.7, 11.5])
 
-    goal_dist1.Mean(), goal_dist2.Mean()
+    logging.info("%r", f"goal_dist1.Mean() = {goal_dist1.Mean()}")
+    logging.info("%r", f"goal_dist2.Mean() = {goal_dist2.Mean()}")
 
     # Now we can compute the probability that the Bruins win, lose, or tie in regulation time.
 
@@ -200,8 +197,6 @@ def test_chapt7():
     print("Prob win, loss, tie:", p_win, p_loss, p_tie)
 
     # If the game goes into overtime, we have to compute the distribution of `t`, the time until the first goal, for each team.  For each hypothetical value of $\lambda$, the distribution of `t` is exponential, so the predictive distribution is a mixture of exponentials.
-
-    from thinkbayes import MakeExponentialPmf
 
     def MakeGoalTimePmf(suite):
         """Makes the distribution of time til first goal.
@@ -229,7 +224,8 @@ def test_chapt7():
     thinkplot.Pmf(time_dist2)
     thinkplot.Config(xlabel="Games until goal", ylabel="Probability")
 
-    time_dist1.Mean(), time_dist2.Mean()
+    logging.info("%r", f"time_dist1.Mean() = {time_dist1.Mean()}")
+    logging.info("%r", f"time_dist2.Mean() = {time_dist2.Mean()}")
 
     # In overtime the first team to score wins, so the probability of winning is the probability of generating a smaller value of `t`:
 

@@ -4,9 +4,10 @@ This notebook presents code and exercises from Think Bayes, second edition.
 Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 import numpy as np
-
+from scipy.special import expit, logit  # pylint: disable=no-name-in-module
 from thinkbayes import Pmf, Suite, Joint
 from thinkbayes import thinkplot
 
@@ -114,8 +115,6 @@ def test_birthday_problem():
     #
     # But for now I will proceed with a linear logistic model.  The following table shows log odds of diagnosis for each month, which I will use to lay out a grid for parameter estimation.
 
-    from scipy.special import expit, logit
-
     for (x, d, t) in zip(xs, diagnosed, totals):
         print(x, logit(d / t))
 
@@ -174,7 +173,7 @@ def test_birthday_problem():
 
     # Let's see what the posterior regression lines look like, superimposed on the data.
 
-    for i in range(100):
+    for _ in range(100):
         b0, b1 = suite.Random()
         ys = expit(b0 + b1 * xs) * 10000
         thinkplot.plot(xs, ys, color="green", alpha=0.01)
@@ -247,6 +246,5 @@ def test_birthday_problem():
 
     # A difference of 21 diagnoses, on a base rate of 71 diagnoses, is an increase of 30% (18%, 42%)
 
-    pmf_diff.Mean() / pmf0.Mean()
-
-    pmf_diff.CredibleInterval(95) / pmf0.Mean()
+    logging.info("%r", f"pmf_diff.Mean() / pmf0.Mean() = {pmf_diff.Mean() / pmf0.Mean()}")
+    logging.info("%r", f"pmf_diff.CredibleInterval(95) / pmf0.Mean() = {pmf_diff.CredibleInterval(95) / pmf0.Mean()}")

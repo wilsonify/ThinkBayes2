@@ -5,7 +5,7 @@ Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 
 """
-
+import logging
 from fractions import Fraction
 
 import numpy as np
@@ -356,7 +356,7 @@ def test_red_dice4():
     d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1 (bluish) ")
     d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2 (reddish)")
     prior = Dice({d1: Fraction(1), d2: Fraction(1)})
-    # prior.Print()
+    print(prior)
 
 
 def test_red_dice5():
@@ -464,7 +464,7 @@ def test_red_dice9():
     d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2 (reddish)")
     prior = Dice({d1: Fraction(1), d2: Fraction(1)})
     posterior = prior.Copy()
-    # posterior.Print()
+    print(posterior)
 
 
 def test_bus():
@@ -518,6 +518,8 @@ def test_bus():
         res.append((bus, time))
 
     buses, times = zip(*res)
+    logging.info("%r", f"buses = {buses}")
+    logging.info("%r", f"times = {times}")
 
     hist = Hist(buses)
-    hist["A"] / hist.Total()
+    logging.info("%r", f"hist[A] / hist.Total() = {hist['A'] / hist.Total()}")

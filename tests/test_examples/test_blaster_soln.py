@@ -4,10 +4,10 @@ This notebook presents code and exercises from Think Bayes, second edition.
 Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 import numpy as np
 import pytest
-
 from thinkbayes import Hist, Pmf, Suite, Beta
 from thinkbayes import thinkplot
 
@@ -84,13 +84,15 @@ def test_alien_blaster_problem():
 
     # The posterior mean is lower
 
-    prior.Mean(), blaster.Mean()
+    logging.info("%r", f"prior.Mean() = {prior.Mean()}")
+    logging.info("%r", f"blaster.Mean() = {blaster.Mean()}")
 
     # Solution
 
     # So is the MAP
 
-    prior.MAP(), blaster.MAP()
+    logging.info("%r", f"prior.MAP() = {prior.MAP()}")
+    logging.info("%r", f"blaster.MAP() = {blaster.MAP()}")
 
     # So if we learn that the new design is "consistent",
     # it is more likely to be consistently bad (in this case).
@@ -112,7 +114,7 @@ def test_alien_blaster_problem():
     x1 = 0.3
     x2 = 0.4
 
-    0.3 * binom.pmf(k, n, x1) + 0.7 * binom.pmf(k, n, x2)
+    print(0.3 * binom.pmf(k, n, x1) + 0.7 * binom.pmf(k, n, x2))
 
     # The answer is a value drawn from the mixture of the two distributions.
 
@@ -132,7 +134,7 @@ def test_alien_blaster_problem():
         return np.random.binomial(n, p)
 
     ks = []
-    for i in range(1000):
+    for _ in range(1000):
         if flip(0.3):
             k = simulate_shots(n, x1)
         else:
@@ -144,7 +146,9 @@ def test_alien_blaster_problem():
     pmf = Pmf(ks)
     thinkplot.Hist(pmf)
     thinkplot.decorate(xlabel="Number of hits", ylabel="PMF")
-    len(ks), np.mean(ks)
+
+    logging.info("%r", f"len(ks) = {len(ks)}")
+    logging.info("%r", f"np.mean(ks) = {np.mean(ks)}")
 
     # The mean should be near 3.7.  We can run this simulation more efficiently using NumPy.  First we generate a sample of `xs`:
 

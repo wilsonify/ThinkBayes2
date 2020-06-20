@@ -26,12 +26,12 @@ def conditional(A, B):
 
 def conjunction(A, B):
     """Probability of both A and B"""
-    return prob(A) * conditional(B, A)
+    return prob(A) * conditional(A=B, B=A)
 
 
 def bayes_theorem(A, B):
     """Conditional probability of A given B, using Bayes's theorem"""
-    return prob(A) * conditional(B, A) / prob(B)
+    return prob(A) * conditional(A=B, B=A) / prob(B)
 
 
 def test_total(gss):
@@ -71,7 +71,7 @@ def test_total(gss):
         if x is True:
             total += 1
 
-    total / len(banker)
+    print(total / len(banker))
 
     prob(female)
 
@@ -89,7 +89,8 @@ def test_total(gss):
 
     prob(female & banker)
 
-    prob(banker & female) / prob(female)
+    banker_given_female = prob(banker & female) / prob(female)
+    print(banker_given_female)
 
     conditional(banker, female)
 
@@ -103,11 +104,13 @@ def test_total(gss):
 
     conjunction(liberal, democrat)
 
-    prob(liberal) * prob(democrat)
+    liberal_and_democrat = prob(liberal) * prob(democrat)
+    print(liberal_and_democrat)
 
     conjunction(democrat, liberal)
-
-    prob(banker) * conditional(female, banker) / prob(female)
+    female_given_banker = conditional(female, banker)
+    banker_given_female = prob(banker) * female_given_banker / prob(female)
+    print(banker_given_female)
 
     bayes_theorem(democrat, liberal)
 
