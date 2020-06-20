@@ -5,7 +5,8 @@ import thinkbayes
 from thinkbayes import Hist, Pmf, Suite
 from thinkbayes.utils import read_gss
 
-TESTDIR = os.path.abspath(os.path.dirname(__file__))
+CONFTESTDIR = os.path.abspath(os.path.dirname(__file__))
+TESTDIR = os.path.abspath(os.path.join(CONFTESTDIR, os.pardir))
 DATADIR = os.path.join(TESTDIR, "data")
 
 
