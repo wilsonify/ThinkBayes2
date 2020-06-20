@@ -7,12 +7,13 @@ MIT License: https://opensource.org/licenses/MIT
 
 import random
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 FORMATS = ["pdf", "eps", "png"]
 
 
-class Die(thinkbayes2.Pmf):
+class Die(thinkbayes.Pmf):
     """Represents the PMF of outcomes for a die."""
 
     def __init__(self, sides, label=""):
@@ -22,7 +23,7 @@ class Die(thinkbayes2.Pmf):
         label: string
         """
         hypos = range(1, sides + 1)
-        thinkbayes2.Pmf.__init__(self, hypos, label=label)
+        thinkbayes.Pmf.__init__(self, hypos, label=label)
 
 
 def PmfMax(pmf1, pmf2):
@@ -32,7 +33,7 @@ def PmfMax(pmf1, pmf2):
 
     returns: new Pmf
     """
-    res = thinkbayes2.Pmf()
+    res = thinkbayes.Pmf()
     for v1, p1 in pmf1.Items():
         for v2, p2 in pmf2.Items():
             res.Incr(max(v1, v2), p1 * p2)
@@ -40,7 +41,7 @@ def PmfMax(pmf1, pmf2):
 
 
 def main():
-    pmf_dice = thinkbayes2.Pmf()
+    pmf_dice = thinkbayes.Pmf()
     pmf_dice.Set(Die(4), 5)
     pmf_dice.Set(Die(6), 4)
     pmf_dice.Set(Die(8), 3)
@@ -48,12 +49,12 @@ def main():
     pmf_dice.Set(Die(20), 1)
     pmf_dice.Normalize()
 
-    mix = thinkbayes2.Pmf()
+    mix = thinkbayes.Pmf()
     for die, weight in pmf_dice.Items():
         for outcome, prob in die.Items():
             mix.Incr(outcome, weight * prob)
 
-    mix = thinkbayes2.MakeMixture(pmf_dice)
+    mix = thinkbayes.MakeMixture(pmf_dice)
 
     thinkplot.Hist(mix, width=0.9)
     thinkplot.Save(
@@ -65,7 +66,7 @@ def main():
     d6 = Die(6, "d6")
 
     dice = [d6] * 3
-    three = thinkbayes2.SampleSum(dice, 1000)
+    three = thinkbayes.SampleSum(dice, 1000)
     three.label = "sample"
     three.Print()
 

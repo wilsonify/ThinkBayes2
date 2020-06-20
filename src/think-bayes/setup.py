@@ -15,7 +15,7 @@ setup(
     author="Allen B. Downey",
     author_email="downey@allendowney.com",
     packages=["thinkbayes"],
-    url="http://github.com/AllenDowney/ThinkBayes2",
+    url="http://github.com/AllenDowney/thinkbayes",
     license="LICENSE.txt",
     description="Supporting code for the book Think Bayes 2e.",
     long_description=readme(),

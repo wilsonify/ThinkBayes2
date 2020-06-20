@@ -5,7 +5,7 @@ Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from src.thinkbayes2 import Pmf
+from thinkbayes import Pmf
 
 
 class Cookie(Pmf):

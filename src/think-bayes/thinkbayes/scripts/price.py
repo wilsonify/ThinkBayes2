@@ -10,7 +10,8 @@ import csv
 import matplotlib.pyplot as pyplot
 import numpy as np
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 FORMATS = ["png", "pdf", "eps"]
 
@@ -41,7 +42,7 @@ def ReadData(filename="showcases.2011.csv"):
     return list(zip(*res))
 
 
-class Price(thinkbayes2.Suite):
+class Price(thinkbayes.Suite):
     """Represents hypotheses about the price of a showcase."""
 
     def __init__(self, pmf, player, label=None):
@@ -51,7 +52,7 @@ class Price(thinkbayes2.Suite):
         player: Player object
         label: string
         """
-        thinkbayes2.Suite.__init__(self, pmf, label=label)
+        thinkbayes.Suite.__init__(self, pmf, label=label)
         self.player = player
 
     def Likelihood(self, data, hypo):
@@ -151,12 +152,12 @@ class Player(object):
         bids: sequence of bids
         diffs: sequence of underness (negative means over)
         """
-        self.pdf_price = thinkbayes2.EstimatedPdf(prices)
-        self.cdf_diff = thinkbayes2.MakeCdfFromList(diffs)
+        self.pdf_price = thinkbayes.EstimatedPdf(prices)
+        self.cdf_diff = thinkbayes.MakeCdfFromList(diffs)
 
         mu = 0
         sigma = np.std(diffs)
-        self.pdf_error = thinkbayes2.NormalPdf(mu, sigma)
+        self.pdf_error = thinkbayes.NormalPdf(mu, sigma)
 
     def ErrorDensity(self, error):
         """Density of the given error in the distribution of error.

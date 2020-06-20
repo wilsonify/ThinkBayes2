@@ -7,10 +7,11 @@ MIT License: https://opensource.org/licenses/MIT
 
 import numpy
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 
-class Soccer(thinkbayes2.Suite):
+class Soccer(thinkbayes.Suite):
     """Represents hypotheses about."""
 
     def Likelihood(self, data, hypo):
@@ -21,7 +22,7 @@ class Soccer(thinkbayes2.Suite):
         """
         goals = data
         lam = hypo
-        like = thinkbayes2.EvalPoissonPmf(goals, lam)
+        like = thinkbayes.EvalPoissonPmf(goals, lam)
         return like
 
     def PredictiveDist(self, label="pred"):
@@ -29,12 +30,12 @@ class Soccer(thinkbayes2.Suite):
 
         returns: new Pmf (mixture of Poissons)
         """
-        metapmf = thinkbayes2.Pmf()
+        metapmf = thinkbayes.Pmf()
         for lam, prob in self.Items():
-            pred = thinkbayes2.MakePoissonPmf(lam, 15)
+            pred = thinkbayes.MakePoissonPmf(lam, 15)
             metapmf[pred] = prob
 
-        mix = thinkbayes2.MakeMixture(metapmf, label=label)
+        mix = thinkbayes.MakeMixture(metapmf, label=label)
         return mix
 
 

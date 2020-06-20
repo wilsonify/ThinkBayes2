@@ -7,7 +7,8 @@ MIT License: https://opensource.org/licenses/MIT
 
 import numpy
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 """
 Bayesian solution to the Lincoln index, described in a blog
@@ -54,7 +55,7 @@ is.
 """
 
 
-def choose(n, k, d={}):
+def choose(n, k, d=None):
     """The binomial coefficient "n choose k".
 
     Args:
@@ -65,6 +66,8 @@ def choose(n, k, d={}):
     Returns:
       int
     """
+    if d is None:
+        d = {}
     if k == 0:
         return 1
     if n == 0:
@@ -88,7 +91,7 @@ def binom(k, n, p):
     return p ** k * (1 - p) ** (n - k)
 
 
-class Lincoln(thinkbayes2.Suite, thinkbayes2.Joint):
+class Lincoln(thinkbayes.Suite, thinkbayes.Joint):
     """Represents hypotheses about the number of errors."""
 
     def Likelihood(self, data, hypo):

@@ -9,10 +9,11 @@ from itertools import product
 
 import numpy
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 
-class Gps(thinkbayes2.Suite, thinkbayes2.Joint):
+class Gps(thinkbayes.Suite, thinkbayes.Joint):
     """Represents hypotheses about your location in the field."""
 
     def Likelihood(self, data, hypo):
@@ -24,8 +25,8 @@ class Gps(thinkbayes2.Suite, thinkbayes2.Joint):
         std = 30
         meanx, meany = hypo
         x, y = data
-        like = thinkbayes2.EvalNormalPdf(x, meanx, std)
-        like *= thinkbayes2.EvalNormalPdf(y, meany, std)
+        like = thinkbayes.EvalNormalPdf(x, meanx, std)
+        like *= thinkbayes.EvalNormalPdf(y, meany, std)
         return like
 
 

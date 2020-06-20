@@ -166,13 +166,15 @@ def values(df, varname):
     return df[varname].value_counts().sort_index()
 
 
-def fill_missing(df, varname, badvals=[98, 99]):
+def fill_missing(df, varname, badvals=None):
     """Fill missing data with random values.
 
     df: DataFrame
     varname: string column name
     badvals: list of values to be replaced
     """
+    if badvals is None:
+        badvals = [98, 99]
     # replace badvals with NaN
     df[varname].replace(badvals, np.nan, inplace=True)
 

@@ -7,10 +7,11 @@ MIT License: https://opensource.org/licenses/MIT
 
 import numpy
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 
-class Soccer(thinkbayes2.Suite):
+class Soccer(thinkbayes.Suite):
     """Represents hypotheses about."""
 
     def Likelihood(self, data, hypo):
@@ -30,7 +31,7 @@ class Soccer(thinkbayes2.Suite):
         """
         # TODO: fill this in
         lam = 1
-        pred = thinkbayes2.MakePoissonPmf(lam, 15)
+        pred = thinkbayes.MakePoissonPmf(lam, 15)
         return pred
 
 

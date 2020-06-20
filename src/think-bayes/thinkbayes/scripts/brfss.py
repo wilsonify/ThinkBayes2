@@ -11,7 +11,8 @@ import sys
 import numpy as np
 import pandas
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 
 def Summarize(df, column, title):
@@ -73,7 +74,7 @@ def ReadBrfss(filename="CDBRFS08.ASC.gz", compression="gzip", nrows=None):
     columns = ["name", "start", "end", "type"]
     variables = pandas.DataFrame(var_info, columns=columns)
     variables.end += 1
-    dct = thinkbayes2.FixedWidthVariables(variables, index_base=1)
+    dct = thinkbayes.FixedWidthVariables(variables, index_base=1)
 
     df = dct.ReadFixedWidth(filename, compression=compression, nrows=nrows)
     CleanBrfssFrame(df)
@@ -85,16 +86,16 @@ def MakeNormalModel(weights):
 
     weights: sequence
     """
-    cdf = thinkbayes2.Cdf(weights, label="weights")
+    cdf = thinkbayes.Cdf(weights, label="weights")
 
-    mean, var = thinkbayes2.TrimmedMeanVar(weights)
+    mean, var = thinkbayes.TrimmedMeanVar(weights)
     std = math.sqrt(var)
     print("n, mean, std", len(weights), mean, std)
 
     xmin = mean - 4 * std
     xmax = mean + 4 * std
 
-    xs, ps = thinkbayes2.RenderNormalCdf(mean, std, xmin, xmax)
+    xs, ps = thinkbayes.RenderNormalCdf(mean, std, xmin, xmax)
     thinkplot.Plot(xs, ps, label="model", linewidth=4, color="0.8")
     thinkplot.Cdf(cdf)
 
@@ -104,14 +105,14 @@ def MakeNormalPlot(weights):
 
     weights: sequence
     """
-    mean, var = thinkbayes2.TrimmedMeanVar(weights, p=0.01)
+    mean, var = thinkbayes.TrimmedMeanVar(weights, p=0.01)
     std = math.sqrt(var)
 
     xs = [-5, 5]
-    xs, ys = thinkbayes2.FitLine(xs, mean, std)
+    xs, ys = thinkbayes.FitLine(xs, mean, std)
     thinkplot.Plot(xs, ys, color="0.8", label="model")
 
-    xs, ys = thinkbayes2.NormalProbability(weights)
+    xs, ys = thinkbayes.NormalProbability(weights)
     thinkplot.Plot(xs, ys, label="weights")
 
 
@@ -148,7 +149,7 @@ def main(script, nrows=1000):
 
     script: string script name
     """
-    thinkbayes2.RandomSeed(17)
+    thinkbayes.RandomSeed(17)
 
     nrows = int(nrows)
     df = ReadBrfss(nrows=nrows)

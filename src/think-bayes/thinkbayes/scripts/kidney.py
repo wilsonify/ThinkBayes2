@@ -9,11 +9,10 @@ import math
 import random
 import sys
 
-import correlation
 import matplotlib.pyplot as pyplot
 import numpy
-
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 INTERVAL = 245 / 365.0
 FORMATS = ["pdf", "eps"]
@@ -82,7 +81,7 @@ def MakeCdf():
     ps = [freq / n for freq in freqs]
     xs = numpy.arange(-1.5, 6.5, 1.0)
 
-    cdf = thinkbayes2.Cdf(xs, ps)
+    cdf = thinkbayes.Cdf(xs, ps)
     return cdf
 
 
@@ -152,7 +151,7 @@ def FitCdf(cdf):
     xs = xs[1:-1]
     lcps = [math.log(p) for p in cps[1:-1]]
 
-    _inter, slope = correlation.LeastSquares(xs, lcps)
+    _inter, slope = thinkbayes.LeastSquares(xs, lcps)
     return -slope
 
 
@@ -168,7 +167,7 @@ def CorrelatedGenerator(cdf, rho):
 
     def Transform(x):
         """Maps from a Normal variate to a variate with the given CDF."""
-        p = thinkbayes2.NormalCdf(x)
+        p = thinkbayes.StandardNormalCdf(x)
         y = cdf.Value(p)
         return y
 
@@ -247,7 +246,7 @@ def GenerateCdf(n=1000, pc=0.35, lam1=0.79, lam2=5.0):
     Returns: Cdf of generated sample
     """
     xs = GenerateSample(n, pc, lam1, lam2)
-    cdf = thinkbayes2.MakeCdfFromList(xs)
+    cdf = thinkbayes.MakeCdfFromList(xs)
     return cdf
 
 
@@ -260,7 +259,7 @@ def ModelCdf(pc=0.35, lam1=0.79, lam2=5.0):
 
     Returns: list of xs, list of ys
     """
-    cdf = thinkbayes2.EvalExponentialCdf
+    cdf = thinkbayes.EvalExponentialCdf
     x1 = numpy.arange(-2, 0, 0.1)
     y1 = [pc * (1 - cdf(-x, lam2)) for x in x1]
     x2 = numpy.arange(0, 7, 0.1)
@@ -316,13 +315,13 @@ class Cache(object):
         sequences: map from bucket to a list of sequences
         initial_rdt: sequence of (V0, rdt) pairs
         """
-        self.joint = thinkbayes2.Joint()
+        self.joint = thinkbayes.Joint()
         self.sequences = {}
         self.initial_rdt = []
 
     def GetBuckets(self):
         """Returns an iterator for the keys in the cache."""
-        return self.sequences.iterkeys()
+        return self.sequences.keys()
 
     def GetSequence(self, bucket):
         """Looks up a bucket in the cache."""
@@ -334,7 +333,7 @@ class Cache(object):
         bucket: int bucket number
         name: string
         """
-        pmf = self.joint.Conditional(0, 1, bucket, name=name)
+        pmf = self.joint.Conditional(0, 1, bucket, label=name)
         cdf = pmf.MakeCdf()
         return cdf
 
@@ -356,7 +355,7 @@ class Cache(object):
         
         Returns: new Pmf object
         """
-        joint = thinkbayes2.Joint()
+        joint = thinkbayes.Joint()
 
         for val, freq in self.joint.Items():
             age, bucket = val
@@ -396,7 +395,7 @@ class Cache(object):
         """Computes the correlation between log volumes and rdts."""
         vs, rdts = zip(*self.initial_rdt)
         lvs = [math.log(v) for v in vs]
-        return correlation.Corr(lvs, rdts)
+        return thinkbayes.Corr(lvs, rdts)
 
 
 class Calculator(object):
@@ -702,7 +701,7 @@ def FitLine(xs, ys, fxs):
     fxs: diameter in cm
     """
     lxs = [math.log(x) for x in xs]
-    inter, slope = correlation.LeastSquares(lxs, ys)
+    inter, slope = thinkbayes.LeastSquares(lxs, ys)
     # res = correlation.Residuals(lxs, ys, inter, slope)
     # r2 = correlation.CoefDetermination(ys, res)
 
@@ -743,11 +742,11 @@ def TestCorrelation(cdf):
     rho = 0.4
 
     rdt_seq = CorrelatedGenerator(cdf, rho)
-    xs = [rdt_seq.next() for _ in range(n)]
+    xs = [next(rdt_seq) for _ in range(n)]
 
-    rho2 = correlation.SerialCorr(xs)
+    rho2 = thinkbayes.SerialCorr(xs)
     print((rho, rho2))
-    cdf2 = thinkbayes2.MakeCdfFromList(xs)
+    cdf2 = thinkbayes.MakeCdfFromList(xs)
 
     thinkplot.Cdfs([cdf, cdf2])
     thinkplot.Show()

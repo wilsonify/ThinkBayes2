@@ -7,10 +7,11 @@ MIT License: https://opensource.org/licenses/MIT
 
 import numpy
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 
-class Soccer(thinkbayes2.Suite):
+class Soccer(thinkbayes.Suite):
     """Represents hypotheses about."""
 
     def Likelihood(self, data, hypo):
@@ -21,7 +22,7 @@ class Soccer(thinkbayes2.Suite):
         """
         x = data
         lam = hypo / 90
-        like = thinkbayes2.EvalExponentialPdf(x, lam)
+        like = thinkbayes.EvalExponentialPdf(x, lam)
         return like
 
     def PredRemaining(self, rem_time, score):
@@ -30,14 +31,14 @@ class Soccer(thinkbayes2.Suite):
         rem_time: remaining time in the game in minutes
         score: number of goals already scored
         """
-        metapmf = thinkbayes2.Pmf()
+        metapmf = thinkbayes.Pmf()
         for lam, prob in self.Items():
             lt = lam * rem_time / 90
-            pred = thinkbayes2.MakePoissonPmf(lt, 15)
+            pred = thinkbayes.MakePoissonPmf(lt, 15)
             metapmf[pred] = prob
             # thinkplot.Pdf(pred, color='gray', alpha=0.1, linewidth=0.5)
 
-        mix = thinkbayes2.MakeMixture(metapmf)
+        mix = thinkbayes.MakeMixture(metapmf)
         mix += score
         thinkplot.Hist(mix)
         thinkplot.Show()

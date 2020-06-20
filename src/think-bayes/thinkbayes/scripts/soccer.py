@@ -7,10 +7,11 @@ MIT License: https://opensource.org/licenses/MIT
 
 import numpy
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 
-class Soccer(thinkbayes2.Suite):
+class Soccer(thinkbayes.Suite):
     """Represents hypotheses about."""
 
     def Likelihood(self, data, hypo):

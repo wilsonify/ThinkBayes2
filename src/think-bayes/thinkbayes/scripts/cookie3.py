@@ -5,10 +5,10 @@ Copyright 2014 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from src import thinkbayes2
+import thinkbayes
 
 
-class Cookie(thinkbayes2.Suite):
+class Cookie(thinkbayes.Suite):
     """Suite to represent bowls of cookies."""
 
     def Likelihood(self, data, hypo):
@@ -29,8 +29,8 @@ class Cookie(thinkbayes2.Suite):
 
 def main():
     # use Hists to represent the contents of the bowls
-    bowl1 = thinkbayes2.Hist(dict(vanilla=30, chocolate=10))
-    bowl2 = thinkbayes2.Hist(dict(vanilla=20, chocolate=20))
+    bowl1 = thinkbayes.Hist(dict(vanilla=30, chocolate=10))
+    bowl2 = thinkbayes.Hist(dict(vanilla=20, chocolate=20))
 
     # instantiate the suite
     suite = Cookie([bowl1, bowl2])

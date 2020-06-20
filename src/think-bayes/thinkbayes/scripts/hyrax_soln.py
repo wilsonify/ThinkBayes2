@@ -5,10 +5,11 @@ Copyright 2014 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 
-class Hyrax(thinkbayes2.Suite):
+class Hyrax(thinkbayes.Suite):
     """Represents hypotheses about how many hyraxes there are."""
 
     def Likelihood(self, data, hypo):
@@ -22,11 +23,11 @@ class Hyrax(thinkbayes2.Suite):
             return 0
 
         p = tagged / hypo
-        like = thinkbayes2.EvalBinomialPmf(k, n, p)
+        like = thinkbayes.EvalBinomialPmf(k, n, p)
         return like
 
 
-class Hyrax2(thinkbayes2.Suite):
+class Hyrax2(thinkbayes.Suite):
     """Represents hypotheses about how many hyraxes there are."""
 
     def Likelihood(self, data, hypo):
@@ -41,7 +42,7 @@ class Hyrax2(thinkbayes2.Suite):
         if hypo < K + (n - k):
             return 0
 
-        like = thinkbayes2.EvalHypergeomPmf(k, N, K, n)
+        like = thinkbayes.EvalHypergeomPmf(k, N, K, n)
         return like
 
 

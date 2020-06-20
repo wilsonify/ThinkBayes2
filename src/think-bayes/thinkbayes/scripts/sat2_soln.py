@@ -7,10 +7,11 @@ MIT License: https://opensource.org/licenses/MIT
 
 import math
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 
-class Sat(thinkbayes2.Suite, thinkbayes2.Joint):
+class Sat(thinkbayes.Suite, thinkbayes.Joint):
     """Represents the distribution of p_correct for a test-taker."""
 
     def Likelihood(self, data, hypo):
@@ -46,7 +47,7 @@ def Update(p, q, correct):
 
     returns: pair of new Pmfs
     """
-    joint = thinkbayes2.MakeJoint(p, q)
+    joint = thinkbayes.MakeJoint(p, q)
     suite = Sat(joint)
     suite.Update(correct)
     p, q = suite.Marginal(0, label=p.label), suite.Marginal(1, label=q.label)
@@ -54,11 +55,11 @@ def Update(p, q, correct):
 
 
 def main():
-    p1 = thinkbayes2.MakeNormalPmf(0, 1, 3, n=101)
+    p1 = thinkbayes.MakeNormalPmf(0, 1, 3, n=101)
     p1.label = "p1"
     p2 = p1.Copy(label="p2")
 
-    q1 = thinkbayes2.MakeNormalPmf(0, 1, 3, n=101)
+    q1 = thinkbayes.MakeNormalPmf(0, 1, 3, n=101)
     q1.label = "q1"
     q2 = q1.Copy(label="q2")
 

@@ -7,10 +7,11 @@ MIT License: https://opensource.org/licenses/MIT
 
 import numpy
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 
-class Electorate(thinkbayes2.Suite):
+class Electorate(thinkbayes.Suite):
     """Represents hypotheses about the state of the electorate."""
 
     def Likelihood(self, data, hypo):

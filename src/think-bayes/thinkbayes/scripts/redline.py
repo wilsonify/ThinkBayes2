@@ -11,7 +11,8 @@ import sys
 
 import numpy
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 FORMATS = ["pdf", "eps", "png", "jpg"]
 
@@ -160,7 +161,7 @@ def MakeUniformPmf(low, high):
     high: highest value (inclusive)
     """
     xs = MakeRange(low, high)
-    pmf = thinkbayes2.Pmf(xs)
+    pmf = thinkbayes.Pmf(xs)
     return pmf
 
 
@@ -214,7 +215,7 @@ class WaitTimeCalculator(object):
 
         Returns: sequence of values
         """
-        cdf_y = thinkbayes2.Cdf(self.pmf_y)
+        cdf_y = thinkbayes.Cdf(self.pmf_y)
         sample = cdf_y.Sample(n)
         return sample
 
@@ -225,7 +226,7 @@ class WaitTimeCalculator(object):
 
         Returns: sequence of values
         """
-        cdf_zb = thinkbayes2.Cdf(self.pmf_zb)
+        cdf_zb = thinkbayes.Cdf(self.pmf_zb)
         sample = cdf_zb.Sample(n)
         return sample
 
@@ -303,12 +304,12 @@ def PmfOfWaitTime(pmf_zb):
 
     Returns: dist of wait time (also dist of elapsed time)
     """
-    metapmf = thinkbayes2.Pmf()
+    metapmf = thinkbayes.Pmf()
     for gap, prob in pmf_zb.Items():
         uniform = MakeUniformPmf(0, gap)
         metapmf.Set(uniform, prob)
 
-    pmf_y = thinkbayes2.MakeMixture(metapmf, label="y")
+    pmf_y = thinkbayes.MakeMixture(metapmf, label="y")
     return pmf_y
 
 
@@ -359,7 +360,7 @@ class ElapsedTimeEstimator(object):
         thinkplot.Save(root=root, xlabel="Time (min)", ylabel="CDF", formats=FORMATS)
 
 
-class ArrivalRate(thinkbayes2.Suite):
+class ArrivalRate(thinkbayes.Suite):
     """Represents the distribution of arrival rates (lambda)."""
 
     def Likelihood(self, data, hypo):
@@ -372,7 +373,7 @@ class ArrivalRate(thinkbayes2.Suite):
         """
         lam = hypo
         x, k = data
-        like = thinkbayes2.EvalPoissonPmf(k, lam * x)
+        like = thinkbayes.EvalPoissonPmf(k, lam * x)
         return like
 
 
@@ -422,7 +423,7 @@ class ArrivalRateEstimator(object):
         )
 
 
-class Elapsed(thinkbayes2.Suite):
+class Elapsed(thinkbayes.Suite):
     """Represents the distribution of elapsed time (x)."""
 
     def Likelihood(self, data, hypo):
@@ -435,7 +436,7 @@ class Elapsed(thinkbayes2.Suite):
         """
         x = hypo
         lam, k = data
-        like = thinkbayes2.EvalPoissonPmf(k, lam * x)
+        like = thinkbayes.EvalPoissonPmf(k, lam * x)
         return like
 
 
@@ -465,7 +466,7 @@ def RemoveNegatives(pmf):
     pmf.Normalize()
 
 
-class Gaps(thinkbayes2.Suite):
+class Gaps(thinkbayes.Suite):
     """Represents the distribution of gap times,
     as updated by an observed waiting time."""
 
@@ -485,7 +486,7 @@ class Gaps(thinkbayes2.Suite):
         return 1.0 / z
 
 
-class GapDirichlet(thinkbayes2.Dirichlet):
+class GapDirichlet(thinkbayes.Dirichlet):
     """Represents the distribution of prevalences for each
     gap time."""
 
@@ -495,7 +496,7 @@ class GapDirichlet(thinkbayes2.Dirichlet):
         xs: sequence of possible gap times
         """
         n = len(xs)
-        thinkbayes2.Dirichlet.__init__(self, n)
+        thinkbayes.Dirichlet.__init__(self, n)
         self.xs = xs
         self.mean_zbs = []
 
@@ -504,14 +505,14 @@ class GapDirichlet(thinkbayes2.Dirichlet):
 
         Values stored in mean_zbs.
         """
-        return thinkbayes2.Pmf(self.mean_zbs)
+        return thinkbayes.Pmf(self.mean_zbs)
 
     def Preload(self, data):
         """Adds pseudocounts to the parameters.
 
         data: sequence of pseudocounts
         """
-        thinkbayes2.Dirichlet.Update(self, data)
+        thinkbayes.Dirichlet.Update(self, data)
 
     def Update(self, data):
         """Computes the likelihood of the data.
@@ -574,7 +575,7 @@ class GapTimeEstimator(object):
         self.passenger_data = passenger_data
 
         self.wait_times = [y for _k1, y, _k2 in passenger_data]
-        self.pmf_y = thinkbayes2.Pmf(self.wait_times, label="y")
+        self.pmf_y = thinkbayes.Pmf(self.wait_times, label="y")
 
         dirichlet = GapDirichlet2(self.xs)
         dirichlet.params /= 1.0
@@ -628,7 +629,7 @@ def TestGte():
     gap_times = [60, 60, 60, 60, 60, 120, 120, 120, 240, 240]
 
     # distribution of gap time (z)
-    pdf_z = thinkbayes2.EstimatedPdf(gap_times)
+    pdf_z = thinkbayes.EstimatedPdf(gap_times)
     pmf_z = pdf_z.MakePmf(xs=xs, label="z")
 
     wtc = WaitTimeCalculator(pmf_z, inverse=False)
@@ -659,13 +660,13 @@ class WaitMixtureEstimator(object):
         are: ArrivalTimeEstimator
         num_passengers: number of passengers seen on the platform
         """
-        self.metapmf = thinkbayes2.Pmf()
+        self.metapmf = thinkbayes.Pmf()
 
         for lam, prob in sorted(are.post_lam.Items()):
             ete = ElapsedTimeEstimator(wtc, lam, num_passengers)
             self.metapmf.Set(ete.pmf_y, prob)
 
-        self.mixture = thinkbayes2.MakeMixture(self.metapmf)
+        self.mixture = thinkbayes.MakeMixture(self.metapmf)
 
         lam = are.post_lam.Mean()
         ete = ElapsedTimeEstimator(wtc, lam, num_passengers)
@@ -705,7 +706,7 @@ def GenerateSampleData(gap_times, lam=0.0333, n=10):
     n: number of simulated observations
     """
     xs = MakeRange(low=10)
-    pdf_z = thinkbayes2.EstimatedPdf(gap_times)
+    pdf_z = thinkbayes.EstimatedPdf(gap_times)
     pmf_z = pdf_z.MakePmf(xs=xs, label="z")
 
     wtc = WaitTimeCalculator(pmf_z, inverse=False)
@@ -735,12 +736,12 @@ def RunSimpleProcess(gap_times, lam=0.0333, num_passengers=15, plot=True):
     global UPPER_BOUND
     UPPER_BOUND = 1200
 
-    cdf_z = thinkbayes2.Cdf(gap_times).Scale(1.0 / 60)
+    cdf_z = thinkbayes.Cdf(gap_times).Scale(1.0 / 60)
     print("CI z", cdf_z.CredibleInterval(90))
 
     xs = MakeRange(low=10)
 
-    pdf_z = thinkbayes2.EstimatedPdf(gap_times)
+    pdf_z = thinkbayes.EstimatedPdf(gap_times)
     pmf_z = pdf_z.MakePmf(xs=xs, label="z")
 
     wtc = WaitTimeCalculator(pmf_z, inverse=False)
@@ -815,16 +816,16 @@ def RunLoop(gap_times, nums, lam=0.0333):
 
     # resample gap_times
     n = 220
-    cdf_z = thinkbayes2.Cdf(gap_times)
+    cdf_z = thinkbayes.Cdf(gap_times)
     sample_z = cdf_z.Sample(n)
-    pmf_z = thinkbayes2.Pmf(sample_z)
+    pmf_z = thinkbayes.Pmf(sample_z)
 
     # compute the biased pmf and add some long delays
     cdf_zp = BiasPmf(pmf_z).MakeCdf()
     sample_zb = numpy.append(cdf_zp.Sample(n), [1800, 2400, 3000])
 
     # smooth the distribution of zb
-    pdf_zb = thinkbayes2.EstimatedPdf(sample_zb)
+    pdf_zb = thinkbayes.EstimatedPdf(sample_zb)
     xs = MakeRange(low=60)
     pmf_zb = pdf_zb.MakePmf(xs=xs)
 

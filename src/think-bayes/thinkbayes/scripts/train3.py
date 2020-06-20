@@ -5,9 +5,10 @@ Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from dice import Dice
+from thinkbayes.scripts.dice import Dice
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 
 class Train(Dice):
@@ -23,7 +24,7 @@ class Train2(Dice):
         hypos: sequence of hypotheses
         alpha: parameter of the power law prior
         """
-        thinkbayes2.Pmf.__init__(self)
+        thinkbayes.Pmf.__init__(self)
         for hypo in hypos:
             self.Set(hypo, hypo ** (-alpha))
         self.Normalize()
@@ -84,7 +85,7 @@ def main():
     interval = suite.Percentile(5), suite.Percentile(95)
     print(interval)
 
-    cdf = thinkbayes2.Cdf(suite)
+    cdf = thinkbayes.Cdf(suite)
     interval = cdf.Percentile(5), cdf.Percentile(95)
     print(interval)
 

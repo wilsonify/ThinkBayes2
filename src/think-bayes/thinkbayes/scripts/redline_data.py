@@ -13,10 +13,10 @@ import os
 import sys
 from datetime import datetime, time
 from time import sleep
+from urllib.request import urlopen
 
 import numpy
-import redis
-import urllib2
+import redis as redis
 
 
 class Redis(object):
@@ -108,7 +108,7 @@ def ReadCsv(url="http://developer.mbta.com/lib/rthr/red.csv"):
 
     Returns: list of TrainSpotting objects
     """
-    fp = urllib2.urlopen(url)
+    fp = urlopen(url)
     reader = csv.reader(fp)
 
     tss = []
@@ -127,7 +127,7 @@ def ReadCsv(url="http://developer.mbta.com/lib/rthr/red.csv"):
 
 def ReadJson():
     url = "http://developer.mbta.com/lib/rthr/red.json"
-    json_text = urllib2.urlopen(url).read()
+    json_text = urlopen(url).read()
     json_obj = json.loads(json_text)
     print(json_obj)
 
@@ -178,7 +178,7 @@ def GetInterarrivals(arrival_map):
     Returns: list of float interarrival times in seconds
     """
     interarrival_seconds = []
-    for day, arrivals in sorted(arrival_map.iteritems()):
+    for day, arrivals in sorted(arrival_map.items()):
         print(day, len(arrivals))
         arrivals.sort()
         diffs = numpy.diff(arrivals)

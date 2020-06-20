@@ -11,7 +11,8 @@ import sys
 
 import numpy
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 
 def ReadScale(filename="sat_scale.csv", col=2):
@@ -48,7 +49,7 @@ def ReadScale(filename="sat_scale.csv", col=2):
 
     raws.sort()
     scores.sort()
-    return thinkbayes2.Interpolator(raws, scores)
+    return thinkbayes.Interpolator(raws, scores)
 
 
 def ReadRanks(filename="sat_ranks.csv"):
@@ -80,7 +81,7 @@ def DivideValues(pmf, denom):
 
     Returns a new Pmf.
     """
-    new = thinkbayes2.Pmf()
+    new = thinkbayes.Pmf()
     denom = float(denom)
     for val, prob in pmf.Items():
         x = val / denom
@@ -99,7 +100,7 @@ class Exam(object):
         self.scale = ReadScale()
 
         scores = ReadRanks()
-        score_pmf = thinkbayes2.Pmf(dict(scores))
+        score_pmf = thinkbayes.Pmf(dict(scores))
 
         self.raw = self.ReverseScale(score_pmf)
         self.max_score = max(self.raw.Values())
@@ -142,12 +143,12 @@ class Exam(object):
 
         efficacies: Pmf of efficacy
         """
-        pmfs = thinkbayes2.Pmf()
+        pmfs = thinkbayes.Pmf()
         for efficacy, prob in efficacies.Items():
             scores = self.PmfCorrect(efficacy)
             pmfs.Set(scores, prob)
 
-        mix = thinkbayes2.MakeMixture(pmfs)
+        mix = thinkbayes.MakeMixture(pmfs)
         return mix
 
     def CalibrateDifficulty(self):
@@ -155,12 +156,12 @@ class Exam(object):
         thinkplot.Clf()
         thinkplot.PrePlot(num=2)
 
-        cdf = thinkbayes2.Cdf(self.raw, label="data")
+        cdf = thinkbayes.Cdf(self.raw, label="data")
         thinkplot.Cdf(cdf)
 
-        efficacies = thinkbayes2.MakeNormalPmf(0, 1.5, 3)
+        efficacies = thinkbayes.MakeNormalPmf(0, 1.5, 3)
         pmf = self.MakeRawScoreDist(efficacies)
-        cdf = thinkbayes2.Cdf(pmf, label="model")
+        cdf = thinkbayes.Cdf(pmf, label="model")
         thinkplot.Cdf(cdf)
 
         thinkplot.Save(
@@ -195,19 +196,18 @@ class Exam(object):
 
         Args:
             pmf: Pmf object
-            scale: Interpolator object
 
         Returns:
             new Pmf
         """
-        new = thinkbayes2.Pmf()
+        new = thinkbayes.Pmf()
         for val, prob in pmf.Items():
             raw = self.Reverse(val)
             new.Incr(raw, prob)
         return new
 
 
-class Sat(thinkbayes2.Suite):
+class Sat(thinkbayes.Suite):
     """Represents the distribution of p_correct for a test-taker."""
 
     def __init__(self, exam, score):
@@ -215,7 +215,7 @@ class Sat(thinkbayes2.Suite):
         self.score = score
 
         # start with the prior distribution
-        thinkbayes2.Suite.__init__(self, exam.prior)
+        thinkbayes.Suite.__init__(self, exam.prior)
 
         # update based on an exam score
         self.Update(score)
@@ -227,7 +227,7 @@ class Sat(thinkbayes2.Suite):
 
         k = self.exam.Reverse(score)
         n = self.exam.max_score
-        like = thinkbayes2.EvalBinomialPmf(k, n, p_correct)
+        like = thinkbayes.EvalBinomialPmf(k, n, p_correct)
         return like
 
     def PlotPosteriors(self, other):
@@ -238,8 +238,8 @@ class Sat(thinkbayes2.Suite):
         thinkplot.Clf()
         thinkplot.PrePlot(num=2)
 
-        cdf1 = thinkbayes2.Cdf(self, label="posterior %d" % self.score)
-        cdf2 = thinkbayes2.Cdf(other, label="posterior %d" % other.score)
+        cdf1 = thinkbayes.Cdf(self, label="posterior %d" % self.score)
+        cdf2 = thinkbayes.Cdf(other, label="posterior %d" % other.score)
 
         thinkplot.Cdfs([cdf1, cdf2])
         thinkplot.Save(
@@ -251,7 +251,7 @@ class Sat(thinkbayes2.Suite):
         )
 
 
-class Sat2(thinkbayes2.Suite):
+class Sat2(thinkbayes.Suite):
     """Represents the distribution of efficacy for a test-taker."""
 
     def __init__(self, exam, score):
@@ -259,8 +259,8 @@ class Sat2(thinkbayes2.Suite):
         self.score = score
 
         # start with the Normal prior
-        efficacies = thinkbayes2.MakeNormalPmf(0, 1.5, 3)
-        thinkbayes2.Suite.__init__(self, efficacies)
+        efficacies = thinkbayes.MakeNormalPmf(0, 1.5, 3)
+        thinkbayes.Suite.__init__(self, efficacies)
 
         # update based on an exam score
         self.Update(score)
@@ -288,8 +288,8 @@ class Sat2(thinkbayes2.Suite):
         thinkplot.Clf()
         thinkplot.PrePlot(num=2)
 
-        cdf1 = thinkbayes2.Cdf(self, label="posterior %d" % self.score)
-        cdf2 = thinkbayes2.Cdf(other, label="posterior %d" % other.score)
+        cdf1 = thinkbayes.Cdf(self, label="posterior %d" % self.score)
+        cdf2 = thinkbayes.Cdf(other, label="posterior %d" % other.score)
 
         thinkplot.Cdfs([cdf1, cdf2])
         thinkplot.Save(
@@ -315,7 +315,7 @@ def PlotJointDist(pmf1, pmf2, thresh=0.8):
 
     Clean(pmf1)
     Clean(pmf2)
-    pmf = thinkbayes2.MakeJoint(pmf1, pmf2)
+    pmf = thinkbayes.MakeJoint(pmf1, pmf2)
 
     thinkplot.Figure(figsize=(6, 6))
     thinkplot.Contour(pmf, contour=False, pcolor=True)
@@ -344,9 +344,9 @@ def ComparePosteriorPredictive(a_sat, b_sat):
     # thinkplot.Pmfs([a_pred, b_pred])
     # thinkplot.Show()
 
-    a_like = thinkbayes2.PmfProbGreater(a_pred, b_pred)
-    b_like = thinkbayes2.PmfProbLess(a_pred, b_pred)
-    c_like = thinkbayes2.PmfProbEqual(a_pred, b_pred)
+    a_like = thinkbayes.PmfProbGreater(a_pred, b_pred)
+    b_like = thinkbayes.PmfProbLess(a_pred, b_pred)
+    c_like = thinkbayes.PmfProbEqual(a_pred, b_pred)
 
     print("Posterior predictive")
     print("A", a_like)
@@ -362,7 +362,7 @@ def PlotPriorDist(pmf):
     thinkplot.Clf()
     thinkplot.PrePlot(num=1)
 
-    cdf1 = thinkbayes2.Cdf(pmf, label="prior")
+    cdf1 = thinkbayes.Cdf(pmf, label="prior")
 
     thinkplot.Cdf(cdf1)
     thinkplot.Save(
@@ -370,7 +370,7 @@ def PlotPriorDist(pmf):
     )
 
 
-class TopLevel(thinkbayes2.Suite):
+class TopLevel(thinkbayes.Suite):
     """Evaluates the top-level hypotheses about Alice and Bob.
 
     Uses the bottom-level posterior distribution about p_correct
@@ -380,9 +380,9 @@ class TopLevel(thinkbayes2.Suite):
     def Update(self, data):
         a_sat, b_sat = data
 
-        a_like = thinkbayes2.PmfProbGreater(a_sat, b_sat)
-        b_like = thinkbayes2.PmfProbLess(a_sat, b_sat)
-        c_like = thinkbayes2.PmfProbEqual(a_sat, b_sat)
+        a_like = thinkbayes.PmfProbGreater(a_sat, b_sat)
+        b_like = thinkbayes.PmfProbLess(a_sat, b_sat)
+        c_like = thinkbayes.PmfProbEqual(a_sat, b_sat)
 
         a_like += c_like / 2
         b_like += c_like / 2
@@ -411,7 +411,7 @@ def BinaryPmf(p):
     
     Returns: Pmf object
     """
-    pmf = thinkbayes2.Pmf()
+    pmf = thinkbayes.Pmf()
     pmf.Set(1, p)
     pmf.Set(0, 1 - p)
     return pmf
@@ -425,7 +425,7 @@ def PmfCorrect(efficacy, difficulties):
 
     Returns: new Pmf object
     """
-    pmf0 = thinkbayes2.Pmf([0])
+    pmf0 = thinkbayes.Pmf([0])
 
     ps = [ProbCorrect(efficacy, difficulty) for difficulty in difficulties]
     pmfs = [BinaryPmf(p) for p in ps]

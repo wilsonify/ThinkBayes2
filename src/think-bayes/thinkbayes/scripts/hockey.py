@@ -7,14 +7,16 @@ MIT License: https://opensource.org/licenses/MIT
 
 import math
 
-import columns
 
-from src import thinkbayes2, thinkplot
+
+import thinkbayes
+from thinkbayes import thinkplot
+from thinkbayes.scripts import columns
 
 USE_SUMMARY_DATA = True
 
 
-class Hockey(thinkbayes2.Suite):
+class Hockey(thinkbayes.Suite):
     """Represents hypotheses about the scoring rate for a team."""
 
     def __init__(self, label=None):
@@ -31,8 +33,8 @@ class Hockey(thinkbayes2.Suite):
             mu = 2.8
             sigma = 0.85
 
-        pmf = thinkbayes2.MakeNormalPmf(mu, sigma, 4)
-        thinkbayes2.Suite.__init__(self, pmf, label=label)
+        pmf = thinkbayes.MakeNormalPmf(mu, sigma, 4)
+        thinkbayes.Suite.__init__(self, pmf, label=label)
 
     def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
@@ -44,7 +46,7 @@ class Hockey(thinkbayes2.Suite):
         """
         lam = hypo
         k = data
-        like = thinkbayes2.EvalPoissonPmf(k, lam)
+        like = thinkbayes.EvalPoissonPmf(k, lam)
         return like
 
 
@@ -56,13 +58,13 @@ def MakeGoalPmf(suite, high=10):
 
     returns: Pmf of goals per game
     """
-    metapmf = thinkbayes2.Pmf()
+    metapmf = thinkbayes.Pmf()
 
     for lam, prob in suite.Items():
-        pmf = thinkbayes2.MakePoissonPmf(lam, high)
+        pmf = thinkbayes.MakePoissonPmf(lam, high)
         metapmf.Set(pmf, prob)
 
-    mix = thinkbayes2.MakeMixture(metapmf, label=suite.label)
+    mix = thinkbayes.MakeMixture(metapmf, label=suite.label)
     return mix
 
 
@@ -73,13 +75,13 @@ def MakeGoalTimePmf(suite):
 
     returns: Pmf of goals per game
     """
-    metapmf = thinkbayes2.Pmf()
+    metapmf = thinkbayes.Pmf()
 
     for lam, prob in suite.Items():
-        pmf = thinkbayes2.MakeExponentialPmf(lam, high=2, n=2001)
+        pmf = thinkbayes.MakeExponentialPmf(lam, high=2, n=2001)
         metapmf.Set(pmf, prob)
 
-    mix = thinkbayes2.MakeMixture(metapmf, label=suite.label)
+    mix = thinkbayes.MakeMixture(metapmf, label=suite.label)
     return mix
 
 
@@ -92,6 +94,7 @@ class Game(object):
     convert = dict()
 
     def clean(self):
+        # noinspection PyUnresolvedReferences
         self.goals = self.pd1 + self.pd2 + self.pd3
 
 
@@ -112,7 +115,7 @@ def ReadHockeyData(filename="hockey_data.csv"):
 
     # map from (team1, team2) to (score1, score2)
     pairs = {}
-    for key, pair in games.iteritems():
+    for key, pair in games.items():
         t1, t2 = pair
         key = t1.team, t2.team
         entry = t1.total, t2.total
@@ -129,7 +132,7 @@ def ProcessScoresPairwise(pairs):
     """
     # map from (team1, team2) to list of goals scored
     goals_scored = {}
-    for key, entries in pairs.iteritems():
+    for key, entries in pairs.items():
         t1, t2 = key
         for entry in entries:
             g1, g2 = entry
@@ -138,18 +141,18 @@ def ProcessScoresPairwise(pairs):
 
     # make a list of average goals scored
     lams = []
-    for key, goals in goals_scored.iteritems():
+    for key, goals in goals_scored.items():
         if len(goals) < 3:
             continue
-        lam = thinkbayes2.Mean(goals)
+        lam = thinkbayes.Mean(goals)
         lams.append(lam)
 
     # make the distribution of average goals scored
-    cdf = thinkbayes2.MakeCdfFromList(lams)
+    cdf = thinkbayes.MakeCdfFromList(lams)
     thinkplot.Cdf(cdf)
     thinkplot.Show()
 
-    mu, var = thinkbayes2.MeanVar(lams)
+    mu, var = thinkbayes.MeanVar(lams)
     print("mu, sig", mu, math.sqrt(var))
 
     print("BOS v VAN", pairs["BOS", "VAN"])
@@ -162,7 +165,7 @@ def ProcessScoresTeamwise(pairs):
     """
     # map from team to list of goals scored
     goals_scored = {}
-    for key, entries in pairs.iteritems():
+    for key, entries in pairs.items():
         t1, t2 = key
         for entry in entries:
             g1, g2 = entry
@@ -171,16 +174,16 @@ def ProcessScoresTeamwise(pairs):
 
     # make a list of average goals scored
     lams = []
-    for key, goals in goals_scored.iteritems():
-        lam = thinkbayes2.Mean(goals)
+    for key, goals in goals_scored.items():
+        lam = thinkbayes.Mean(goals)
         lams.append(lam)
 
     # make the distribution of average goals scored
-    cdf = thinkbayes2.MakeCdfFromList(lams)
+    cdf = thinkbayes.MakeCdfFromList(lams)
     thinkplot.Cdf(cdf)
     thinkplot.Show()
 
-    mu, var = thinkbayes2.MeanVar(lams)
+    mu, var = thinkbayes.MeanVar(lams)
     print("mu, sig", mu, math.sqrt(var))
 
 
@@ -244,8 +247,8 @@ def main():
 
     print(p_win, p_loss, p_tie)
 
-    p_overtime = thinkbayes2.PmfProbLess(time_dist1, time_dist2)
-    p_adjust = thinkbayes2.PmfProbEqual(time_dist1, time_dist2)
+    p_overtime = thinkbayes.PmfProbLess(time_dist1, time_dist2)
+    p_adjust = thinkbayes.PmfProbEqual(time_dist1, time_dist2)
     p_overtime += p_adjust / 2
     print("p_overtime", p_overtime)
 

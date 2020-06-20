@@ -8,7 +8,8 @@ MIT License: https://opensource.org/licenses/MIT
 import math
 import sys
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 FORMATS = ["pdf", "eps", "png"]
 
@@ -40,7 +41,7 @@ def MakeLocationPmf(alpha, beta, locations):
 
     Returns: Pmf object
     """
-    pmf = thinkbayes2.Pmf()
+    pmf = thinkbayes.Pmf()
     for x in locations:
         prob = 1.0 / StrafingSpeed(alpha, beta, x)
         pmf.Set(x, prob)
@@ -48,7 +49,7 @@ def MakeLocationPmf(alpha, beta, locations):
     return pmf
 
 
-class Paintball(thinkbayes2.Suite, thinkbayes2.Joint):
+class Paintball(thinkbayes.Suite, thinkbayes.Joint):
     """Represents hypotheses about the location of an opponent."""
 
     def __init__(self, alphas, betas, locations):
@@ -63,7 +64,7 @@ class Paintball(thinkbayes2.Suite, thinkbayes2.Joint):
         """
         self.locations = locations
         pairs = [(alpha, beta) for alpha in alphas for beta in betas]
-        thinkbayes2.Suite.__init__(self, pairs)
+        thinkbayes.Suite.__init__(self, pairs)
 
     def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
@@ -113,8 +114,8 @@ def MakePosteriorPlot(suite):
     # thinkplot.Pmf(marginal_alpha)
     # thinkplot.Pmf(marginal_beta)
 
-    thinkplot.Cdf(thinkbayes2.MakeCdfFromPmf(marginal_alpha))
-    thinkplot.Cdf(thinkbayes2.MakeCdfFromPmf(marginal_beta))
+    thinkplot.Cdf(thinkbayes.MakeCdfFromPmf(marginal_alpha))
+    thinkplot.Cdf(thinkbayes.MakeCdfFromPmf(marginal_beta))
 
     thinkplot.Save(
         "paintball2", xlabel="Distance", ylabel="Prob", loc=4, formats=FORMATS

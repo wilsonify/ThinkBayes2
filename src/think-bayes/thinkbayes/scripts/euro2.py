@@ -22,10 +22,11 @@ rather than fair?"
 
 """
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 
-class Euro(thinkbayes2.Suite):
+class Euro(thinkbayes.Suite):
     """Represents hypotheses about the probability of heads."""
 
     def Likelihood(self, data, hypo):
@@ -41,7 +42,7 @@ class Euro(thinkbayes2.Suite):
             return 1 - x
 
 
-class Euro2(thinkbayes2.Suite):
+class Euro2(thinkbayes.Suite):
     """Represents hypotheses about the probability of heads."""
 
     def Likelihood(self, data, hypo):

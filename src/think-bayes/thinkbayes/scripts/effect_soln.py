@@ -4,10 +4,11 @@ by Allen B. Downey, available from greenteapress.com
 Copyright 2014 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+from random import random
 
-from variability import *
-
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
+from thinkbayes.scripts.variability import UpdateSuite5, Height, FindPriorRanges, Summarize, ReadHeights
 
 
 def RunEstimate(update_func, num_points=31, median_flag=False):
@@ -25,7 +26,7 @@ def RunEstimate(update_func, num_points=31, median_flag=False):
         print(label, len(xs))
         Summarize(xs)
 
-        xs = thinkbayes2.Jitter(xs, 1.3)
+        xs = thinkbayes.Jitter(xs, 1.3)
 
         mus, sigmas = FindPriorRanges(xs, num_points, median_flag=median_flag)
         suite = Height(mus, sigmas, label)

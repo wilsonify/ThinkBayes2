@@ -5,10 +5,11 @@ Copyright 2014 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from thinkbayes import thinkplot
 
 
-class Electorate(thinkbayes2.Suite):
+class Electorate(thinkbayes.Suite):
     """Represents hypotheses about the state of the electorate."""
 
     def Likelihood(self, data, hypo):
@@ -19,7 +20,7 @@ class Electorate(thinkbayes2.Suite):
         """
         bias, std, result = data
         error = result - hypo
-        like = thinkbayes2.EvalNormalPdf(error, bias, std)
+        like = thinkbayes.EvalNormalPdf(error, bias, std)
         return like
 
 

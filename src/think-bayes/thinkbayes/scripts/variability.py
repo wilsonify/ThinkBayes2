@@ -8,17 +8,18 @@ MIT License: https://opensource.org/licenses/MIT
 import math
 import random
 
-import brfss
 import matplotlib.pyplot as pyplot
 import numpy
 import scipy
-
-from src import thinkbayes2, thinkplot
+import thinkbayes
+from scipy import stats
+from thinkbayes import thinkplot
+from thinkbayes.scripts import brfss
 
 NUM_SIGMAS = 1
 
 
-class Height(thinkbayes2.Suite, thinkbayes2.Joint):
+class Height(thinkbayes.Suite, thinkbayes.Joint):
     """Hypotheses about parameters of the distribution of height."""
 
     def __init__(self, mus, sigmas, label=None):
@@ -30,7 +31,7 @@ class Height(thinkbayes2.Suite, thinkbayes2.Joint):
         """
         pairs = [(mu, sigma) for mu in mus for sigma in sigmas]
 
-        thinkbayes2.Suite.__init__(self, pairs, label=label)
+        thinkbayes.Suite.__init__(self, pairs, label=label)
 
     def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
@@ -182,7 +183,7 @@ def FindPriorRanges(xs, num_points, num_stderrs=3.0, median_flag=False):
     return mus, sigmas
 
 
-def Summation(xs, mu, cache={}):
+def Summation(xs, mu, cache=None):
     """Computes the sum of (x-mu)**2 for x in t.
 
     Caches previous results.
@@ -191,6 +192,8 @@ def Summation(xs, mu, cache={}):
     mu: hypothetical mean
     cache: cache of previous results
     """
+    if cache is None:
+        cache = {}
     try:
         return cache[xs, mu]
     except KeyError:
@@ -207,7 +210,7 @@ def CoefVariation(suite):
 
     Returns: Pmf object for CV.
     """
-    pmf = thinkbayes2.Pmf()
+    pmf = thinkbayes.Pmf()
     for (m, s), p in suite.Items():
         pmf.Incr(s / m, p)
     return pmf
@@ -223,10 +226,10 @@ def PlotCdfs(d, labels):
     """
     thinkplot.Clf()
     for key, xs in d.items():
-        mu = thinkbayes2.Mean(xs)
-        xs = thinkbayes2.Jitter(xs, 1.3)
+        mu = thinkbayes.Mean(xs)
+        xs = thinkbayes.Jitter(xs, 1.3)
         xs = [x - mu for x in xs]
-        cdf = thinkbayes2.MakeCdfFromList(xs)
+        cdf = thinkbayes.MakeCdfFromList(xs)
         thinkplot.Cdf(cdf, label=labels[key])
     thinkplot.Show()
 
@@ -259,7 +262,7 @@ def PlotCoefVariation(suites):
     for label, suite in suites.items():
         pmf = CoefVariation(suite)
         print("CV posterior mean", pmf.Mean())
-        cdf = thinkbayes2.MakeCdfFromPmf(pmf, label)
+        cdf = thinkbayes.MakeCdfFromPmf(pmf, label)
         thinkplot.Cdf(cdf)
 
         pmfs[label] = pmf
@@ -268,8 +271,8 @@ def PlotCoefVariation(suites):
         root="variability_cv", xlabel="Coefficient of variation", ylabel="Probability"
     )
 
-    print("female bigger", thinkbayes2.PmfProbGreater(pmfs["female"], pmfs["male"]))
-    print("male bigger", thinkbayes2.PmfProbGreater(pmfs["male"], pmfs["female"]))
+    print("female bigger", thinkbayes.PmfProbGreater(pmfs["female"], pmfs["male"]))
+    print("male bigger", thinkbayes.PmfProbGreater(pmfs["male"], pmfs["female"]))
 
 
 def PlotOutliers(samples):
@@ -278,7 +281,7 @@ def PlotOutliers(samples):
     for label, sample in samples.items():
         outliers = [x for x in sample if x < 150]
 
-        cdf = thinkbayes2.MakeCdfFromList(outliers, label)
+        cdf = thinkbayes.MakeCdfFromList(outliers, label)
         cdfs.append(cdf)
 
     thinkplot.Clf()
@@ -300,12 +303,12 @@ def PlotMarginals(suite):
 
     pyplot.subplot(1, 2, 1)
     pmf_m = suite.Marginal(0)
-    cdf_m = thinkbayes2.MakeCdfFromPmf(pmf_m)
+    cdf_m = thinkbayes.MakeCdfFromPmf(pmf_m)
     thinkplot.Cdf(cdf_m)
 
     pyplot.subplot(1, 2, 2)
     pmf_s = suite.Marginal(1)
-    cdf_s = thinkbayes2.MakeCdfFromPmf(pmf_s)
+    cdf_s = thinkbayes.MakeCdfFromPmf(pmf_s)
     thinkplot.Cdf(cdf_s)
 
     thinkplot.Show()
@@ -401,7 +404,7 @@ def MedianIPR(xs, p):
 
     returns: tuple of float (median, IPR)
     """
-    cdf = thinkbayes2.MakeCdfFromList(xs)
+    cdf = thinkbayes.MakeCdfFromList(xs)
     median = cdf.Percentile(50)
 
     alpha = (1 - p) / 2
@@ -416,7 +419,7 @@ def MedianS(xs, num_sigmas):
 
     factor: number of standard deviations spanned by the IPR
     """
-    half_p = thinkbayes2.StandardNormalCdf(num_sigmas) - 0.5
+    half_p = thinkbayes.StandardNormalCdf(num_sigmas) - 0.5
     median, ipr = MedianIPR(xs, half_p * 2)
     s = ipr / 2 / num_sigmas
 
@@ -434,7 +437,7 @@ def Summarize(xs):
     print("largest", xs[-10:])
 
     # print median and interquartile range
-    cdf = thinkbayes2.MakeCdfFromList(xs)
+    cdf = thinkbayes.MakeCdfFromList(xs)
     print(cdf.Percentile(25), cdf.Percentile(50), cdf.Percentile(75))
 
 
@@ -455,7 +458,7 @@ def RunEstimate(update_func, num_points=31, median_flag=False):
         print(label, len(xs))
         Summarize(xs)
 
-        xs = thinkbayes2.Jitter(xs, 1.3)
+        xs = thinkbayes.Jitter(xs, 1.3)
 
         mus, sigmas = FindPriorRanges(xs, num_points, median_flag=median_flag)
         suite = Height(mus, sigmas, label)
