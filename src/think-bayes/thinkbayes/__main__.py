@@ -18,7 +18,6 @@ Pdf: represents a continuous probability density function
 import bisect
 import copy
 import logging
-import random
 import re
 from collections import Counter
 from io import open
@@ -40,7 +39,6 @@ def RandomSeed(x):
 
     x: int seed
     """
-    random.seed(x)
     np.random.seed(x)
 
 
@@ -536,7 +534,7 @@ class Pmf(_DictWrapper):
         Returns:
             float value from the Pmf
         """
-        target = random.random()
+        target = np.random.random()
         total = 0
         for x, p in self.d.items():
             total += p
@@ -1220,7 +1218,7 @@ class Cdf:
 
     def Random(self):
         """Chooses a random value from this distribution."""
-        return self.Value(random.random())
+        return self.Value(np.random.random())
 
     def Sample(self, n):
         """Generates a random sample from this distribution.
