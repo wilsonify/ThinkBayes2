@@ -2203,7 +2203,7 @@ class Beta:
 
     def Random(self):
         """Generates a random variate from this distribution."""
-        return random.betavariate(self.alpha, self.beta)
+        return np.random.betavariate(self.alpha, self.beta)
 
     def Sample(self, n):
         """Generates a random sample from this distribution.
@@ -2733,12 +2733,13 @@ def CorrelatedGenerator(rho):
 
     Returns: iterable
     """
-    x = random.gauss(0, 1)
+    x = np.random.normal(0, 1)
     yield x
 
     sigma = np.sqrt(1 - rho ** 2)
     while True:
-        x = random.gauss(x * rho, sigma)
+
+        x = np.random.normal(x * rho, sigma)
         yield x
 
 
