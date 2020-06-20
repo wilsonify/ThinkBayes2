@@ -41,7 +41,7 @@ class _Brewer(object):
 
     color_iter = None
 
-    colors = [
+    colors_list = [
                  "#f7fbff",
                  "#deebf7",
                  "#c6dbef",
@@ -73,7 +73,7 @@ class _Brewer(object):
     def Colors(cls):
         """Returns the list of colors.
         """
-        return cls.colors
+        return cls.colors_list
 
     @classmethod
     def ColorGenerator(cls, num):
@@ -82,7 +82,7 @@ class _Brewer(object):
         n: how many colors will be used
         """
         for i in cls.which_colors[num]:
-            yield cls.colors[i]
+            yield cls.colors_list[i]
         raise StopIteration("Ran out of colors in _Brewer.")
 
     @classmethod
