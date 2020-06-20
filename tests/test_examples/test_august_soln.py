@@ -94,9 +94,9 @@ def test_birthday_problem():
 
     low, high = np.transpose(res)
 
-    low
+    assert low.shape == (12,)
 
-    high
+    assert high.shape == (12,)
 
     # Here's what the plot looks like with error bars.
 
