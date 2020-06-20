@@ -19,7 +19,7 @@ class Battleship(Suite, Joint):
         x_guess, y_guess, result = data
         d = np.hypot(x_guess - x_actual, y_guess - y_actual)
         p_hit = np.exp(-self.lam * d)
-        return p if result == "hit" else 1 - p
+        return p_hit if result == "hit" else 1 - p_hit
 
 
 def test_battle():
