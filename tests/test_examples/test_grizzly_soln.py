@@ -1,20 +1,12 @@
-
-# # Think Bayes
-#
-# This notebook presents example code and exercise solutions for Think Bayes.
-#
-# Copyright 2018 Allen B. Downey
-#
-# MIT License: https://opensource.org/licenses/MIT
-
-
-
-
+"""
+Think Bayes
+This notebook presents example code and exercise solutions for Think Bayes.
+Copyright 2018 Allen B. Downey
+MIT License: https://opensource.org/licenses/MIT
+"""
 
 from thinkbayes import Hist, Pmf, Suite
 from thinkbayes import thinkplot
-
-
 
 # ### The Grizzly Bear Problem
 #
@@ -52,88 +44,79 @@ from thinkbayes import thinkplot
 from scipy.special import binom
 
 
-class Grizzly(Suite):
-    """Represents hypotheses about how many bears there are."""
+def test_Grizzly():
+    class Grizzly(Suite):
+        """Represents hypotheses about how many bears there are."""
 
-    def Likelihood(self, data, hypo):
-        """Computes the likelihood of the data under the hypothesis.
+        def Likelihood(self, data, hypo):
+            """Computes the likelihood of the data under the hypothesis.
 
-        hypo: total population (N)
-        data: # tagged (K), # caught (n), # of caught who were tagged (k)
-        """
-        N = hypo
-        K, n, k = data
+            hypo: total population (N)
+            data: # tagged (K), # caught (n), # of caught who were tagged (k)
+            """
+            N = hypo
+            K, n, k = data
 
-        if hypo < K + (n - k):
-            return 0
+            if hypo < K + (n - k):
+                return 0
 
-        like = binom(N - K, n - k) / binom(N, n)
-        return like
+            like = binom(N - K, n - k) / binom(N, n)
+            return like
 
+    # Solution
 
+    hypos = range(100, 501)
+    suite = Grizzly(hypos)
 
-# Solution
+    data = 23, 19, 4
+    suite.Update(data)
 
-hypos = range(100, 501)
-suite = Grizzly(hypos)
+    # Solution
 
-data = 23, 19, 4
-suite.Update(data)
+    thinkplot.Pdf(suite)
+    thinkplot.Config(xlabel="Number of bears", ylabel="PMF", legend=False)
 
+    # Solution
 
-# Solution
+    print("Posterior mean", suite.Mean())
+    print("Maximum a posteriori estimate", suite.MaximumLikelihood())
+    print("90% credible interval", suite.CredibleInterval(90))
 
-thinkplot.Pdf(suite)
-thinkplot.Config(xlabel="Number of bears", ylabel="PMF", legend=False)
+    # Solution
 
+    # Alternatively, we can take advantage of the `hypergeom`
+    # object in scipy.stats.
 
-# Solution
+    from scipy import stats
 
-print("Posterior mean", suite.Mean())
-print("Maximum a posteriori estimate", suite.MaximumLikelihood())
-print("90% credible interval", suite.CredibleInterval(90))
+    class Grizzly2(Suite):
+        """Represents hypotheses about how many bears there are."""
 
+        def Likelihood(self, data, hypo):
+            """Computes the likelihood of the data under the hypothesis.
 
-# Solution
+            hypo: total population (N)
+            data: # tagged (K), # caught (n), # of caught who were tagged (k)
+            """
+            N = hypo
+            K, n, k = data
 
-# Alternatively, we can take advantage of the `hypergeom`
-# object in scipy.stats.
+            if hypo < K + (n - k):
+                return 0
 
-from scipy import stats
+            like = stats.hypergeom.pmf(k, N, K, n)
+            return like
 
+    # Solution
 
-class Grizzly2(Suite):
-    """Represents hypotheses about how many bears there are."""
+    hypos = range(100, 501)
+    suite = Grizzly2(hypos)
 
-    def Likelihood(self, data, hypo):
-        """Computes the likelihood of the data under the hypothesis.
+    data = 23, 19, 4
+    suite.Update(data)
 
-        hypo: total population (N)
-        data: # tagged (K), # caught (n), # of caught who were tagged (k)
-        """
-        N = hypo
-        K, n, k = data
+    # Solution
 
-        if hypo < K + (n - k):
-            return 0
-
-        like = stats.hypergeom.pmf(k, N, K, n)
-        return like
-
-
-
-# Solution
-
-hypos = range(100, 501)
-suite = Grizzly2(hypos)
-
-data = 23, 19, 4
-suite.Update(data)
-
-
-# Solution
-
-print("Posterior mean", suite.Mean())
-print("Maximum a posteriori estimate", suite.MaximumLikelihood())
-print("90% credible interval", suite.CredibleInterval(90))
-
+    print("Posterior mean", suite.Mean())
+    print("Maximum a posteriori estimate", suite.MaximumLikelihood())
+    print("90% credible interval", suite.CredibleInterval(90))

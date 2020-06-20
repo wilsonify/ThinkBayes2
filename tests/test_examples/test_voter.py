@@ -1,10 +1,9 @@
-# Think Bayes
-#
-# Example problem related to *Think Bayes*
-#
-# [The MIT License](https://opensource.org/licenses/MIT)
-# Copyright 2016 Allen Downey
-
+"""
+Think Bayes
+Example problem related to *Think Bayes*
+[The MIT License](https://opensource.org/licenses/MIT)
+Copyright 2016 Allen Downey
+"""
 import thinkbayes
 
 

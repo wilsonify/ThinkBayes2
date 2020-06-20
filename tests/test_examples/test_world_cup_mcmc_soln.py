@@ -1,15 +1,9 @@
-
-# # Think Bayes
-#
-# This notebook presents example code and exercise solutions for Think Bayes.
-#
-# Copyright 2018 Allen B. Downey
-#
-# MIT License: https://opensource.org/licenses/MIT
-
-
-
-
+"""
+Think Bayes
+This notebook presents example code and exercise solutions for Think Bayes.
+Copyright 2018 Allen B. Downey
+MIT License: https://opensource.org/licenses/MIT
+"""
 
 from thinkbayes import Pmf, Cdf, Suite
 
@@ -21,9 +15,8 @@ from scipy.special import gamma
 
 import pymc3 as pm
 
-def test_world_cup():
-    
 
+def test_world_cup():
     # ## The World Cup Problem, Part One
     #
     # >In the 2014 FIFA World Cup, Germany played Brazil in a semifinal match. Germany scored after 11 minutes and again at the 23 minute mark. At that point in the match, how many goals would you expect Germany to score after 90 minutes? What was the probability that they would score 5 more goals (as, in fact, they did)?
@@ -34,7 +27,6 @@ def test_world_cup():
     #
     # Here's what the prior looks like.
 
-
     from thinkbayes import MakeGammaPmf
 
     xs = np.linspace(0, 12, 101)
@@ -42,10 +34,6 @@ def test_world_cup():
     thinkplot.Pdf(pmf_gamma)
     thinkplot.decorate(title="Gamma PDF", xlabel="Goals per game", ylabel="PDF")
     pmf_gamma.Mean()
-
-
-    
-
 
     class Soccer(Suite):
         """Represents hypotheses about goal-scoring rates."""
@@ -61,7 +49,6 @@ def test_world_cup():
             like = lam * np.exp(-lam * x)
             return like
 
-
     # Now we can create a `Soccer` object and initialize it with the prior Pmf:
 
     prior = Soccer(pmf_gamma)
@@ -70,7 +57,6 @@ def test_world_cup():
     prior.Mean()
 
     # Here's the update after the first goal at 11 minutes.
-
 
     posterior1 = prior.Copy()
     posterior1.Update(11)
@@ -81,11 +67,9 @@ def test_world_cup():
         title="Posterior after 1 goal", xlabel="Goals per game", ylabel="PDF"
     )
     posterior1.Mean()
-    
 
     # Here's the update after the second goal at 23 minutes (the time between first and second goals is 12 minutes).
     #
-
 
     posterior2 = posterior1.Copy()
     posterior2.Update(12)
@@ -98,12 +82,10 @@ def test_world_cup():
         title="Posterior after 2 goals", xlabel="Goals per game", ylabel="PDF"
     )
     posterior2.Mean()
-    
 
     from thinkbayes import MakePoissonPmf
 
     # We can compute the mixture of these distributions by making a Meta-Pmf that maps from each Poisson Pmf to its probability.
-
 
     rem_time = 90 - 23
 
@@ -113,11 +95,7 @@ def test_world_cup():
         pred = MakePoissonPmf(lt, 15)
         metapmf[pred] = prob
 
-
-    
-
     # `MakeMixture` takes a Meta-Pmf (a Pmf that contains Pmfs) and returns a single Pmf that represents the weighted mixture of distributions:
-
 
     def MakeMixture(metapmf, label="mix"):
         """Make a mixture distribution.
@@ -134,7 +112,6 @@ def test_world_cup():
                 mix[x] += p1 * p2
         return mix
 
-
     # Here's the result for the World Cup problem.
 
     mix = MakeMixture(metapmf)
@@ -149,11 +126,9 @@ def test_world_cup():
 
     # **Exercise:** Compute the predictive mean and the probability of scoring 5 or more additional goals.
 
-
     # Solution
 
     mix.Mean(), mix.ProbGreater(4)
-    
 
     # ## MCMC
     #
@@ -161,13 +136,11 @@ def test_world_cup():
 
     cdf_gamma = pmf_gamma.MakeCdf()
 
-
     mean_rate = 1.3
 
     with pm.Model() as model:
         lam = pm.Gamma("lam", alpha=mean_rate, beta=1)
         trace = pm.sample_prior_predictive(1000)
-
 
     lam_sample = trace["lam"]
     print(lam_sample.mean())
@@ -176,7 +149,6 @@ def test_world_cup():
     thinkplot.Cdf(cdf_gamma, label="Prior grid")
     thinkplot.Cdf(cdf_lam, label="Prior MCMC")
     thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
-    
 
     # Let's look at the prior predictive distribution for the time between goals (in games).
 
@@ -185,17 +157,14 @@ def test_world_cup():
         gap = pm.Exponential("gap", lam)
         trace = pm.sample_prior_predictive(1000)
 
-
     gap_sample = trace["gap"]
     print(gap_sample.mean())
     cdf_lam = Cdf(gap_sample)
 
     thinkplot.Cdf(cdf_lam)
     thinkplot.decorate(xlabel="Time between goals (games)", ylabel="Cdf")
-    
 
     # Now we're ready for the inverse problem, estimating `lam` based on the first observed gap.
-
 
     first_gap = 11 / 90
 
@@ -203,10 +172,8 @@ def test_world_cup():
         lam = pm.Gamma("lam", alpha=mean_rate, beta=1)
         gap = pm.Exponential("gap", lam, observed=first_gap)
         trace = pm.sample(1000, tune=3000)
-    
 
     pm.traceplot(trace)
-
 
     lam_sample = trace["lam"]
     print(lam_sample.mean())
@@ -216,10 +183,8 @@ def test_world_cup():
     thinkplot.Cdf(posterior1.MakeCdf(), label="Posterior analytic")
     thinkplot.Cdf(cdf_lam, label="Posterior MCMC")
     thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
-    
 
     # And here's the inverse problem with both observed gaps.
-
 
     second_gap = 12 / 90
 
@@ -227,10 +192,8 @@ def test_world_cup():
         lam = pm.Gamma("lam", alpha=mean_rate, beta=1)
         gap = pm.Exponential("gap", lam, observed=[first_gap, second_gap])
         trace = pm.sample(1000, tune=2000)
-    
 
     pm.traceplot(trace)
-
 
     lam_sample = trace["lam"]
     print(lam_sample.mean())
@@ -240,13 +203,11 @@ def test_world_cup():
     thinkplot.Cdf(posterior2.MakeCdf(), label="Posterior analytic")
     thinkplot.Cdf(cdf_lam, label="Posterior MCMC")
     thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
-    
 
     # And we can generate a predictive distribution for the time until the next goal (in games).
 
     with model:
         post_pred = pm.sample_ppc(trace, samples=1000)
-
 
     gap_sample = post_pred["gap"].flatten()
     print(gap_sample.mean())
@@ -254,7 +215,6 @@ def test_world_cup():
     cdf_gap = Cdf(gap_sample)
     thinkplot.Cdf(cdf_gap)
     thinkplot.decorate(xlabel="Time between goals (games)", ylabel="Cdf")
-    
 
     # **Exercise:** Use PyMC to write a solution to the second World Cup problem:
     #
@@ -267,20 +227,17 @@ def test_world_cup():
 
     pm.traceplot(trace)
 
-
     lam_sample = trace["lam"]
     print(lam_sample.mean())
     cdf_lam = Cdf(lam_sample)
 
     thinkplot.Cdf(cdf_lam, label="Posterior MCMC")
     thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
-    
 
     # And we can generate a predictive distribution for the time until the next goal (in games).
 
     with model:
         post_pred = pm.sample_ppc(trace, samples=1000)
-
 
     goal_sample = post_pred["goals"].flatten()
     print(goal_sample.mean())
@@ -289,9 +246,7 @@ def test_world_cup():
     thinkplot.Hist(pmf_goals)
     thinkplot.decorate(xlabel="Number of goals", ylabel="Cdf")
 
-
     from scipy.stats import poisson
-
 
     class Soccer2(thinkbayes.Suite):
         """Represents hypotheses about goal-scoring rates."""
@@ -304,8 +259,6 @@ def test_world_cup():
             """
             return poisson.pmf(data, hypo)
 
-
-
     from thinkbayes import MakeGammaPmf
 
     xs = np.linspace(0, 8, 101)
@@ -313,12 +266,10 @@ def test_world_cup():
     thinkplot.Pdf(pmf)
     thinkplot.decorate(xlabel="Goal-scoring rate (λ)", ylabel="PMF")
     pmf.Mean()
-    
 
     germany = Soccer2(pmf)
 
     germany.Update(1)
-
 
     def PredictiveDist(suite, duration=1, label="pred"):
         """Computes the distribution of goals scored in a game.
@@ -333,14 +284,11 @@ def test_world_cup():
         mix = thinkbayes.MakeMixture(metapmf, label=label)
         return mix
 
-
-
     germany_pred = PredictiveDist(germany, label="germany")
 
     thinkplot.Hist(germany_pred, width=0.45, align="right")
     thinkplot.Hist(pmf_goals, width=0.45, align="left")
     thinkplot.decorate(xlabel="Predicted # goals", ylabel="Pmf")
-    
 
     thinkplot.Cdf(germany_pred.MakeCdf(), label="Grid")
     thinkplot.Cdf(Cdf(goal_sample), label="MCMC")

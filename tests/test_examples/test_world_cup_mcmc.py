@@ -1,16 +1,11 @@
-# # Think Bayes
-#
-# This notebook presents example code and exercise solutions for Think Bayes.
-#
-# Copyright 2018 Allen B. Downey
-#
-# MIT License: https://opensource.org/licenses/MIT
+"""
+Think Bayes
+This notebook presents example code and exercise solutions for Think Bayes.
+Copyright 2018 Allen B. Downey
+MIT License: https://opensource.org/licenses/MIT
+"""
 
-
-
-
-
-from thinkbayes import Pmf, Cdf, Suite
+from thinkbayes import Pmf, Cdf, Suite, MakeGammaPmf
 
 import thinkbayes
 from thinkbayes import thinkplot
@@ -19,6 +14,7 @@ import numpy as np
 from scipy.special import gamma
 
 import pymc3 as pm
+
 
 # ## The World Cup Problem, Part One
 #
@@ -31,15 +27,12 @@ import pymc3 as pm
 # Here's what the prior looks like.
 
 
-from thinkbayes import MakeGammaPmf
 def test_wc():
-
     xs = np.linspace(0, 12, 101)
-    pmf_gamma = MakeGammaPmf(xs, 1.3)
+    pmf_gamma = thinkbayes.MakeGammaPmf(xs, 1.3)
     thinkplot.Pdf(pmf_gamma)
     thinkplot.decorate(title="Gamma PDF", xlabel="Goals per game", ylabel="PDF")
     pmf_gamma.Mean()
-
 
     class Soccer(Suite):
         """Represents hypotheses about goal-scoring rates."""
@@ -55,7 +48,6 @@ def test_wc():
             like = lam * np.exp(-lam * x)
             return like
 
-
     # Now we can create a `Soccer` object and initialize it with the prior Pmf:
 
     prior = Soccer(pmf_gamma)
@@ -64,7 +56,6 @@ def test_wc():
     prior.Mean()
 
     # Here's the update after the first goal at 11 minutes.
-
 
     posterior1 = prior.Copy()
     posterior1.Update(11)
@@ -78,7 +69,6 @@ def test_wc():
 
     # Here's the update after the second goal at 23 minutes (the time between first and second goals is 12 minutes).
     #
-
 
     posterior2 = posterior1.Copy()
     posterior2.Update(12)
@@ -96,7 +86,6 @@ def test_wc():
 
     # We can compute the mixture of these distributions by making a Meta-Pmf that maps from each Poisson Pmf to its probability.
 
-
     rem_time = 90 - 23
 
     metapmf = Pmf()
@@ -105,9 +94,7 @@ def test_wc():
         pred = MakePoissonPmf(lt, 15)
         metapmf[pred] = prob
 
-
     # `MakeMixture` takes a Meta-Pmf (a Pmf that contains Pmfs) and returns a single Pmf that represents the weighted mixture of distributions:
-
 
     def MakeMixture(metapmf, label="mix"):
         """Make a mixture distribution.
@@ -124,7 +111,6 @@ def test_wc():
                 mix[x] += p1 * p2
         return mix
 
-
     # Here's the result for the World Cup problem.
 
     mix = MakeMixture(metapmf)
@@ -139,9 +125,7 @@ def test_wc():
 
     # **Exercise:** Compute the predictive mean and the probability of scoring 5 or more additional goals.
 
-
     # Solution goes here
-
 
     # ## MCMC
     #
@@ -179,7 +163,6 @@ def test_wc():
 
     # Now we're ready for the inverse problem, estimating `lam` based on the first observed gap.
 
-
     first_gap = 11 / 90
 
     with pm.Model() as model:
@@ -199,7 +182,6 @@ def test_wc():
     thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
 
     # And here's the inverse problem with both observed gaps.
-
 
     second_gap = 12 / 90
 
@@ -263,7 +245,6 @@ def test_wc():
 
     from scipy.stats import poisson
 
-
     class Soccer2(thinkbayes.Suite):
         """Represents hypotheses about goal-scoring rates."""
 
@@ -274,7 +255,6 @@ def test_wc():
             data: goals scored in a game
             """
             return poisson.pmf(data, hypo)
-
 
     from thinkbayes import MakeGammaPmf
 
@@ -288,7 +268,6 @@ def test_wc():
 
     germany.Update(1)
 
-
     def PredictiveDist(suite, duration=1, label="pred"):
         """Computes the distribution of goals scored in a game.
 
@@ -301,7 +280,6 @@ def test_wc():
 
         mix = thinkbayes.MakeMixture(metapmf, label=label)
         return mix
-
 
     germany_pred = PredictiveDist(germany, label="germany")
 

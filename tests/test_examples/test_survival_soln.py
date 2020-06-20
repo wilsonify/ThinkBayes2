@@ -1,28 +1,21 @@
-# # Survival Analysis
-#
-# This notebook presents code and exercises from Think Bayes, second edition.
-#
-# Copyright 2016 Allen B. Downey
-#
-# MIT License: https://opensource.org/licenses/MIT
-
-
+"""
+Survival Analysis
+This notebook presents code and exercises from Think Bayes, second edition.
+Copyright 2016 Allen B. Downey
+MIT License: https://opensource.org/licenses/MIT
+"""
 
 import numpy as np
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
 
+
 def test_weibull():
-
-
-    
-
     # ## The Weibull distribution
     #
     # The Weibull distribution is often used in survival analysis because it models the distribution of lifetimes for manufactured products, at least over some parts of the range.
     #
     # The following functions evaluate its PDF and CDF.
-
 
     def EvalWeibullPdf(x, lam, k):
         """Computes the Weibull PDF.
@@ -36,12 +29,10 @@ def test_weibull():
         arg = x / lam
         return k / lam * arg ** (k - 1) * np.exp(-(arg ** k))
 
-
     def EvalWeibullCdf(x, lam, k):
         """Evaluates CDF of the Weibull distribution."""
         arg = x / lam
         return 1 - np.exp(-(arg ** k))
-
 
     def MakeWeibullPmf(lam, k, high, n=200):
         """Makes a PMF discrete approx to a Weibull distribution.
@@ -57,11 +48,7 @@ def test_weibull():
         ps = EvalWeibullPdf(xs, lam, k)
         return Pmf(dict(zip(xs, ps)))
 
-
-    
-
     # SciPy also provides functions to evaluate the Weibull distribution, which I'll use to check my implementation.
-
 
     from scipy.stats import weibull_min
 
@@ -70,7 +57,6 @@ def test_weibull():
     x = 0.5
 
     weibull_min.pdf(x, k, scale=lam)
-    
 
     EvalWeibullPdf(x, lam, k)
 
@@ -84,23 +70,17 @@ def test_weibull():
     thinkplot.Pdf(pmf)
     thinkplot.Config(xlabel="Lifetime", ylabel="PMF")
 
-
     # We can use np.random.weibull to generate random values from a Weibull distribution with given parameters.
     #
     # To check that it is correct, I generate a large sample and compare its CDF to the analytic CDF.
 
-
     def SampleWeibull(lam, k, n=1):
         return np.random.weibull(k, size=n) * lam
-
 
     data = SampleWeibull(lam, k, 10000)
     cdf = Cdf(data)
     model = pmf.MakeCdf()
     thinkplot.Cdfs([cdf, model])
-
-
-    
 
     # **Exercise:** Write a class called `LightBulb` that inherits from `Suite` and `Joint` and provides a `Likelihood` function that takes an observed lifespan as data and a tuple, `(lam, k)`, as a hypothesis.  It should return a likelihood proportional to the probability of the observed lifespan in a Weibull distribution with the given parameters.
     #
@@ -108,9 +88,7 @@ def test_weibull():
     #
     # Plot the posterior distributions of `lam` and `k`.  As the sample size increases, does the posterior distribution converge on the values of `lam` and `k` used to generate the sample?
 
-
     # Solution
-
 
     class LightBulb(Suite, Joint):
         def Likelihood(self, data, hypo):
@@ -121,8 +99,6 @@ def test_weibull():
             like = EvalWeibullPdf(x, lam, k)
             return like
 
-
-
     # Solution
 
     from itertools import product
@@ -132,7 +108,6 @@ def test_weibull():
 
     suite = LightBulb(product(lams, ks))
 
-
     # Solution
 
     datum = SampleWeibull(lam, k, 10)
@@ -140,13 +115,11 @@ def test_weibull():
     k = 1.5
     suite.UpdateSet(datum)
 
-
     # Solution
 
     pmf_lam = suite.Marginal(0)
     thinkplot.Pdf(pmf_lam)
     pmf_lam.Mean()
-
 
     # Solution
 
@@ -154,19 +127,13 @@ def test_weibull():
     thinkplot.Pdf(pmf_k)
     pmf_k.Mean()
 
-
     # Solution
 
     thinkplot.Contour(suite)
 
-
-    
-
     # **Exercise:** Now suppose that instead of observing a lifespan, `k`, you observe a lightbulb that has operated for 1 year and is still working.  Write another version of `LightBulb` that takes data in this form and performs an update.
 
-
     # Solution
-
 
     class LightBulb2(Suite, Joint):
         def Likelihood(self, data, hypo):
@@ -177,8 +144,6 @@ def test_weibull():
             like = 1 - EvalWeibullCdf(x, lam, k)
             return like
 
-
-
     # Solution
 
     from itertools import product
@@ -188,11 +153,9 @@ def test_weibull():
 
     suite = LightBulb2(product(lams, ks))
 
-
     # Solution
 
     suite.Update(1)
-
 
     # Solution
 
@@ -200,13 +163,11 @@ def test_weibull():
     thinkplot.Pdf(pmf_lam)
     pmf_lam.Mean()
 
-
     # Solution
 
     pmf_k = suite.Marginal(1)
     thinkplot.Pdf(pmf_k)
     pmf_k.Mean()
-    
 
     # **Exercise:** Now let's put it all together.  Suppose you have 15 lightbulbs installed at different times over a 10 year period.  When you observe them, some have died and some are still working.  Write a version of `LightBulb` that takes data in the form of a `(flag, x)` tuple, where:
     #
@@ -225,7 +186,6 @@ def test_weibull():
     #
     # `age_t`: age of the bulb at t=10
 
-
     import pandas as pd
 
     lam = 2
@@ -240,10 +200,8 @@ def test_weibull():
     df["age_t"] = t_end - df.start
 
     df.head()
-    
 
     # Now I'll process the DataFrame to generate data in the form we want for the update.
-
 
     data = []
     for i, row in df.iterrows():
@@ -255,10 +213,7 @@ def test_weibull():
     for pair in data:
         print(pair)
 
-
-
     # Solution
-
 
     class LightBulb3(Suite, Joint):
         def Likelihood(self, data, hypo):
@@ -274,8 +229,6 @@ def test_weibull():
                 raise ValueError("Invalid data")
             return like
 
-
-
     # Solution
 
     from itertools import product
@@ -285,11 +238,9 @@ def test_weibull():
 
     suite = LightBulb3(product(lams, ks))
 
-
     # Solution
 
     suite.UpdateSet(data)
-
 
     # Solution
 
@@ -297,21 +248,15 @@ def test_weibull():
     thinkplot.Pdf(pmf_lam)
     pmf_lam.Mean()
 
-
     # Solution
 
     pmf_k = suite.Marginal(1)
     thinkplot.Pdf(pmf_k)
     pmf_k.Mean()
 
-
-    
-
     # **Exercise:** Suppose you install a light bulb and then you don't check on it for a year, but when you come back, you find that it has burned out.  Extend `LightBulb` to handle this kind of data, too.
 
-
     # Solution
-
 
     class LightBulb4(Suite, Joint):
         def Likelihood(self, data, hypo):
@@ -329,20 +274,15 @@ def test_weibull():
                 raise ValueError("Invalid data")
             return like
 
-
-    
-
     # ## Prediction
     #
     # **Exercise:** Suppose we know that, for a particular kind of lightbulb in a particular location, the distribution of lifespans is well modeled by a Weibull distribution with `lam=2` and `k=1.5`.  If we install `n=100` lightbulbs and come back one year later, what is the distribution of `c`, the number of lightbulbs that have burned out?
-
 
     # Solution
 
     # The probability that any given bulb has burned out comes from the CDF of the distribution
     p = EvalWeibullCdf(1, lam, k)
     p
-
 
     # Solution
 
@@ -352,10 +292,8 @@ def test_weibull():
 
     pmf_c = MakeBinomialPmf(n, p)
     thinkplot.Pdf(pmf_c)
-    
 
     # **Exercise:** Now suppose that `lam` and `k` are not known precisely, but we have a `LightBulb` object that represents the joint posterior distribution of the parameters after seeing some data.  Compute the posterior predictive distribution for `c`, the number of bulbs burned out after one year.
-
 
     # Solution
 

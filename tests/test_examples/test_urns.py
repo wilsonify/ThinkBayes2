@@ -1,12 +1,9 @@
-# # Think Bayes
-#
-# This notebook presents example code and exercise solutions for Think Bayes.
-#
-# Copyright 2016 Allen B. Downey
-#
-# MIT License: https://opensource.org/licenses/MIT
-
-
+"""
+Think Bayes
+This notebook presents example code and exercise solutions for Think Bayes.
+Copyright 2016 Allen B. Downey
+MIT License: https://opensource.org/licenses/MIT
+"""
 
 from thinkbayes import Pmf, Suite
 

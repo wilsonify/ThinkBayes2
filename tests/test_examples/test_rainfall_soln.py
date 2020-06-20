@@ -1,23 +1,16 @@
-# # Think Bayes
-#
-# Copyright 2018 Allen B. Downey
-#
-# MIT License: https://opensource.org/licenses/MIT
-
-
-
-
+"""
+Think Bayes
+Copyright 2018 Allen B. Downey
+MIT License: https://opensource.org/licenses/MIT
+"""
 import numpy as np
 import pandas as pd
-
 
 from thinkbayes import Pmf, Cdf, Suite, Joint
 
 from thinkbayes import MakePoissonPmf, EvalBinomialPmf, MakeMixture
 
 from thinkbayes import thinkplot
-
-
 
 # ## The rain in Boston problem
 #
@@ -60,194 +53,166 @@ from thinkbayes import thinkplot
 from scipy.special import gamma
 
 
-def gamma_pdf(x, k, theta):
-    return x ** (k - 1) * np.exp(-x / theta) / gamma(k) / theta ** k
+def test_gamma():
+    def gamma_pdf(x, k, theta):
+        return x ** (k - 1) * np.exp(-x / theta) / gamma(k) / theta ** k
 
+    # And here's a version using `scipy.stats`, translating from the $k$, $\theta$ parameterization to SciPy's inhumane parameterization.
 
+    from scipy import stats
 
+    def gamma_pdf2(x, k, theta):
+        return stats.gamma(k, scale=theta).pdf(x)
 
-# And here's a version using `scipy.stats`, translating from the $k$, $\theta$ parameterization to SciPy's inhumane parameterization.
+    # Evaluting the PDF at a test location...
 
+    x = 2
+    k = 3
+    theta = 2
 
-from scipy import stats
+    gamma_pdf(x, k, theta)
 
+    # And comparing to the results from SciPy
 
-def gamma_pdf2(x, k, theta):
-    return stats.gamma(k, scale=theta).pdf(x)
+    gamma_pdf2(x, k, theta)
 
+    # Now here's the `Suite` we'll use to estimate parameters from data.
 
+    class Rainfall(Suite, Joint):
+        def Likelihood(self, data, hypo):
+            """
 
+            data: observed rainfall
+            hypo: k, theta
+            """
+            k, theta = hypo
+            x = data
+            like = gamma_pdf(x, k, theta)
+            return like
 
-# Evaluting the PDF at a test location...
+    # For the priors, we'll use a HalfNormal for `k`
 
+    from scipy.stats import norm
 
-x = 2
-k = 3
-theta = 2
+    ks = np.linspace(0.01, 2, 101)
+    ps = norm(0, 0.5).pdf(ks)
+    pmf_k = Pmf(dict(zip(ks, ps)))
 
-gamma_pdf(x, k, theta)
+    # And a HalfNormal for `theta`
 
+    thetas = np.linspace(0.01, 12, 101)
+    ps = norm(0, 4).pdf(thetas)
+    pmf_theta = Pmf(dict(zip(thetas, ps)))
 
-# And comparing to the results from SciPy
+    # Now we can initialize the suite.
 
-gamma_pdf2(x, k, theta)
+    from thinkbayes import MakeJoint
 
+    suite = Rainfall(MakeJoint(pmf_k, pmf_theta))
 
-# Now here's the `Suite` we'll use to estimate parameters from data.
+    # And update it.
 
+    data = [0.78, 0.87, 0.64]
 
-class Rainfall(Suite, Joint):
-    def Likelihood(self, data, hypo):
-        """
-        
-        data: observed rainfall
-        hypo: k, theta
-        """
-        k, theta = hypo
-        x = data
-        like = gamma_pdf(x, k, theta)
-        return like
+    # %time suite.UpdateSet(data)
 
+    # To my surprise, the simple implementation of the PDF using NumPy functions is substantially faster than the [SciPy implementation](https://github.com/scipy/scipy/blob/v1.1.0/scipy/stats/_continuous_distns.py#L2429), which evaluates the log-PDF and then exponentiates it.
+    #
+    # If there's a good reason for that, it's probably because the numerical behavior is better, but the performance hit is big.
+    #
+    # Anyway, here's the posterior marginal for `k`:
 
-# For the priors, we'll use a HalfNormal for `k`
+    post_k = suite.Marginal(0)
+    print(post_k.Mean())
+    thinkplot.Pdf(post_k)
+    thinkplot.decorate(xlabel="k", ylabel="PDF")
 
+    # And here's the posterior marginal for `theta`
 
-from scipy.stats import norm
+    post_theta = suite.Marginal(1)
+    print(post_theta.Mean())
+    thinkplot.Pdf(post_theta)
+    thinkplot.decorate(xlabel="theta", ylabel="PDF")
 
-ks = np.linspace(0.01, 2, 101)
-ps = norm(0, 0.5).pdf(ks)
-pmf_k = Pmf(dict(zip(ks, ps)))
+    # To make the predictive distribution, we'll need to make PMF approximations to gamma distributions.
 
+    def make_gamma_pmf(xs, k, theta):
+        ps = gamma_pdf(xs, k, theta)
+        return Pmf(dict(zip(xs, ps)))
 
-# And a HalfNormal for `theta`
+    # Here's a test case.
 
-thetas = np.linspace(0.01, 12, 101)
-ps = norm(0, 4).pdf(thetas)
-pmf_theta = Pmf(dict(zip(thetas, ps)))
+    xs = np.linspace(0, 20)
+    pmf = make_gamma_pmf(xs, 3, 2)
+    thinkplot.Pdf(pmf)
 
-# Now we can initialize the suite.
+    # Now we can make a mixture of gamma distributions with parameters from the posterior joint distribution.
 
+    xs = np.linspace(0.001, 30, 1001)
 
-from thinkbayes import MakeJoint
+    metapmf = Pmf()
+    for (k, theta), p in suite.Items():
+        pmf = make_gamma_pmf(xs, k, theta)
+        metapmf[pmf] = p
 
-suite = Rainfall(MakeJoint(pmf_k, pmf_theta))
+    # Here's the posterior predictive distribution.  Since it is so steep near 0, we need a pretty fine grid to get an accurate estimate of the posterior predictive mean (which we'll verify by comparison to the solution from MCMC below).
 
+    pred_pmf = MakeMixture(metapmf)
+    print(pred_pmf.Mean())
+    thinkplot.Pdf(pred_pmf)
 
-# And update it.
+    # ### Now with PyMC
+    #
+    # Although I generally like to do grid algorithms first and use them to validate the MCMC solution, this example almost works the other way.  I found it easier to write a demonstrably-correct solution in PyMC3, and I used it to help choose the grid location and resolution.
 
+    from warnings import simplefilter
 
-data = [0.78, 0.87, 0.64]
+    simplefilter("ignore", FutureWarning)
 
-# %time suite.UpdateSet(data)
+    import pymc3 as pm
 
+    # Here's the model in three lines.  The only trick part is translating to yet another parameterization.
 
-# To my surprise, the simple implementation of the PDF using NumPy functions is substantially faster than the [SciPy implementation](https://github.com/scipy/scipy/blob/v1.1.0/scipy/stats/_continuous_distns.py#L2429), which evaluates the log-PDF and then exponentiates it.
-#
-# If there's a good reason for that, it's probably because the numerical behavior is better, but the performance hit is big.
-#
-# Anyway, here's the posterior marginal for `k`:
+    model = pm.Model()
 
-post_k = suite.Marginal(0)
-print(post_k.Mean())
-thinkplot.Pdf(post_k)
-thinkplot.decorate(xlabel="k", ylabel="PDF")
+    with model:
+        k = pm.HalfNormal("k", 0.5)
+        theta = pm.HalfNormal("theta", 4)
+        rain = pm.Gamma("rain", alpha=k, beta=1 / theta, observed=data)
 
-# And here's the posterior marginal for `theta`
+    # Sampling worked well enough with the default parameters.
 
-post_theta = suite.Marginal(1)
-print(post_theta.Mean())
-thinkplot.Pdf(post_theta)
-thinkplot.decorate(xlabel="theta", ylabel="PDF")
+    with model:
+        trace = pm.sample()
 
+    # Here are the posterior distributions.
 
-# To make the predictive distribution, we'll need to make PMF approximations to gamma distributions.
+    pm.traceplot(trace)
 
+    pm.plot_posterior(trace)
 
-def make_gamma_pmf(xs, k, theta):
-    ps = gamma_pdf(xs, k, theta)
-    return Pmf(dict(zip(xs, ps)))
+    # Here are the posterior means.
 
+    trace["k"].mean()
 
-# Here's a test case.
+    trace["theta"].mean()
 
-xs = np.linspace(0, 20)
-pmf = make_gamma_pmf(xs, 3, 2)
-thinkplot.Pdf(pmf)
+    # ### Predictions
+    #
+    # Here's the posterior predictive distribution.
 
-# Now we can make a mixture of gamma distributions with parameters from the posterior joint distribution.
+    with model:
+        pred = pm.sample_ppc(trace)
 
+    # And the posterior predictive mean.
 
-xs = np.linspace(0.001, 30, 1001)
+    pred["rain"].mean()
 
-metapmf = Pmf()
-for (k, theta), p in suite.Items():
-    pmf = make_gamma_pmf(xs, k, theta)
-    metapmf[pmf] = p
+    # Comparing the results from MCMC and the grid algorithm
 
+    cdf = Cdf(pred["rain"].flatten())
+    thinkplot.Cdf(cdf, label="MCMC")
+    thinkplot.Cdf(pred_pmf.MakeCdf(), label="Grid")
+    thinkplot.decorate(xlabel="Predicted rainfall", ylabel="CDF")
 
-# Here's the posterior predictive distribution.  Since it is so steep near 0, we need a pretty fine grid to get an accurate estimate of the posterior predictive mean (which we'll verify by comparison to the solution from MCMC below).
-
-pred_pmf = MakeMixture(metapmf)
-print(pred_pmf.Mean())
-thinkplot.Pdf(pred_pmf)
-
-# ### Now with PyMC
-#
-# Although I generally like to do grid algorithms first and use them to validate the MCMC solution, this example almost works the other way.  I found it easier to write a demonstrably-correct solution in PyMC3, and I used it to help choose the grid location and resolution.
-
-
-from warnings import simplefilter
-
-simplefilter("ignore", FutureWarning)
-
-import pymc3 as pm
-
-
-
-# Here's the model in three lines.  The only trick part is translating to yet another parameterization.
-
-
-model = pm.Model()
-
-with model:
-    k = pm.HalfNormal("k", 0.5)
-    theta = pm.HalfNormal("theta", 4)
-    rain = pm.Gamma("rain", alpha=k, beta=1 / theta, observed=data)
-
-
-# Sampling worked well enough with the default parameters.
-
-with model:
-    trace = pm.sample()
-
-# Here are the posterior distributions.
-
-pm.traceplot(trace)
-
-pm.plot_posterior(trace)
-
-# Here are the posterior means.
-
-trace["k"].mean()
-
-trace["theta"].mean()
-
-# ### Predictions
-#
-# Here's the posterior predictive distribution.
-
-with model:
-    pred = pm.sample_ppc(trace)
-
-# And the posterior predictive mean.
-
-pred["rain"].mean()
-
-# Comparing the results from MCMC and the grid algorithm
-
-cdf = Cdf(pred["rain"].flatten())
-thinkplot.Cdf(cdf, label="MCMC")
-thinkplot.Cdf(pred_pmf.MakeCdf(), label="Grid")
-thinkplot.decorate(xlabel="Predicted rainfall", ylabel="CDF")
-
-# Looks good.  The predictive means are not quite the same; the most likely culprit is the resolution of the grid algorithm.
+    # Looks good.  The predictive means are not quite the same; the most likely culprit is the resolution of the grid algorithm.

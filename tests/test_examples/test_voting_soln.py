@@ -1,21 +1,14 @@
-# # Think Bayes
-#
-# This notebook presents example code and exercise solutions for Think Bayes.
-#
-# Copyright 2018 Allen B. Downey
-#
-# MIT License: https://opensource.org/licenses/MIT
-
-
-
-
+"""
+Think Bayes
+This notebook presents example code and exercise solutions for Think Bayes.
+Copyright 2018 Allen B. Downey
+MIT License: https://opensource.org/licenses/MIT
+"""
 
 from thinkbayes import Hist, Pmf, Suite, MakeMixture
 
 
 def test_vote():
-    
-
     #
 
     def add(pmf1, pmf2):
@@ -72,7 +65,6 @@ def test_vote():
 
     #
 
-
     mix = Pmf()
 
     for val1, p1 in pmf_citizen_report.Items():
@@ -82,8 +74,6 @@ def test_vote():
             mix[val1, val2] = p1 * p2
 
     mix.Print()
-
-    
 
     #
 
@@ -104,14 +94,12 @@ def test_vote():
 
     #
 
-
     pmf_report = Pmf()
 
     for (cstate, vstate), p in mix.Items():
         creport = report(cstate, citizen_status)
         vreport = report(vstate, vote_status)
         pmf_report[creport, vreport] += p
-    
 
     #
 

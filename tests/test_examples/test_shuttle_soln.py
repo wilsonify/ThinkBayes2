@@ -43,7 +43,6 @@ def test_shuttle():
     df["Incident"] = df["Damage Incident"].astype(float)
     df
 
-
     import matplotlib.pyplot as plt
 
     plt.scatter(df.Temperature, df.Incident, s=75, color="k", alpha=0.5)
@@ -51,7 +50,6 @@ def test_shuttle():
     plt.ylabel("Damage Incident?")
     plt.xlabel("Outside temperature (Fahrenheit)")
     plt.title("Defects of the Space Shuttle O-Rings vs temperature")
-    
 
     # ### Grid algorithm
     #
@@ -63,7 +61,6 @@ def test_shuttle():
     #
     # Hint: the `expit` function from `scipy.special` computes the inverse of the `logit` function.
 
-
     from scipy.special import expit
 
     class Logistic(Suite, Joint):
@@ -74,7 +71,6 @@ def test_shuttle():
             hypo: b0, b1
             """
             return 1
-
 
     # Solution
 
@@ -99,8 +95,6 @@ def test_shuttle():
             else:
                 # NaN
                 return 1
-
-    
 
     b0 = np.linspace(0, 50, 101)
 
@@ -128,7 +122,6 @@ def test_shuttle():
 
     # According to the posterior distribution, what was the probability of damage when the shuttle launched at 31 degF?
 
-
     # Solution
 
     T = 31
@@ -142,12 +135,10 @@ def test_shuttle():
 
     total
 
-
     # Solution
 
     pred = suite.Copy()
     pred.Update((31, True))
-    
 
     # ### MCMC
     #
@@ -155,13 +146,11 @@ def test_shuttle():
     #
     # As a challege, try writing the model more explicitly, rather than using the GLM module.
 
-
     from warnings import simplefilter
 
     simplefilter("ignore", FutureWarning)
 
     import pymc3 as pm
-
 
     # Solution
 
@@ -172,10 +161,8 @@ def test_shuttle():
 
         start = pm.find_MAP()
         trace = pm.sample(1000, start=start, tune=1000)
-    
 
     pm.traceplot(trace)
-
 
     # Solution
 
@@ -185,6 +172,5 @@ def test_shuttle():
         )
 
         trace = pm.sample(1000, tune=1000)
-    
 
     # The posterior distributions for these parameters should be similar to what we got with the grid algorithm.

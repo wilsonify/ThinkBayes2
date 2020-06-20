@@ -11,7 +11,6 @@ Copyright 2018 Allen Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
 import numpy as np
 import pymc3 as pm
 

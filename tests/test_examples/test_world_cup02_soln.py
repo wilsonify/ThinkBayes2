@@ -1,14 +1,9 @@
-# # Think Bayes
-#
-# This notebook presents example code and exercise solutions for Think Bayes.
-#
-# Copyright 2018 Allen B. Downey
-#
-# MIT License: https://opensource.org/licenses/MIT
-
-
-
-
+"""
+Think Bayes
+This notebook presents example code and exercise solutions for Think Bayes.
+Copyright 2018 Allen B. Downey
+MIT License: https://opensource.org/licenses/MIT
+"""
 
 from thinkbayes import Pmf, Suite
 
@@ -18,10 +13,8 @@ from thinkbayes import thinkplot
 import numpy as np
 from scipy.special import gamma
 
+
 def test_wc2():
-
-    
-
     # ### World Cup problem, part two
     #
     # > In the final match of the 2014 FIFA World Cup, Germany defeated Argentina 1-0.  How much evidence does this victory provide that Germany had the better team?  What is the probability that Germany would win a rematch?
@@ -41,7 +34,6 @@ def test_wc2():
     #
     # If goal-scoring is a Poisson process, the distribution of goals per game is Poisson with parameter $\lambda$.  To compute the distribution of $\lambda$ we can define a new class that inherits from `thinkbayes.Suite` and provides an appropriate `Likelihood` function:
 
-
     class Soccer2(thinkbayes.Suite):
         """Represents hypotheses about goal-scoring rates."""
 
@@ -54,12 +46,9 @@ def test_wc2():
             # FILL THIS IN!
             return 1
 
-
-
     # Solution
 
     from scipy.stats import poisson
-
 
     class Soccer2(thinkbayes.Suite):
         """Represents hypotheses about goal-scoring rates."""
@@ -72,9 +61,6 @@ def test_wc2():
             """
             return poisson.pmf(data, hypo)
 
-
-    
-
     # `Likelihood` computes the likelihood of `data` given `hypo`, where `data` is an observed number of goals, and `hypo` is a hypothetical goal-scoring rate in goals per game.  We can compute the likelihood of the data by evaluating the Poisson probability mass function (PMF).
     #
     # Now we can get back to Step 1.
@@ -85,7 +71,6 @@ def test_wc2():
     #
     # To construct the prior, I use a gamma distribution with a mean of 1.34 goals per game.
 
-
     from thinkbayes import MakeGammaPmf
 
     xs = np.linspace(0, 8, 101)
@@ -93,7 +78,6 @@ def test_wc2():
     thinkplot.Pdf(pmf)
     thinkplot.decorate(xlabel="Goal-scoring rate (λ)", ylabel="PMF")
     pmf.Mean()
-    
 
     suite = Soccer2(pmf)
 
@@ -110,7 +94,6 @@ def test_wc2():
     #
     # The next step is to compute the posteriors for the two teams:
 
-
     germany = suite.Copy(label="Germany")
     argentina = suite.Copy(label="Argentina")
     germany.Update(1)
@@ -118,7 +101,6 @@ def test_wc2():
 
     print("posterior mean Germany", germany.Mean())
     print("posterior mean Argentina", argentina.Mean())
-    
 
     # `Update` invokes the likelihood function for each hypothetical value of $\lambda$ and updates the distribution accordingly.
     #
@@ -159,25 +141,19 @@ def test_wc2():
     #
     # Use the results to estimate the probability that Germany would win a rematch.
 
-
     # Solution
 
     gdr_goals = poisson.rvs(germany.Sample(1000))
     arg_goals = poisson.rvs(argentina.Sample(1000))
     np.mean(gdr_goals > arg_goals)
 
-
     # Solution
 
     np.mean(gdr_goals == arg_goals)
 
-
     # Solution
 
     np.mean(gdr_goals < arg_goals)
-
-
-    
 
     # Instead of running simulations, you could compute the posterior predictive distributions explicitly.
     #
@@ -187,9 +163,7 @@ def test_wc2():
     #
     # Finally, it should use `MakeMixture` to compute the mixture of the predictive distributions.
 
-
     # Solution
-
 
     def PredictiveDist(suite, duration=1, label="pred"):
         """Computes the distribution of goals scored in a game.
@@ -204,9 +178,6 @@ def test_wc2():
         mix = thinkbayes.MakeMixture(metapmf, label=label)
         return mix
 
-
-    
-
     germany_pred = PredictiveDist(germany, label="germany")
     argentina_pred = PredictiveDist(argentina, label="argentina")
 
@@ -216,7 +187,6 @@ def test_wc2():
 
     # Using the predictive distributions, we can compute probabilities for the outcomes of a rematch.
 
-
     win = germany_pred.ProbGreater(argentina_pred)
     lose = germany_pred.ProbLess(argentina_pred)
     tie = 1 - (win + lose)
@@ -224,4 +194,3 @@ def test_wc2():
     print("Posterior prob Germany wins rematch", win)
     print("Posterior prob tie", tie)
     print("Posterior prob Argentina wins rematch", lose)
-    

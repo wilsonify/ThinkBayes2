@@ -1,16 +1,9 @@
-# Bayesian Statistics Made Simple
-# ===
-#
-# Code and exercises from my workshop on Bayesian statistics in Python.
-#
-# Copyright 2016 Allen Downey
-#
-# MIT License: https://opensource.org/licenses/MIT
-
-
-
-
-
+"""
+Bayesian Statistics Made Simple
+Code and exercises from my workshop on Bayesian statistics in Python.
+Copyright 2016 Allen Downey
+MIT License: https://opensource.org/licenses/MIT
+"""
 
 import warnings
 
@@ -19,10 +12,7 @@ from thinkbayes import thinkplot
 
 
 def test_pmfs():
-    
-
     # Working with Pmfs
-    --
     # Create a Pmf object to represent a six-sided die.
 
     d6 = Pmf()
@@ -67,7 +57,6 @@ def test_pmfs():
     #
     # Plot the Pmf of the remaining possible outcomes and compute its mean.
 
-
     # Solution
 
     pmf = d6 + d6
@@ -76,10 +65,9 @@ def test_pmfs():
     pmf.Normalize()
     thinkplot.Hist(pmf)
     pmf.Mean()
-    
 
     # The cookie problem
-    --
+
     # Create a Pmf with two equally likely hypotheses.
     #
 
@@ -100,21 +88,18 @@ def test_pmfs():
     #
     # Hint: The posterior (after the first cookie) becomes the prior (before the second cookie).
 
-
     # Solution
 
     cookie["Bowl 1"] *= 0.25
     cookie["Bowl 2"] *= 0.5
     cookie.Normalize()
     cookie.Print()
-    
 
     # **Exercise 4:** Instead of doing two updates, what if we collapse the two pieces of data into one update?
     #
     # Re-initialize `Pmf` with two equally likely hypotheses and perform one update based on two pieces of data, a vanilla cookie and a chocolate cookie.
     #
     # The result should be the same regardless of how many updates you do (or the order of updates).
-
 
     # Solution
 
@@ -123,10 +108,9 @@ def test_pmfs():
     cookie["Bowl 2"] *= 0.5 * 0.5
     cookie.Normalize()
     cookie.Print()
-    
 
     # The dice problem
-    --
+
     # Create a Suite to represent dice with different numbers of sides.
 
     pmf = Pmf([4, 6, 8, 12])
@@ -135,7 +119,6 @@ def test_pmfs():
     # **Exercise 5:** We'll solve this problem two ways.  First we'll do it "by hand", as we did with the cookie problem; that is, we'll multiply each hypothesis by the likelihood of the data, and then renormalize.
     #
     # In the space below, update `suite` based on the likelihood of the data (rolling a 6), then normalize and print the results.
-
 
     # Solution
 
@@ -146,8 +129,6 @@ def test_pmfs():
 
     pmf.Normalize()
     pmf.Print()
-
-    
 
     # **Exercise 6:**  Now let's do the same calculation using `Suite.Update`.
     #
@@ -163,7 +144,6 @@ def test_pmfs():
         def Likelihood(self, data, hypo):
             return 1
 
-
     # Solution
 
     class Dice(Suite):
@@ -174,8 +154,6 @@ def test_pmfs():
                 return 0
             else:
                 return 1 / hypo
-
-    
 
     # Now we can create a `Dice` object and update it.
 
@@ -193,7 +171,7 @@ def test_pmfs():
     dice.Print()
 
     # The German tank problem
-    --
+
     # The German tank problem is actually identical to the dice problem.
 
     class Tank(Suite):
@@ -216,7 +194,6 @@ def test_pmfs():
     #
     # Update the suite again with the new data and plot the results.
 
-
     # Solution
 
     thinkplot.Pdf(tank, color="0.7")
@@ -224,10 +201,8 @@ def test_pmfs():
     thinkplot.Pdf(tank)
     tank.Mean()
 
-    
-
     # The Euro problem
-    --
+
     #
     # **Exercise 8:**  Write a class definition for `Euro`, which extends `Suite` and defines a likelihood function that computes the probability of the data (heads or tails) for a given value of `x` (the probability of heads).
     #
@@ -240,7 +215,6 @@ def test_pmfs():
             data is a string, either 'H' or 'T'
             """
             return 1
-
 
     # Solution
 
@@ -255,8 +229,6 @@ def test_pmfs():
                 return x
             else:
                 return 1 - x
-
-    
 
     # We'll start with a uniform distribution from 0 to 100.
 
@@ -280,7 +252,6 @@ def test_pmfs():
 
     # Starting over, here's what it looks like after 7 heads and 3 tails.
 
-
     euro = Euro(range(101))
 
     for outcome in "HHHHHHHTTT":
@@ -288,12 +259,10 @@ def test_pmfs():
 
     thinkplot.Pdf(euro)
     euro.MaximumLikelihood()
-    
 
     # The maximum posterior probability is 70%, which is the observed proportion.
     #
     # Here are the posterior probabilities after 140 heads and 110 tails.
-
 
     euro = Euro(range(101))
 
@@ -302,7 +271,6 @@ def test_pmfs():
         euro.Update(outcome)
 
     thinkplot.Pdf(euro)
-    
 
     # The posterior mean s about 56%
 
@@ -339,7 +307,6 @@ def test_pmfs():
 
     # **Exercise 9:** Update euro1 and euro2 with the same data we used before (140 heads and 110 tails) and plot the posteriors.  How big is the difference in the means?
 
-
     # Solution
 
     evidence = "H" * 140 + "T" * 110
@@ -350,4 +317,3 @@ def test_pmfs():
     thinkplot.Pdfs([euro1, euro2])
     thinkplot.Config(title="Posteriors")
     euro1.Mean(), euro2.Mean()
-    

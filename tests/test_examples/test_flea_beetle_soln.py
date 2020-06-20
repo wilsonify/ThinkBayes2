@@ -1,22 +1,15 @@
-
-# # Think Bayes
-#
-# This notebook presents code and exercises from Think Bayes, second edition.
-#
-# Copyright 2016 Allen B. Downey
-#
-# MIT License: https://opensource.org/licenses/MIT
-
-
-
+"""
+Think Bayes
+This notebook presents code and exercises from Think Bayes, second edition.
+Copyright 2016 Allen B. Downey
+MIT License: https://opensource.org/licenses/MIT
+"""
 
 import math
 import numpy as np
 
 from thinkbayes import Pmf, Cdf, Suite
 from thinkbayes import thinkplot
-
-
 
 # ### The flea beetle problem
 #
@@ -55,94 +48,85 @@ from thinkbayes import thinkplot
 
 import pandas as pd
 
-df = pd.read_csv("../data/flea_beetles.csv", delimiter="\t")
-df.head()
 
+def test_flea_beetles():
+    df = pd.read_csv("../data/flea_beetles.csv", delimiter="\t")
+    df.head()
 
+    # Here's what the distributions of width look like.
 
+    def plot_cdfs(df, col):
+        for name, group in df.groupby("Species"):
+            cdf = Cdf(group[col], label=name)
+            thinkplot.Cdf(cdf)
 
-# Here's what the distributions of width look like.
+        thinkplot.decorate(xlabel=col, ylabel="CDF", loc="lower right")
 
+    plot_cdfs(df, "Width")
 
-def plot_cdfs(df, col):
-    for name, group in df.groupby("Species"):
-        cdf = Cdf(group[col], label=name)
-        thinkplot.Cdf(cdf)
+    # And the distributions of angle.
 
-    thinkplot.decorate(xlabel=col, ylabel="CDF", loc="lower right")
+    plot_cdfs(df, "Angle")
 
+    # I'll group the data by species and compute summary statistics.
 
-plot_cdfs(df, "Width")
+    grouped = df.groupby("Species")
 
-# And the distributions of angle.
+    # Here are the means.
 
-plot_cdfs(df, "Angle")
+    means = grouped.mean()
 
-# I'll group the data by species and compute summary statistics.
+    # And the standard deviations.
 
-grouped = df.groupby("Species")
+    stddevs = grouped.std()
 
-# Here are the means.
+    # And the correlations.
 
-means = grouped.mean()
+    for name, group in grouped:
+        corr = group.Width.corr(group.Angle)
+        print(name, corr)
 
-# And the standard deviations.
+    # Those correlations are small enough that we can get an acceptable approximation by ignoring them, but we might want to come back later and write a complete solution that takes them into account.
+    #
+    # ### The likelihood function
+    #
+    # To support the likelihood function, I'll make a dictionary for each attribute that contains a `norm` object for each species.
 
-stddevs = grouped.std()
+    from scipy.stats import norm
 
-# And the correlations.
+    dist_width = {}
+    dist_angle = {}
+    for name, group in grouped:
+        dist_width[name] = norm(group.Width.mean(), group.Width.std())
+        dist_angle[name] = norm(group.Angle.mean(), group.Angle.std())
 
-for name, group in grouped:
-    corr = group.Width.corr(group.Angle)
-    print(name, corr)
+    # Now we can write the likelihood function concisely.
 
-# Those correlations are small enough that we can get an acceptable approximation by ignoring them, but we might want to come back later and write a complete solution that takes them into account.
-#
-# ### The likelihood function
-#
-# To support the likelihood function, I'll make a dictionary for each attribute that contains a `norm` object for each species.
+    class Beetle(Suite):
+        def Likelihood(self, data, hypo):
+            """
+            data: sequence of width, height
+            hypo: name of species
+            """
+            width, angle = data
+            name = hypo
 
+            like = dist_width[name].pdf(width)
+            like *= dist_angle[name].pdf(angle)
+            return like
 
-from scipy.stats import norm
+    # The hypotheses are the species names:
 
-dist_width = {}
-dist_angle = {}
-for name, group in grouped:
-    dist_width[name] = norm(group.Width.mean(), group.Width.std())
-    dist_angle[name] = norm(group.Angle.mean(), group.Angle.std())
+    hypos = grouped.groups.keys()
 
+    # We'll start with equal priors
 
+    suite = Beetle(hypos)
+    suite.Print()
 
+    # Now we can update with the data and print the posterior.
 
-# Now we can write the likelihood function concisely.
+    suite.Update((140, 15))
+    suite.Print()
 
-
-class Beetle(Suite):
-    def Likelihood(self, data, hypo):
-        """
-        data: sequence of width, height
-        hypo: name of species
-        """
-        width, angle = data
-        name = hypo
-
-        like = dist_width[name].pdf(width)
-        like *= dist_angle[name].pdf(angle)
-        return like
-
-
-# The hypotheses are the species names:
-
-hypos = grouped.groups.keys()
-
-# We'll start with equal priors
-
-suite = Beetle(hypos)
-suite.Print()
-
-# Now we can update with the data and print the posterior.
-
-suite.Update((140, 15))
-suite.Print()
-
-# Based on these measurements, the specimen is very likely to be an example of *Chaetocnema concinna*.
+    # Based on these measurements, the specimen is very likely to be an example of *Chaetocnema concinna*.

@@ -1,16 +1,9 @@
-# Bayesian Statistics Made Simple
-# ===
-#
-# Code and exercises from my workshop on Bayesian statistics in Python.
-#
-# Copyright 2018 Allen Downey
-#
-# MIT License: https://opensource.org/licenses/MIT
-
-
-
-
-
+"""
+Bayesian Statistics Made Simple
+Code and exercises from my workshop on Bayesian statistics in Python.
+Copyright 2018 Allen Downey
+MIT License: https://opensource.org/licenses/MIT
+"""
 
 import numpy as np
 
@@ -19,16 +12,14 @@ from thinkbayes import thinkplot
 
 import warnings
 
-def test_bandit():
-    
 
+def test_bandit():
     # ## The likelihood function
     #
     #
     # Here's a definition for `Bandit`, which extends `Suite` and defines a likelihood function that computes the probability of the data (win or lose) for a given value of `x` (the probability of win).
     #
     # Note that `hypo` is in the range 0 to 100.
-
 
     class Bandit(Suite):
         def Likelihood(self, data, hypo):
@@ -41,7 +32,6 @@ def test_bandit():
                 return x
             else:
                 return 1 - x
-
 
     # We'll start with a uniform distribution from 0 to 100.
 
@@ -69,7 +59,6 @@ def test_bandit():
 
     # Starting over, here's what it looks like after 1 win and 9 losses.
 
-
     bandit = Bandit(range(101))
 
     for outcome in "WLLLLLLLLL":
@@ -77,7 +66,6 @@ def test_bandit():
 
     thinkplot.Pdf(bandit)
     thinkplot.Config(xlabel="x", ylabel="Probability", legend=False)
-    
 
     # The posterior mean is about 17%
 
@@ -101,16 +89,13 @@ def test_bandit():
 
     # The following function simulates playing one machine once.
 
-
     from random import random
     from collections import Counter
 
     counter = Counter()
 
-
     def flip(p):
         return random() < p
-
 
     def play(i):
         counter[i] += 1
@@ -119,9 +104,6 @@ def test_bandit():
             return "W"
         else:
             return "L"
-
-
-    
 
     # Here's a test, playing machine 3 twenty times:
 
@@ -136,9 +118,7 @@ def test_bandit():
 
     # This function displays the four posterior distributions
 
-
     options = dict(yticklabels="invisible")
-
 
     def plot(beliefs, **options):
         thinkplot.preplot(rows=2, cols=2)
@@ -147,18 +127,12 @@ def test_bandit():
             thinkplot.Pdf(b, label=i)
             thinkplot.Config(**options)
 
-
-    
-
     plot(beliefs, legend=True)
-
 
     # Now suppose we play each machine 10 times.  This function updates our beliefs about one of the machines based on one outcome.
 
-
     def update(beliefs, i, outcome):
         beliefs[i].Update(outcome)
-
 
     for i in range(4):
         for _ in range(10):
@@ -171,7 +145,6 @@ def test_bandit():
 
     [belief.Mean() for belief in beliefs]
 
-
     # ## Bayesian Bandits
     #
     # To get more information, we could play each machine 100 times, but while we are gathering data, we are not making good use of it.  The kernel of the Bayesian Bandits algorithm is that is collects and uses data at the same time.  In other words, it balances exploration and exploitation.
@@ -182,19 +155,15 @@ def test_bandit():
     #
     # `argmax` returns the index of the machine that chose the highest value.
 
-
     def choose(beliefs):
         ps = [b.Random() for b in beliefs]
         return np.argmax(ps)
-
 
     # Here's an example.
 
     choose(beliefs)
 
-
     # Putting it all together, the following function chooses a machine, plays once, and updates `beliefs`:
-
 
     def choose_play_update(beliefs, verbose=False):
         i = choose(beliefs)
@@ -202,7 +171,6 @@ def test_bandit():
         update(beliefs, i, outcome)
         if verbose:
             print(i, outcome, beliefs[i].Mean())
-
 
     # Here's an example
 
@@ -217,14 +185,12 @@ def test_bandit():
 
     # Now we can play a few times and see how `beliefs` gets updated:
 
-
     num_plays = 100
 
     for i in range(num_plays):
         choose_play_update(beliefs)
 
     plot(beliefs)
-    
 
     # We can summarize `beliefs` by printing the posterior mean and credible interval:
 

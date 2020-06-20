@@ -2,8 +2,9 @@
 The ThinkBayes framework
 Introduction
 thinkbayes is a Python module that provides a framework for Bayesian statistics.
+
 The most important class is `Suite`, which represents
- a set of hypotheses that are mutually exclusive and collectively exhaustive; 
+a set of hypotheses that are mutually exclusive and collectively exhaustive;
 in other words, exactly one of the hypotheses is true.  
 `Suite` provides a method, `Update`, that performs a Bayesian update.
 
@@ -22,7 +23,6 @@ To use this framework, you normally define a new class that inherits from `Suite
 It provides wrappers for some of the functions in Matplotlib,
 and includes functions like `Pdf` that known how to plot `Suites` and other objects from thinkbayes.
 """
-
 
 import thinkbayes
 from thinkbayes import thinkplot
