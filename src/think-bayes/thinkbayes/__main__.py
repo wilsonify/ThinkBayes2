@@ -158,16 +158,16 @@ class _DictWrapper(object):
     def __str__(self):
         cls = self.__class__.__name__
         if self.label == DEFAULT_LABEL:
-            return "%s(%s)" % (cls, str(self.d))
+            return f"{cls} {self.d})"
         else:
             return self.label
 
     def __repr__(self):
         cls = self.__class__.__name__
         if self.label == DEFAULT_LABEL:
-            return "%s(%s)" % (cls, repr(self.d))
+            return f"{cls}({repr(self.d)})"
         else:
-            return "%s(%s, %s)" % (cls, repr(self.d), repr(self.label))
+            return f"{cls}({repr(self.d)}, {repr(self.label)})"
 
     def __eq__(self, other):
         try:
@@ -1032,21 +1032,16 @@ class Cdf:
     def __str__(self):
         cls = self.__class__.__name__
         if self.label == DEFAULT_LABEL:
-            return "%s(%s, %s)" % (cls, str(self.xs), str(self.ps))
+            return f"{cls} {self.xs}, {self.ps})"
         else:
             return self.label
 
     def __repr__(self):
         cls = self.__class__.__name__
         if self.label == DEFAULT_LABEL:
-            return "%s(%s, %s)" % (cls, str(self.xs), str(self.ps))
+            return f"{cls}({self.xs}, {self.ps})"
         else:
-            return "%s(%s, %s, %s)" % (
-                cls,
-                str(self.xs),
-                str(self.ps),
-                repr(self.label),
-            )
+            return f"{cls} {self.xs}, {self.ps}, {self.label})"
 
     def __len__(self):
         return len(self.xs)
@@ -1619,7 +1614,7 @@ class NormalPdf(Pdf):
         self.label = label if label is not None else "_nolegend_"
 
     def __str__(self):
-        return "NormalPdf(%f, %f)" % (self.mu, self.sigma)
+        return f"NormalPdf({self.mu}, {self.sigma})"
 
     def GetLinspace(self):
         """Get a linspace for plotting.
@@ -1652,7 +1647,7 @@ class ExponentialPdf(Pdf):
         self.label = label if label is not None else "_nolegend_"
 
     def __str__(self):
-        return "ExponentialPdf(%f)" % (self.lam)
+        return f"ExponentialPdf({self.lam})"
 
     def GetLinspace(self):
         """Get a linspace for plotting.
@@ -1688,7 +1683,7 @@ class EstimatedPdf(Pdf):
         self.linspace = np.linspace(low, high, 101)
 
     def __str__(self):
-        return "EstimatedPdf(label=%s)" % str(self.label)
+        return f"EstimatedPdf(label={self.label})"
 
     def GetLinspace(self):
         """Get a linspace for plotting.
