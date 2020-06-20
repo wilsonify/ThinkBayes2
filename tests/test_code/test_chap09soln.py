@@ -8,6 +8,8 @@ MIT License: https://opensource.org/licenses/MIT
 import math
 
 import numpy as np
+import thinkbayes
+from scipy import stats
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
 
@@ -48,7 +50,7 @@ def test_improving_reading_ability():
             hypo: mu, sigma
             """
             mu, sigma = hypo
-            likes = EvalNormalPdf(data, mu, sigma)
+            likes = thinkbayes.EvalNormalPdf(data, mu, sigma)
             return np.prod(likes)
 
     # The prior distributions for `mu` and `sigma` are uniform.
@@ -409,8 +411,9 @@ def test_improving_reading_ability():
             std = 30
             meanx, meany = hypo
             x, y = data
-            like = EvalNormalPdf(x, meanx, std)
-            like *= EvalNormalPdf(y, meany, std)
+
+            like = stats.norm.pdf(x, meanx, std)
+            like *= stats.norm.pdf(x, meany, std)
             return like
 
     # Solution
