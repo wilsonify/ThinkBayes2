@@ -4,7 +4,6 @@ This notebook presents example code and exercise solutions for Think Bayes.
 Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
-from random import random
 
 import pytest
 import thinkbayes
@@ -95,7 +94,7 @@ class Dungeons(Suite):
         :param p:
         :return:
         """
-        return random() < p
+        return np.random.random() < p
 
     def game_day(self, n, p):
         """
