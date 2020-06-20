@@ -134,7 +134,7 @@ class _DictWrapper(object):
         self.d = {}
 
         # flag whether the distribution is under a log transform
-        self.log = False
+        self.log_transformed = False
 
         if obj is None:
             return
@@ -233,9 +233,9 @@ class _DictWrapper(object):
 
         Normalizes so that the largest logprob is 0.
         """
-        if self.log:
+        if self.log_transformed:
             raise ValueError("Pmf/Hist already under a log transform")
-        self.log = True
+        self.log_transformed = True
 
         if m is None:
             m = self.MaxLike()
@@ -253,9 +253,9 @@ class _DictWrapper(object):
 
         If m is None, normalizes so that the largest prob is 1.
         """
-        if not self.log:
+        if not self.log_transformed:
             raise ValueError("Pmf/Hist not under a log transform")
-        self.log = False
+        self.log_transformed = False
 
         if m is None:
             m = self.MaxLike()
@@ -514,7 +514,7 @@ class Pmf(_DictWrapper):
 
         Returns: the total probability before normalizing
         """
-        if self.log:
+        if self.log_transformed:
             raise ValueError("Normalize: Pmf is under a log transform")
 
         total = self.Total()
