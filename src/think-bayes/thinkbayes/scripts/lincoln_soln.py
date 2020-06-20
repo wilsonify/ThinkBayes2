@@ -14,14 +14,14 @@ from thinkbayes import thinkplot
 Bayesian solution to the Lincoln index, described in a blog
 article at Probably Overthinking It.
 
-http://tinyurl.com/lincoln14
+https://tinyurl.com/lincoln14
 
 Last year my occasional correspondent John D. Cook wrote an excellent
 blog post about the Lincoln index, which is a way to estimate the
 number of errors in a document (or program) by comparing results from
 two independent testers. 
 
-http://www.johndcook.com/blog/2010/07/13/lincoln-index/
+https://www.johndcook.com/blog/2010/07/13/lincoln-index/
 
 Here's his presentation of the problem:
 

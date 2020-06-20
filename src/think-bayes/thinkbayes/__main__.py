@@ -2051,7 +2051,7 @@ def MakeParetoPmf(xm, alpha, high, num=101):
 def StandardNormalCdf(x):
     """Evaluates the CDF of the standard Normal distribution.
 
-    See http://en.wikipedia.org/wiki/Normal_distribution
+    See https://en.wikipedia.org/wiki/Normal_distribution
     #Cumulative_distribution_function
 
     Args:
@@ -2082,7 +2082,7 @@ def EvalNormalCdf(x, mu=0, sigma=1):
 def EvalNormalCdfInverse(p, mu=0, sigma=1):
     """Evaluates the inverse CDF of the normal distribution.
 
-    See http://en.wikipedia.org/wiki/Normal_distribution#Quantile_function
+    See https://en.wikipedia.org/wiki/Normal_distribution#Quantile_function
 
     Args:
         p: float
@@ -2175,7 +2175,7 @@ def RenderParetoCdf(xmin, alpha, low, high, n=50):
 class Beta:
     """Represents a Beta distribution.
 
-    See http://en.wikipedia.org/wiki/Beta_distribution
+    See https://en.wikipedia.org/wiki/Beta_distribution
     """
 
     def __init__(self, alpha=1, beta=1, label=None):
@@ -2273,7 +2273,7 @@ class Beta:
 class Dirichlet(object):
     """Represents a Dirichlet distribution.
 
-    See http://en.wikipedia.org/wiki/Dirichlet_distribution
+    See https://en.wikipedia.org/wiki/Dirichlet_distribution
     """
 
     def __init__(self, n, conc=1, label=None):
@@ -2340,7 +2340,7 @@ class Dirichlet(object):
     def MarginalBeta(self, i):
         """Computes the marginal distribution of the ith element.
 
-        See http://en.wikipedia.org/wiki/Dirichlet_distribution
+        See https://en.wikipedia.org/wiki/Dirichlet_distribution
         #Marginal_distributions
 
         i: int
@@ -2381,7 +2381,7 @@ def BinomialCoef(n, k):
 def LogBinomialCoef(n, k):
     """Computes the log of the binomial coefficient.
 
-    http://math.stackexchange.com/questions/64716/
+    https://math.stackexchange.com/questions/64716/
     approximating-the-logarithm-of-the-binomial-coefficient
 
     n: number of trials
@@ -2487,7 +2487,7 @@ def Std(xs, mu=None, ddof=0):
 def MeanVar(xs, ddof=0):
     """Computes mean and variance.
 
-    Based on http://stackoverflow.com/questions/19391149/
+    Based on https://stackoverflow.com/questions/19391149/
     numpy-mean-and-variance-from-single-function
 
     xs: sequence of values

@@ -103,7 +103,7 @@ class TrainSpotting(object):
         self.seconds = int(t[6])
 
 
-def ReadCsv(url="http://developer.mbta.com/lib/rthr/red.csv"):
+def ReadCsv(url="https://developer.mbta.com/lib/rthr/red.csv"):
     """Reads data from the red line.
 
     Returns: list of TrainSpotting objects
@@ -126,7 +126,7 @@ def ReadCsv(url="http://developer.mbta.com/lib/rthr/red.csv"):
 
 
 def ReadJson():
-    url = "http://developer.mbta.com/lib/rthr/red.json"
+    url = "https://developer.mbta.com/lib/rthr/red.json"
     json_text = urlopen(url).read()
     json_obj = json.loads(json_text)
     print(json_obj)

@@ -540,7 +540,7 @@ def SpeciesGenerator(names, num):
 def ReadRarefactedData(filename="journal.pone.0047712.s001.csv", clean_param=0):
     """Reads a data file and returns a list of Subjects.
 
-    Data from http://www.plosone.org/article/
+    Data from https://www.plosone.org/article/
     info%3Adoi%2F10.1371%2Fjournal.pone.0047712#s4
 
     filename: string filename to read
