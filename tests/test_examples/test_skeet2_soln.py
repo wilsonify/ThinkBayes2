@@ -229,7 +229,8 @@ def test_comparing_distributions():
 
     # But there is, according to this model, a 2% chance that she could win by 10.
 
-    sum([p for (x, p) in pmf.Items() if x >= 10])
+    p_win_by_10 = sum([p for (x, p) in pmf.Items() if x >= 10])
+    logging.info("%r", f"p_win_by_10 = {p_win_by_10}")
 
     # ## Distribution of maximum
     #
@@ -257,12 +258,10 @@ def test_comparing_distributions():
     ks = rhode_rematch.Sample((6, iters))
     logging.info("%r", f"ks = {ks}")
 
-
     # Compute the maximum in each column:
 
     maxes = np.max(ks, axis=0)
     logging.info("%r", f"maxes[:10] = {maxes[:10]}")
-
 
     # And then plot the distribution of maximums:
 

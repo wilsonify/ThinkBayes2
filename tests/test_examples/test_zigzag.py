@@ -61,7 +61,9 @@ def test_hockey():
 
     size = 1000
     sample_sim = [half_game(lam_per_min) for i in range(size)]
-    np.mean(sample_sim), lam_per_game
+
+    logging.info("%r", f"np.mean(sample_sim) = {np.mean(sample_sim)}")
+    logging.info("%r", f"lam_per_game = {lam_per_game}")
 
     # ## PMFs
     #
@@ -309,7 +311,6 @@ def test_hockey():
     hypo_mu = np.linspace(0, 20, num=51)
     logging.info("%r", f"hypo_mu = {hypo_mu}")
 
-
     # Initially `suite` represents the prior distribution of `mu`.
 
     suite = Suite(hypo_mu)
@@ -335,7 +336,18 @@ def test_hockey():
     #
     # Here are (total goals)/(number of games) for both teams from 2013 to 2017, not including games that went into overtime.
 
-    xs = [13 / 6, 19 / 6, 8 / 4, 4 / 4, 10 / 6, 13 / 6, 2 / 2, 4 / 2, 5 / 3, 6 / 3]
+    xs = [
+        13 / 6,
+        19 / 6,
+        8 / 4,
+        1.0,
+        10 / 6,
+        13 / 6,
+        1.0,
+        4 / 2,
+        5 / 3,
+        6 / 3
+    ]
 
     # If those values were sampled from a gamma distribution, we can estimate its parameters, `k` and `theta`.
 
@@ -917,7 +929,6 @@ def test_hockey():
     WSH = post_pred["WSH18"]
     logging.info("%r", f"WSH.shape = {WSH.shape}")
 
-
     WSH = post_pred["WSH18"].flatten()
     VGK = post_pred["VGK18"].flatten()
 
@@ -930,18 +941,15 @@ def test_hockey():
     win = np.mean(VGK > WSH)
     logging.info("%r", f"win = {win}")
 
-
     # The chance that they lose.
 
     lose = np.mean(WSH > VGK)
     logging.info("%r", f"lose = {lose}")
 
-
     # And the chance of a tie.
 
     tie = np.mean(WSH == VGK)
     logging.info("%r", f"tie = {tie}")
-
 
     # ## Overtime!
     #
@@ -967,12 +975,10 @@ def test_hockey():
     win_ot = np.mean(tts_VGK < tts_WSH)
     logging.info("%r", f"win_ot = {win_ot}")
 
-
     # Since `tts` is continuous, ties are unlikely.
 
     total_win = win + tie * win_ot
     logging.info("%r", f"total_win = {total_win}")
-
 
     # Finally, we can simulate the rest of the series and compute the probability that Vegas wins the series.
 

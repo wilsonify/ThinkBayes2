@@ -4,6 +4,7 @@ This notebook presents code and exercises from Think Bayes, second edition.
 Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 import numpy as np
 
@@ -228,7 +229,7 @@ def test_flea_beetle_problem():
     for row in trace:
         total += multivariate_normal.pdf(measured, mean=row["μ"], cov=row["Σ"])
 
-    total / len(trace)
+    logging.info("%r", f"total / len(trace) = {total / len(trace)}")
 
     def compute_posterior_likelihood(measured, species):
         x = observed[species]

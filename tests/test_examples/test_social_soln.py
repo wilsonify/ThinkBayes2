@@ -5,7 +5,7 @@
 # Copyright 2018 Allen B. Downey
 #
 # MIT License: https://opensource.org/licenses/MIT
-
+import logging
 
 import numpy as np
 from thinkbayes import Suite, Beta
@@ -102,4 +102,4 @@ def test_social():
 
     # So the effective sample size is about 35.
 
-    100 / 2 / np.sqrt(2)
+    logging.info("%r", f"100 / 2 / np.sqrt(2) = {100 / 2 / np.sqrt(2)}")
