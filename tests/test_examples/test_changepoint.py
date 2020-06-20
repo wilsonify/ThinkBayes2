@@ -20,13 +20,13 @@ DATADIR = os.path.join(TESTDIR, "data")
 
 
 @pytest.fixture(name="n")
-def n_fixture(n):
+def n_fixture():
     n = 60
     return n
 
 
 @pytest.fixture(name="t1")
-def t1_fixture(t1):
+def t1_fixture():
     t1 = 30
     return t1
 
