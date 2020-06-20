@@ -4,6 +4,7 @@ This notebook presents code and exercises from Think Bayes, second edition.
 Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 
 def test_chapt5():
@@ -34,23 +35,27 @@ def test_chapt5():
     prior_odds = 1
     likelihood_ratio = 0.75 / 0.5
     post_odds = prior_odds * likelihood_ratio
-    post_odds
+    logging.info("%r", f"post_odds = {post_odds}")
+
 
     # And then we can compute the posterior probability, if desired.
 
     post_prob = Probability(post_odds)
-    post_prob
+    logging.info("%r", f"post_prob = {post_prob}")
+
 
     # If we draw another cookie and it's chocolate, we can do another update:
 
     likelihood_ratio = 0.25 / 0.5
     post_odds *= likelihood_ratio
-    post_odds
+    logging.info("%r", f"post_odds = {post_odds}")
+
 
     # And convert back to probability.
 
     post_prob = Probability(post_odds)
-    post_prob
+    logging.info("%r", f"post_prob = {post_prob}")
+
 
     # ## Oliver's blood
     #
@@ -80,7 +85,8 @@ def test_chapt5():
     like2 = 2 * 0.6 * 0.01
 
     likelihood_ratio = like1 / like2
-    likelihood_ratio
+    logging.info("%r", f"likelihood_ratio = {likelihood_ratio}")
+
 
     # Since the ratio is less than 1, it is evidence *against* the hypothesis that Oliver left blood at the scence.
     #

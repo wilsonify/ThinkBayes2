@@ -5,6 +5,7 @@
 #
 # MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 import os
 
 import numpy as np
@@ -36,10 +37,12 @@ def test_shuttle():
     columns = ["Date", "Temperature", "Incident"]
     df = pd.read_csv(os.path.join(DATADIR, "challenger_data.csv"), parse_dates=[0])
     df.drop(labels=[3, 24], inplace=True)
-    df
+    logging.info("%r", f"df.shape = {df.shape}")
+
 
     df["Incident"] = df["Damage Incident"].astype(float)
-    df
+    logging.info("%r", f"df.shape = {df.shape}")
+
 
     import matplotlib.pyplot as plt
 
@@ -129,7 +132,8 @@ def test_shuttle():
         p_fail = expit(log_odds)
         total += p * p_fail
 
-    total
+    logging.info("%r", f"total = {total}")
+
 
     # Solution
 

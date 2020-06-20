@@ -3,6 +3,7 @@ The pair of dice problem
 Copyright 2018 Allen Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 import numpy as np
 import pandas as pd
@@ -57,7 +58,8 @@ def test_BayesTable():
             if die2 > die1:
                 hypo.append((die1, die2))
 
-    hypo
+    logging.info("%r", f"hypo = {hypo}")
+
 
     # Here's a `BayesTable` that represents the hypotheses.
 
@@ -77,12 +79,14 @@ def test_BayesTable():
         n1, n2 = row.hypo
         table.loc[i, "likelihood"] = 2 / n1 / n2
 
-    table
+    logging.info("%r", f"table = {table}")
+
 
     # Now we can use `update` to compute the posterior probabilities:
 
     table.update()
-    table
+    logging.info("%r", f"table = {table}")
+
 
     # ### Part two
     #
@@ -127,7 +131,8 @@ def test_BayesTable():
         p = prob_total(11, n1, n2)
         total += row.posterior * p
 
-    total
+    logging.info("%r", f"total = {total}")
+
 
     # This calculation is similar to the first step of the update, so we can also compute it by
     #
@@ -142,11 +147,13 @@ def test_BayesTable():
         n1, n2 = row.hypo
         table2.loc[i, "likelihood"] = prob_total(11, n1, n2)
 
-    table2
+    logging.info("%r", f"table2 = {table2}")
+
 
     table2.update()
 
-    table2
+    logging.info("%r", f"table2 = {table2}")
+
 
     # ### Using a Suite
 

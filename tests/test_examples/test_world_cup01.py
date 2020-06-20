@@ -4,6 +4,7 @@ This notebook presents example code and exercise solutions for Think Bayes.
 Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 import numpy as np
 from thinkbayes import Pmf, Suite
@@ -97,7 +98,8 @@ def test_wc3():
     # We can sample a value from the posterior like this:
 
     lam = soccer.Random()
-    lam
+    logging.info("%r", f"lam = {lam}")
+
 
     # Given `lam`, the number of goals scored in the remaining 67 minutes comes from the Poisson distribution with parameter `lam * t`, with `t` in units of goals.
     #

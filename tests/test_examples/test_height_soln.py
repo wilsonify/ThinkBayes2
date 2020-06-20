@@ -4,6 +4,7 @@ This notebook presents code and exercises from Think Bayes, second edition.
 Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 import numpy as np
 import pandas as pd
@@ -263,7 +264,8 @@ def test_eight():
     total = 0
     for h, p in A.Items():
         total += p * prob_male(h)
-    total
+    logging.info("%r", f"total = {total}")
+
 
     annotated_mix = Suite()
     for h, p in male_height_pmf.Items():

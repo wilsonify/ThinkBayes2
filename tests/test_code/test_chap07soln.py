@@ -4,6 +4,7 @@ This notebook presents code and exercises from Think Bayes, second edition.
 Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 import numpy as np
 from scipy.stats import poisson
@@ -50,7 +51,8 @@ def test_chapt7():
     total = pmf + pmf + pmf
     thinkplot.Hist(total)
     thinkplot.Config(xlabel="Number of goals", ylabel="PMF", xlim=[-0.5, 22.5])
-    total[9]
+    logging.info("%r", f"total[9] = {total[9]}")
+
 
     # Solution
 

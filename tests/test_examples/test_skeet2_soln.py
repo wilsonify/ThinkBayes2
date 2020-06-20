@@ -4,6 +4,7 @@ This notebook presents example code and exercise solutions for Think Bayes.
 Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 import numpy as np
 from thinkbayes import Pmf, Beta
@@ -51,7 +52,7 @@ def test_comparing_distributions():
         if x1 > x2:
             count += 1
 
-    count / iters
+    logging.info("%r", f"count / iters = {count / iters}")
 
     # `Beta` also provides `Sample`, which returns a NumPy array, so we an perform the comparisons using array operations:
 
@@ -117,8 +118,7 @@ def test_comparing_distributions():
             wins += 1
         if count1 < count2:
             losses += 1
-
-    wins / iters, losses / iters
+    logging.info("%r", f"wins / iters, losses / iters = {wins / iters, losses / iters}")
 
     # Or, realizing that the distribution of `k` is binomial, we can simplify the code using NumPy:
 
@@ -255,12 +255,14 @@ def test_comparing_distributions():
 
     iters = 1000
     ks = rhode_rematch.Sample((6, iters))
-    ks
+    logging.info("%r", f"ks = {ks}")
+
 
     # Compute the maximum in each column:
 
     maxes = np.max(ks, axis=0)
-    maxes[:10]
+    logging.info("%r", f"maxes[:10] = {maxes[:10]}")
+
 
     # And then plot the distribution of maximums:
 

@@ -3,6 +3,7 @@ Think Bayes
 Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 import numpy as np
 
@@ -103,7 +104,8 @@ def test_bayes_reg():
 
     import pymc3 as pm
 
-    pm.GLM
+    logging.info("%r", f"pm.GLM = {pm.GLM}")
+
 
     thinkplot.plot(xs, ys)
     thinkplot.decorate(xlabel="x", ylabel="y")

@@ -38,11 +38,11 @@ def test_pmf_class():
 
     # Or you can use the bracket operator.
 
-    pmf[1]
+    print(pmf[1])
 
     #   Either way, if you ask for the probability of something that's not in the Pmf, the result is 0.
 
-    pmf[7]
+    print(pmf[7])
 
     # ## The cookie problem
     #

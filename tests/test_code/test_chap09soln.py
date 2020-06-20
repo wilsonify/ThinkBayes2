@@ -4,7 +4,7 @@ This notebook presents code and exercises from Think Bayes, second edition.
 Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
-
+import logging
 import math
 
 import numpy as np
@@ -128,7 +128,7 @@ def test_improving_reading_ability():
     pmf_diff = pmf_mu1 - pmf_mu0
     cdf_diff = pmf_diff.MakeCdf()
     thinkplot.Cdf(cdf_diff)
-    cdf_diff[0]
+    logging.info("%r", f"cdf_diff[0] = {cdf_diff[0]}")
 
     # Solution
 

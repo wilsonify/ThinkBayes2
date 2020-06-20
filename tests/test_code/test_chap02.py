@@ -194,7 +194,7 @@ def test_pmf(six_sided_die_pmf):
 
 def test_Prob(six_sided_die_pmf):
     six_sided_die_pmf.Prob(1)  # To extract a value from a Pmf, you can use `Prob`
-    six_sided_die_pmf[1]  # Or you can use the bracket operator.
+    print(six_sided_die_pmf[1])  # Or you can use the bracket operator.
     assert six_sided_die_pmf.Prob(1) == six_sided_die_pmf[1]
 
 

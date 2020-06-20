@@ -50,7 +50,7 @@ def test_lincoln_index_problem():
     # my head is that there must be a (better) Bayesian solution! And there
     # is.
 
-    def choose(n, k, d={}):
+    def choose(n, k, d=None):
         """The binomial coefficient "n choose k".
 
         Args:
@@ -61,6 +61,8 @@ def test_lincoln_index_problem():
         Returns:
           int
         """
+        if d is None:
+            d = {}
         if k == 0:
             return 1
         if n == 0:

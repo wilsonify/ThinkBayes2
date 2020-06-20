@@ -4,6 +4,7 @@ This notebook presents example code and exercise solutions for Think Bayes.
 Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 from thinkbayes import Suite
 
@@ -94,7 +95,8 @@ def test_urns():
         prob_blue = i / 3
         total += prob_i * prob_blue
 
-    total
+    logging.info("%r", f"total = {total}")
+
 
     # Let's make it a function:
 

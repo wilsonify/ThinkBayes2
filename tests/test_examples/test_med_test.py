@@ -4,6 +4,7 @@ This notebook presents example code and exercise solutions for Think Bayes.
 Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 import numpy as np
 import pandas as pd
@@ -69,14 +70,14 @@ def test_interpreting_medical_tests():
     sensitivity = 0.734
     specificity = 0.877
     table.likelihood = [sensitivity, 1 - specificity]
-    table
+    logging.info("%r", f"table = {table}")
 
     likelihood_ratio = table.likelihood["cancer"] / table.likelihood["no cancer"]
 
     table.update()
-    table
+    logging.info("%r", f"table = {table}")
 
-    table.posterior["cancer"] * 100
+    logging.info("%r", f"table.posterior[cancer] * 100 = {table.posterior['cancer'] * 100}")
 
     # So there is a 1.56% chance that this patient has cancer, given that the initial screening mammogram was positive.
     #

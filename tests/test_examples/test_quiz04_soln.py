@@ -4,6 +4,7 @@ This notebook presents code and exercises from Think Bayes, second edition.
 Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 import numpy as np
 import thinkbayes
@@ -43,4 +44,5 @@ def test_battle():
     thinkplot.Hist(mix)
     thinkplot.decorate(xlabel="Number of passengers", ylabel="PMF")
 
-    mix[10]
+    logging.info("%r", f"likelihood = {mix[10]}")
+

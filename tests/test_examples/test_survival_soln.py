@@ -4,6 +4,7 @@ This notebook presents code and exercises from Think Bayes, second edition.
 Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 import numpy as np
 from thinkbayes import Pmf, Cdf, Suite, Joint
@@ -282,7 +283,8 @@ def test_weibull():
 
     # The probability that any given bulb has burned out comes from the CDF of the distribution
     p = EvalWeibullCdf(1, lam, k)
-    p
+    logging.info("%r", f"p = {p}")
+
 
     # Solution
 

@@ -3,6 +3,7 @@ Think Bayes
 Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 import numpy as np
 import pandas as pd
@@ -46,7 +47,8 @@ def test_geiger_counter_problem():
     for n, p in pmf.Items():
         total += p * EvalBinomialPmf(k, n, f)
 
-    total
+    logging.info("%r", f"total = {total}")
+
 
     def compute_likelihood(k, r, f):
         pmf = MakePoissonPmf(r, high=500)

@@ -3,6 +3,7 @@ Think Bayes
 Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 import numpy as np
 
@@ -185,7 +186,8 @@ def test_ltb():
         ps = pm.Dirichlet("ps", a, shape=a.shape)
         xs = pm.Categorical("xs", ps, observed=observed, shape=1)
 
-    model
+    logging.info("%r", f"model = {model}")
+
 
     # Solution
 
@@ -241,7 +243,8 @@ def test_ltb():
         # Observed data is a multinomial distribution with 6 trials
         xs = pm.Multinomial("xs", n=6, p=ps, shape=3, observed=c)
 
-    model
+    logging.info("%r", f"model = {model}")
+
 
     with model:
         # Sample from the posterior
@@ -257,7 +260,8 @@ def test_ltb():
 
     summary = pm.summary(trace)
     summary.index = animals
-    summary
+    logging.info("%r", f"summary = {summary}")
+
 
     # We can also use `plot_posterior` to get a better view of the results.
 

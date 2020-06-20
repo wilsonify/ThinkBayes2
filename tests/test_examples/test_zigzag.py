@@ -10,6 +10,7 @@ pip3 install -U git+https://github.com/pymc-devs/pymc3.git
 Copyright 2018 Allen Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -50,7 +51,8 @@ def test_hockey():
     lam_per_game = 2.7
     min_per_game = 60
     lam_per_min = lam_per_game / min_per_game
-    lam_per_min, lam_per_min ** 2
+    logging.info("%r", f"lam_per_min = {lam_per_min}")
+    logging.info("%r", f"lam_per_min ** 2 = {lam_per_min ** 2}")
 
     size = 10
     sample = [half_game(lam_per_min) for i in range(size)]
@@ -305,7 +307,8 @@ def test_hockey():
     # I'll start with a uniform prior just to keep things simple.  We'll choose a better prior later.
 
     hypo_mu = np.linspace(0, 20, num=51)
-    hypo_mu
+    logging.info("%r", f"hypo_mu = {hypo_mu}")
+
 
     # Initially `suite` represents the prior distribution of `mu`.
 
@@ -912,7 +915,8 @@ def test_hockey():
     # Here are the posterior predictive distributions of goals scored.
 
     WSH = post_pred["WSH18"]
-    WSH.shape
+    logging.info("%r", f"WSH.shape = {WSH.shape}")
+
 
     WSH = post_pred["WSH18"].flatten()
     VGK = post_pred["VGK18"].flatten()
@@ -924,17 +928,20 @@ def test_hockey():
     # Here's the chance that Vegas wins the next game.
 
     win = np.mean(VGK > WSH)
-    win
+    logging.info("%r", f"win = {win}")
+
 
     # The chance that they lose.
 
     lose = np.mean(WSH > VGK)
-    lose
+    logging.info("%r", f"lose = {lose}")
+
 
     # And the chance of a tie.
 
     tie = np.mean(WSH == VGK)
-    tie
+    logging.info("%r", f"tie = {tie}")
+
 
     # ## Overtime!
     #
@@ -958,12 +965,14 @@ def test_hockey():
     # Here's the chance that Vegas wins in overtime.
 
     win_ot = np.mean(tts_VGK < tts_WSH)
-    win_ot
+    logging.info("%r", f"win_ot = {win_ot}")
+
 
     # Since `tts` is continuous, ties are unlikely.
 
     total_win = win + tie * win_ot
-    total_win
+    logging.info("%r", f"total_win = {total_win}")
+
 
     # Finally, we can simulate the rest of the series and compute the probability that Vegas wins the series.
 

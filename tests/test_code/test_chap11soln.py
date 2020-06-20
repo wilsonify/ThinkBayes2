@@ -4,6 +4,7 @@ This notebook presents code and exercises from Think Bayes, second edition.
 Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 from thinkbayes import Suite
 
@@ -111,13 +112,15 @@ def test_euro_problem():
     # We don't really need the SuiteLikelihood function, because `Suite.Update` already computes the total probability of the data, which is the normalizing constant.
 
     likelihood = SuiteLikelihood(b_uniform, data)
-    likelihood
+    logging.info("%r", f"likelihood = {likelihood}")
+
 
     euro = Euro(b_uniform)
     euro.Update(data)
 
     likelihood = SuiteLikelihood(b_tri, data)
-    likelihood
+    logging.info("%r", f"likelihood = {likelihood}")
+
 
     euro = Euro(b_tri)
     euro.Update(data)
