@@ -110,7 +110,7 @@ def test_shootings(crime_data_df):
     is_description = crime_data_df.Description.isin(["HOMICIDE", "SHOOTING"])
     is_weapon = crime_data_df.Weapon == "FIREARM"
     shootings = crime_data_df[is_description & is_weapon]
-    shootings.shape
+    assert shootings.shape == (10, 17)
 
     grouped = shootings.groupby("CrimeDate")
     counts = grouped["Total Incidents"].sum()
