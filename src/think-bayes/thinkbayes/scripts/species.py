@@ -1668,7 +1668,7 @@ class Calibrator(object):
         # generate a random number of species and their prevalences
         # (from a Dirichlet distribution with alpha_i = conc for all i)
         RandomSeed(seed)
-        n_actual = random.randrange(n_low, n_high + 1)
+        n_actual = np.random.randint(n_low, n_high + 1)
 
         hist, subhist, q_actual = GenerateFakeSample(n_actual, r, tr, self.conc)
 
