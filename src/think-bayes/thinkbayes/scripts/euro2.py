@@ -28,7 +28,7 @@ from thinkbayes import thinkplot
 class Euro(thinkbayes.Suite):
     """Represents hypotheses about the probability of heads."""
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: integer value of x, the probability of heads (0-100)
@@ -44,7 +44,7 @@ class Euro(thinkbayes.Suite):
 class Euro2(thinkbayes.Suite):
     """Represents hypotheses about the probability of heads."""
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: integer value of x, the probability of heads (0-100)
@@ -72,7 +72,7 @@ def version2():
     heads, tails = 140, 110
     dataset = "H" * heads + "T" * tails
 
-    suite.UpdateSet(dataset)
+    suite.update_set(dataset)
     return suite
 
 
@@ -86,7 +86,7 @@ def version3():
 
 def main():
     suite = version3()
-    print(suite.Mean())
+    print(suite.mean())
 
     thinkplot.plot_pdf_line(suite)
     thinkplot.show_plot(legend=False)

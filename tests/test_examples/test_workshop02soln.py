@@ -20,7 +20,7 @@ def test_bandit():
     # Note that `hypo` is in the range 0 to 100.
 
     class Bandit(Suite):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """
             hypo is the prob of win (0-100)
             data is a string, either 'W' or 'L'
@@ -67,7 +67,7 @@ def test_bandit():
 
     # The posterior mean is about 17%
 
-    bandit.Mean()
+    bandit.mean()
 
     # The most likely value is the observed proportion 1/10
 
@@ -75,7 +75,7 @@ def test_bandit():
 
     # The posterior credible interval has a 90% chance of containing the true value (provided that the prior distribution truly represents our background knowledge).
 
-    bandit.CredibleInterval(90)
+    bandit.credible_interval(90)
 
     # ## Multiple bandits
 
@@ -140,7 +140,7 @@ def test_bandit():
 
     # After playing each machine 10 times, we have some information about their probabilies:
 
-    [belief.Mean() for belief in beliefs]
+    [belief.mean() for belief in beliefs]
 
     # ## Bayesian Bandits
     #
@@ -153,7 +153,7 @@ def test_bandit():
     # `argmax` returns the index of the machine that chose the highest value.
 
     def choose(beliefs):
-        ps = [b.Random() for b in beliefs]
+        ps = [b.random() for b in beliefs]
         return np.argmax(ps)
 
     # Here's an example.
@@ -167,7 +167,7 @@ def test_bandit():
         outcome = play(i)
         update(beliefs, i, outcome)
         if verbose:
-            print(i, outcome, beliefs[i].Mean())
+            print(i, outcome, beliefs[i].mean())
 
     # Here's an example
 
@@ -192,7 +192,7 @@ def test_bandit():
     # We can summarize `beliefs` by printing the posterior mean and credible interval:
 
     for i, b in enumerate(beliefs):
-        print(b.Mean(), b.CredibleInterval(90))
+        print(b.mean(), b.credible_interval(90))
 
     # The credible intervals usually contain the true values (10, 20, 30, and 40).
     #

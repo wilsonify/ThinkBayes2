@@ -15,7 +15,7 @@ from thinkbayes import thinkplot
 class Battleship(Suite, Joint):
     lam = 1
 
-    def Likelihood(self, hypo, data):
+    def likelihood(self, hypo, data):
         x_actual, y_actual = hypo
         x_guess, y_guess, result = data
         d = np.hypot(x_guess - x_actual, y_guess - y_actual)
@@ -24,23 +24,23 @@ class Battleship(Suite, Joint):
 
 
 def test_battle():
-    gap = thinkbayes.MakeNormalPmf(7, 1, 3)
+    gap = thinkbayes.make_normal_pmf(7, 1, 3)
     thinkplot.plot(gap)
 
     metapmf = thinkbayes.Pmf()
-    for t, p in gap.Items():
-        arrivals = thinkbayes.MakePoissonPmf(1.3 * t, 25)
+    for t, p in gap.items():
+        arrivals = thinkbayes.make_poisson_pmf(1.3 * t, 25)
         thinkplot.plot(arrivals, color="C0", linewidth=0.1)
         metapmf[arrivals] = p
 
     metapmf = thinkbayes.Pmf()
-    for t, p in gap.Items():
-        arrivals = thinkbayes.MakePoissonPmf(1.3 * t, 25)
+    for t, p in gap.items():
+        arrivals = thinkbayes.make_poisson_pmf(1.3 * t, 25)
         thinkplot.plot(arrivals, color="C0", linewidth=0.1)
         metapmf[arrivals] = p
 
-    mix = thinkbayes.MakeMixture(metapmf)
-    mix.Mean()
+    mix = thinkbayes.make_mixture(metapmf)
+    mix.mean()
     thinkplot.plot_hist_bar(mix)
     thinkplot.decorate(xlabel="Number of passengers", ylabel="PMF")
 

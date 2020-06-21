@@ -26,7 +26,7 @@ def run_estimate(update_func, num_points=31, median_flag=False):
         print(label, len(xs))
         summarize(xs)
 
-        xs = thinkbayes.Jitter(xs, 1.3)
+        xs = thinkbayes.jitter(xs, 1.3)
 
         mus, sigmas = find_prior_ranges(xs, num_points, median_flag=median_flag)
         suite = Height(mus, sigmas, label)

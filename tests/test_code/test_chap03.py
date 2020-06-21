@@ -16,7 +16,7 @@ class Dice(Suite):
     The `Dice` class inherits `Update` and provides `Likelihood`
     """
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         if hypo < data:
             return 0
         else:
@@ -29,7 +29,7 @@ class Train(Suite):
     The Train problem has the same likelihood as the Dice problem.
     """
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         if hypo < data:
             return 0
         else:
@@ -38,7 +38,7 @@ class Train(Suite):
 
 def Mean(suite):
     total = 0
-    for hypo, prob in suite.Items():
+    for hypo, prob in suite.items():
         total += hypo * prob
     return total
 
@@ -74,7 +74,7 @@ class Train2(Train):
         Pmf.__init__(self)
         for hypo in hypos:
             self[hypo] = hypo ** (-alpha)
-        self.Normalize()
+        self.normalize()
 
 
 def test_dice():
@@ -82,11 +82,11 @@ def test_dice():
 
     suite = Dice([4, 6, 8, 12, 20])
     suite.update(6)
-    suite.Print()
+    suite.print()
     # And here's what it looks like after more data:
     for roll in [6, 8, 7, 7, 5, 4]:
         suite.update(roll)
-    suite.Print()
+    suite.print()
 
 
 def test_hypos():
@@ -106,7 +106,7 @@ def test_hypos():
 
     # Or we can just use the method
 
-    suite.Mean()
+    suite.mean()
 
 
 def test_MakePosterior():
@@ -116,7 +116,7 @@ def test_MakePosterior():
 
     for high in [500, 1000, 2000]:
         suite = MakePosterior(high, dataset)
-        print(high, suite.Mean())
+        print(high, suite.mean())
 
 
 def test_Train2():
@@ -155,7 +155,7 @@ def test_Train2():
 
     for high in [500, 1000, 2000]:
         suite = MakePosterior(high, dataset, Train2)
-        print(high, suite.Mean())
+        print(high, suite.mean())
     # -
 
     # ## Credible intervals
@@ -167,7 +167,7 @@ def test_Train2():
     suite = Train(hypos)
     suite.update(60)
 
-    suite.Percentile(5), suite.Percentile(95)
+    suite.percentile(5), suite.percentile(95)
     # -
 
     # If you have to compute more than a few percentiles, it is more efficient to compute a CDF.
@@ -182,7 +182,7 @@ def test_Train2():
 
     # `Cdf` also provides `Percentile`
 
-    cdf.Percentile(5), cdf.Percentile(95)
+    cdf.percentile(5), cdf.percentile(95)
 
     # ## Exercises
 

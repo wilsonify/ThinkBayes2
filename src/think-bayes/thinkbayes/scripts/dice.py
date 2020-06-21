@@ -11,7 +11,7 @@ from thinkbayes import Suite
 class Dice(Suite):
     """Represents hypotheses about which die was rolled."""
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: integer number of sides on the die
@@ -28,13 +28,13 @@ def main():
 
     suite.update(6)
     print("After one 6")
-    suite.Print()
+    suite.print()
 
     for roll in [4, 8, 7, 7, 2]:
         suite.update(roll)
 
     print("After more rolls")
-    suite.Print()
+    suite.print()
 
 
 if __name__ == "__main__":

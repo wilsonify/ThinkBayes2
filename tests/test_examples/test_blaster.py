@@ -12,8 +12,8 @@ import pytest
 from numpy.random import random
 from scipy import stats
 from thinkbayes import Hist, Pmf, Suite, Beta
-from thinkbayes import MakeBinomialPmf
-from thinkbayes import MakeMixture
+from thinkbayes import make_binomial_pmf
+from thinkbayes import make_mixture
 from thinkbayes import thinkplot
 
 
@@ -40,7 +40,7 @@ class AlienBlaster(Suite):
     If you would like a challenge, write a version that works for any number of shots.
     """
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of data under hypo.
 
         data: number of shots they took
@@ -79,8 +79,8 @@ def test_blaster(prior):
     :return:
     """
 
-    thinkplot.plot_pdf_line(prior.MakePmf())
-    assert prior.Mean() == 0.4
+    thinkplot.plot_pdf_line(prior.make_pmf())
+    assert prior.mean() == 0.4
 
 
 def test_blaster2():
@@ -93,8 +93,8 @@ def test_blaster2():
     """
 
     posterior = Beta(3, 2)
-    posterior.Update((2, 8))
-    assert posterior.MAP() == pytest.approx(0.3, abs=0.01)
+    posterior.update((2, 8))
+    assert posterior.map() == pytest.approx(0.3, abs=0.01)
 
 
 def test_blaster31(prior):
@@ -108,11 +108,11 @@ def test_blaster31(prior):
     :return:
     """
 
-    pmf = Beta(1, 1).MakePmf()
+    pmf = Beta(1, 1).make_pmf()
     blaster = AlienBlaster(pmf)
     blaster.update(2)
     thinkplot.plot_pdf_line(blaster)
-    assert prior.Mean() < blaster.Mean()
+    assert prior.mean() < blaster.mean()
 
 
 def test_blaster32(prior):
@@ -122,13 +122,13 @@ def test_blaster32(prior):
 
     :return:
     """
-    pmf = Beta(2, 3).MakePmf()
+    pmf = Beta(2, 3).make_pmf()
     blaster = AlienBlaster(pmf)
     blaster.update(2)
     thinkplot.plot_pdf_line(blaster)
 
     assert (
-            prior.Mean() > blaster.Mean()
+            prior.mean() > blaster.mean()
     )  # The posterior mean and MAP are lower than in the prior.
 
 
@@ -143,13 +143,13 @@ def test_blaster35(prior):
 
     :return:
     """
-    pmf = Beta(2, 3).MakePmf()
+    pmf = Beta(2, 3).make_pmf()
     blaster = AlienBlaster(pmf)
     blaster.update(2)
     thinkplot.plot_pdf_line(blaster)
 
     assert (
-            prior.MAP() > blaster.MAP()
+            prior.map() > blaster.MAP()
     )  # The posterior mean and MAP are lower than in the prior.
 
 
@@ -271,14 +271,14 @@ def test_blaster7():
     x1 = 0.3
     x2 = 0.4
 
-    pmf1 = MakeBinomialPmf(n_const, x1)
-    pmf2 = MakeBinomialPmf(n_const, x2)
+    pmf1 = make_binomial_pmf(n_const, x1)
+    pmf2 = make_binomial_pmf(n_const, x2)
 
     metapmf = Pmf({pmf1: 0.3, pmf2: 0.7})
-    metapmf.Print()
+    metapmf.print()
 
     ks = [
-        metapmf.Random().Random() for _ in range(1000)
+        metapmf.random().random() for _ in range(1000)
     ]  # Here's how we can draw samples from the meta-Pmf:
 
     pmf = Pmf(ks)
@@ -319,9 +319,9 @@ def test_blaster8():
     n_const = 10
     x1 = 0.3
     x2 = 0.4
-    pmf1 = MakeBinomialPmf(n_const, x1)
-    pmf2 = MakeBinomialPmf(n_const, x2)
+    pmf1 = make_binomial_pmf(n_const, x1)
+    pmf2 = make_binomial_pmf(n_const, x2)
     metapmf = Pmf({pmf1: 0.3, pmf2: 0.7})
-    mix = MakeMixture(metapmf)
+    mix = make_mixture(metapmf)
     thinkplot.plot_hist_bar(mix)
-    assert mix.Mean() == pytest.approx(3.7, abs=0.2)
+    assert mix.mean() == pytest.approx(3.7, abs=0.2)

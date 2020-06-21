@@ -29,7 +29,7 @@ def six_sided_die_pmf():
     pmf = thinkbayes.Pmf()
     for x in [1, 2, 3, 4, 5, 6]:
         pmf[x] = 1
-    pmf.Normalize()
+    pmf.normalize()
     return pmf
 
 
@@ -88,5 +88,5 @@ def d6_fixture():
     d6 = Pmf()
     for x in range(1, 7):
         d6[x] = 1
-    d6.Normalize()
+    d6.normalize()
     return d6

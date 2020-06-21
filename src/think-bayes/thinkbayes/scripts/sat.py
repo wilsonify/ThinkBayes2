@@ -83,9 +83,9 @@ def divide_values(pmf, denom):
     """
     new = thinkbayes.Pmf()
     denom = float(denom)
-    for val, prob in pmf.Items():
+    for val, prob in pmf.items():
         x = val / denom
-        new.Set(x, prob)
+        new.set(x, prob)
     return new
 
 
@@ -103,7 +103,7 @@ class Exam(object):
         score_pmf = thinkbayes.Pmf(dict(scores))
 
         self.raw = self.reverse_scale(score_pmf)
-        self.max_score = max(self.raw.Values())
+        self.max_score = max(self.raw.values())
         self.prior = divide_values(self.raw, denom=self.max_score)
 
         center = -0.05
@@ -126,9 +126,9 @@ class Exam(object):
 
         top = TopLevel("AB")
         top.update((a_sat, b_sat))
-        top.Print()
+        top.print()
 
-        ratio = top.Prob("A") / top.Prob("B")
+        ratio = top.prob("A") / top.prob("B")
 
         print("Likelihood ratio", ratio)
 
@@ -144,11 +144,11 @@ class Exam(object):
         efficacies: Pmf of efficacy
         """
         pmfs = thinkbayes.Pmf()
-        for efficacy, prob in efficacies.Items():
+        for efficacy, prob in efficacies.items():
             scores = self.pmf_correct(efficacy)
-            pmfs.Set(scores, prob)
+            pmfs.set(scores, prob)
 
-        mix = thinkbayes.MakeMixture(pmfs)
+        mix = thinkbayes.make_mixture(pmfs)
         return mix
 
     def calibrate_difficulty(self):
@@ -159,7 +159,7 @@ class Exam(object):
         cdf = thinkbayes.Cdf(self.raw, label="data")
         thinkplot.plot_cdf_line(cdf)
 
-        efficacies = thinkbayes.MakeNormalPmf(0, 1.5, 3)
+        efficacies = thinkbayes.make_normal_pmf(0, 1.5, 3)
         pmf = self.make_raw_score_dist(efficacies)
         cdf = thinkbayes.Cdf(pmf, label="model")
         thinkplot.plot_cdf_line(cdf)
@@ -181,14 +181,14 @@ class Exam(object):
 
     def lookup(self, raw):
         """Looks up a raw score and returns a scaled score."""
-        return self.scale.Lookup(raw)
+        return self.scale.lookup(raw)
 
     def reverse(self, score):
         """Looks up a scaled score and returns a raw score.
 
         Since we ignore the penalty, negative scores round up to zero.
         """
-        raw = self.scale.Reverse(score)
+        raw = self.scale.reverse(score)
         return raw if raw > 0 else 0
 
     def reverse_scale(self, pmf):
@@ -201,9 +201,9 @@ class Exam(object):
             new Pmf
         """
         new = thinkbayes.Pmf()
-        for val, prob in pmf.Items():
+        for val, prob in pmf.items():
             raw = self.reverse(val)
-            new.Incr(raw, prob)
+            new.incr(raw, prob)
         return new
 
 
@@ -220,14 +220,14 @@ class Sat(thinkbayes.Suite):
         # update based on an exam score
         self.update(score)
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of a test score, given efficacy."""
         p_correct = hypo
         score = data
 
         k = self.exam.reverse(score)
         n = self.exam.max_score
-        like = thinkbayes.EvalBinomialPmf(k, n, p_correct)
+        like = thinkbayes.eval_binomial_pmf(k, n, p_correct)
         return like
 
     def plot_posteriors(self, other):
@@ -259,20 +259,20 @@ class Sat2(thinkbayes.Suite):
         self.score = score
 
         # start with the Normal prior
-        efficacies = thinkbayes.MakeNormalPmf(0, 1.5, 3)
+        efficacies = thinkbayes.make_normal_pmf(0, 1.5, 3)
         thinkbayes.Suite.__init__(self, efficacies)
 
         # update based on an exam score
         self.update(score)
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of a test score, given efficacy."""
         efficacy = hypo
         score = data
         raw = self.exam.reverse(score)
 
         pmf = self.exam.pmf_correct(efficacy)
-        like = pmf.Prob(raw)
+        like = pmf.prob(raw)
         return like
 
     def make_predictive_dist(self):
@@ -310,12 +310,12 @@ def plot_joint_dist(pmf1, pmf2, thresh=0.8):
 
     def clean(probability_mass_function):
         """Removes values below thresh."""
-        vals = [val for val in probability_mass_function.Values() if val < thresh]
-        [probability_mass_function.Remove(val) for val in vals]
+        vals = [val for val in probability_mass_function.values() if val < thresh]
+        [probability_mass_function.remove(val) for val in vals]
 
     clean(pmf1)
     clean(pmf2)
-    pmf = thinkbayes.MakeJoint(pmf1, pmf2)
+    pmf = thinkbayes.make_joint(pmf1, pmf2)
 
     thinkplot.underride_figure(figsize=(6, 6))
     thinkplot.contour_plot(pmf, contour_bool=False, pcolor_bool=True)
@@ -344,9 +344,9 @@ def compare_posterior_predictive(a_sat, b_sat):
     # thinkplot.Pmfs([a_pred, b_pred])
     # thinkplot.Show()
 
-    a_like = thinkbayes.PmfProbGreater(a_pred, b_pred)
-    b_like = thinkbayes.PmfProbLess(a_pred, b_pred)
-    c_like = thinkbayes.PmfProbEqual(a_pred, b_pred)
+    a_like = thinkbayes.pmf_prob_greater(a_pred, b_pred)
+    b_like = thinkbayes.pmf_prob_less(a_pred, b_pred)
+    c_like = thinkbayes.pmf_prob_equal(a_pred, b_pred)
 
     print("Posterior predictive")
     print("A", a_like)
@@ -380,17 +380,17 @@ class TopLevel(thinkbayes.Suite):
     def update(self, data):
         a_sat, b_sat = data
 
-        a_like = thinkbayes.PmfProbGreater(a_sat, b_sat)
-        b_like = thinkbayes.PmfProbLess(a_sat, b_sat)
-        c_like = thinkbayes.PmfProbEqual(a_sat, b_sat)
+        a_like = thinkbayes.pmf_prob_greater(a_sat, b_sat)
+        b_like = thinkbayes.pmf_prob_less(a_sat, b_sat)
+        c_like = thinkbayes.pmf_prob_equal(a_sat, b_sat)
 
         a_like += c_like / 2
         b_like += c_like / 2
 
-        self.Mult("A", a_like)
-        self.Mult("B", b_like)
+        self.mult("A", a_like)
+        self.mult("B", b_like)
 
-        self.Normalize()
+        self.normalize()
 
 
 def prob_correct(efficacy, difficulty, a=1):
@@ -412,8 +412,8 @@ def binary_pmf(p):
     Returns: Pmf object
     """
     pmf = thinkbayes.Pmf()
-    pmf.Set(1, p)
-    pmf.Set(0, 1 - p)
+    pmf.set(1, p)
+    pmf.set(0, 1 - p)
     return pmf
 
 

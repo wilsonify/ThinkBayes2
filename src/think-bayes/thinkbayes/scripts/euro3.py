@@ -3,10 +3,8 @@ by Allen B. Downey, available from greenteapress.com
 
 Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
-"""
-import logging
 
-"""This file contains a partial solution to a problem from
+This file contains a partial solution to a problem from
 MacKay, "Information Theory, Inference, and Learning Algorithms."
 
     Exercise 3.15 (page 50): A statistical statement appeared in
@@ -22,6 +20,7 @@ MacKay asks, "But do these data give evidence that the coin is biased
 rather than fair?"
 
 """
+import logging
 
 import thinkbayes
 
@@ -29,7 +28,7 @@ import thinkbayes
 class Euro(thinkbayes.Suite):
     """Represents hypotheses about the probability of heads."""
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: integer value of x, the probability of heads (0-100)
@@ -45,10 +44,10 @@ def triangle_prior():
     """Makes a Suite with a triangular prior."""
     suite = Euro()
     for x in range(0, 51):
-        suite.Set(x, x)
+        suite.set(x, x)
     for x in range(51, 101):
-        suite.Set(x, 100 - x)
-    suite.Normalize()
+        suite.set(x, 100 - x)
+    suite.normalize()
     return suite
 
 
@@ -61,7 +60,7 @@ def suite_likelihood(suite, data):
     returns: float likelihood
     """
     total = 0
-    for hypo, prob in suite.Items():
+    for hypo, prob in suite.items():
         like = suite.likelihood(data, hypo)
         total += prob * like
     return total
@@ -73,30 +72,30 @@ def main():
     data = 8, 12
     logging.debug("%r", f"data={data}")
     suite = Euro()
-    like_f = suite.Likelihood(data, 50)
+    like_f = suite.likelihood(data, 50)
     print("p(D|F)", like_f)
 
     actual_percent = 100.0 * 140 / 250
-    likelihood = suite.Likelihood(data, actual_percent)
+    likelihood = suite.likelihood(data, actual_percent)
     print("p(D|B_cheat)", likelihood)
     print("p(D|B_cheat) / p(D|F)", likelihood / like_f)
 
-    like40 = suite.Likelihood(data, 40)
-    like60 = suite.Likelihood(data, 60)
+    like40 = suite.likelihood(data, 40)
+    like60 = suite.likelihood(data, 60)
     likelihood = 0.5 * like40 + 0.5 * like60
     print("p(D|B_two)", likelihood)
     print("p(D|B_two) / p(D|F)", likelihood / like_f)
 
     b_uniform = Euro(range(0, 101))
-    b_uniform.Remove(50)
-    b_uniform.Normalize()
+    b_uniform.remove(50)
+    b_uniform.normalize()
     likelihood = suite_likelihood(b_uniform, data)
     print("p(D|B_uniform)", likelihood)
     print("p(D|B_uniform) / p(D|F)", likelihood / like_f)
 
     b_tri = triangle_prior()
-    b_tri.Remove(50)
-    b_tri.Normalize()
+    b_tri.remove(50)
+    b_tri.normalize()
     likelihood = b_tri.update(data)
     print("p(D|B_tri)", likelihood)
     print("p(D|B_tri) / p(D|F)", likelihood / like_f)

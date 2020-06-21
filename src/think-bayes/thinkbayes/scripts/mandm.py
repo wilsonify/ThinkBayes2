@@ -20,7 +20,7 @@ class MAndM(Suite):
 
     hypotheses = dict(A=hypoA, B=hypoB)
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: string hypothesis (A or B)
@@ -38,7 +38,7 @@ def main():
     suite.update(("bag1", "yellow"))
     suite.update(("bag2", "green"))
 
-    suite.Print()
+    suite.print()
 
 
 if __name__ == "__main__":

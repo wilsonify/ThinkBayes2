@@ -14,7 +14,7 @@ from thinkbayes import thinkplot
 class Soccer(thinkbayes.Suite):
     """Represents hypotheses about."""
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: goal rate in goals per game
@@ -22,7 +22,7 @@ class Soccer(thinkbayes.Suite):
         """
         x = data
         lam = hypo / 90
-        like = thinkbayes.EvalExponentialPdf(x, lam)
+        like = thinkbayes.eval_exponential_pdf(x, lam)
         return like
 
     def pred_remaining(self, rem_time, score):
@@ -32,13 +32,13 @@ class Soccer(thinkbayes.Suite):
         score: number of goals already scored
         """
         metapmf = thinkbayes.Pmf()
-        for lam, prob in self.Items():
+        for lam, prob in self.items():
             lt = lam * rem_time / 90
-            pred = thinkbayes.MakePoissonPmf(lt, 15)
+            pred = thinkbayes.make_poisson_pmf(lt, 15)
             metapmf[pred] = prob
             # thinkplot.Pdf(pred, color='gray', alpha=0.1, linewidth=0.5)
 
-        mix = thinkbayes.MakeMixture(metapmf)
+        mix = thinkbayes.make_mixture(metapmf)
         mix += score
         thinkplot.plot_hist_bar(mix)
         thinkplot.show_plot()
@@ -55,15 +55,15 @@ def main():
     # start with a prior based on the mean interarrival time
     suite.update(mean_interarrival)
     thinkplot.plot_pdf_line(suite, label="prior")
-    print("prior mean", suite.Mean())
+    print("prior mean", suite.mean())
 
     suite.update(11)
     thinkplot.plot_pdf_line(suite, label="posterior 1")
-    print("after one goal", suite.Mean())
+    print("after one goal", suite.mean())
 
     suite.update(12)
     thinkplot.plot_pdf_line(suite, label="posterior 2")
-    print("after two goals", suite.Mean())
+    print("after two goals", suite.mean())
 
     thinkplot.show_plot()
 

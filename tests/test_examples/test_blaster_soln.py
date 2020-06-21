@@ -28,9 +28,9 @@ def test_alien_blaster_problem():
     # Here's the prior
 
     prior = Beta(5, 10)
-    thinkplot.plot_pdf_line(prior.MakePmf())
+    thinkplot.plot_pdf_line(prior.make_pmf())
     thinkplot.decorate(xlabel="Probability of hit", ylabel="PMF")
-    prior.Mean()
+    prior.mean()
 
     # Solution
 
@@ -39,7 +39,7 @@ def test_alien_blaster_problem():
     from scipy.stats import binom
 
     class AlienBlaster(Suite):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """Computes the likeliood of data under hypo.
 
             data: number of shots they took
@@ -61,7 +61,7 @@ def test_alien_blaster_problem():
     # If we start with a uniform prior,
     # we can see what the likelihood function looks like:
 
-    pmf = Beta(1, 1).MakePmf()
+    pmf = Beta(1, 1).make_pmf()
     blaster = AlienBlaster(pmf)
     blaster.update(2)
     thinkplot.plot_pdf_line(blaster)
@@ -73,7 +73,7 @@ def test_alien_blaster_problem():
     # see what happens when we multiply the convex prior and
     # the concave posterior.
 
-    pmf = Beta(5, 10).MakePmf()
+    pmf = Beta(5, 10).make_pmf()
     blaster = AlienBlaster(pmf)
     thinkplot.plot_pdf_line(blaster, color="gray")
     blaster.update(2)
@@ -84,14 +84,14 @@ def test_alien_blaster_problem():
 
     # The posterior mean is lower
 
-    logging.info("%r", f"prior.Mean() = {prior.Mean()}")
-    logging.info("%r", f"blaster.Mean() = {blaster.Mean()}")
+    logging.info("%r", f"prior.Mean() = {prior.mean()}")
+    logging.info("%r", f"blaster.Mean() = {blaster.mean()}")
 
     # Solution
 
     # So is the MAP
 
-    logging.info("%r", f"prior.MAP() = {prior.MAP()}")
+    logging.info("%r", f"prior.MAP() = {prior.map()}")
     logging.info("%r", f"blaster.MAP() = {blaster.MAP()}")
 
     # So if we learn that the new design is "consistent",
@@ -168,17 +168,17 @@ def test_alien_blaster_problem():
 
     # One more way to do the same thing is to make a meta-Pmf, which contains the two binomial `Pmf` objects:
 
-    from thinkbayes import MakeBinomialPmf
+    from thinkbayes import make_binomial_pmf
 
-    pmf1 = MakeBinomialPmf(n, x1)
-    pmf2 = MakeBinomialPmf(n, x2)
+    pmf1 = make_binomial_pmf(n, x1)
+    pmf2 = make_binomial_pmf(n, x2)
 
     metapmf = Pmf({pmf1: 0.3, pmf2: 0.7})
-    metapmf.Print()
+    metapmf.print()
 
     # Here's how we can draw samples from the meta-Pmf:
 
-    ks = [metapmf.Random().Random() for _ in range(1000)]
+    ks = [metapmf.random().random() for _ in range(1000)]
 
     # And here are the results, one more time:
 
@@ -213,11 +213,11 @@ def test_alien_blaster_problem():
     #
     # In the example, each Pmf is associated with a value of `x` (probability of hitting a target).  The inner loop enumerates the values of `k` (number of targets hit after 10 shots).
 
-    from thinkbayes import MakeMixture
+    from thinkbayes import make_mixture
 
-    mix = MakeMixture(metapmf)
+    mix = make_mixture(metapmf)
     thinkplot.plot_hist_bar(mix)
-    mix.Mean()
+    mix.mean()
 
     assert mix[3] == pytest.approx(0.23, abs=0.1)
 

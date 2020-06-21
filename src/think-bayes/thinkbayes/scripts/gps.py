@@ -15,7 +15,7 @@ import thinkbayes
 class Gps(thinkbayes.Suite, thinkbayes.Joint):
     """Represents hypotheses about your location in the field."""
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: 
@@ -44,7 +44,7 @@ def main():
         (45.58108994142448, 3.5718287379754585),
     ]
 
-    joint.UpdateSet(pairs)
+    joint.update_set(pairs)
 
     # TODO: plot the marginals and print the posterior means
 

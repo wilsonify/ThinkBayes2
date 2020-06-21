@@ -22,13 +22,13 @@ def test_wc3():
     #
     # Here's what the prior looks like.
 
-    from thinkbayes import MakeGammaPmf
+    from thinkbayes import make_gamma_pmf
 
     xs = np.linspace(0, 8, 101)
-    pmf = MakeGammaPmf(xs, 1.3)
+    pmf = make_gamma_pmf(xs, 1.3)
     thinkplot.plot_pdf_line(pmf)
     thinkplot.decorate(title="Gamma PDF", xlabel="Goals per game", ylabel="PDF")
-    pmf.Mean()
+    pmf.mean()
 
     # **Exercise:**  Write a class called `Soccer` that extends `Suite` and defines `Likelihood`, which should compute the probability of the data (the time between goals in minutes) for a hypothetical goal-scoring rate, `lam`, in goals per game.
     #
@@ -39,7 +39,7 @@ def test_wc3():
     class Soccer(Suite):
         """Represents hypotheses about goal-scoring rates."""
 
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: scoring rate in goals per game
@@ -54,7 +54,7 @@ def test_wc3():
     soccer = Soccer(pmf)
     thinkplot.plot_pdf_line(soccer)
     thinkplot.decorate(title="Gamma prior", xlabel="Goals per game", ylabel="PDF")
-    soccer.Mean()
+    soccer.mean()
 
     # Here's the update after first goal at 11 minutes.
 
@@ -64,7 +64,7 @@ def test_wc3():
     thinkplot.decorate(
         title="Posterior after 1 goal", xlabel="Goals per game", ylabel="PDF"
     )
-    soccer.Mean()
+    soccer.mean()
 
     # Here's the update after the second goal at 23 minutes (the time between first and second goals is 12 minutes).
     #
@@ -75,7 +75,7 @@ def test_wc3():
     thinkplot.decorate(
         title="Posterior after 2 goals", xlabel="Goals per game", ylabel="PDF"
     )
-    soccer.Mean()
+    soccer.mean()
 
     # This distribution represents our belief about `lam` after two goals.
     #
@@ -97,7 +97,7 @@ def test_wc3():
     #
     # We can sample a value from the posterior like this:
 
-    lam = soccer.Random()
+    lam = soccer.random()
     logging.info("%r", f"lam = {lam}")
 
 
@@ -116,7 +116,7 @@ def test_wc3():
     thinkplot.decorate(
         title="Distribution of goals, known lambda", xlabel="Goals scored", ylabel="PMF"
     )
-    pmf.Mean()
+    pmf.mean()
 
     # But that's based on a single value of `lam`, so it doesn't take into account both sources of uncertainty.  Instead, we should sample values from the posterior distribution and generate one prediction for each.
     #
@@ -140,14 +140,14 @@ def test_wc3():
     #
     # `MakePoissonPmf` makes a Pmf that represents a Poisson distribution.
 
-    from thinkbayes import MakePoissonPmf
+    from thinkbayes import make_poisson_pmf
 
     # If we assume that `lam` is the mean of the posterior, we can generate a predictive distribution for the number of goals in the remainder of the game.
 
-    lam = soccer.Mean()
+    lam = soccer.mean()
     rem_time = 90 - 23
     lt = lam * rem_time / 90
-    pred = MakePoissonPmf(lt, 10)
+    pred = make_poisson_pmf(lt, 10)
     thinkplot.plot_hist_bar(pred)
     thinkplot.decorate(
         title="Distribution of goals, known lambda", xlabel="Goals scored", ylabel="PMF"
@@ -155,11 +155,11 @@ def test_wc3():
 
     # The predictive mean is about 2 goals.
 
-    pred.Mean()
+    pred.mean()
 
     # And the chance of scoring 5 more goals is still small.
 
-    pred.ProbGreater(4)
+    pred.prob_greater(4)
 
     # But that answer is only approximate because it does not take into account our uncertainty about `lam`.
     #
@@ -167,9 +167,9 @@ def test_wc3():
     #
     # The following figure shows the different predictive distributions for the different values of `lam`.
 
-    for lam, prob in soccer.Items():
+    for lam, prob in soccer.items():
         lt = lam * rem_time / 90
-        pred = MakePoissonPmf(lt, 14)
+        pred = make_poisson_pmf(lt, 14)
         thinkplot.plot_pdf_line(pred, color="gray", alpha=0.3, linewidth=0.5)
 
     thinkplot.decorate(
@@ -180,9 +180,9 @@ def test_wc3():
 
     metapmf = Pmf()
 
-    for lam, prob in soccer.Items():
+    for lam, prob in soccer.items():
         lt = lam * rem_time / 90
-        pred = MakePoissonPmf(lt, 15)
+        pred = make_poisson_pmf(lt, 15)
         metapmf[pred] = prob
 
     # `MakeMixture` takes a Meta-Pmf (a Pmf that contains Pmfs) and returns a single Pmf that represents the weighted mixture of distributions:
@@ -197,15 +197,15 @@ def test_wc3():
         Returns: Pmf object.
         """
         mix = Pmf(label=label)
-        for pmf, p1 in metapmf.Items():
-            for x, p2 in pmf.Items():
+        for pmf, p1 in metapmf.items():
+            for x, p2 in pmf.items():
                 mix[x] += p1 * p2
         return mix
 
     # Here's the result for the World Cup problem.
 
     mix = MakeMixture(metapmf)
-    mix.Print()
+    mix.print()
 
     # And here's what the mixture looks like.
 

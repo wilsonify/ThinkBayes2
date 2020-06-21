@@ -17,7 +17,7 @@ def test_euro_problem():
     # Here's a class that represents hypotheses about the probability a coin lands heads.
 
     class Euro(Suite):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """Computes the likelihood of `data` given `hypo`.
 
             data: string 'H' or 'T'
@@ -45,23 +45,23 @@ def test_euro_problem():
 
     # We can summarize the posterior several ways, including the mean:
 
-    suite.Mean()
+    suite.mean()
 
     # Median:
 
-    suite.Percentile(50)
+    suite.percentile(50)
 
     # The peak of the posterior, known as the Maximum Aposteori Probability (MAP)
 
-    suite.MAP()
+    suite.map()
 
     # And a 90% credible interval
 
-    suite.CredibleInterval(90)
+    suite.credible_interval(90)
 
     # We can look up a particular value in the posterior PMF, but the result doesn't mean much, because we could have divided the range (0-100) into as many pieces as we like, and the result would be different.
 
-    suite.Prob(50)
+    suite.prob(50)
 
     # ## Different priors
     #
@@ -83,7 +83,7 @@ def test_euro_problem():
             suite[x] = x
         for x in range(51, 101):
             suite[x] = 100 - x
-        suite.Normalize()
+        suite.normalize()
         return suite
 
     # Here's what they look like:
@@ -125,7 +125,7 @@ def test_euro_problem():
     class Euro2(Suite):
         """Represents hypotheses about the probability of heads."""
 
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: integer value of x, the probability of heads (0-100)
@@ -187,7 +187,7 @@ def test_euro_problem():
 
         def Random(self):
             """Generates a random variate from this distribution."""
-            return np.random.betavariate(self.alpha, self.beta)
+            return np.random.beta(self.alpha, self.beta)
 
         def Sample(self, n):
             """Generates a random sample from this distribution.
@@ -223,7 +223,7 @@ def test_euro_problem():
 
             if self.alpha < 1 or self.beta < 1:
                 cdf = self.MakeCdf()
-                pmf = cdf.MakePmf()
+                pmf = cdf.make_pmf()
                 return pmf
 
             xs = [i / (steps - 1) for i in range(steps)]

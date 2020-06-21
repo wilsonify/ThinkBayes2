@@ -157,7 +157,7 @@ def test_elephant():
     # Here's a Suite that represents the set of possible zoos.  The likelihood of any zoo is just the total probability of the data.
 
     class Zoo(Suite):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """
             data: sequence of counts
             hypo: Dirichlet object
@@ -174,7 +174,7 @@ def test_elephant():
     )
 
     def print_zoos(suite):
-        for d, p in suite.Items():
+        for d, p in suite.items():
             print(p, d.label)
 
     print_zoos(suite)
@@ -195,19 +195,19 @@ def test_elephant():
     # Here's how we can get the posterior distribution of `n`, the number of species.
 
     pmf_n = Pmf()
-    for d, p in suite.Items():
+    for d, p in suite.items():
         pmf_n[d.n] += p
 
     # And here's what it looks like.
 
     thinkplot.plot_hist_bar(pmf_n)
-    print(pmf_n.Mean())
+    print(pmf_n.mean())
     thinkplot.decorate(xlabel="n", ylabel="PMF", title="Posterior distribution of n")
 
     # Now, to answer the question, we have to compute the posterior distribution of the prevalence of elephants.  Here's a function that computes it.
 
     def enumerate_posterior(suite):
-        for d, p in suite.Items():
+        for d, p in suite.items():
             mean = d.mean()
             index = d.label.find("E")
             p_elephant = 0 if index == -1 else mean[index]

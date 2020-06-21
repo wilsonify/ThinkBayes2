@@ -16,7 +16,7 @@ class Train(Dice):
     for the Dice problem.
     """
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         sample_size = hypo
         k, m = data
         if sample_size < m:
@@ -31,7 +31,7 @@ def main():
 
     data = 3, 70
     suite.update(data)
-    print("posterior mean", suite.Mean())
+    print("posterior mean", suite.mean())
 
     thinkplot.plot_pmf_line(suite, label="after 70")
     thinkplot.show_plot(xlabel="Number of trains", ylabel="PMF")

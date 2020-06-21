@@ -16,7 +16,7 @@ from thinkbayes import thinkplot
 class Gps(thinkbayes.Suite, thinkbayes.Joint):
     """Represents hypotheses about your location in the field."""
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: 
@@ -25,8 +25,8 @@ class Gps(thinkbayes.Suite, thinkbayes.Joint):
         std = 30
         meanx, meany = hypo
         x, y = data
-        like = thinkbayes.EvalNormalPdf(x, meanx, std)
-        like *= thinkbayes.EvalNormalPdf(y, meany, std)
+        like = thinkbayes.eval_normal_pdf(x, meanx, std)
+        like *= thinkbayes.eval_normal_pdf(y, meany, std)
         return like
 
 
@@ -48,17 +48,17 @@ def main():
         (45.58108994142448, 3.5718287379754585),
     ]
 
-    joint.UpdateSet(pairs)
+    joint.update_set(pairs)
 
     thinkplot.pre_plot(2)
-    pdfx = joint.Marginal(0)
-    pdfy = joint.Marginal(1)
+    pdfx = joint.marginal(0)
+    pdfy = joint.marginal(1)
     thinkplot.plot_pdf_line(pdfx, label="posterior x")
     thinkplot.plot_pdf_line(pdfy, label="posterior y")
     thinkplot.show_plot()
 
-    print(pdfx.Mean(), pdfx.Std())
-    print(pdfy.Mean(), pdfy.Std())
+    print(pdfx.mean(), pdfx.std())
+    print(pdfy.mean(), pdfy.std())
 
 
 if __name__ == "__main__":

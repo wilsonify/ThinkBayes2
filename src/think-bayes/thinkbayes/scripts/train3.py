@@ -26,8 +26,8 @@ class Train2(Dice):
         """
         thinkbayes.Pmf.__init__(self)
         for hypo in hypos:
-            self.Set(hypo, hypo ** (-alpha))
-        self.Normalize()
+            self.set(hypo, hypo ** (-alpha))
+        self.normalize()
 
 
 def make_posterior(high, dataset, constructor):
@@ -78,15 +78,15 @@ def main():
 
     for high in [500, 1000, 2000]:
         suite = make_posterior(high, dataset, Train2)
-        print(high, suite.Mean())
+        print(high, suite.mean())
 
     thinkplot.save_plot(root="train3", xlabel="Number of trains", ylabel="Probability")
 
-    interval = suite.Percentile(5), suite.Percentile(95)
+    interval = suite.percentile(5), suite.percentile(95)
     print(interval)
 
     cdf = thinkbayes.Cdf(suite)
-    interval = cdf.Percentile(5), cdf.Percentile(95)
+    interval = cdf.percentile(5), cdf.percentile(95)
     print(interval)
 
 

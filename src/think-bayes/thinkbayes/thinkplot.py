@@ -244,7 +244,7 @@ def plot_line(obj, ys=None, style="", **options):
     xs = obj
     if ys is None:
         if hasattr(obj, "Render"):
-            xs, ys = obj.Render()
+            xs, ys = obj.render()
         if isinstance(obj, pandas.Series):
             ys = obj.values
             xs = obj.index
@@ -352,7 +352,7 @@ def plot_pdf_line(pdf, **options):
     n = options.pop("n", 101)
     logging.debug("%r", f"n={n}")
 
-    xs, ps = pdf.Render()
+    xs, ps = pdf.render()
     options = _underride(options, label=pdf.label)
     plot_line(xs, ps, **options)
 
@@ -384,7 +384,7 @@ def plot_hist_bar(histogram, **options):
       options: keyword args passed to plt.bar
     """
     # find the minimum distance between adjacent values
-    xs, ys = histogram.Render()
+    xs, ys = histogram.render()
 
     # see if the values support arithmetic
     try:
@@ -437,7 +437,7 @@ def plot_pmf_line(probability_mass_function, **options):
       probability_mass_function: Hist or Pmf object
       options: keyword args passed to plt.plot
     """
-    xs, ys = probability_mass_function.Render()
+    xs, ys = probability_mass_function.render()
     low, high = min(xs), max(xs)
     logging.debug("%r", f"low={low}")
     logging.debug("%r", f"high={high}")
@@ -520,7 +520,7 @@ def plot_cdf_line(cumulative_density_function, complement=False, transform=None,
       dictionary with the scale options that should be passed to
       Config, Show or Save.
     """
-    xs, ps = cumulative_density_function.Render()
+    xs, ps = cumulative_density_function.render()
     xs = np.asarray(xs)
     ps = np.asarray(ps)
 
@@ -595,7 +595,7 @@ def contour_plot(obj, pcolor_bool=False, contour_bool=True, imshow=False, **opti
     options: keyword args passed to plt.pcolor and/or plt.contour
     """
     try:
-        d = obj.GetDict()
+        d = obj.d
     except AttributeError:
         d = obj
 
@@ -606,7 +606,10 @@ def contour_plot(obj, pcolor_bool=False, contour_bool=True, imshow=False, **opti
     ys = sorted(set(ys))
 
     x_meshgrid, y_meshgrid = np.meshgrid(xs, ys)
-    func = lambda x, y: d.get((x, y), 0)
+
+    def func(x, y):
+        return d.get((x, y), 0)
+
     func = np.vectorize(func)
     z_meshgrid = func(x_meshgrid, y_meshgrid)
 
@@ -848,7 +851,7 @@ def render_pdf(mu, sigma, n=101):
     n: number of places to evaluate the PDF
     """
     xs = np.linspace(mu - 4 * sigma, mu + 4 * sigma, n)
-    ys = [thinkbayes.EvalNormalPdf(x, mu, sigma) for x in xs]
+    ys = [thinkbayes.eval_normal_pdf(x, mu, sigma) for x in xs]
     return xs, ys
 
 

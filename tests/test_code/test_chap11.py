@@ -17,7 +17,7 @@ class Euro(Suite):
     Represents hypotheses about the probability of heads.
     """
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: integer value of x, the probability of heads (0-100)
@@ -44,8 +44,8 @@ def SuiteLikelihood(suite, data):
     returns: float likelihood
     """
     total = 0
-    for hypo, prob in suite.Items():
-        like = suite.Likelihood(data, hypo)
+    for hypo, prob in suite.items():
+        like = suite.likelihood(data, hypo)
         total += prob * like
     return total
 
@@ -59,10 +59,10 @@ def TrianglePrior():
     """
     suite = Euro()
     for x in range(0, 51):
-        suite.Set(x, x)
+        suite.set(x, x)
     for x in range(51, 101):
-        suite.Set(x, 100 - x)
-    suite.Normalize()
+        suite.set(x, 100 - x)
+    suite.normalize()
     return suite
 
 
@@ -75,14 +75,14 @@ def test_euro():
     data = 140, 110
 
     suite = Euro()
-    like_f = suite.Likelihood(data, 50)
+    like_f = suite.likelihood(data, 50)
     print("p(D|F)", like_f)
     # -
 
     # If we cheat an pretend that the alternative hypothesis is exactly the observed proportion, we can compute the likelihood of the data and the likelihood ratio, relative to the fair coin.
 
     actual_percent = 100.0 * 140 / 250
-    likelihood = suite.Likelihood(data, actual_percent)
+    likelihood = suite.likelihood(data, actual_percent)
     print("p(D|B_cheat)", likelihood)
     print("p(D|B_cheat) / p(D|F)", likelihood / like_f)
 
@@ -90,8 +90,8 @@ def test_euro():
     #
     # Suppose we think "biased" means either 0.4 or 0.6, but we're not sure which.  The total likelihood of the data is the weighted average of the two likelihoods.
 
-    like40 = suite.Likelihood(data, 40)
-    like60 = suite.Likelihood(data, 60)
+    like40 = suite.likelihood(data, 40)
+    like60 = suite.likelihood(data, 60)
     likelihood = 0.5 * like40 + 0.5 * like60
     print("p(D|B_two)", likelihood)
     print("p(D|B_two) / p(D|F)", likelihood / like_f)
@@ -99,8 +99,8 @@ def test_euro():
     # Here's what it looks like if "biased" means "equally likely to be any value between 0 and 1".
 
     b_uniform = Euro(range(0, 101))
-    b_uniform.Remove(50)
-    b_uniform.Normalize()
+    b_uniform.remove(50)
+    b_uniform.normalize()
     likelihood = SuiteLikelihood(b_uniform, data)
     print("p(D|B_uniform)", likelihood)
     print("p(D|B_uniform) / p(D|F)", likelihood / like_f)
@@ -108,8 +108,8 @@ def test_euro():
     # Here's what it looks like:
 
     b_tri = TrianglePrior()
-    b_tri.Remove(50)
-    b_tri.Normalize()
+    b_tri.remove(50)
+    b_tri.normalize()
     likelihood = b_tri.update(data)
     print("p(D|B_tri)", likelihood)
     print("p(D|B_tri) / p(D|F)", likelihood / like_f)

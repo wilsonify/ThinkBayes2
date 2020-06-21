@@ -9,7 +9,7 @@ from itertools import product
 
 import numpy as np
 from scipy.stats import norm
-from thinkbayes import EvalNormalPdf
+from thinkbayes import eval_normal_pdf
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
 
@@ -19,14 +19,14 @@ class Normal(Suite, Joint):
     The `Normal` class provides a `Likelihood` function that computes the likelihood of a sample from a normal distribution.
     """
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """
 
         data: sequence of test scores
         hypo: mu, sigma
         """
         mu, sigma = hypo
-        likes = EvalNormalPdf(data, mu, sigma)
+        likes = eval_normal_pdf(data, mu, sigma)
         return np.prod(likes)
 
 
@@ -46,8 +46,8 @@ def MakeLocationPmf(alpha, beta, locations):
     pmf = Pmf()
     for x in locations:
         prob = 1.0 / StrafingSpeed(alpha, beta, x)
-        pmf.Set(x, prob)
-    pmf.Normalize()
+        pmf.set(x, prob)
+    pmf.normalize()
     return pmf
 
 
@@ -98,7 +98,7 @@ class Paintball(Suite, Joint):
         pairs = [(alpha, beta) for alpha in alphas for beta in betas]
         Suite.__init__(self, pairs)
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: pair of alpha, beta
@@ -109,18 +109,18 @@ class Paintball(Suite, Joint):
         alpha, beta = hypo
         x = data
         pmf = MakeLocationPmf(alpha, beta, self.locations)
-        like = pmf.Prob(x)
+        like = pmf.prob(x)
         return like
 
 
 class Beetle(Suite, Joint):
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """
         data: sequence of measurements
         hypo: mu, sigma
         """
         mu, sigma = hypo
-        likes = EvalNormalPdf(data, mu, sigma)
+        likes = eval_normal_pdf(data, mu, sigma)
         return np.prod(likes)
 
     def PredictiveProb(self, data):
@@ -129,7 +129,7 @@ class Beetle(Suite, Joint):
         data: sequence of measurements
         """
         total = 0
-        for (mu, sigma), prob in self.Items():
+        for (mu, sigma), prob in self.items():
             likes = norm.pdf(data, mu, sigma)
             total += prob * np.prod(likes)
         return total
@@ -152,7 +152,7 @@ class Species:
     def __str__(self):
         return self.name
 
-    def Likelihood(self, data):
+    def likelihood(self, data):
         width, angle = data
         like1 = self.suite_width.PredictiveProb(width)
         like2 = self.suite_angle.PredictiveProb(angle)
@@ -206,13 +206,13 @@ def test_reading(drp_scores_df):
     )  # plot the probability of each `mu`-`sigma` pair as a contour plot.
     thinkplot.config_plot(xlabel="mu", ylabel="sigma")
 
-    pmf_mu0 = control.Marginal(
+    pmf_mu0 = control.marginal(
         0
     )  # And then we can extract the marginal distribution of `mu`
     thinkplot.plot_pdf_line(pmf_mu0)
     thinkplot.config_plot(xlabel="mu", ylabel="Pmf")
 
-    pmf_sigma0 = control.Marginal(1)  # And the marginal distribution of `sigma`
+    pmf_sigma0 = control.marginal(1)  # And the marginal distribution of `sigma`
     thinkplot.plot_pdf_line(pmf_sigma0)
     thinkplot.config_plot(xlabel="sigma", ylabel="Pmf")
 
@@ -238,7 +238,7 @@ def test_paintball():
     locations = range(0, 31)
 
     suite = Paintball(alphas, betas, locations)
-    suite.UpdateSet([15, 16, 18, 21])
+    suite.update_set([15, 16, 18, 21])
     locations = range(0, 31)
     alpha = 10
     betas = [10, 20, 40]
@@ -251,13 +251,13 @@ def test_paintball():
 
     thinkplot.config_plot(xlabel="Distance", ylabel="Prob")
 
-    marginal_alpha = suite.Marginal(
+    marginal_alpha = suite.marginal(
         0, label="alpha"
     )  # Here are the marginal posterior distributions
-    marginal_beta = suite.Marginal(1, label="beta")
+    marginal_beta = suite.marginal(1, label="beta")
 
-    print("alpha CI", marginal_alpha.CredibleInterval(50))
-    print("beta CI", marginal_beta.CredibleInterval(50))
+    print("alpha CI", marginal_alpha.credible_interval(50))
+    print("beta CI", marginal_beta.credible_interval(50))
 
     thinkplot.pre_plot(num=2)
 
@@ -270,23 +270,23 @@ def test_paintball():
     thinkplot.pre_plot(num=len(betas))
 
     for beta in betas:
-        cond = suite.Conditional(0, 1, beta)
+        cond = suite.conditional(0, 1, beta)
         cond.label = f"beta = {beta}"
         thinkplot.plot_pdf_line(cond)
 
     thinkplot.config_plot(xlabel="Distance", ylabel="Prob")
 
     thinkplot.contour_plot(
-        suite.GetDict(), contour_bool=False, pcolor_bool=True
+        suite.d, contour_bool=False, pcolor_bool=True
     )  # Another way to visualize the posterior distribution
 
     thinkplot.config_plot(xlabel="alpha", ylabel="beta", axis=[0, 30, 0, 20])
 
-    d = dict((pair, 0) for pair in suite.Values())
+    d = dict((pair, 0) for pair in suite.values())
 
     percentages = [75, 50, 25]
     for p in percentages:
-        interval = suite.MaxLikeInterval(p)
+        interval = suite.max_like_interval(p)
         for pair in interval:
             d[pair] += 1
 
@@ -336,18 +336,18 @@ def test_flea_beetles(flea_beetles_df):
         suite_angle = MakeAngleSuite(group.Angle)
         species[name] = Species(name, suite_width, suite_angle)
 
-    species["Con"].Likelihood((145, 14))
+    species["Con"].likelihood((145, 14))
 
     class Classifier(Suite):
-        def Likelihood(self, data, hypo):
-            return hypo.Likelihood(data)
+        def likelihood(self, data, hypo):
+            return hypo.likelihood(data)
 
     suite = Classifier(species.values())
-    for hypo, prob in suite.Items():
+    for hypo, prob in suite.items():
         print(hypo, prob)
 
     suite.update((145, 14))
-    for hypo, prob in suite.Items():
+    for hypo, prob in suite.items():
         print(hypo, prob)
 
 # **Exercise:** Run this analysis again for the control group.

@@ -69,16 +69,16 @@ def test_flea_beetle_problem():
     # The following class estimates the mean and standard deviation of a normal distribution, given the data:
 
     from scipy.stats import norm
-    from thinkbayes import EvalNormalPdf
+    from thinkbayes import eval_normal_pdf
 
     class Beetle(Suite, Joint):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """
             data: sequence of measurements
             hypo: mu, sigma
             """
             mu, sigma = hypo
-            likes = EvalNormalPdf(data, mu, sigma)
+            likes = eval_normal_pdf(data, mu, sigma)
             return np.prod(likes)
 
         def PredictiveProb(self, data):
@@ -87,7 +87,7 @@ def test_flea_beetle_problem():
             data: sequence of measurements
             """
             total = 0
-            for (mu, sigma), prob in self.Items():
+            for (mu, sigma), prob in self.items():
                 likes = norm.pdf(data, mu, sigma)
                 total += prob * np.prod(likes)
             return total
@@ -157,15 +157,15 @@ def test_flea_beetle_problem():
     # Now we can make a `Classifier` that uses the `Species` objects as hypotheses.
 
     class Classifier(Suite):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             return hypo.likelihood(data)
 
     suite = Classifier(species.values())
-    for hypo, prob in suite.Items():
+    for hypo, prob in suite.items():
         print(hypo, prob)
 
     suite.update(measurements)
-    for hypo, prob in suite.Items():
+    for hypo, prob in suite.items():
         print(hypo, prob)
 
     # ## Now with MCMC
@@ -257,6 +257,6 @@ def test_flea_beetle_problem():
         print(hypo, like)
         suite[hypo] *= like
 
-    suite.Normalize()
+    suite.normalize()
 
-    suite.Print()
+    suite.print()

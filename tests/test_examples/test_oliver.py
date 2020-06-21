@@ -38,7 +38,7 @@ def test_oliver():
     # I'll create a `Pmf` object with the distribution of blood types.
 
     types = Pmf({"O\t": 0.6, "AB\t": 0.01, "other\t": 0.39})
-    types.Print()
+    types.print()
 
     # Now we can compute `P(D | S) = p(AB)`
 
@@ -60,12 +60,12 @@ def test_oliver():
     # Let's do the update, assuming that the prior is 50:50.
 
     suite = Suite(["S", "S̄"])
-    suite.Print()
+    suite.print()
 
     suite["S"] *= like_S
     suite["S̄"] *= like_s
-    suite.Normalize()
+    suite.normalize()
 
     # In light of this evidence, we are slightly more inclined to believe that Oliver is not guilty (or at least, did not leave a blood trace at the scene).
 
-    suite.Print()
+    suite.print()

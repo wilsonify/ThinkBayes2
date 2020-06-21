@@ -43,14 +43,14 @@ def test_improving_reading_ability():
     from scipy.stats import norm
 
     class Normal(Suite, Joint):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """
 
             data: sequence of test scores
             hypo: mu, sigma
             """
             mu, sigma = hypo
-            likes = thinkbayes.EvalNormalPdf(data, mu, sigma)
+            likes = thinkbayes.eval_normal_pdf(data, mu, sigma)
             return np.prod(likes)
 
     # The prior distributions for `mu` and `sigma` are uniform.
@@ -73,13 +73,13 @@ def test_improving_reading_ability():
 
     # And then we can extract the marginal distribution of `mu`
 
-    pmf_mu0 = control.Marginal(0)
+    pmf_mu0 = control.marginal(0)
     thinkplot.plot_pdf_line(pmf_mu0)
     thinkplot.config_plot(xlabel="mu", ylabel="Pmf")
 
     # And the marginal distribution of `sigma`
 
-    pmf_sigma0 = control.Marginal(1)
+    pmf_sigma0 = control.marginal(1)
     thinkplot.plot_pdf_line(pmf_sigma0)
     thinkplot.config_plot(xlabel="sigma", ylabel="Pmf")
 
@@ -102,7 +102,7 @@ def test_improving_reading_ability():
 
     # The marginal distribution of mu
 
-    pmf_mu1 = treated.Marginal(0)
+    pmf_mu1 = treated.marginal(0)
     thinkplot.plot_pdf_line(pmf_mu1)
     thinkplot.config_plot(xlabel="mu", ylabel="Pmf")
 
@@ -110,7 +110,7 @@ def test_improving_reading_ability():
 
     # The marginal distribution of sigma
 
-    pmf_sigma1 = treated.Marginal(1)
+    pmf_sigma1 = treated.marginal(1)
     thinkplot.plot_pdf_line(pmf_sigma1)
     thinkplot.config_plot(xlabel="sigma", ylabel="Pmf")
 
@@ -119,14 +119,14 @@ def test_improving_reading_ability():
     # Now we can compute the distribution of the difference between groups
 
     pmf_diff = pmf_mu1 - pmf_mu0
-    pmf_diff.Mean(), pmf_diff.MAP()
+    pmf_diff.mean(), pmf_diff.map()
 
     # Solution
 
     # And CDF_diff(0), which is the probability that the difference is <= 0
 
     pmf_diff = pmf_mu1 - pmf_mu0
-    cdf_diff = pmf_diff.MakeCdf()
+    cdf_diff = pmf_diff.make_cdf()
     thinkplot.plot_cdf_line(cdf_diff)
     logging.info("%r", f"cdf_diff[0] = {cdf_diff[0]}")
 
@@ -135,14 +135,14 @@ def test_improving_reading_ability():
     # Or we could directly compute the probability that mu is
     # greater than mu2
 
-    pmf_mu1.ProbGreater(pmf_mu0)
+    pmf_mu1.prob_greater(pmf_mu0)
 
     # Solution
 
     # Finally, here's the probability that the standard deviation
     # in the treatment group is higher.
 
-    pmf_sigma1.ProbGreater(pmf_sigma0)
+    pmf_sigma1.prob_greater(pmf_sigma0)
 
     # It looks like there is a high probability that the mean of
     # the treatment group is higher, and the most likely size of
@@ -184,7 +184,7 @@ def test_improving_reading_ability():
             pairs = [(alpha, beta) for alpha in alphas for beta in betas]
             Suite.__init__(self, pairs)
 
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: pair of alpha, beta
@@ -195,7 +195,7 @@ def test_improving_reading_ability():
             alpha, beta = hypo
             x = data
             pmf = MakeLocationPmf(alpha, beta, self.locations)
-            like = pmf.Prob(x)
+            like = pmf.prob(x)
             return like
 
     def MakeLocationPmf(alpha, beta, locations):
@@ -214,8 +214,8 @@ def test_improving_reading_ability():
         pmf = Pmf()
         for x in locations:
             prob = 1.0 / StrafingSpeed(alpha, beta, x)
-            pmf.Set(x, prob)
-        pmf.Normalize()
+            pmf.set(x, prob)
+        pmf.normalize()
         return pmf
 
     def StrafingSpeed(alpha, beta, x):
@@ -238,7 +238,7 @@ def test_improving_reading_ability():
     locations = range(0, 31)
 
     suite = Paintball(alphas, betas, locations)
-    suite.UpdateSet([15, 16, 18, 21])
+    suite.update_set([15, 16, 18, 21])
 
     # To visualize the joint posterior, I take slices for a few values of `beta` and plot the conditional distributions of `alpha`.  If the shooter is close to the wall, we can be somewhat confident of his position.  The farther away he is, the less certain we are.
 
@@ -256,11 +256,11 @@ def test_improving_reading_ability():
 
     # Here are the marginal posterior distributions for `alpha` and `beta`.
 
-    marginal_alpha = suite.Marginal(0, label="alpha")
-    marginal_beta = suite.Marginal(1, label="beta")
+    marginal_alpha = suite.marginal(0, label="alpha")
+    marginal_beta = suite.marginal(1, label="beta")
 
-    print("alpha CI", marginal_alpha.CredibleInterval(50))
-    print("beta CI", marginal_beta.CredibleInterval(50))
+    print("alpha CI", marginal_alpha.credible_interval(50))
+    print("beta CI", marginal_beta.credible_interval(50))
 
     thinkplot.pre_plot(num=2)
 
@@ -275,7 +275,7 @@ def test_improving_reading_ability():
     thinkplot.pre_plot(num=len(betas))
 
     for beta in betas:
-        cond = suite.Conditional(0, 1, beta)
+        cond = suite.conditional(0, 1, beta)
         cond.label = f"beta = {beta}"
         thinkplot.plot_pdf_line(cond)
 
@@ -283,17 +283,17 @@ def test_improving_reading_ability():
 
     # Another way to visualize the posterio distribution: a pseudocolor plot of probability as a function of `alpha` and `beta`.
 
-    thinkplot.contour_plot(suite.GetDict(), contour_bool=False, pcolor_bool=True)
+    thinkplot.contour_plot(suite.d, contour_bool=False, pcolor_bool=True)
 
     thinkplot.config_plot(xlabel="alpha", ylabel="beta", axis=[0, 30, 0, 20])
 
     # Here's another visualization that shows posterior credible regions.
 
-    d = dict((pair, 0) for pair in suite.Values())
+    d = dict((pair, 0) for pair in suite.values())
 
     percentages = [75, 50, 25]
     for p in percentages:
-        interval = suite.MaxLikeInterval(p)
+        interval = suite.max_like_interval(p)
         for pair in interval:
             d[pair] += 1
 
@@ -328,7 +328,7 @@ def test_improving_reading_ability():
     class Lincoln(Suite, Joint):
         """Represents hypotheses about the number of errors."""
 
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: n, p1, p2
@@ -356,14 +356,14 @@ def test_improving_reading_ability():
 
     # Solution
 
-    n_marginal = suite.Marginal(0)
+    n_marginal = suite.marginal(0)
     thinkplot.plot_pmf_line(n_marginal, label="n")
     thinkplot.config_plot(xlabel="number of bugs", ylabel="PMF")
 
     # Solution
 
-    print("post mean n", n_marginal.Mean())
-    print("MAP n", n_marginal.MAP())
+    print("post mean n", n_marginal.mean())
+    print("MAP n", n_marginal.map())
 
     # **Exercise:** The GPS problem.  According to [Wikipedia]()
     #
@@ -402,7 +402,7 @@ def test_improving_reading_ability():
     class Gps(Suite, Joint):
         """Represents hypotheses about your location in the field."""
 
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo:
@@ -441,20 +441,20 @@ def test_improving_reading_ability():
         (45.58108994142448, 3.5718287379754585),
     ]
 
-    joint.UpdateSet(pairs)
+    joint.update_set(pairs)
 
     # Solution
 
     thinkplot.pre_plot(2)
-    pdfx = joint.Marginal(0)
-    pdfy = joint.Marginal(1)
+    pdfx = joint.marginal(0)
+    pdfy = joint.marginal(1)
     thinkplot.plot_pdf_line(pdfx, label="posterior x")
     thinkplot.plot_pdf_line(pdfy, label="posterior y")
 
     # Solution
 
-    print(pdfx.Mean(), pdfx.Std())
-    print(pdfy.Mean(), pdfy.Std())
+    print(pdfx.mean(), pdfx.std())
+    print(pdfy.mean(), pdfy.std())
 
     # **Exercise:** [The Flea Beetle problem from DASL](http://lib.stat.cmu.edu/DASL/Datafiles/FleaBeetles.html)
     #
@@ -510,16 +510,16 @@ def test_improving_reading_ability():
 
     plot_cdfs(df, "Angle")
 
-    from thinkbayes import EvalNormalPdf
+    from thinkbayes import eval_normal_pdf
 
     class Beetle(Suite, Joint):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """
             data: sequence of measurements
             hypo: mu, sigma
             """
             mu, sigma = hypo
-            likes = EvalNormalPdf(data, mu, sigma)
+            likes = eval_normal_pdf(data, mu, sigma)
             return np.prod(likes)
 
         def PredictiveProb(self, data):
@@ -528,7 +528,7 @@ def test_improving_reading_ability():
             data: sequence of measurements
             """
             total = 0
-            for (mu, sigma), prob in self.Items():
+            for (mu, sigma), prob in self.items():
                 likes = norm.pdf(data, mu, sigma)
                 total += prob * np.prod(likes)
             return total
@@ -570,7 +570,7 @@ def test_improving_reading_ability():
         def __str__(self):
             return self.name
 
-        def Likelihood(self, data):
+        def likelihood(self, data):
             width, angle = data
             like1 = self.suite_width.PredictiveProb(width)
             like2 = self.suite_angle.PredictiveProb(angle)
@@ -583,16 +583,16 @@ def test_improving_reading_ability():
         suite_angle = MakeAngleSuite(group.Angle)
         species[name] = Species(name, suite_width, suite_angle)
 
-    species["Con"].Likelihood((145, 14))
+    species["Con"].likelihood((145, 14))
 
     class Classifier(Suite):
-        def Likelihood(self, data, hypo):
-            return hypo.Likelihood(data)
+        def likelihood(self, data, hypo):
+            return hypo.likelihood(data)
 
     suite = Classifier(species.values())
-    for hypo, prob in suite.Items():
+    for hypo, prob in suite.items():
         print(hypo, prob)
 
     suite.update((145, 14))
-    for hypo, prob in suite.Items():
+    for hypo, prob in suite.items():
         print(hypo, prob)

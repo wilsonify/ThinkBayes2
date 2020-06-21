@@ -34,27 +34,27 @@ def pmf_max(pmf1, pmf2):
     returns: new Pmf
     """
     res = thinkbayes.Pmf()
-    for v1, p1 in pmf1.Items():
-        for v2, p2 in pmf2.Items():
-            res.Incr(max(v1, v2), p1 * p2)
+    for v1, p1 in pmf1.items():
+        for v2, p2 in pmf2.items():
+            res.incr(max(v1, v2), p1 * p2)
     return res
 
 
 def main():
     pmf_dice = thinkbayes.Pmf()
-    pmf_dice.Set(Die(4), 5)
-    pmf_dice.Set(Die(6), 4)
-    pmf_dice.Set(Die(8), 3)
-    pmf_dice.Set(Die(12), 2)
-    pmf_dice.Set(Die(20), 1)
-    pmf_dice.Normalize()
+    pmf_dice.set(Die(4), 5)
+    pmf_dice.set(Die(6), 4)
+    pmf_dice.set(Die(8), 3)
+    pmf_dice.set(Die(12), 2)
+    pmf_dice.set(Die(20), 1)
+    pmf_dice.normalize()
 
     mix = thinkbayes.Pmf()
-    for die, weight in pmf_dice.Items():
-        for outcome, prob in die.Items():
-            mix.Incr(outcome, weight * prob)
+    for die, weight in pmf_dice.items():
+        for outcome, prob in die.items():
+            mix.incr(outcome, weight * prob)
 
-    mix = thinkbayes.MakeMixture(pmf_dice)
+    mix = thinkbayes.make_mixture(pmf_dice)
 
     thinkplot.plot_hist_bar(mix, width=0.9)
     thinkplot.save_plot(
@@ -66,7 +66,7 @@ def main():
     d6 = Die(6, "d6")
 
     dice = [d6] * 3
-    three = thinkbayes.SampleSum(dice, 1000)
+    three = thinkbayes.sample_sum(dice, 1000)
     three.label = "sample"
     three.print_size()
 
@@ -96,9 +96,9 @@ def main():
     # thinkplot.Pmf(best_attr6)
 
     # and the easy way
-    best_attr_cdf = three_exact.Max(6)
+    best_attr_cdf = three_exact.max(6)
     best_attr_cdf.label = ""
-    best_attr_pmf = best_attr_cdf.MakePmf()
+    best_attr_pmf = best_attr_cdf.make_pmf()
     best_attr_pmf.print_size()
 
     thinkplot.plot_pmf_line(best_attr_pmf)

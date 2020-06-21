@@ -33,7 +33,7 @@ class Height(thinkbayes.Suite, thinkbayes.Joint):
 
         thinkbayes.Suite.__init__(self, pairs, label=label)
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         Args:
@@ -48,7 +48,7 @@ class Height(thinkbayes.Suite, thinkbayes.Joint):
         like = scipy.stats.norm.pdf(x, mu, sigma)
         return like
 
-    def LogLikelihood(self, data, hypo):
+    def log_likelihood(self, data, hypo):
         """Computes the log likelihood of the data under the hypothesis.
 
         Args:
@@ -74,11 +74,11 @@ class Height(thinkbayes.Suite, thinkbayes.Joint):
         xs = tuple(data)
         n = len(xs)
 
-        for hypo in self.Values():
+        for hypo in self.values():
             mu, sigma = hypo
             total = summation(xs, mu)
             loglike = -n * math.log(sigma) - total / 2 / sigma ** 2
-            self.Incr(hypo, loglike)
+            self.incr(hypo, loglike)
 
     def log_update_set_mean_var(self, data):
         """Updates the suite using ABC and mean/var.
@@ -116,7 +116,7 @@ class Height(thinkbayes.Suite, thinkbayes.Joint):
         m: estimated central tendency
         s: estimated spread
         """
-        for hypo in sorted(self.Values()):
+        for hypo in sorted(self.values()):
             mu, sigma = hypo
 
             # compute log likelihood of m, given hypo
@@ -127,7 +127,7 @@ class Height(thinkbayes.Suite, thinkbayes.Joint):
             stderr_s = sigma / math.sqrt(2 * (n - 1))
             loglike += eval_normal_log_pdf(s, sigma, stderr_s)
 
-            self.Incr(hypo, loglike)
+            self.incr(hypo, loglike)
 
 
 def eval_normal_log_pdf(x, mu, sigma):
@@ -211,8 +211,8 @@ def coef_variation(suite):
     Returns: Pmf object for CV.
     """
     pmf = thinkbayes.Pmf()
-    for (m, s), p in suite.Items():
-        pmf.Incr(s / m, p)
+    for (m, s), p in suite.items():
+        pmf.incr(s / m, p)
     return pmf
 
 
@@ -226,10 +226,10 @@ def plot_cdfs(d, labels):
     """
     thinkplot.clear_figure()
     for key, xs in d.items():
-        mu = thinkbayes.Mean(xs)
-        xs = thinkbayes.Jitter(xs, 1.3)
+        mu = thinkbayes.mean(xs)
+        xs = thinkbayes.jitter(xs, 1.3)
         xs = [x - mu for x in xs]
-        cdf = thinkbayes.MakeCdfFromList(xs)
+        cdf = thinkbayes.make_cdf_from_list(xs)
         thinkplot.plot_cdf_line(cdf, label=labels[key])
     thinkplot.show_plot()
 
@@ -261,8 +261,8 @@ def plot_coef_variation(suites):
     pmfs = {}
     for label, suite in suites.items():
         pmf = coef_variation(suite)
-        print("CV posterior mean", pmf.Mean())
-        cdf = thinkbayes.MakeCdfFromPmf(pmf, label)
+        print("CV posterior mean", pmf.mean())
+        cdf = thinkbayes.make_cdf_from_pmf(pmf, label)
         thinkplot.plot_cdf_line(cdf)
 
         pmfs[label] = pmf
@@ -271,8 +271,8 @@ def plot_coef_variation(suites):
         root="variability_cv", xlabel="Coefficient of variation", ylabel="Probability"
     )
 
-    print("female bigger", thinkbayes.PmfProbGreater(pmfs["female"], pmfs["male"]))
-    print("male bigger", thinkbayes.PmfProbGreater(pmfs["male"], pmfs["female"]))
+    print("female bigger", thinkbayes.pmf_prob_greater(pmfs["female"], pmfs["male"]))
+    print("male bigger", thinkbayes.pmf_prob_greater(pmfs["male"], pmfs["female"]))
 
 
 def plot_outliers(samples):
@@ -281,7 +281,7 @@ def plot_outliers(samples):
     for label, sample in samples.items():
         outliers = [x for x in sample if x < 150]
 
-        cdf = thinkbayes.MakeCdfFromList(outliers, label)
+        cdf = thinkbayes.make_cdf_from_list(outliers, label)
         cdfs.append(cdf)
 
     thinkplot.clear_figure()
@@ -302,13 +302,13 @@ def plot_marginals(suite):
     thinkplot.clear_figure()
 
     pyplot.subplot(1, 2, 1)
-    pmf_m = suite.Marginal(0)
-    cdf_m = thinkbayes.MakeCdfFromPmf(pmf_m)
+    pmf_m = suite.marginal(0)
+    cdf_m = thinkbayes.make_cdf_from_pmf(pmf_m)
     thinkplot.plot_cdf_line(cdf_m)
 
     pyplot.subplot(1, 2, 2)
-    pmf_s = suite.Marginal(1)
-    cdf_s = thinkbayes.MakeCdfFromPmf(pmf_s)
+    pmf_s = suite.marginal(1)
+    cdf_s = thinkbayes.make_cdf_from_pmf(pmf_s)
     thinkplot.plot_cdf_line(cdf_s)
 
     thinkplot.show_plot()
@@ -337,7 +337,7 @@ def update_suite1(suite, xs):
     suite: Suite that maps from (mu, sigma) to prob
     xs: sequence
     """
-    suite.UpdateSet(xs)
+    suite.update_set(xs)
 
 
 def update_suite2(suite, xs):
@@ -348,10 +348,10 @@ def update_suite2(suite, xs):
     suite: Suite that maps from (mu, sigma) to prob
     xs: sequence
     """
-    suite.Log()
-    suite.LogUpdateSet(xs)
-    suite.Exp()
-    suite.Normalize()
+    suite.log()
+    suite.log_update_set(xs)
+    suite.exp()
+    suite.normalize()
 
 
 def update_suite3(suite, xs):
@@ -362,10 +362,10 @@ def update_suite3(suite, xs):
     suite: Suite that maps from (mu, sigma) to prob
     t: sequence
     """
-    suite.Log()
+    suite.log()
     suite.log_update_set_fast(xs)
-    suite.Exp()
-    suite.Normalize()
+    suite.exp()
+    suite.normalize()
 
 
 def update_suite4(suite, xs):
@@ -376,10 +376,10 @@ def update_suite4(suite, xs):
     suite: Suite that maps from (mu, sigma) to prob
     t: sequence
     """
-    suite.Log()
+    suite.log()
     suite.log_update_set_mean_var(xs)
-    suite.Exp()
-    suite.Normalize()
+    suite.exp()
+    suite.normalize()
 
 
 def update_suite5(suite, xs):
@@ -390,10 +390,10 @@ def update_suite5(suite, xs):
     suite: Suite that maps from (mu, sigma) to prob
     t: sequence
     """
-    suite.Log()
+    suite.log()
     suite.log_update_set_median_ipr(xs)
-    suite.Exp()
-    suite.Normalize()
+    suite.exp()
+    suite.normalize()
 
 
 def median_ipr(xs, p):
@@ -404,11 +404,11 @@ def median_ipr(xs, p):
 
     returns: tuple of float (median, IPR)
     """
-    cdf = thinkbayes.MakeCdfFromList(xs)
-    median = cdf.Percentile(50)
+    cdf = thinkbayes.make_cdf_from_list(xs)
+    median = cdf.percentile(50)
 
     alpha = (1 - p) / 2
-    ipr = cdf.Value(1 - alpha) - cdf.Value(alpha)
+    ipr = cdf.value(1 - alpha) - cdf.value(alpha)
     return median, ipr
 
 
@@ -419,7 +419,7 @@ def median_s(xs, num_sigmas):
 
     factor: number of standard deviations spanned by the IPR
     """
-    half_p = thinkbayes.StandardNormalCdf(num_sigmas) - 0.5
+    half_p = thinkbayes.standard_normal_cdf(num_sigmas) - 0.5
     median, ipr = median_ipr(xs, half_p * 2)
     s = ipr / 2 / num_sigmas
 
@@ -437,8 +437,8 @@ def summarize(xs):
     print("largest", xs[-10:])
 
     # print median and interquartile range
-    cdf = thinkbayes.MakeCdfFromList(xs)
-    print(cdf.Percentile(25), cdf.Percentile(50), cdf.Percentile(75))
+    cdf = thinkbayes.make_cdf_from_list(xs)
+    print(cdf.percentile(25), cdf.percentile(50), cdf.percentile(75))
 
 
 def run_estimate(update_func, num_points=31, median_flag=False):
@@ -458,7 +458,7 @@ def run_estimate(update_func, num_points=31, median_flag=False):
         print(label, len(xs))
         summarize(xs)
 
-        xs = thinkbayes.Jitter(xs, 1.3)
+        xs = thinkbayes.jitter(xs, 1.3)
 
         mus, sigmas = find_prior_ranges(xs, num_points, median_flag=median_flag)
         suite = Height(mus, sigmas, label)
@@ -468,10 +468,10 @@ def run_estimate(update_func, num_points=31, median_flag=False):
 
         plot_posterior(suite)
 
-        pmf_m = suite.Marginal(0)
-        pmf_s = suite.Marginal(1)
-        print("marginal mu", pmf_m.Mean(), pmf_m.Var())
-        print("marginal sigma", pmf_s.Mean(), pmf_s.Var())
+        pmf_m = suite.marginal(0)
+        pmf_s = suite.marginal(1)
+        print("marginal mu", pmf_m.mean(), pmf_m.var())
+        print("marginal sigma", pmf_s.mean(), pmf_s.var())
 
         # PlotMarginals(suite)
 

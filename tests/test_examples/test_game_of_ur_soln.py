@@ -44,7 +44,7 @@ def test_ur_problem():
         for i in range(iters):
             total = 0
             for n in range(1, 1000):
-                total += roll.Random()
+                total += roll.random()
                 if total > 14:
                     break
                 yield (n, total)
@@ -58,9 +58,9 @@ def test_ur_problem():
 
     # Here's the distribution of the number of rolls:
 
-    pmf_sim.Normalize()
+    pmf_sim.normalize()
 
-    pmf_sim.Print()
+    pmf_sim.print()
 
     thinkplot.plot_hist_bar(pmf_sim, label="Simulation")
     thinkplot.decorate(xlabel="Number of rolls to get to space 13", ylabel="PMF")
@@ -78,8 +78,8 @@ def test_ur_problem():
         pmf_n = sum([roll] * n)
         pmf_13[n] = pmf_n[13]
 
-    pmf_13.Print()
-    pmf_13.Total()
+    pmf_13.print()
+    pmf_13.total()
 
     # The total probability of the data is very close to 1/2, but it's not obvious (to me) why.
     #
@@ -91,8 +91,8 @@ def test_ur_problem():
     #
     # If the prior is uniform, the posterior equals the likelihood function, normalized.
 
-    posterior = pmf_13.Copy()
-    posterior.Normalize()
+    posterior = pmf_13.copy()
+    posterior.normalize()
     posterior.print_size()
 
     # That sure looks similar to what we got by simulation.  Let's compare them.

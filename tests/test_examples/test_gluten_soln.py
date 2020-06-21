@@ -31,7 +31,7 @@ def test_dinner_party():
     # +
     # Solution
 
-    pmf.Mean()
+    pmf.mean()
 
     # -
 
@@ -62,7 +62,7 @@ def test_dinner_party():
     # Here's a class that models the study
 
     class Gluten(Suite):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """Computes the probability of the data under the hypothesis.
 
             data: tuple of (number who identified, number who did not)
@@ -89,7 +89,7 @@ def test_dinner_party():
     # +
     # Solution
 
-    posterior = prior.Copy()
+    posterior = prior.copy()
     data = 12, 23
     posterior.update(data)
 
@@ -102,4 +102,4 @@ def test_dinner_party():
     # +
     # Solution
 
-    posterior.CredibleInterval(95)
+    posterior.credible_interval(95)

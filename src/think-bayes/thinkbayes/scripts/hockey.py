@@ -31,10 +31,10 @@ class Hockey(thinkbayes.Suite):
             mu = 2.8
             sigma = 0.85
 
-        pmf = thinkbayes.MakeNormalPmf(mu, sigma, 4)
+        pmf = thinkbayes.make_normal_pmf(mu, sigma, 4)
         thinkbayes.Suite.__init__(self, pmf, label=label)
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         Evaluates the Poisson PMF for lambda and k.
@@ -44,7 +44,7 @@ class Hockey(thinkbayes.Suite):
         """
         lam = hypo
         k = data
-        like = thinkbayes.EvalPoissonPmf(k, lam)
+        like = thinkbayes.eval_poisson_pmf(k, lam)
         return like
 
 
@@ -58,11 +58,11 @@ def make_goal_pmf(suite, high=10):
     """
     metapmf = thinkbayes.Pmf()
 
-    for lam, prob in suite.Items():
-        pmf = thinkbayes.MakePoissonPmf(lam, high)
-        metapmf.Set(pmf, prob)
+    for lam, prob in suite.items():
+        pmf = thinkbayes.make_poisson_pmf(lam, high)
+        metapmf.set(pmf, prob)
 
-    mix = thinkbayes.MakeMixture(metapmf, label=suite.label)
+    mix = thinkbayes.make_mixture(metapmf, label=suite.label)
     return mix
 
 
@@ -75,11 +75,11 @@ def make_goal_time_pmf(suite):
     """
     metapmf = thinkbayes.Pmf()
 
-    for lam, prob in suite.Items():
-        pmf = thinkbayes.MakeExponentialPmf(lam, high=2, n=2001)
-        metapmf.Set(pmf, prob)
+    for lam, prob in suite.items():
+        pmf = thinkbayes.make_exponential_pmf(lam, high=2, n=2001)
+        metapmf.set(pmf, prob)
 
-    mix = thinkbayes.MakeMixture(metapmf, label=suite.label)
+    mix = thinkbayes.make_mixture(metapmf, label=suite.label)
     return mix
 
 
@@ -142,15 +142,15 @@ def process_scores_pairwise(pairs):
     for key, goals in goals_scored.items():
         if len(goals) < 3:
             continue
-        lam = thinkbayes.Mean(goals)
+        lam = thinkbayes.mean(goals)
         lams.append(lam)
 
     # make the distribution of average goals scored
-    cdf = thinkbayes.MakeCdfFromList(lams)
+    cdf = thinkbayes.make_cdf_from_list(lams)
     thinkplot.plot_cdf_line(cdf)
     thinkplot.show_plot()
 
-    mu, var = thinkbayes.MeanVar(lams)
+    mu, var = thinkbayes.mean_var(lams)
     print("mu, sig", mu, math.sqrt(var))
 
     print("BOS v VAN", pairs["BOS", "VAN"])
@@ -173,15 +173,15 @@ def process_scores_teamwise(pairs):
     # make a list of average goals scored
     lams = []
     for key, goals in goals_scored.items():
-        lam = thinkbayes.Mean(goals)
+        lam = thinkbayes.mean(goals)
         lams.append(lam)
 
     # make the distribution of average goals scored
-    cdf = thinkbayes.MakeCdfFromList(lams)
+    cdf = thinkbayes.make_cdf_from_list(lams)
     thinkplot.plot_cdf_line(cdf)
     thinkplot.show_plot()
 
-    mu, var = thinkbayes.MeanVar(lams)
+    mu, var = thinkbayes.mean_var(lams)
     print("mu, sig", mu, math.sqrt(var))
 
 
@@ -202,8 +202,8 @@ def main():
         root="hockey0", xlabel="Goals per game", ylabel="Probability", formats=formats
     )
 
-    suite1.UpdateSet([0, 2, 8, 4])
-    suite2.UpdateSet([1, 3, 1, 0])
+    suite1.update_set([0, 2, 8, 4])
+    suite2.update_set([1, 3, 1, 0])
 
     thinkplot.clear_figure()
     thinkplot.pre_plot(num=2)
@@ -239,14 +239,14 @@ def main():
     )
 
     diff = goal_dist1 - goal_dist2
-    p_win = diff.ProbGreater(0)
-    p_loss = diff.ProbLess(0)
-    p_tie = diff.Prob(0)
+    p_win = diff.prob_greater(0)
+    p_loss = diff.prob_less(0)
+    p_tie = diff.prob(0)
 
     print(p_win, p_loss, p_tie)
 
-    p_overtime = thinkbayes.PmfProbLess(time_dist1, time_dist2)
-    p_adjust = thinkbayes.PmfProbEqual(time_dist1, time_dist2)
+    p_overtime = thinkbayes.pmf_prob_less(time_dist1, time_dist2)
+    p_adjust = thinkbayes.pmf_prob_equal(time_dist1, time_dist2)
     p_overtime += p_adjust / 2
     print("p_overtime", p_overtime)
 

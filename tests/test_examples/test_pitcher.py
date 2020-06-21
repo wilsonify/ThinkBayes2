@@ -11,7 +11,7 @@ from thinkbayes import thinkplot
 
 
 class Subclass(Suite):
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
         
         data: 
@@ -26,7 +26,7 @@ def test_subclass():
     thinkplot.plot_hist_bar(prior)
     thinkplot.config_plot(xlabel="x", ylabel="PMF")
 
-    posterior = prior.Copy()
+    posterior = prior.copy()
     posterior.update(1)
     thinkplot.plot_hist_bar(prior, color="gray")
     thinkplot.plot_hist_bar(posterior)

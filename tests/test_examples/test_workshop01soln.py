@@ -22,23 +22,23 @@ def test_pmfs():
 
     # Initially the probabilities don't add up to 1.
 
-    d6.Print()
+    d6.print()
 
     # `Normalize` adds up the probabilities and divides through.  The return value is the total probability before normalizing.
 
-    d6.Normalize()
+    d6.normalize()
 
     # Now the Pmf is normalized.
 
-    d6.Print()
+    d6.print()
 
     # And we can compute its mean (which only works if it's normalized).
 
-    d6.Mean()
+    d6.mean()
 
     # `Random` chooses a random value from the Pmf.
 
-    d6.Random()
+    d6.random()
 
     # `thinkplot` provides methods for plotting Pmfs in a few different styles.
 
@@ -60,9 +60,9 @@ def test_pmfs():
     pmf = d6 + d6
     pmf[2] = 0
     pmf[3] = 0
-    pmf.Normalize()
+    pmf.normalize()
     thinkplot.plot_hist_bar(pmf)
-    pmf.Mean()
+    pmf.mean()
 
     # The cookie problem
 
@@ -70,17 +70,17 @@ def test_pmfs():
     #
 
     cookie = Pmf(["Bowl1", "Bowl2"])
-    cookie.Print()
+    cookie.print()
 
     # Update each hypothesis with the likelihood of the data (a vanilla cookie).
 
     cookie["Bowl1"] *= 0.75
     cookie["Bowl2"] *= 0.5
-    cookie.Normalize()
+    cookie.normalize()
 
     # Print the posterior probabilities.
 
-    cookie.Print()
+    cookie.print()
 
     # **Exercise 3:** Suppose we put the first cookie back, stir, choose again from the same bowl, and get a chocolate cookie.
     #
@@ -90,8 +90,8 @@ def test_pmfs():
 
     cookie["Bowl1"] *= 0.25
     cookie["Bowl2"] *= 0.5
-    cookie.Normalize()
-    cookie.Print()
+    cookie.normalize()
+    cookie.print()
 
     # **Exercise 4:** Instead of doing two updates, what if we collapse the two pieces of data into one update?
     #
@@ -104,15 +104,15 @@ def test_pmfs():
     cookie = Pmf(["Bowl1", "Bowl2"])
     cookie["Bowl1"] *= 0.75 * 0.25
     cookie["Bowl2"] *= 0.5 * 0.5
-    cookie.Normalize()
-    cookie.Print()
+    cookie.normalize()
+    cookie.print()
 
     # The dice problem
 
     # Create a Suite to represent dice with different numbers of sides.
 
     pmf = Pmf([4, 6, 8, 12])
-    pmf.Print()
+    pmf.print()
 
     # **Exercise 5:** We'll solve this problem two ways.  First we'll do it "by hand", as we did with the cookie problem; that is, we'll multiply each hypothesis by the likelihood of the data, and then renormalize.
     #
@@ -125,8 +125,8 @@ def test_pmfs():
     pmf[8] *= 1 / 8
     pmf[12] *= 1 / 12
 
-    pmf.Normalize()
-    pmf.Print()
+    pmf.normalize()
+    pmf.print()
 
     # **Exercise 6:**  Now let's do the same calculation using `Suite.Update`.
     #
@@ -139,7 +139,7 @@ def test_pmfs():
     class Dice(Suite):
         # hypo is the number of sides on the die
         # data is the outcome
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             return 1
 
     # Solution
@@ -147,7 +147,7 @@ def test_pmfs():
     class Dice(Suite):
         # hypo is the number of sides on the die
         # data is the outcome
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             if data > hypo:
                 return 0
             else:
@@ -157,7 +157,7 @@ def test_pmfs():
 
     dice = Dice([4, 6, 8, 12])
     dice.update(6)
-    dice.Print()
+    dice.print()
 
     # If we get more data, we can perform more updates.
 
@@ -166,7 +166,7 @@ def test_pmfs():
 
     # Here are the results.
 
-    dice.Print()
+    dice.print()
 
     # The German tank problem
 
@@ -175,7 +175,7 @@ def test_pmfs():
     class Tank(Suite):
         # hypo is the number of tanks
         # data is an observed serial number
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             if data > hypo:
                 return 0
             else:
@@ -186,7 +186,7 @@ def test_pmfs():
     tank = Tank(range(100))
     tank.update(37)
     thinkplot.plot_pdf_line(tank)
-    tank.Mean()
+    tank.mean()
 
     # **Exercise 7:**  Suppose we see another tank with serial number 17.  What effect does this have on the posterior probabilities?
     #
@@ -197,7 +197,7 @@ def test_pmfs():
     thinkplot.plot_pdf_line(tank, color="0.7")
     tank.update(17)
     thinkplot.plot_pdf_line(tank)
-    tank.Mean()
+    tank.mean()
 
     # The Euro problem
 
@@ -207,7 +207,7 @@ def test_pmfs():
     # Note that `hypo` is in the range 0 to 100.  Here's an outline to get you started.
 
     class Euro(Suite):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """
             hypo is the prob of heads (0-100)
             data is a string, either 'H' or 'T'
@@ -217,7 +217,7 @@ def test_pmfs():
     # Solution
 
     class Euro(Suite):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """
             hypo is the prob of heads (0-100)
             data is a string, either 'H' or 'T'
@@ -272,7 +272,7 @@ def test_pmfs():
 
     # The posterior mean s about 56%
 
-    euro.Mean()
+    euro.mean()
 
     # So is the value with Maximum Aposteriori Probability (MAP).
 
@@ -280,7 +280,7 @@ def test_pmfs():
 
     # The posterior credible interval has a 90% chance of containing the true value (provided that the prior distribution truly represents our background knowledge).
 
-    euro.CredibleInterval(90)
+    euro.credible_interval(90)
 
     # ## Swamping the prior
     #
@@ -293,7 +293,7 @@ def test_pmfs():
             suite[x] = x
         for x in range(51, 101):
             suite[x] = 100 - x
-        suite.Normalize()
+        suite.normalize()
         return suite
 
     # And here's what it looks like:
@@ -314,4 +314,4 @@ def test_pmfs():
 
     thinkplot.plot_pdfs([euro1, euro2])
     thinkplot.config_plot(title="Posteriors")
-    euro1.Mean(), euro2.Mean()
+    euro1.mean(), euro2.mean()

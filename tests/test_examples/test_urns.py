@@ -37,7 +37,7 @@ def test_urns():
     # Here's a class that represents a suite of hypotheses about the urns:
 
     class Urns(Suite):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             data: 'B' or 'G'
@@ -57,7 +57,7 @@ def test_urns():
 
     # Here's Jacob's update after 5 blue marbles.
 
-    jacob = prior.Copy()
+    jacob = prior.copy()
     B5G0 = "B" * 5
 
     for data in B5G0:
@@ -71,7 +71,7 @@ def test_urns():
 
     # Here's Emily's update after an additional 12 blue and 3 green.
 
-    emily = jacob.Copy()
+    emily = jacob.copy()
     B12G3 = "B" * 12 + "G" * 3
 
     for data in B12G3:
@@ -90,7 +90,7 @@ def test_urns():
     # What should Jacob believe about Bnext?
 
     total = 0
-    for i, prob_i in jacob.Items():
+    for i, prob_i in jacob.items():
         print(i, prob_i)
         prob_blue = i / 3
         total += prob_i * prob_blue
@@ -102,7 +102,7 @@ def test_urns():
 
     def prob_b_next(suite):
         total = 0
-        for i, prob_i in suite.Items():
+        for i, prob_i in suite.items():
             prob_blue = i / 3
             total += prob_i * prob_blue
 

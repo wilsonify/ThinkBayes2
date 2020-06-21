@@ -21,7 +21,7 @@ def test_dice_problem():
     # The `Dice` class inherits `Update` and provides `Likelihood`
 
     class Dice(Suite):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             if hypo < data:
                 return 0
             else:
@@ -31,21 +31,21 @@ def test_dice_problem():
 
     suite = Dice([4, 6, 8, 12, 20])
     suite.update(6)
-    suite.Print()
+    suite.print()
 
     # And here's what it looks like after more data:
 
     for roll in [6, 8, 7, 7, 5, 4]:
         suite.update(roll)
 
-    suite.Print()
+    suite.print()
 
     # ## The train problem
     #
     # The Train problem has the same likelihood as the Dice problem.
 
     class Train(Suite):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             if hypo < data:
                 return 0
             else:
@@ -65,7 +65,7 @@ def test_dice_problem():
 
     def Mean(suite):
         total = 0
-        for hypo, prob in suite.Items():
+        for hypo, prob in suite.items():
             total += hypo * prob
         return total
 
@@ -73,7 +73,7 @@ def test_dice_problem():
 
     # Or we can just use the method
 
-    suite.Mean()
+    suite.mean()
 
     # ## Sensitivity to the prior
     #
@@ -102,7 +102,7 @@ def test_dice_problem():
 
     for high in [500, 1000, 2000]:
         suite = MakePosterior(high, dataset)
-        print(high, suite.Mean())
+        print(high, suite.mean())
 
     # The results are quite sensitive to the prior, even with several observations.
 
@@ -115,7 +115,7 @@ def test_dice_problem():
             Pmf.__init__(self)
             for hypo in hypos:
                 self[hypo] = hypo ** (-alpha)
-            self.Normalize()
+            self.normalize()
 
     # Here's what a power law prior looks like, compared to a uniform prior
 
@@ -149,7 +149,7 @@ def test_dice_problem():
 
     for high in [500, 1000, 2000]:
         suite = MakePosterior(high, dataset, Train2)
-        print(high, suite.Mean())
+        print(high, suite.mean())
 
     # ## Credible intervals
     #
@@ -159,7 +159,7 @@ def test_dice_problem():
     suite = Train(hypos)
     suite.update(60)
 
-    suite.Percentile(5), suite.Percentile(95)
+    suite.percentile(5), suite.percentile(95)
 
     # If you have to compute more than a few percentiles, it is more efficient to compute a CDF.
     #
@@ -173,7 +173,7 @@ def test_dice_problem():
 
     # `Cdf` also provides `Percentile`
 
-    cdf.Percentile(5), cdf.Percentile(95)
+    cdf.percentile(5), cdf.percentile(95)
 
     # ## Exercises
 

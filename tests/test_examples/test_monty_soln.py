@@ -29,7 +29,7 @@ def test_monty():
     pmf["A"] *= p
     pmf["B"] *= 0
     pmf["C"] *= 1
-    pmf.Normalize()
+    pmf.normalize()
     pmf["A"].simplify()
 
     # Solution
@@ -52,5 +52,5 @@ def test_monty():
     pmf["A"] *= 1 - p
     pmf["B"] *= 1
     pmf["C"] *= 0
-    pmf.Normalize()
+    pmf.normalize()
     pmf["A"].simplify()

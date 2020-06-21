@@ -23,7 +23,7 @@ def main():
     suite = Train(hypos)
 
     suite.update(60)
-    print(suite.Mean())
+    print(suite.mean())
 
     thinkplot.pre_plot(1)
     thinkplot.plot_pmf_line(suite)

@@ -74,7 +74,7 @@ def read_brfss(filename="CDBRFS08.ASC.gz", compression="gzip", nrows=None):
     variables.end += 1
     dct = thinkbayes.FixedWidthVariables(variables, index_base=1)
 
-    df = dct.ReadFixedWidth(filename, compression=compression, nrows=nrows)
+    df = dct.read_fixed_width(filename, compression=compression, nrows=nrows)
     clean_brfss_frame(df)
     return df
 
@@ -86,14 +86,14 @@ def make_normal_model(weights):
     """
     cdf = thinkbayes.Cdf(weights, label="weights")
 
-    mean, var = thinkbayes.TrimmedMeanVar(weights)
+    mean, var = thinkbayes.trimmed_mean_var(weights)
     std = math.sqrt(var)
     print("n, mean, std", len(weights), mean, std)
 
     xmin = mean - 4 * std
     xmax = mean + 4 * std
 
-    xs, ps = thinkbayes.RenderNormalCdf(mean, std, xmin, xmax)
+    xs, ps = thinkbayes.render_normal_cdf(mean, std, xmin, xmax)
     thinkplot.plot_line(xs, ps, label="model", linewidth=4, color="0.8")
     thinkplot.plot_cdf_line(cdf)
 
@@ -103,14 +103,14 @@ def make_normal_plot(weights):
 
     weights: sequence
     """
-    mean, var = thinkbayes.TrimmedMeanVar(weights, p=0.01)
+    mean, var = thinkbayes.trimmed_mean_var(weights, p=0.01)
     std = math.sqrt(var)
 
     xs = [-5, 5]
-    xs, ys = thinkbayes.FitLine(xs, mean, std)
+    xs, ys = thinkbayes.fit_line(xs, mean, std)
     thinkplot.plot_line(xs, ys, color="0.8", label="model")
 
-    xs, ys = thinkbayes.NormalProbability(weights)
+    xs, ys = thinkbayes.normal_probability(weights)
     thinkplot.plot_line(xs, ys, label="weights")
 
 
@@ -147,7 +147,7 @@ def main(script, nrows=1000):
 
     script: string script name
     """
-    thinkbayes.RandomSeed(17)
+    thinkbayes.random_seed(17)
 
     nrows = int(nrows)
     df = read_brfss(nrows=nrows)

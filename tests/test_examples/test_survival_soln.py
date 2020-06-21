@@ -80,7 +80,7 @@ def test_weibull():
 
     data = SampleWeibull(lam, k, 10000)
     cdf = Cdf(data)
-    model = pmf.MakeCdf()
+    model = pmf.make_cdf()
     thinkplot.plot_cdfs([cdf, model])
 
     # **Exercise:** Write a class called `LightBulb` that inherits from `Suite` and `Joint` and provides a `Likelihood` function that takes an observed lifespan as data and a tuple, `(lam, k)`, as a hypothesis.  It should return a likelihood proportional to the probability of the observed lifespan in a Weibull distribution with the given parameters.
@@ -92,7 +92,7 @@ def test_weibull():
     # Solution
 
     class LightBulb(Suite, Joint):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             lam, k = hypo
             if lam == 0:
                 return 0
@@ -114,19 +114,19 @@ def test_weibull():
     datum = SampleWeibull(lam, k, 10)
     lam = 2
     k = 1.5
-    suite.UpdateSet(datum)
+    suite.update_set(datum)
 
     # Solution
 
-    pmf_lam = suite.Marginal(0)
+    pmf_lam = suite.marginal(0)
     thinkplot.plot_pdf_line(pmf_lam)
-    pmf_lam.Mean()
+    pmf_lam.mean()
 
     # Solution
 
-    pmf_k = suite.Marginal(1)
+    pmf_k = suite.marginal(1)
     thinkplot.plot_pdf_line(pmf_k)
-    pmf_k.Mean()
+    pmf_k.mean()
 
     # Solution
 
@@ -137,7 +137,7 @@ def test_weibull():
     # Solution
 
     class LightBulb2(Suite, Joint):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             lam, k = hypo
             if lam == 0:
                 return 0
@@ -160,15 +160,15 @@ def test_weibull():
 
     # Solution
 
-    pmf_lam = suite.Marginal(0)
+    pmf_lam = suite.marginal(0)
     thinkplot.plot_pdf_line(pmf_lam)
-    pmf_lam.Mean()
+    pmf_lam.mean()
 
     # Solution
 
-    pmf_k = suite.Marginal(1)
+    pmf_k = suite.marginal(1)
     thinkplot.plot_pdf_line(pmf_k)
-    pmf_k.Mean()
+    pmf_k.mean()
 
     # **Exercise:** Now let's put it all together.  Suppose you have 15 lightbulbs installed at different times over a 10 year period.  When you observe them, some have died and some are still working.  Write a version of `LightBulb` that takes data in the form of a `(flag, x)` tuple, where:
     #
@@ -217,7 +217,7 @@ def test_weibull():
     # Solution
 
     class LightBulb3(Suite, Joint):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             lam, k = hypo
             if lam == 0:
                 return 0
@@ -241,26 +241,26 @@ def test_weibull():
 
     # Solution
 
-    suite.UpdateSet(data)
+    suite.update_set(data)
 
     # Solution
 
-    pmf_lam = suite.Marginal(0)
+    pmf_lam = suite.marginal(0)
     thinkplot.plot_pdf_line(pmf_lam)
-    pmf_lam.Mean()
+    pmf_lam.mean()
 
     # Solution
 
-    pmf_k = suite.Marginal(1)
+    pmf_k = suite.marginal(1)
     thinkplot.plot_pdf_line(pmf_k)
-    pmf_k.Mean()
+    pmf_k.mean()
 
     # **Exercise:** Suppose you install a light bulb and then you don't check on it for a year, but when you come back, you find that it has burned out.  Extend `LightBulb` to handle this kind of data, too.
 
     # Solution
 
     class LightBulb4(Suite, Joint):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             lam, k = hypo
             if lam == 0:
                 return 0
@@ -290,9 +290,9 @@ def test_weibull():
 
     # The number of bulbs that have burned out is distributed Binom(n, p)
     n = 100
-    from thinkbayes import MakeBinomialPmf
+    from thinkbayes import make_binomial_pmf
 
-    pmf_c = MakeBinomialPmf(n, p)
+    pmf_c = make_binomial_pmf(n, p)
     thinkplot.plot_pdf_line(pmf_c)
 
     # **Exercise:** Now suppose that `lam` and `k` are not known precisely, but we have a `LightBulb` object that represents the joint posterior distribution of the parameters after seeing some data.  Compute the posterior predictive distribution for `c`, the number of bulbs burned out after one year.

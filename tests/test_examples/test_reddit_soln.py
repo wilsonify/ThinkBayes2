@@ -45,29 +45,29 @@ def test_unreliable_evaluators():
     # Suppose we start with a redditor who has demonstrated some reliability.
 
     beta = Beta(2, 1)
-    redditor = beta.MakePmf(11)
+    redditor = beta.make_pmf(11)
     thinkplot.plot_pdf_line(redditor)
     thinkplot.decorate(xlabel="Reliability (R)", ylabel="PMF")
 
-    mean_r = redditor.Mean()
+    mean_r = redditor.mean()
 
     # Solution
 
     # And a completely unknown item.
 
     beta = Beta(1, 1)
-    item = beta.MakePmf(11)
+    item = beta.make_pmf(11)
     thinkplot.plot_pdf_line(item)
     thinkplot.decorate(xlabel="Quality (Q))", ylabel="PMF")
 
-    mean_q = item.Mean()
+    mean_q = item.mean()
 
     # Solution
 
     class Pair(Suite):
         """Represents hypotheses about the reliability and quality."""
 
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: q, r
@@ -87,8 +87,8 @@ def test_unreliable_evaluators():
     # the vote provides no information about the redditor:
 
     d = {}
-    for r, p1 in redditor.Items():
-        for q, p2 in item.Items():
+    for r, p1 in redditor.items():
+        for q, p2 in item.items():
             d[q, r] = p1 * p2
 
     suite = Pair(d)
@@ -100,25 +100,25 @@ def test_unreliable_evaluators():
     # Solution
 
     redditor_post = Pmf()
-    for (q, r), p in suite.Items():
+    for (q, r), p in suite.items():
         redditor_post[r] += p
 
-    redditor_post.Total()
+    redditor_post.total()
 
     thinkplot.plot_pdf_line(redditor_post)
-    ylim = 0, redditor_post.MaxLike() * 1.05
+    ylim = 0, redditor_post.max_like() * 1.05
     thinkplot.decorate(xlabel="Reliability (R)", ylabel="PMF", ylim=ylim)
 
-    mean_r = redditor_post.Mean()
+    mean_r = redditor_post.mean()
 
     item_post = Pmf()
-    for (q, r), p in suite.Items():
+    for (q, r), p in suite.items():
         item_post[q] += p
 
-    item_post.Total()
+    item_post.total()
 
     thinkplot.plot_pdf_line(item_post)
-    ylim = 0, item_post.MaxLike() * 1.05
+    ylim = 0, item_post.max_like() * 1.05
     thinkplot.decorate(xlabel="Quality (Q))", ylabel="PMF", ylim=ylim)
 
-    mean_q = item_post.Mean()
+    mean_q = item_post.mean()

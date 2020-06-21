@@ -5,7 +5,7 @@ MIT License: https://opensource.org/licenses/MIT
 """
 import numpy as np
 from scipy.special import gamma
-from thinkbayes import MakeMixture
+from thinkbayes import make_mixture
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
 
@@ -73,7 +73,7 @@ def test_gamma():
     # Now here's the `Suite` we'll use to estimate parameters from data.
 
     class Rainfall(Suite, Joint):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """
 
             data: observed rainfall
@@ -100,9 +100,9 @@ def test_gamma():
 
     # Now we can initialize the suite.
 
-    from thinkbayes import MakeJoint
+    from thinkbayes import make_joint
 
-    suite = Rainfall(MakeJoint(pmf_k, pmf_theta))
+    suite = Rainfall(make_joint(pmf_k, pmf_theta))
 
     # And update it.
 
@@ -116,15 +116,15 @@ def test_gamma():
     #
     # Anyway, here's the posterior marginal for `k`:
 
-    post_k = suite.Marginal(0)
-    print(post_k.Mean())
+    post_k = suite.marginal(0)
+    print(post_k.mean())
     thinkplot.plot_pdf_line(post_k)
     thinkplot.decorate(xlabel="k", ylabel="PDF")
 
     # And here's the posterior marginal for `theta`
 
-    post_theta = suite.Marginal(1)
-    print(post_theta.Mean())
+    post_theta = suite.marginal(1)
+    print(post_theta.mean())
     thinkplot.plot_pdf_line(post_theta)
     thinkplot.decorate(xlabel="theta", ylabel="PDF")
 
@@ -145,14 +145,14 @@ def test_gamma():
     xs = np.linspace(0.001, 30, 1001)
 
     metapmf = Pmf()
-    for (k, theta), p in suite.Items():
+    for (k, theta), p in suite.items():
         pmf = make_gamma_pmf(xs, k, theta)
         metapmf[pmf] = p
 
     # Here's the posterior predictive distribution.  Since it is so steep near 0, we need a pretty fine grid to get an accurate estimate of the posterior predictive mean (which we'll verify by comparison to the solution from MCMC below).
 
-    pred_pmf = MakeMixture(metapmf)
-    print(pred_pmf.Mean())
+    pred_pmf = make_mixture(metapmf)
+    print(pred_pmf.mean())
     thinkplot.plot_pdf_line(pred_pmf)
 
     # ### Now with PyMC

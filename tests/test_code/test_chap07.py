@@ -3,12 +3,12 @@ This is based on code and exercises from Think Bayes: Chapter 7.
 """
 
 import numpy as np
-from thinkbayes import EvalPoissonPmf
-from thinkbayes import MakeExponentialPmf
-from thinkbayes import MakeGammaPmf
-from thinkbayes import MakeMixture
-from thinkbayes import MakeNormalPmf
-from thinkbayes import MakePoissonPmf
+from thinkbayes import eval_poisson_pmf
+from thinkbayes import make_exponential_pmf
+from thinkbayes import make_gamma_pmf
+from thinkbayes import make_mixture
+from thinkbayes import make_normal_pmf
+from thinkbayes import make_poisson_pmf
 from thinkbayes import Pmf, Suite
 from thinkbayes import thinkplot
 
@@ -24,10 +24,10 @@ class Hockey(Suite):
         mu = 2.8
         sigma = 0.3
 
-        pmf = MakeNormalPmf(mu, sigma, num_sigmas=4, n=101)
+        pmf = make_normal_pmf(mu, sigma, num_sigmas=4, n=101)
         Suite.__init__(self, pmf, label=label)
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         Evaluates the Poisson PMF for lambda and k.
@@ -37,7 +37,7 @@ class Hockey(Suite):
         """
         lam = hypo
         k = data
-        like = EvalPoissonPmf(k, lam)
+        like = eval_poisson_pmf(k, lam)
         return like
 
 
@@ -51,11 +51,11 @@ def MakeGoalPmf(suite, high=10):
     """
     metapmf = Pmf()
 
-    for lam, prob in suite.Items():
-        pmf = MakePoissonPmf(lam, high)
-        metapmf.Set(pmf, prob)
+    for lam, prob in suite.items():
+        pmf = make_poisson_pmf(lam, high)
+        metapmf.set(pmf, prob)
 
-    mix = MakeMixture(metapmf, label=suite.label)
+    mix = make_mixture(metapmf, label=suite.label)
     return mix
 
 
@@ -68,11 +68,11 @@ def MakeGoalTimePmf(suite):
     """
     metapmf = Pmf()
 
-    for lam, prob in suite.Items():
-        pmf = MakeExponentialPmf(lam, high=2.5, n=1001)
-        metapmf.Set(pmf, prob)
+    for lam, prob in suite.items():
+        pmf = make_exponential_pmf(lam, high=2.5, n=1001)
+        metapmf.set(pmf, prob)
 
-    mix = MakeMixture(metapmf, label=suite.label)
+    mix = make_mixture(metapmf, label=suite.label)
     return mix
 
 
@@ -94,15 +94,15 @@ def test_Hockey():
     # And we can update each suite with the scores from the first 4 games.
 
     # +
-    suite1.UpdateSet([0, 2, 8, 4])
-    suite2.UpdateSet([1, 3, 1, 0])
+    suite1.update_set([0, 2, 8, 4])
+    suite2.update_set([1, 3, 1, 0])
 
     thinkplot.pre_plot(num=2)
     thinkplot.plot_pdf_line(suite1)
     thinkplot.plot_pdf_line(suite2)
     thinkplot.config_plot(xlabel="Goals per game", ylabel="Probability")
 
-    suite1.Mean(), suite2.Mean()
+    suite1.mean(), suite2.mean()
     # -
 
     # To predict the number of goals scored in the next game we can compute, for each hypothetical value of $\lambda$, a Poisson distribution of goals scored, then make a weighted mixture of Poissons:
@@ -122,16 +122,16 @@ def test_Hockey():
     thinkplot.plot_pmf_line(goal_dist2)
     thinkplot.config_plot(xlabel="Goals", ylabel="Probability", xlim=[-0.7, 11.5])
 
-    goal_dist1.Mean(), goal_dist2.Mean()
+    goal_dist1.mean(), goal_dist2.mean()
     # -
 
     # Now we can compute the probability that the Bruins win, lose, or tie in regulation time.
 
     # +
     diff = goal_dist1 - goal_dist2
-    p_win = diff.ProbGreater(0)
-    p_loss = diff.ProbLess(0)
-    p_tie = diff.Prob(0)
+    p_win = diff.prob_greater(0)
+    p_loss = diff.prob_less(0)
+    p_tie = diff.prob(0)
 
     print("Prob win, loss, tie:", p_win, p_loss, p_tie)
     # -
@@ -153,13 +153,13 @@ def test_Hockey():
     thinkplot.plot_pmf_line(time_dist2)
     thinkplot.config_plot(xlabel="Games until goal", ylabel="Probability")
 
-    time_dist1.Mean(), time_dist2.Mean()
+    time_dist1.mean(), time_dist2.mean()
     # -
 
     # In overtime the first team to score wins, so the probability of winning is the probability of generating a smaller value of `t`:
 
-    p_win_in_overtime = time_dist1.ProbLess(time_dist2)
-    p_adjust = time_dist1.ProbEqual(time_dist2)
+    p_win_in_overtime = time_dist1.prob_less(time_dist2)
+    p_adjust = time_dist1.prob_equal(time_dist2)
     p_win_in_overtime += p_adjust / 2
     print("p_win_in_overtime", p_win_in_overtime)
 
@@ -183,10 +183,10 @@ def test_Hockey():
     # +
 
     xs = np.linspace(0, 8, 101)
-    pmf = MakeGammaPmf(xs, 1.3)
+    pmf = make_gamma_pmf(xs, 1.3)
     thinkplot.plot_pdf_line(pmf)
     thinkplot.config_plot(xlabel="Goals per game")
-    pmf.Mean()
+    pmf.mean()
 
     # -
 

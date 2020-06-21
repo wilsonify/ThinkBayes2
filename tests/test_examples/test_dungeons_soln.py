@@ -41,17 +41,17 @@ class Dungeons(Suite):
 
         d6 = Pmf([1, 2, 3, 4, 5, 6])
         thrice = sum([d6] * 3)
-        cdf_thrice = thrice.MakeCdf()
+        cdf_thrice = thrice.make_cdf()
         self.like_min = {}
         self.like_max = {}
         for n in range(2, 11):
             cdf_min = self.compute_cdf_min(cdf_thrice, n * 6)
-            self.like_min[n] = cdf_min.MakePmf()
-            cdf_max = cdf_thrice.Max(n * 6)
-            self.like_max[n] = cdf_max.MakePmf()
+            self.like_min[n] = cdf_min.make_pmf()
+            cdf_max = cdf_thrice.max(n * 6)
+            self.like_max[n] = cdf_max.make_pmf()
             print(self.like_min[n][5], self.like_max[n][16])
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Probability of the data given the hypothesis.
 
         data: lowest attribute, highest attribute, boolean
@@ -84,7 +84,7 @@ class Dungeons(Suite):
 
         returns: new Cdf object
         """
-        cdf_min = cdf.Copy()
+        cdf_min = cdf.copy()
         cdf_min.ps = 1 - (1 - cdf_min.ps) ** k
         return cdf_min
 
@@ -132,7 +132,7 @@ def test_conv():
     Here's what it looks like.
     """
     player = coin(0.7)
-    player.Print()
+    player.print()
 
 
 def test_add():
@@ -150,7 +150,7 @@ def prior_fixture():
     """
     player = coin(0.7)
     prior = sum([player] * 10)
-    prior.Print()
+    prior.print()
     return prior
 
 
@@ -183,7 +183,7 @@ def test_analytic(prior):
     And we can confirm that the analytic result matches what we computed by convolution.
     """
 
-    binomial = thinkbayes.MakeBinomialPmf(10, 0.7)
+    binomial = thinkbayes.make_binomial_pmf(10, 0.7)
     thinkplot.plot_pmf_line(prior, color="C1")
     thinkplot.plot_pmf_line(binomial, color="C2", linestyle="dotted")
     thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
@@ -196,7 +196,7 @@ def test_eliminate(prior):
     thinkplot.plot_pmf_line(prior, color="gray")
     del prior[0]
     del prior[1]
-    prior.Normalize()
+    prior.normalize()
     thinkplot.plot_pmf_line(prior, color="C1")
     thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
 
@@ -214,7 +214,7 @@ def thrice_fixture():
     Here is the distribution for a single die and the sum of three dice.
     """
     d6 = Pmf([1, 2, 3, 4, 5, 6])
-    d6.Print()
+    d6.print()
     thrice = sum([d6] * 3)
     thinkplot.plot_pdf_line(thrice)
     thinkplot.decorate(xlabel="Attribute", ylabel="PMF")
@@ -223,7 +223,7 @@ def thrice_fixture():
 
 @pytest.fixture(name="cdf_thrice")
 def cdf_thrice_fixture(thrice):
-    return thrice.MakeCdf()
+    return thrice.make_cdf()
 
 
 @pytest.fixture(name="like_min")
@@ -234,9 +234,9 @@ def like_min_fixture(cdf_thrice):
 
     for n in range(2, 11):
         cdf_min = dungeon_instance.compute_cdf_min(cdf_thrice, n * 6)
-        like_min[n] = cdf_min.MakePmf()
-        cdf_max = cdf_thrice.Max(n * 6)
-        like_max[n] = cdf_max.MakePmf()
+        like_min[n] = cdf_min.make_pmf()
+        cdf_max = cdf_thrice.max(n * 6)
+        like_max[n] = cdf_max.make_pmf()
         print(like_min[n][5], like_max[n][16])
     return like_min
 
@@ -249,9 +249,9 @@ def like_max_fixture(cdf_thrice):
 
     for n in range(2, 11):
         cdf_min = dungeon_instance.compute_cdf_min(cdf_thrice, n * 6)
-        like_min[n] = cdf_min.MakePmf()
-        cdf_max = cdf_thrice.Max(n * 6)
-        like_max[n] = cdf_max.MakePmf()
+        like_min[n] = cdf_min.make_pmf()
+        cdf_max = cdf_thrice.max(n * 6)
+        like_max[n] = cdf_max.make_pmf()
         print(like_min[n][5], like_max[n][16])
     return like_max
 
@@ -264,7 +264,7 @@ def test_cdf_max(cdf_thrice):
 
     thinkplot.plot_cdf_line(cdf_thrice)
     thinkplot.decorate(xlabel="Attribute", ylabel="CDF")
-    cdf_max_6 = cdf_thrice.Max(6)
+    cdf_max_6 = cdf_thrice.max(6)
     thinkplot.plot_cdf_line(cdf_max_6)
     thinkplot.decorate(
         xlabel="Attribute", ylabel="CDF", title="Maximum of 6 attributes"
@@ -278,7 +278,7 @@ def test_n_cdf_max(cdf_thrice):
     """
 
     for n in range(2, 10, 2):
-        cdf_max = cdf_thrice.Max(n * 6)
+        cdf_max = cdf_thrice.max(n * 6)
         thinkplot.plot_cdf_line(cdf_max, label="n=%s" % n)
 
     thinkplot.decorate(
@@ -292,9 +292,9 @@ def test_n_sim(cdf_thrice):
     """
 
     n = 7
-    cdf = cdf_thrice.Max(n * 6)
+    cdf = cdf_thrice.max(n * 6)
     thinkplot.plot_cdf_line(cdf, label="n=%s" % n)
-    sample_max = [max(cdf_thrice.Sample(42)) for _ in range(1000)]
+    sample_max = [max(cdf_thrice.sample(42)) for _ in range(1000)]
     thinkplot.plot_cdf_line(thinkbayes.Cdf(sample_max), label="sample")
     thinkplot.decorate(
         xlabel="Attribute", ylabel="CDF", title="Maximum of 6*n attributes"
@@ -325,7 +325,7 @@ def test_compute_cdf_min_sim(cdf_thrice):
     cdf = dungeon_instance.compute_cdf_min(cdf_thrice, n * 6)
     thinkplot.plot_cdf_line(cdf, label="n=%s" % n)
 
-    sample_min = [min(cdf_thrice.Sample(42)) for _ in range(1000)]
+    sample_min = [min(cdf_thrice.sample(42)) for _ in range(1000)]
     thinkplot.plot_cdf_line(thinkbayes.Cdf(sample_min), label="sample")
 
     thinkplot.decorate(
@@ -344,9 +344,9 @@ def test_precompute(cdf_thrice, like_min, like_max):
     dungeon_instance = Dungeons()
     for n in range(2, 11):
         cdf_min = dungeon_instance.compute_cdf_min(cdf_thrice, n * 6)
-        like_min[n] = cdf_min.MakePmf()
-        cdf_max = cdf_thrice.Max(n * 6)
-        like_max[n] = cdf_max.MakePmf()
+        like_min[n] = cdf_min.make_pmf()
+        cdf_max = cdf_thrice.max(n * 6)
+        like_max[n] = cdf_max.make_pmf()
         print(like_min[n][5], like_max[n][16])
 
 
@@ -369,13 +369,13 @@ def test_min_max_same(d6):
 
     del prior[0]
     del prior[1]
-    prior.Normalize()
+    prior.normalize()
 
     suite = Dungeons(prior)
 
     suite.update((5, 16, False))
 
-    ci = suite.CredibleInterval()
+    ci = suite.credible_interval()
     print(ci)
     result = sum(suite[n] for n in range(ci[0], ci[1] + 1))
     assert result == pytest.approx(0.9, abs=0.1)

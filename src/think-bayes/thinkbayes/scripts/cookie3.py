@@ -11,14 +11,14 @@ import thinkbayes
 class Cookie(thinkbayes.Suite):
     """Suite to represent bowls of cookies."""
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """The likelihood of the data under the hypothesis.
 
         data: string cookie type
         hypo: Hist of cookies
         """
         # compute the likelihood with the current bowls
-        like = hypo[data] / hypo.Total()
+        like = hypo[data] / hypo.total()
 
         # update the bowl
         if like:
@@ -37,17 +37,17 @@ def main():
 
     print("After 1 vanilla")
     suite.update("vanilla")
-    for hypo, prob in suite.Items():
+    for hypo, prob in suite.items():
         print(hypo, prob)
 
     print("\nAfter 1 vanilla, 1 chocolate")
     suite.update("chocolate")
-    for hypo, prob in suite.Items():
+    for hypo, prob in suite.items():
         print(hypo, prob)
 
     print("\nAfter 1 vanilla, 1 chocolate, 1 vanilla")
     suite.update("vanilla")
-    for hypo, prob in suite.Items():
+    for hypo, prob in suite.items():
         print(hypo, prob)
 
 

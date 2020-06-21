@@ -7,7 +7,7 @@ import logging
 
 import numpy as np
 import pandas as pd
-from thinkbayes import MakePoissonPmf, EvalBinomialPmf, MakeMixture
+from thinkbayes import make_poisson_pmf, eval_binomial_pmf, make_mixture
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
 
@@ -28,7 +28,7 @@ def test_geiger_counter_problem():
     #
 
     class Logistic(Suite, Joint):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """
 
             data: k, number of particles detected
@@ -40,21 +40,21 @@ def test_geiger_counter_problem():
     k = 15
     f = 0.1
 
-    pmf = MakePoissonPmf(r, high=500)
+    pmf = make_poisson_pmf(r, high=500)
     thinkplot.plot_hist_bar(pmf)
 
     total = 0
-    for n, p in pmf.Items():
-        total += p * EvalBinomialPmf(k, n, f)
+    for n, p in pmf.items():
+        total += p * eval_binomial_pmf(k, n, f)
 
     logging.info("%r", f"total = {total}")
 
 
     def compute_likelihood(k, r, f):
-        pmf = MakePoissonPmf(r, high=500)
+        pmf = make_poisson_pmf(r, high=500)
         total = 0
-        for n, p in pmf.Items():
-            total += p * EvalBinomialPmf(k, n, f)
+        for n, p in pmf.items():
+            total += p * eval_binomial_pmf(k, n, f)
 
         return total
 
@@ -72,7 +72,7 @@ def test_geiger_counter_problem():
     class Logistic(Suite, Joint):
         f = 0.1
 
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """
 
             data: k, number of particles detected
@@ -132,7 +132,7 @@ def test_geiger_counter_problem():
     r_sample = trace["r"]
     thinkplot.plot_cdf_line(Cdf(r_sample))
 
-    thinkplot.plot_cdf_line(suite.MakeCdf())
+    thinkplot.plot_cdf_line(suite.make_cdf())
     thinkplot.plot_cdf_line(Cdf(r_sample))
 
     # ### Grid algorithm, version 2
@@ -142,7 +142,7 @@ def test_geiger_counter_problem():
     class Logistic(Suite, Joint):
         f = 0.1
 
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """
 
             data: k, number of particles detected
@@ -150,22 +150,22 @@ def test_geiger_counter_problem():
             """
             k = data
             r, n = hypo
-            return EvalBinomialPmf(k, n, self.f)
+            return eval_binomial_pmf(k, n, self.f)
 
     rs = np.linspace(0, 300, 51)
 
     suite = Logistic()
 
     for r in rs:
-        pmf = MakePoissonPmf(r, high=500)
-        for n, p in pmf.Items():
+        pmf = make_poisson_pmf(r, high=500)
+        for n, p in pmf.items():
             suite[r, n] += p
 
-    suite.Normalize()
+    suite.normalize()
 
     suite.update(15)
 
-    pmf_r = suite.Marginal(0)
+    pmf_r = suite.marginal(0)
     thinkplot.plot_pdf_line(pmf_r)
     thinkplot.decorate(
         xlabel="Emission rate (particles/second)",
@@ -173,7 +173,7 @@ def test_geiger_counter_problem():
         title="Posterior marginal distribution",
     )
 
-    pmf_n = suite.Marginal(1)
+    pmf_n = suite.marginal(1)
     thinkplot.plot_pdf_line(pmf_n)
     thinkplot.decorate(
         xlabel="Number of particles (n)",
@@ -193,12 +193,12 @@ def test_geiger_counter_problem():
             f: fraction of particles registered
             high: maximum number of particles, n
             """
-            pmf = MakePoissonPmf(r, high)
+            pmf = make_poisson_pmf(r, high)
             super().__init__(pmf)
             self.r = r
             self.f = f
 
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """Likelihood of the data given the hypothesis.
 
             data: number of particles counted
@@ -207,7 +207,7 @@ def test_geiger_counter_problem():
             k = data
             n = hypo
 
-            return EvalBinomialPmf(k, n, self.f)
+            return eval_binomial_pmf(k, n, self.f)
 
     r = 160
     k = 15
@@ -220,7 +220,7 @@ def test_geiger_counter_problem():
     class Emitter(Suite):
         """Represents hypotheses about r."""
 
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """Likelihood of the data given the hypothesis.
 
             data: number of counted per unit time
@@ -236,11 +236,11 @@ def test_geiger_counter_problem():
     suite.update(15)
 
     pmf_r = Pmf()
-    for detector, p in suite.Items():
+    for detector, p in suite.items():
         pmf_r[detector.r] = p
 
     thinkplot.plot_pdf_line(pmf_r)
 
-    mix = MakeMixture(suite)
+    mix = make_mixture(suite)
 
     thinkplot.plot_pdf_line(mix)

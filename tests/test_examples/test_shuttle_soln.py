@@ -63,7 +63,7 @@ def test_shuttle():
     # Hint: the `expit` function from `scipy.special` computes the inverse of the `logit` function.
 
     class Logistic(Suite, Joint):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """
 
             data: T, fail
@@ -76,7 +76,7 @@ def test_shuttle():
     from scipy.special import expit
 
     class Logistic(Suite, Joint):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """
 
             data: T, fail
@@ -109,12 +109,12 @@ def test_shuttle():
         print(data)
         suite.update(data)
 
-    thinkplot.plot_pdf_line(suite.Marginal(0))
+    thinkplot.plot_pdf_line(suite.marginal(0))
     thinkplot.decorate(
         xlabel="Intercept", ylabel="PMF", title="Posterior marginal distribution"
     )
 
-    thinkplot.plot_pdf_line(suite.Marginal(1))
+    thinkplot.plot_pdf_line(suite.marginal(1))
     thinkplot.decorate(
         xlabel="Log odds ratio", ylabel="PMF", title="Posterior marginal distribution"
     )
@@ -126,7 +126,7 @@ def test_shuttle():
     T = 31
     total = 0
 
-    for hypo, p in suite.Items():
+    for hypo, p in suite.items():
         b0, b1 = hypo
         log_odds = b0 + b1 * T
         p_fail = expit(log_odds)
@@ -137,7 +137,7 @@ def test_shuttle():
 
     # Solution
 
-    pred = suite.Copy()
+    pred = suite.copy()
     pred.update((31, True))
 
     # ### MCMC

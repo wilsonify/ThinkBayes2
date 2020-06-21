@@ -176,7 +176,7 @@ def test_BayesTable():
     # Here's a `Dice` class that implements `Likelihood` by looking up the data, `k`, in the `Pmf` that corresponds to `hypo`:
 
     class Dice(Suite):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """Likelihood of the data given the hypothesis.
 
             data: total of two dice
@@ -189,12 +189,12 @@ def test_BayesTable():
     # Here's the prior:
 
     suite = Dice(pairs.keys())
-    suite.Print()
+    suite.print()
 
     # And the posterior:
 
     suite.update(3)
-    suite.Print()
+    suite.print()
 
     # And the posterior probability of getting `11` on the next roll.
 

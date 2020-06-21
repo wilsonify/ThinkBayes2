@@ -12,31 +12,31 @@ from thinkbayes import thinkplot
 
 def test_beta():
     beta = Beta(5, 5)
-    prior = beta.MakePmf()
+    prior = beta.make_pmf()
     thinkplot.plot_pdf_line(prior)
     thinkplot.decorate(xlabel="Prob Red Sox win (x)", ylabel="PDF")
 
     # %psource beta.Update
 
-    beta.Update((15, 0))
-    posterior = beta.MakePmf()
+    beta.update((15, 0))
+    posterior = beta.make_pmf()
 
     thinkplot.plot_pdf_line(prior, color="gray", label="prior")
     thinkplot.plot_pdf_line(posterior, label="posterior")
     thinkplot.decorate(xlabel="Prob Red Sox win (x)", ylabel="PDF")
 
-    posterior.Mean()
+    posterior.mean()
 
-    posterior.MAP()
+    posterior.map()
 
-    posterior.CredibleInterval()
+    posterior.credible_interval()
 
-    x = posterior.Random()
+    x = posterior.random()
 
     np.sum(np.random.random(7) < x)
 
     def simulate(k, dist):
-        x = dist.Random()
+        x = dist.random()
         return np.sum(np.random.random(k) <= x)
 
     simulate(7, posterior)

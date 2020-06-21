@@ -14,7 +14,7 @@ from thinkbayes import thinkplot
 class Soccer(thinkbayes.Suite):
     """Represents hypotheses about."""
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: 
@@ -37,11 +37,11 @@ def main():
     suite = Soccer(hypos)
 
     thinkplot.plot_pdf_line(suite, label="prior")
-    print("prior mean", suite.Mean())
+    print("prior mean", suite.mean())
 
     suite.update(11)
     thinkplot.plot_pdf_line(suite, label="posterior 1")
-    print("after one goal", suite.Mean())
+    print("after one goal", suite.mean())
 
     thinkplot.show_plot()
 

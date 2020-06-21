@@ -25,15 +25,15 @@ from thinkbayes import thinkplot
 
 def test_wc():
     xs = np.linspace(0, 12, 101)
-    pmf_gamma = thinkbayes.MakeGammaPmf(xs, 1.3)
+    pmf_gamma = thinkbayes.make_gamma_pmf(xs, 1.3)
     thinkplot.plot_pdf_line(pmf_gamma)
     thinkplot.decorate(title="Gamma PDF", xlabel="Goals per game", ylabel="PDF")
-    pmf_gamma.Mean()
+    pmf_gamma.mean()
 
     class Soccer(Suite):
         """Represents hypotheses about goal-scoring rates."""
 
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: scoring rate in goals per game
@@ -49,11 +49,11 @@ def test_wc():
     prior = Soccer(pmf_gamma)
     thinkplot.plot_pdf_line(prior)
     thinkplot.decorate(title="Gamma prior", xlabel="Goals per game", ylabel="PDF")
-    prior.Mean()
+    prior.mean()
 
     # Here's the update after the first goal at 11 minutes.
 
-    posterior1 = prior.Copy()
+    posterior1 = prior.copy()
     posterior1.update(11)
 
     thinkplot.plot_pdf_line(prior, color="0.7")
@@ -61,12 +61,12 @@ def test_wc():
     thinkplot.decorate(
         title="Posterior after 1 goal", xlabel="Goals per game", ylabel="PDF"
     )
-    posterior1.Mean()
+    posterior1.mean()
 
     # Here's the update after the second goal at 23 minutes (the time between first and second goals is 12 minutes).
     #
 
-    posterior2 = posterior1.Copy()
+    posterior2 = posterior1.copy()
     posterior2.update(12)
 
     thinkplot.plot_pdf_line(prior, color="0.7")
@@ -76,18 +76,18 @@ def test_wc():
     thinkplot.decorate(
         title="Posterior after 2 goals", xlabel="Goals per game", ylabel="PDF"
     )
-    posterior2.Mean()
+    posterior2.mean()
 
-    from thinkbayes import MakePoissonPmf
+    from thinkbayes import make_poisson_pmf
 
     # We can compute the mixture of these distributions by making a Meta-Pmf that maps from each Poisson Pmf to its probability.
 
     rem_time = 90 - 23
 
     metapmf = Pmf()
-    for lam, prob in posterior2.Items():
+    for lam, prob in posterior2.items():
         lt = lam * rem_time / 90
-        pred = MakePoissonPmf(lt, 15)
+        pred = make_poisson_pmf(lt, 15)
         metapmf[pred] = prob
 
     # `MakeMixture` takes a Meta-Pmf (a Pmf that contains Pmfs) and returns a single Pmf that represents the weighted mixture of distributions:
@@ -102,15 +102,15 @@ def test_wc():
         Returns: Pmf object.
         """
         mix = Pmf(label=label)
-        for pmf, p1 in metapmf.Items():
-            for x, p2 in pmf.Items():
+        for pmf, p1 in metapmf.items():
+            for x, p2 in pmf.items():
                 mix[x] += p1 * p2
         return mix
 
     # Here's the result for the World Cup problem.
 
     mix = MakeMixture(metapmf)
-    mix.Print()
+    mix.print()
 
     # And here's what the mixture looks like.
 
@@ -170,7 +170,7 @@ def test_wc():
 
     lam_sample = trace["lam"]
     print(lam_sample.mean())
-    print(posterior1.Mean())
+    print(posterior1.mean())
     cdf_lam = Cdf(lam_sample)
 
     thinkplot.plot_cdf_line(posterior1.make_cdf(), label="Posterior analytic")
@@ -190,7 +190,7 @@ def test_wc():
 
     lam_sample = trace["lam"]
     print(lam_sample.mean())
-    print(posterior2.Mean())
+    print(posterior2.mean())
     cdf_lam = Cdf(lam_sample)
 
     thinkplot.plot_cdf_line(posterior2.make_cdf(), label="Posterior analytic")
@@ -244,7 +244,7 @@ def test_wc():
     class Soccer2(thinkbayes.Suite):
         """Represents hypotheses about goal-scoring rates."""
 
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: goal rate in goals per game
@@ -252,13 +252,13 @@ def test_wc():
             """
             return poisson.pmf(data, hypo)
 
-    from thinkbayes import MakeGammaPmf
+    from thinkbayes import make_gamma_pmf
 
     xs = np.linspace(0, 8, 101)
-    pmf = MakeGammaPmf(xs, 1.3)
+    pmf = make_gamma_pmf(xs, 1.3)
     thinkplot.plot_pdf_line(pmf)
     thinkplot.decorate(xlabel="Goal-scoring rate (λ)", ylabel="PMF")
-    pmf.Mean()
+    pmf.mean()
 
     germany = Soccer2(pmf)
 
@@ -270,11 +270,11 @@ def test_wc():
         returns: new Pmf (mixture of Poissons)
         """
         metapmf = thinkbayes.Pmf()
-        for lam, prob in suite.Items():
-            pred = thinkbayes.MakePoissonPmf(lam * duration, 10)
+        for lam, prob in suite.items():
+            pred = thinkbayes.make_poisson_pmf(lam * duration, 10)
             metapmf[pred] = prob
 
-        mix = thinkbayes.MakeMixture(metapmf, label=label)
+        mix = thinkbayes.make_mixture(metapmf, label=label)
         return mix
 
     germany_pred = PredictiveDist(germany, label="germany")

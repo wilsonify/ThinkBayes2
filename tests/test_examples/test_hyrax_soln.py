@@ -42,7 +42,7 @@ class Hyrax(Suite):
     Represents hypotheses about how many hyraxes there are.
     """
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: total population (N)
@@ -74,9 +74,9 @@ def test_hydrax():
     # +
     # Solution
 
-    print("Posterior mean", suite.Mean())
+    print("Posterior mean", suite.mean())
     print("Maximum a posteriori estimate", suite.MaximumLikelihood())
-    print("90% credible interval", suite.CredibleInterval(90))
+    print("90% credible interval", suite.credible_interval(90))
 
     # +
     # Solution
@@ -86,7 +86,7 @@ def test_hydrax():
     class Hyrax2(Suite):
         """Represents hypotheses about how many hyraxes there are."""
 
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: total population (N)
@@ -113,6 +113,6 @@ def test_hydrax():
     # +
     # Solution
 
-    print("Posterior mean", suite.Mean())
+    print("Posterior mean", suite.mean())
     print("Maximum a posteriori estimate", suite.MaximumLikelihood())
-    print("90% credible interval", suite.CredibleInterval(90))
+    print("90% credible interval", suite.credible_interval(90))

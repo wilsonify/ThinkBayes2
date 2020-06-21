@@ -18,18 +18,18 @@ class Cookie(Pmf):
         """
         Pmf.__init__(self)
         for hypo in hypos:
-            self.Set(hypo, 1)
-        self.Normalize()
+            self.set(hypo, 1)
+        self.normalize()
 
     def update(self, data):
         """Updates the PMF with new data.
 
         data: string cookie type
         """
-        for hypo in self.Values():
+        for hypo in self.values():
             like = self.likelihood(data, hypo)
-            self.Mult(hypo, like)
-        self.Normalize()
+            self.mult(hypo, like)
+        self.normalize()
 
     mixes = {
         "Bowl1": dict(vanilla=0.75, chocolate=0.25),
@@ -54,7 +54,7 @@ def main():
 
     pmf.update("vanilla")
 
-    for hypo, prob in pmf.Items():
+    for hypo, prob in pmf.items():
         print(hypo, prob)
 
 

@@ -71,7 +71,7 @@ def simple_model():
     print(("rdt", rdt))
 
     cdf = make_cdf()
-    p = cdf.Prob(rdt)
+    p = cdf.prob(rdt)
     print(("Prob{RDT > 2.4}", 1 - p))
 
 
@@ -135,7 +135,7 @@ def qq_plot(cdf, fit):
     thinkplot.plot_line(xs, xs, "b-")
 
     xs, ps = cdf.xs, cdf.ps
-    fs = [fit.Value(p) for p in ps]
+    fs = [fit.value(p) for p in ps]
 
     thinkplot.plot_line(xs, fs, "gs")
     thinkplot.save_plot(root="kidney3", formats=FORMATS, xlabel="Actual", ylabel="Model")
@@ -152,7 +152,7 @@ def fit_cdf(cdf):
     xs = xs[1:-1]
     lcps = [math.log(p) for p in cps[1:-1]]
 
-    _inter, slope = thinkbayes.LeastSquares(xs, lcps)
+    _inter, slope = thinkbayes.least_squares(xs, lcps)
     return -slope
 
 
@@ -168,8 +168,8 @@ def correlated_generator(cdf, rho):
 
     def transform(location):
         """Maps from a Normal variate to a variate with the given CDF."""
-        p = thinkbayes.StandardNormalCdf(location)
-        y = cdf.Value(p)
+        p = thinkbayes.standard_normal_cdf(location)
+        y = cdf.value(p)
         return y
 
     # for the first value, choose from a Normal and transform it
@@ -194,7 +194,7 @@ def uncorrelated_generator(cdf, _rho=None):
     rho: ignored
     """
     while True:
-        x = cdf.Random()
+        x = cdf.random()
         yield x
 
 
@@ -247,7 +247,7 @@ def generate_cdf(n=1000, pc=0.35, lam1=0.79, lam2=5.0):
     Returns: Cdf of generated sample
     """
     xs = generate_sample(n, pc, lam1, lam2)
-    cdf = thinkbayes.MakeCdfFromList(xs)
+    cdf = thinkbayes.make_cdf_from_list(xs)
     return cdf
 
 
@@ -260,7 +260,7 @@ def model_cdf(pc=0.35, lam1=0.79, lam2=5.0):
 
     Returns: list of xs, list of ys
     """
-    cdf = thinkbayes.EvalExponentialCdf
+    cdf = thinkbayes.eval_exponential_cdf
     x1 = np.arange(-2, 0, 0.1)
     y1 = [pc * (1 - cdf(-x, lam2)) for x in x1]
     x2 = np.arange(0, 7, 0.1)
@@ -290,20 +290,20 @@ def cm_to_bucket(x, factor=BUCKET_FACTOR):
     return round(factor * math.log(x))
 
 
-def diameter(volume, factor=3 / math.pi / 4, exp=1 / 3.0):
+def diameter(volume_sphere, factor=3 / math.pi / 4, exp=1 / 3.0):
     """Converts a volume to a diameter.
 
     d = 2r = 2 * (3/4/pi V)^1/3
     """
-    return 2 * (factor * volume) ** exp
+    return 2 * (factor * volume_sphere) ** exp
 
 
-def volume(diameter, factor=4 * math.pi / 3):
+def volume(diameter_sphere, factor=4 * math.pi / 3):
     """Converts a diameter to a volume.
 
     V = 4/3 pi (d/2)^3
     """
-    return factor * (diameter / 2.0) ** 3
+    return factor * (diameter_sphere / 2.0) ** 3
 
 
 class Cache(object):
@@ -334,7 +334,7 @@ class Cache(object):
         bucket: int bucket number
         name: string
         """
-        pmf = self.joint.Conditional(0, 1, bucket, label=name)
+        pmf = self.joint.conditional(0, 1, bucket, label=name)
         cdf = pmf.make_cdf()
         return cdf
 
@@ -346,7 +346,7 @@ class Cache(object):
         """
         bucket = cm_to_bucket(cm)
         cdf = self.conditional_cdf(bucket)
-        p = cdf.Prob(age)
+        p = cdf.prob(age)
         return 1 - p
 
     def get_dist_age_size(self, size_thresh=MAXSIZE):
@@ -358,13 +358,13 @@ class Cache(object):
         """
         joint = thinkbayes.Joint()
 
-        for val, freq in self.joint.Items():
+        for val, freq in self.joint.items():
             age, bucket = val
             cm = bucket_to_cm(bucket)
             if cm > size_thresh:
                 continue
             log_cm = math.log10(cm)
-            joint.Set((age, log_cm), math.log(freq) * 10)
+            joint.set((age, log_cm), math.log(freq) * 10)
 
         return joint
 
@@ -378,7 +378,7 @@ class Cache(object):
         final = seq[-1]
         cm = diameter(final)
         bucket = cm_to_bucket(cm)
-        self.joint.Incr((age, bucket))
+        self.joint.incr((age, bucket))
 
         self.sequences.setdefault(bucket, []).append(seq)
 
@@ -389,14 +389,14 @@ class Cache(object):
         """Prints the size (cm) for each bucket, and the number of sequences."""
         for bucket in sorted(self.get_buckets()):
             ss = self.get_sequence(bucket)
-            diameter = bucket_to_cm(bucket)
-            print((diameter, len(ss)))
+            _diameter = bucket_to_cm(bucket)
+            print((_diameter, len(ss)))
 
     def correlation(self):
         """Computes the correlation between log volumes and rdts."""
         vs, rdts = zip(*self.initial_rdt)
         lvs = [math.log(v) for v in vs]
-        return thinkbayes.Corr(lvs, rdts)
+        return thinkbayes.corr(lvs, rdts)
 
 
 class Calculator(object):
@@ -560,7 +560,7 @@ class Calculator(object):
                 continue
             xs.append(cm)
             cdf = self.cache.conditional_cdf(bucket)
-            ps = [cdf.Percentile(p) for p in percentiles]
+            ps = [cdf.percentile(p) for p in percentiles]
             ts.append(ps)
 
         # dump the results into a table
@@ -707,7 +707,7 @@ def fit_line(xs, ys, fxs):
     fxs: diameter in cm
     """
     lxs = [math.log(x) for x in xs]
-    inter, slope = thinkbayes.LeastSquares(lxs, ys)
+    inter, slope = thinkbayes.least_squares(lxs, ys)
     # res = correlation.Residuals(lxs, ys, inter, slope)
     # r2 = correlation.CoefDetermination(ys, res)
 
@@ -750,9 +750,9 @@ def test_correlation(cdf):
     rdt_seq = correlated_generator(cdf, rho)
     xs = [next(rdt_seq) for _ in range(n)]
 
-    rho2 = thinkbayes.SerialCorr(xs)
+    rho2 = thinkbayes.serial_corr(xs)
     print((rho, rho2))
-    cdf2 = thinkbayes.MakeCdfFromList(xs)
+    cdf2 = thinkbayes.make_cdf_from_list(xs)
 
     thinkplot.plot_cdfs([cdf, cdf2])
     thinkplot.show_plot()

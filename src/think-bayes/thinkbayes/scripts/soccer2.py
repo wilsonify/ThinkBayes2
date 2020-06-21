@@ -15,7 +15,7 @@ from thinkbayes import thinkplot
 class Soccer(thinkbayes.Suite):
     """Represents hypotheses about."""
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: goal rate in goals per game
@@ -34,7 +34,7 @@ class Soccer(thinkbayes.Suite):
         logging.debug("%r", f"label={label}")
         # TODO: fill this in
         lam = 1
-        pred = thinkbayes.MakePoissonPmf(lam, 15)
+        pred = thinkbayes.make_poisson_pmf(lam, 15)
         return pred
 
 
@@ -45,14 +45,14 @@ def main():
     # chosen to yield the right prior mean
     suite1 = Soccer(hypos, label="Germany")
     suite1.update(0.34)
-    suite2 = suite1.Copy(label="Argentina")
+    suite2 = suite1.copy(label="Argentina")
 
     # update with the results of World Cup 2014 final
     suite1.update(1)
     suite2.update(0)
 
-    print("posterior mean Germany", suite1.Mean())
-    print("posterior mean Argentina", suite2.Mean())
+    print("posterior mean Germany", suite1.mean())
+    print("posterior mean Argentina", suite2.mean())
 
     # plot the posteriors
     thinkplot.pre_plot(2)

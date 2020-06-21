@@ -12,7 +12,7 @@ from thinkbayes import thinkplot
 class Electorate(thinkbayes.Suite):
     """Represents hypotheses about the state of the electorate."""
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: fraction of the population that supports your candidate
@@ -20,7 +20,7 @@ class Electorate(thinkbayes.Suite):
         """
         bias, std, result = data
         error = result - hypo
-        like = thinkbayes.EvalNormalPdf(error, bias, std)
+        like = thinkbayes.eval_normal_pdf(error, bias, std)
         return like
 
 
@@ -42,9 +42,9 @@ def main():
         clf=False,
     )
 
-    print(suite.Mean())
-    print(suite.Std())
-    print(suite.ProbLess(50))
+    print(suite.mean())
+    print(suite.std())
+    print(suite.prob_less(50))
 
     data = -2.3, 4.1, 49
     suite.update(data)
@@ -57,9 +57,9 @@ def main():
         formats=["png"],
     )
 
-    print(suite.Mean())
-    print(suite.Std())
-    print(suite.ProbLess(50))
+    print(suite.mean())
+    print(suite.std())
+    print(suite.prob_less(50))
 
 
 if __name__ == "__main__":

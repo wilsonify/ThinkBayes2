@@ -55,7 +55,7 @@ class Price(thinkbayes.Suite):
         thinkbayes.Suite.__init__(self, pmf, label=label)
         self.player = player
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: actual price
@@ -105,7 +105,7 @@ class GainCalculator(object):
         """
         suite = self.player.posterior
         total = 0
-        for price, prob in sorted(suite.Items()):
+        for price, prob in sorted(suite.items()):
             gain = self.gain(bid, price)
             total += prob * gain
         return total
@@ -157,7 +157,7 @@ class Player(object):
         logging.debug("%r", f"diffs={diffs}")
 
         self.pdf_price = thinkbayes.EstimatedPdf(prices)
-        self.cdf_diff = thinkbayes.MakeCdfFromList(diffs)
+        self.cdf_diff = thinkbayes.make_cdf_from_list(diffs)
 
         mu = 0
         sigma = np.std(diffs)
@@ -170,14 +170,14 @@ class Player(object):
 
         error: how much the bid is under the actual price
         """
-        return self.pdf_error.Density(error)
+        return self.pdf_error.density(error)
 
     def pmf_price(self):
         """Returns a new Pmf of prices.
 
         A discrete version of the estimated Pdf.
         """
-        return self.pdf_price.MakePmf(xs=self.price_xs)
+        return self.pdf_price.make_pmf(xs=self.price_xs)
 
     def cdf_diff(self):
         """Returns a reference to the Cdf of differences (underness).
@@ -187,14 +187,14 @@ class Player(object):
     def prob_overbid(self):
         """Returns the probability this player overbids.
         """
-        return self.cdf_diff.Prob(-1)
+        return self.cdf_diff.prob(-1)
 
     def prob_worse_than(self, diff):
         """Probability this player's diff is greater than the given diff.
 
         diff: how much the oppenent is off by (always positive)
         """
-        return 1 - self.cdf_diff.Prob(diff)
+        return 1 - self.cdf_diff.prob(diff)
 
     def make_beliefs(self, guess):
         """Makes a posterior distribution based on estimated price.
@@ -205,7 +205,7 @@ class Player(object):
         """
         pmf = self.pmf_price()
         self.prior = Price(pmf, self, label="prior")
-        self.posterior = self.prior.Copy(label="posterior")
+        self.posterior = self.prior.copy(label="posterior")
         self.posterior.update(guess)
 
     def optimal_bid(self, guess, opponent):
@@ -258,8 +258,8 @@ def make_plots(player1, player2):
     cdf2 = player2.cdf_diff()
     cdf2.label = "player 2"
 
-    print("Player median", cdf1.Percentile(50))
-    print("Player median", cdf2.Percentile(50))
+    print("Player median", cdf1.percentile(50))
+    print("Player median", cdf2.percentile(50))
 
     print("Player 1 overbids", player1.prob_overbid())
     print("Player 2 overbids", player2.prob_overbid())
@@ -299,8 +299,8 @@ def plot_expected_gains(guess1=20000, guess2=40000):
 
     print("Player 1 prior mle", player1.prior.MaximumLikelihood())
     print("Player 2 prior mle", player2.prior.MaximumLikelihood())
-    print("Player 1 mean", player1.posterior.Mean())
-    print("Player 2 mean", player2.posterior.Mean())
+    print("Player 1 mean", player1.posterior.mean())
+    print("Player 2 mean", player2.posterior.mean())
     print("Player 1 mle", player1.posterior.MaximumLikelihood())
     print("Player 2 mle", player2.posterior.MaximumLikelihood())
 
@@ -336,7 +336,7 @@ def plot_optimal_bid():
     for guess in guesses:
         player1.make_beliefs(guess)
 
-        mean = player1.posterior.Mean()
+        mean = player1.posterior.mean()
         mle = player1.posterior.MaximumLikelihood()
 
         calc = GainCalculator(player1, player2)

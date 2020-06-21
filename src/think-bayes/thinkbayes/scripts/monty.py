@@ -18,18 +18,18 @@ class Monty(Pmf):
         """
         Pmf.__init__(self)
         for hypo in hypos:
-            self.Set(hypo, 1)
-        self.Normalize()
+            self.set(hypo, 1)
+        self.normalize()
 
     def update(self, data):
         """Updates each hypothesis based on the data.
 
         data: any representation of the data
         """
-        for hypo in self.Values():
+        for hypo in self.values():
             like = self.likelihood(data, hypo)
-            self.Mult(hypo, like)
-        self.Normalize()
+            self.mult(hypo, like)
+        self.normalize()
 
     @staticmethod
     def likelihood(data, hypo):
@@ -53,7 +53,7 @@ def main():
     data = "B"
     pmf.update(data)
 
-    for hypo, prob in sorted(pmf.Items()):
+    for hypo, prob in sorted(pmf.items()):
         print(hypo, prob)
 
 

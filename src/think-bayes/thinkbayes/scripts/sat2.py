@@ -14,7 +14,7 @@ from thinkbayes import thinkplot
 class Sat(thinkbayes.Suite, thinkbayes.Joint):
     """Represents the distribution of p_correct for a test-taker."""
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of data under hypo.
 
         data: boolean, whether the answer is correct
@@ -52,13 +52,13 @@ def update_p_q(p, q, correct):
 
 
 def main():
-    p1 = thinkbayes.MakeNormalPmf(0, 1, 3, n=101)
+    p1 = thinkbayes.make_normal_pmf(0, 1, 3, n=101)
     p1.label = "p1"
-    p2 = p1.Copy(label="p2")
+    p2 = p1.copy(label="p2")
 
-    q1 = thinkbayes.MakeNormalPmf(-1, 1, 3, n=101)
+    q1 = thinkbayes.make_normal_pmf(-1, 1, 3, n=101)
     q1.label = "q1"
-    q2 = q1.Copy(label="q2")
+    q2 = q1.copy(label="q2")
 
     p1, q1 = update_p_q(p1, q1, True)
     p1, q2 = update_p_q(p1, q2, True)

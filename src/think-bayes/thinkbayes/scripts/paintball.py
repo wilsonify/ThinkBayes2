@@ -44,8 +44,8 @@ def make_location_pmf(alpha, beta, locations):
     pmf = thinkbayes.Pmf()
     for x in locations:
         prob = 1.0 / strafing_speed(alpha, beta, x)
-        pmf.Set(x, prob)
-    pmf.Normalize()
+        pmf.set(x, prob)
+    pmf.normalize()
     return pmf
 
 
@@ -66,7 +66,7 @@ class Paintball(thinkbayes.Suite, thinkbayes.Joint):
         pairs = [(alpha, beta) for alpha in alphas for beta in betas]
         thinkbayes.Suite.__init__(self, pairs)
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: pair of alpha, beta
@@ -77,7 +77,7 @@ class Paintball(thinkbayes.Suite, thinkbayes.Joint):
         alpha, beta = hypo
         x = data
         pmf = make_location_pmf(alpha, beta, self.locations)
-        like = pmf.Prob(x)
+        like = pmf.prob(x)
         return like
 
 
@@ -101,21 +101,21 @@ def make_posterior_plot(suite):
 
     suite: posterior joint distribution of location
     """
-    marginal_alpha = suite.Marginal(0)
+    marginal_alpha = suite.marginal(0)
     marginal_alpha.name = "alpha"
-    marginal_beta = suite.Marginal(1)
+    marginal_beta = suite.marginal(1)
     marginal_beta.name = "beta"
 
-    print("alpha CI", marginal_alpha.CredibleInterval(50))
-    print("beta CI", marginal_beta.CredibleInterval(50))
+    print("alpha CI", marginal_alpha.credible_interval(50))
+    print("beta CI", marginal_beta.credible_interval(50))
 
     thinkplot.pre_plot(num=2)
 
     # thinkplot.Pmf(marginal_alpha)
     # thinkplot.Pmf(marginal_beta)
 
-    thinkplot.plot_cdf_line(thinkbayes.MakeCdfFromPmf(marginal_alpha))
-    thinkplot.plot_cdf_line(thinkbayes.MakeCdfFromPmf(marginal_beta))
+    thinkplot.plot_cdf_line(thinkbayes.make_cdf_from_pmf(marginal_alpha))
+    thinkplot.plot_cdf_line(thinkbayes.make_cdf_from_pmf(marginal_beta))
 
     thinkplot.save_plot(
         "paintball2", xlabel="Distance", ylabel="Prob", loc=4, formats=FORMATS
@@ -131,7 +131,7 @@ def make_conditional_plot(suite):
     thinkplot.pre_plot(num=len(betas))
 
     for beta in betas:
-        cond = suite.Conditional(0, 1, beta)
+        cond = suite.conditional(0, 1, beta)
         cond.name = f"beta = {beta}"
         thinkplot.plot_pdf_line(cond)
 
@@ -159,11 +159,11 @@ def make_credible_plot(suite):
 
     suite: Suite
     """
-    d = dict((pair, 0) for pair in suite.Values())
+    d = dict((pair, 0) for pair in suite.values())
 
     percentages = [75, 50, 25]
     for p in percentages:
-        interval = suite.MaxLikeInterval(p)
+        interval = suite.max_like_interval(p)
         for pair in interval:
             d[pair] += 1
 
@@ -184,7 +184,7 @@ def main(script):
     locations = range(0, 31)
 
     suite = Paintball(alphas, betas, locations)
-    suite.UpdateSet([15, 16, 18, 21])
+    suite.update_set([15, 16, 18, 21])
 
     make_credible_plot(suite)
 

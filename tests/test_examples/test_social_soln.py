@@ -36,7 +36,7 @@ def test_social():
     # Solution
 
     class Social(Suite):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """
             data: outcome of unreliable measurement, either 'YES' or 'NO'
             hypo: actual proportion of the thing we're measuring
@@ -71,7 +71,7 @@ def test_social():
 
     # Solution
 
-    suite.Mean(), suite.MAP()
+    suite.mean(), suite.MAP()
 
     # Solution
 
@@ -79,8 +79,8 @@ def test_social():
     # to survey 100 people directly?
 
     beta = Beta(1, 1)
-    beta.Update((60, 40))
-    thinkplot.plot_pdf_line(beta.MakePmf(), label="Direct", color="gray")
+    beta.update((60, 40))
+    thinkplot.plot_pdf_line(beta.make_pmf(), label="Direct", color="gray")
 
     thinkplot.plot_pdf_line(suite, label="Randomized")
     thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
@@ -92,8 +92,8 @@ def test_social():
 
     factor = 2 * np.sqrt(2)
     beta = Beta(1, 1)
-    beta.Update((60 / factor, 40 / factor))
-    thinkplot.plot_pdf_line(beta.MakePmf(), label="Direct", color="gray")
+    beta.update((60 / factor, 40 / factor))
+    thinkplot.plot_pdf_line(beta.make_pmf(), label="Direct", color="gray")
 
     thinkplot.plot_pdf_line(suite, label="Randomized")
     thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")

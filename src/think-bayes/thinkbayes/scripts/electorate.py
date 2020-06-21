@@ -14,7 +14,7 @@ from thinkbayes import thinkplot
 class Electorate(thinkbayes.Suite):
     """Represents hypotheses about the state of the electorate."""
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: 

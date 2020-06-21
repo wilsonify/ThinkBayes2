@@ -44,7 +44,7 @@ class Locker(object):
 
     def keys(self):
         """Returns an iterator of keys."""
-        return self.shelf.iterkeys()
+        return self.shelf.keys()
 
     def read(self):
         """Returns the contents of the shelf as a map."""
@@ -217,9 +217,9 @@ class Subject(object):
             _, observations = self.generate_observations(add_reads)
             all_seen = seen.union(observations)
             len_all_seen_minus_seen = len(all_seen) - len(seen)
-            pmf.Incr(len_all_seen_minus_seen)
+            pmf.incr(len_all_seen_minus_seen)
 
-        pmf.Normalize()
+        pmf.normalize()
         self.pmf_l = pmf
 
     def dist_l(self):
@@ -235,7 +235,7 @@ class Subject(object):
     def plot_dist_n(self):
         """Plots distribution of n."""
         pmf = self.suite.dist_n()
-        print("90% CI for N:", pmf.CredibleInterval(90))
+        print("90% CI for N:", pmf.credible_interval(90))
         pmf.label = self.code
 
         thinkplot.clear_figure()
@@ -283,7 +283,7 @@ class Subject(object):
         mix.label = f"{rank} ({count})"
 
         print(f"90%% CI for prevalence of species {rank}: ")
-        print(mix.CredibleInterval(90))
+        print(mix.credible_interval(90))
 
         if cdf_flag:
             cdf = mix.make_cdf()
@@ -305,7 +305,7 @@ class Subject(object):
         metapmf, mix = self.suite.dist_of_prevalence(index)
 
         thinkplot.clear_figure()
-        for pmf in metapmf.Values():
+        for pmf in metapmf.values():
             thinkplot.plot_pmf_line(pmf, color="blue", alpha=0.2, linewidth=0.5)
 
         thinkplot.plot_pmf_line(mix, color="blue", alpha=0.9, linewidth=2)
@@ -345,7 +345,7 @@ class Subject(object):
         items = zip(name_iter, prevalences)
 
         cdf = thinkbayes.Cdf(dict(items))
-        observations = cdf.Sample(num_reads)
+        observations = cdf.sample(num_reads)
 
         # for ob in observations:
         #    print ob
@@ -366,7 +366,7 @@ class Subject(object):
 
         subject = Subject(self.code)
         hist = thinkbayes.Hist(reads)
-        for species, count in hist.Items():
+        for species, count in hist.items():
             subject.add_species_count(species, count)
 
         subject.done()
@@ -450,8 +450,8 @@ class Subject(object):
         pred = thinkbayes.Pmf(label=self.code)
         for curve in curves:
             _, last_num_new = curve[-1]
-            pred.Incr(last_num_new)
-        pred.Normalize()
+            pred.incr(last_num_new)
+        pred.normalize()
         return pred
 
 
@@ -467,12 +467,12 @@ def make_conditionals(curves, ks):
 
     cdfs = []
     for k in ks:
-        pmf = joint.Conditional(1, 0, k)
+        pmf = joint.conditional(1, 0, k)
         pmf.label = f"k={k}"
         cdf = pmf.make_cdf()
         cdfs.append(cdf)
         print(f"90%% credible interval for {k} ")
-        print(cdf.CredibleInterval(90))
+        print(cdf.credible_interval(90))
     return cdfs
 
 
@@ -486,8 +486,8 @@ def make_joint_predictive(curves):
     joint = thinkbayes.Joint()
     for curve in curves:
         for k, num_new in curve:
-            joint.Incr((k, num_new))
-    joint.Normalize()
+            joint.incr((k, num_new))
+    joint.normalize()
     return joint
 
 
@@ -723,12 +723,12 @@ def plot_frac_cdfs(cdfs, root="species-frac"):
     color = "#225EA8"
 
     for k, cdf in cdfs.items():
-        xs, ys = cdf.Render()
+        xs, ys = cdf.render()
         ys = [1 - y for y in ys]
         thinkplot.plot_line(xs, ys, color=color, linewidth=1)
 
         x = 0.9
-        y = 1 - cdf.Prob(x)
+        y = 1 - cdf.prob(x)
         pyplot.text(
             x,
             y,
@@ -766,10 +766,10 @@ class Species(thinkbayes.Suite):
         thinkbayes.Suite.update(self, data)
 
         # update the next level of the hierarchy
-        for hypo in self.Values():
+        for hypo in self.values():
             hypo.update(data)
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under this hypothesis.
 
         hypo: Dirichlet object
@@ -786,15 +786,15 @@ class Species(thinkbayes.Suite):
         # correct for the number of ways the observed species
         # might have been chosen from all species
         m = len(data)
-        like *= thinkbayes.BinomialCoef(dirichlet.n, m)
+        like *= thinkbayes.binomial_coef(dirichlet.n, m)
 
         return like
 
     def dist_n(self):
         """Computes the distribution of n."""
         pmf = thinkbayes.Pmf()
-        for hypo, prob in self.Items():
-            pmf.Set(hypo.n, prob)
+        for hypo, prob in self.items():
+            pmf.set(hypo.n, prob)
         return pmf
 
 
@@ -875,7 +875,7 @@ class Species2(object):
         log_likes -= np.max(log_likes)
         likes = np.exp(log_likes)
 
-        coefs = [thinkbayes.BinomialCoef(n, m) for n in self.ns]
+        coefs = [thinkbayes.binomial_coef(n, m) for n in self.ns]
         likes *= coefs
 
         return likes
@@ -890,22 +890,22 @@ class Species2(object):
 
     def random_n(self):
         """Returns a random value of n."""
-        return self.dist_n().Random()
+        return self.dist_n().random()
 
     def dist_q(self, iters=100):
         """Computes the distribution of q based on distribution of n.
 
         Returns: pmf of q
         """
-        cdf_n = self.dist_n().MakeCdf()
-        sample_n = cdf_n.Sample(iters)
+        cdf_n = self.dist_n().make_cdf()
+        sample_n = cdf_n.sample(iters)
 
         pmf = thinkbayes.Pmf()
         for n in sample_n:
             q = self.random_q(n)
-            pmf.Incr(q)
+            pmf.incr(q)
 
-        pmf.Normalize()
+        pmf.normalize()
         return pmf
 
     def random_q(self, n):
@@ -919,12 +919,12 @@ class Species2(object):
         """
         # generate random prevalences
         dirichlet = thinkbayes.Dirichlet(n, conc=self.conc)
-        prevalences = dirichlet.Random()
+        prevalences = dirichlet.random()
 
         # generate a simulated sample
         pmf = thinkbayes.Pmf(dict(enumerate(prevalences)))
-        cdf = pmf.MakeCdf()
-        sample = cdf.Sample(self.num_reads)
+        cdf = pmf.make_cdf()
+        sample = cdf.sample(self.num_reads)
         seen = set(sample)
 
         # add up the prevalence of unseen species
@@ -958,10 +958,10 @@ class Species2(object):
 
         for n, prob in zip(self.ns, self.probs):
             beta = self.marginal_beta(n, index)
-            pmf = beta.MakePmf()
-            metapmf.Set(pmf, prob)
+            pmf = beta.make_pmf()
+            metapmf.set(pmf, prob)
 
-        mix = thinkbayes.MakeMixture(metapmf)
+        mix = thinkbayes.make_mixture(metapmf)
         return metapmf, mix
 
     def sample_posterior(self):
@@ -1072,7 +1072,7 @@ class Species3(Species2):
 
         # correct for the number of ways we could see m species
         # out of a possible n
-        coefs = [thinkbayes.BinomialCoef(n, m) for n in self.ns]
+        coefs = [thinkbayes.binomial_coef(n, m) for n in self.ns]
         likes *= coefs
 
         return likes
@@ -1096,7 +1096,7 @@ class Species4(Species):
             # call the parent class
             Species.update(self, one)
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under this hypothesis.
 
         Note: this only works correctly if we update one species at a time.
@@ -1262,15 +1262,15 @@ def simple_dirichlet_example():
 
     dirichlet = thinkbayes.Dirichlet(3)
     for i in range(3):
-        beta = dirichlet.MarginalBeta(i)
-        print("mean", names[i], beta.Mean())
+        beta = dirichlet.marginal_beta(i)
+        print("mean", names[i], beta.mean())
 
-    dirichlet.Update(data)
+    dirichlet.update(data)
     for i in range(3):
-        beta = dirichlet.MarginalBeta(i)
-        print("mean", names[i], beta.Mean())
+        beta = dirichlet.marginal_beta(i)
+        print("mean", names[i], beta.mean())
 
-        pmf = beta.MakePmf(label=names[i])
+        pmf = beta.make_pmf(label=names[i])
         thinkplot.plot_pmf_line(pmf)
 
     thinkplot.save_plot(
@@ -1336,8 +1336,8 @@ def process_subjects(codes):
 
         pmfs.append(pmf)
 
-    print("ProbGreater", thinkbayes.PmfProbGreater(pmfs[0], pmfs[1]))
-    print("ProbLess", thinkbayes.PmfProbLess(pmfs[0], pmfs[1]))
+    print("ProbGreater", thinkbayes.pmf_prob_greater(pmfs[0], pmfs[1]))
+    print("ProbLess", thinkbayes.pmf_prob_less(pmfs[0], pmfs[1]))
 
     thinkplot.save_plot(
         root="species4", xlabel=SPECIES_LABEL, ylabel="Prob", formats=FORMATS,
@@ -1402,8 +1402,8 @@ def print_prediction(cdf, actual):
     cdf: predictive distribution
     actual: actual value
     """
-    median = cdf.Percentile(50)
-    low, high = cdf.CredibleInterval(75)
+    median = cdf.percentile(50)
+    low, high = cdf.credible_interval(75)
 
     print("predicted %0.2f (%0.2f %0.2f)" % (median, low, high))
     print("actual", actual)
@@ -1429,13 +1429,13 @@ def generate_fake_sample(n, r, tr, conc=1):
     """
     # generate random prevalences
     dirichlet = thinkbayes.Dirichlet(n, conc=conc)
-    prevalences = dirichlet.Random()
+    prevalences = dirichlet.random()
     prevalences.sort()
 
     # generate a simulated sample
     pmf = thinkbayes.Pmf(dict(enumerate(prevalences)))
-    cdf = pmf.MakeCdf()
-    sample = cdf.Sample(tr)
+    cdf = pmf.make_cdf()
+    sample = cdf.sample(tr)
 
     # collect the species counts
     hist = thinkbayes.Hist(sample)
@@ -1483,12 +1483,12 @@ def plot_actual_prevalences():
 
         # incr the PMFs
         if m > 50:
-            pmf_actual.Incr(actual_max)
-            pmf_sim.Incr(simulate_max_prev(m, conc))
+            pmf_actual.incr(actual_max)
+            pmf_sim.incr(simulate_max_prev(m, conc))
 
     # plot CDFs for the actual and simulated max prevalence
-    cdf_actual = pmf_actual.MakeCdf(label="actual")
-    cdf_sim = pmf_sim.MakeCdf(label="sim")
+    cdf_actual = pmf_actual.make_cdf(label="actual")
+    cdf_sim = pmf_sim.make_cdf(label="sim")
 
     thinkplot.plot_cdfs([cdf_actual, cdf_sim])
     thinkplot.show_plot()
@@ -1517,7 +1517,7 @@ def simulate_max_prev(m, conc=1):
     Returns: float max of m prevalences
     """
     dirichlet = thinkbayes.Dirichlet(m, conc)
-    prevalences = dirichlet.Random()
+    prevalences = dirichlet.random()
     return max(prevalences)
 
 
@@ -1534,7 +1534,7 @@ def expected_max_prev(m, conc=1, iters=100):
 
     t = []
     for _ in range(iters):
-        prevalences = dirichlet.Random()
+        prevalences = dirichlet.random()
         t.append(max(prevalences))
 
     return np.mean(t)
@@ -1675,7 +1675,7 @@ class Calibrator(object):
         print("Run n, q, l", n_actual, q_actual, l_actual)
 
         # extract the data
-        data = [count for species, count in subhist.Items()]
+        data = [count for species, count in subhist.items()]
         data.sort()
         print("data", data)
 
@@ -1684,7 +1684,7 @@ class Calibrator(object):
         subject.num_reads = r
         subject.total_reads = tr
 
-        for species, count in subhist.Items():
+        for species, count in subhist.items():
             subject.add_species_count(species, count)
         subject.done()
 
@@ -1727,7 +1727,7 @@ class Calibrator(object):
         actual: actual value
         seq: which sequence to append (actual, mean) onto
         """
-        mean = pmf.Mean()
+        mean = pmf.mean()
         seq.append((actual, mean))
 
         cdf = pmf.make_cdf()
@@ -1748,9 +1748,9 @@ def score_vector(cdf, ps, actual):
     """
     scores = []
     for p in ps:
-        low, high = cdf.CredibleInterval(p)
-        score = score(low, high, actual)
-        scores.append(score)
+        low, high = cdf.credible_interval(p)
+        _score = score(low, high, actual)
+        scores.append(_score)
 
     return np.array(scores)
 
@@ -1789,25 +1789,25 @@ def fake_subject(n=300, conc=0.1, num_reads=400, prevalences=None):
     # generate random prevalences
     if prevalences is None:
         dirichlet = thinkbayes.Dirichlet(n, conc=conc)
-        prevalences = dirichlet.Random()
+        prevalences = dirichlet.random()
         prevalences.sort()
 
     # generate a simulated sample
     pmf = thinkbayes.Pmf(dict(enumerate(prevalences)))
-    cdf = pmf.MakeCdf()
-    sample = cdf.Sample(num_reads)
+    cdf = pmf.make_cdf()
+    sample = cdf.sample(num_reads)
 
     # collect the species counts
     hist = thinkbayes.Hist(sample)
 
     # extract the data
-    data = [count for species, count in hist.Items()]
+    data = [count for species, count in hist.items()]
     data.sort()
 
     # make a Subject and process
     subject = Subject("simulated")
 
-    for species, count in hist.Items():
+    for species, count in hist.items():
         subject.add_species_count(species, count)
     subject.done()
 

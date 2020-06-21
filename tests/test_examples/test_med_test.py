@@ -89,7 +89,7 @@ def test_interpreting_medical_tests():
         pmf = Pmf()
         pmf["cancer"] = base_rate * sensitivity
         pmf["no cancer"] = (1 - base_rate) * (1 - specificity)
-        pmf.Normalize()
+        pmf.normalize()
         return pmf
 
     pmf = compute_ppv(base_rate, sensitivity, specificity)

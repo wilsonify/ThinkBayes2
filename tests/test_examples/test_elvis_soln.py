@@ -31,5 +31,5 @@ def test_elvis_presley():
 
     pmf["fraternal"] *= 0.5
     pmf["identical"] *= 1
-    pmf.Normalize()
-    pmf.Print()
+    pmf.normalize()
+    pmf.print()

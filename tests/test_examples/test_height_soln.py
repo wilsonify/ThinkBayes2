@@ -9,7 +9,7 @@ import logging
 import numpy as np
 import pandas as pd
 from scipy.stats import norm
-from thinkbayes import Pmf, Suite, Joint, MakeMixture, MakeJoint
+from thinkbayes import Pmf, Suite, Joint, make_mixture, make_joint
 from thinkbayes import thinkplot
 
 dist_height = dict(male=norm(178, 7.7), female=norm(163, 7.3))
@@ -30,7 +30,7 @@ class Height(Suite):
     that represents a normal distribution with given parameters.
     """
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """
         data: height in cm
         hypo: 'male' or 'female'
@@ -42,7 +42,7 @@ class Height(Suite):
 
 
 class Heights(Suite, Joint):
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """
 
         data: who is taller, 'A' or 'B'?
@@ -56,7 +56,7 @@ class Heights(Suite, Joint):
 
 
 class Heights2(Suite, Joint):
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """
 
         data: who is taller, A or B
@@ -72,8 +72,8 @@ class Heights2(Suite, Joint):
 def make_prior(A, B):
     suite = Heights()
 
-    for h1, p1 in A.Items():
-        for h2, p2 in B.Items():
+    for h1, p1 in A.items():
+        for h2, p2 in B.items():
             suite[h1, h2] = p1 * p2
     return suite
 
@@ -93,16 +93,16 @@ def faceoff(player1, player2, data):
     """
     joint = make_prior(player1, player2)
     joint.update(data)
-    return joint.Marginal(0), joint.Marginal(1)
+    return joint.marginal(0), joint.marginal(1)
 
 
 def test_one():
     suite = Height(dict(male=0.49, female=0.51))
-    for hypo, prob in suite.Items():
+    for hypo, prob in suite.items():
         print(hypo, prob)
 
     suite.update(170)
-    for hypo, prob in suite.Items():
+    for hypo, prob in suite.items():
         print(hypo, prob)
 
     heights = np.linspace(130, 210)
@@ -140,8 +140,8 @@ def test_three():
     female_height_pmf = Pmf(dict(zip(hs, ps)))
 
     metapmf = Pmf({male_height_pmf: 0.49, female_height_pmf: 0.51})
-    mix = MakeMixture(metapmf)
-    mix.Mean()
+    mix = make_mixture(metapmf)
+    mix.mean()
 
     thinkplot.plot_pdf_line(mix)
     thinkplot.decorate(
@@ -158,11 +158,11 @@ def test_four():
     female_height_pmf = Pmf(dict(zip(hs, ps)))
 
     metapmf = Pmf({male_height_pmf: 0.49, female_height_pmf: 0.51})
-    mix = MakeMixture(metapmf)
-    mix.Mean()
+    mix = make_mixture(metapmf)
+    mix.mean()
 
     suite = make_prior(mix, mix)
-    suite.Total()
+    suite.total()
 
     thinkplot.contour_plot(suite)
     thinkplot.decorate(
@@ -181,11 +181,11 @@ def test_five():
     female_height_pmf = Pmf(dict(zip(hs, ps)))
 
     metapmf = Pmf({male_height_pmf: 0.49, female_height_pmf: 0.51})
-    mix = MakeMixture(metapmf)
-    mix.Mean()
+    mix = make_mixture(metapmf)
+    mix.mean()
 
     suite = make_prior(mix, mix)
-    suite.Total()
+    suite.total()
     suite.update(0)
 
     thinkplot.contour_plot(suite)
@@ -205,15 +205,15 @@ def test_six():
     female_height_pmf = Pmf(dict(zip(hs, ps)))
 
     metapmf = Pmf({male_height_pmf: 0.49, female_height_pmf: 0.51})
-    mix = MakeMixture(metapmf)
-    mix.Mean()
+    mix = make_mixture(metapmf)
+    mix.mean()
 
     suite = make_prior(mix, mix)
-    suite.Total()
+    suite.total()
     suite.update(0)
 
-    posterior_a = suite.Marginal(0)
-    posterior_b = suite.Marginal(1)
+    posterior_a = suite.marginal(0)
+    posterior_b = suite.marginal(1)
 
     thinkplot.plot_pdf_line(posterior_a, label="A")
     thinkplot.plot_pdf_line(posterior_b, label="B")
@@ -221,7 +221,7 @@ def test_six():
         xlabel="Height (cm)", ylabel="PMF", title="Posterior marginal distributions"
     )
 
-    posterior_a.Mean(), posterior_b.Mean()
+    posterior_a.mean(), posterior_b.mean()
 
 
 def test_seven():
@@ -233,7 +233,7 @@ def test_seven():
     female_height_pmf = Pmf(dict(zip(hs, ps)))
 
     metapmf = Pmf({male_height_pmf: 0.49, female_height_pmf: 0.51})
-    mix = MakeMixture(metapmf)
+    mix = make_mixture(metapmf)
 
     A = mix
     B = mix
@@ -244,7 +244,7 @@ def test_seven():
     A, B = faceoff(A, B, "B")
 
     thinkplot.plot_pdf_line(A)
-    A.Mean()
+    A.mean()
 
 
 def test_eight():
@@ -256,30 +256,30 @@ def test_eight():
     female_height_pmf = Pmf(dict(zip(hs, ps)))
 
     metapmf = Pmf({male_height_pmf: 0.49, female_height_pmf: 0.51})
-    mix = MakeMixture(metapmf)
+    mix = make_mixture(metapmf)
 
     A = mix
     B = mix
 
     total = 0
-    for h, p in A.Items():
+    for h, p in A.items():
         total += p * prob_male(h)
     logging.info("%r", f"total = {total}")
 
 
     annotated_mix = Suite()
-    for h, p in male_height_pmf.Items():
+    for h, p in male_height_pmf.items():
         annotated_mix["M", h] = p * 0.49
 
-    for h, p in female_height_pmf.Items():
+    for h, p in female_height_pmf.items():
         annotated_mix["F", h] = p * 0.51
 
-    annotated_mix.Total()
+    annotated_mix.total()
 
     def faceoff(player1, player2, data):
-        joint = Heights2(MakeJoint(player1, player2))
+        joint = Heights2(make_joint(player1, player2))
         joint.update(data)
-        return joint.Marginal(0), joint.Marginal(1)
+        return joint.marginal(0), joint.marginal(1)
 
     A = annotated_mix
     B = annotated_mix
@@ -289,8 +289,8 @@ def test_eight():
 
     A, _ = faceoff(A, B, "B")
 
-    A_male = Joint(A).Marginal(0)
+    A_male = Joint(A).marginal(0)
 
-    A_height = Joint(A).Marginal(1)
+    A_height = Joint(A).marginal(1)
     thinkplot.plot_pdf_line(A_height)
-    A_height.Mean()
+    A_height.mean()

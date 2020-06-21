@@ -28,7 +28,7 @@ from thinkbayes import thinkplot
 class Euro(thinkbayes.Suite):
     """Represents hypotheses about the probability of heads."""
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: integer value of x, the probability of heads (0-100)
@@ -44,7 +44,7 @@ class Euro(thinkbayes.Suite):
 class Euro2(thinkbayes.Suite):
     """Represents hypotheses about the probability of heads."""
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: integer value of x, the probability of heads (0-100)
@@ -66,10 +66,10 @@ def triangle_prior():
     """Makes a Suite with a triangular prior."""
     suite = Euro()
     for x in range(0, 51):
-        suite.Set(x, x)
+        suite.set(x, x)
     for x in range(51, 101):
-        suite.Set(x, 100 - x)
-    suite.Normalize()
+        suite.set(x, 100 - x)
+    suite.normalize()
     return suite
 
 
@@ -88,17 +88,17 @@ def run_update(suite, heads=140, tails=110):
 
 def summarize(suite):
     """Prints summary statistics for the suite."""
-    print(suite.Prob(50))
+    print(suite.prob(50))
 
     print("MLE", suite.MaximumLikelihood())
 
-    print("Mean", suite.Mean())
-    print("Median", suite.Percentile(50))
+    print("Mean", suite.mean())
+    print("Median", suite.percentile(50))
 
-    print("5th %ile", suite.Percentile(5))
-    print("95th %ile", suite.Percentile(95))
+    print("5th %ile", suite.percentile(5))
+    print("95th %ile", suite.percentile(95))
 
-    print("CI", suite.CredibleInterval(90))
+    print("CI", suite.credible_interval(90))
 
 
 def plot_suites(suites, root):

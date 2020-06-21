@@ -39,7 +39,7 @@ import thinkbayes
 class Soccer(thinkbayes.Suite):
     """Represents hypotheses about goal-scoring rates."""
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: goal rate in goals per game
@@ -47,7 +47,7 @@ class Soccer(thinkbayes.Suite):
         """
         goals = data
         lam = hypo
-        like = thinkbayes.EvalPoissonPmf(goals, lam)
+        like = thinkbayes.eval_poisson_pmf(goals, lam)
         return like
 
 
@@ -72,7 +72,7 @@ def test_soccer():
     )  # fake data chosen by trial and error to yield the observed prior mean
 
     thinkplot.plot_pdf_line(suite)
-    suite.Mean()
+    suite.mean()
 
     # According to this prior, the goal-scoring rates are always greater than zero, with the most likely value (a priori) near 0.5.  Goal scoring rates greater than 5 are considered unlikely.
     #
@@ -80,13 +80,13 @@ def test_soccer():
     #
     # The next step is to compute the posteriors for the two teams:
 
-    germany = suite.Copy(label="Germany")
-    argentina = suite.Copy(label="Argentina")
+    germany = suite.copy(label="Germany")
+    argentina = suite.copy(label="Argentina")
     germany.update(1)
     argentina.update(0)
 
-    print("posterior mean Germany", germany.Mean())
-    print("posterior mean Argentina", argentina.Mean())
+    print("posterior mean Germany", germany.mean())
+    print("posterior mean Argentina", argentina.mean())
 
     # `Update` invokes the likelihood function for each hypothetical value of $\lambda$ and updates the distribution accordingly.
     #
@@ -125,11 +125,11 @@ def test_soccer():
         returns: new Pmf (mixture of Poissons)
         """
         metapmf = thinkbayes.Pmf()
-        for lam, prob in suite.Items():
-            pred = thinkbayes.MakePoissonPmf(lam * duration, 15)
+        for lam, prob in suite.items():
+            pred = thinkbayes.make_poisson_pmf(lam * duration, 15)
             metapmf[pred] = prob
 
-        mix = thinkbayes.MakeMixture(metapmf, label=label)
+        mix = thinkbayes.make_mixture(metapmf, label=label)
         return mix
 
     germany_pred = PredictiveDist(germany, label="germany")

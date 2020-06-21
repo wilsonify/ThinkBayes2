@@ -26,7 +26,7 @@ def run_estimate(update_func, num_points=31, median_flag=False):
         print(label, len(xs))
         summarize(xs)
 
-        xs = thinkbayes.Jitter(xs, 1.3)
+        xs = thinkbayes.jitter(xs, 1.3)
 
         mus, sigmas = find_prior_ranges(xs, num_points, median_flag=median_flag)
         suite = Height(mus, sigmas, label)
@@ -37,11 +37,11 @@ def run_estimate(update_func, num_points=31, median_flag=False):
     suite1 = suites["male"]
     suite2 = suites["female"]
 
-    mu1 = suite1.Marginal(0)
-    sigma1 = suite1.Marginal(1)
+    mu1 = suite1.marginal(0)
+    sigma1 = suite1.marginal(1)
 
-    mu2 = suite2.Marginal(0)
-    sigma2 = suite2.Marginal(1)
+    mu2 = suite2.marginal(0)
+    sigma2 = suite2.marginal(1)
 
     diff = mu1 - mu2
     sigma = (sigma1 + sigma2) / 2

@@ -27,7 +27,7 @@ def main():
 
     thinkplot.show_plot(xlabel="Number of trains", ylabel="PMF")
 
-    print("posterior mean", suite.Mean())
+    print("posterior mean", suite.mean())
 
 
 if __name__ == "__main__":

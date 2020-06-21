@@ -38,14 +38,14 @@ def test_cookie_problem():
     bowl1 = Hist(dict(vanilla=30, chocolate=10))
     bowl2 = Hist(dict(vanilla=20, chocolate=20))
 
-    bowl1.Print()
+    bowl1.print()
 
     # Solution
 
     # Now I'll make a Pmf that contains the two bowls, giving them equal probability.
 
     pmf = Pmf([bowl1, bowl2])
-    pmf.Print()
+    pmf.print()
 
     # Solution
 
@@ -57,7 +57,7 @@ def test_cookie_problem():
     # and as a side effect, it removes one of the cookies from `hypo`
 
     def likelihood(hypo, data):
-        like = hypo[data] / hypo.Total()
+        like = hypo[data] / hypo.total()
         if like:
             hypo[data] -= 1
         return like
@@ -70,7 +70,7 @@ def test_cookie_problem():
     def update(pmf, data):
         for hypo in pmf:
             pmf[hypo] *= likelihood(hypo, data)
-        return pmf.Normalize()
+        return pmf.normalize()
 
     # Solution
 
@@ -79,7 +79,7 @@ def test_cookie_problem():
     # in each Hist has been updated.
 
     update(pmf, "vanilla")
-    pmf.Print()
+    pmf.print()
 
     # Solution
 
@@ -87,7 +87,7 @@ def test_cookie_problem():
     # likelihoods, and different posteriors.
 
     update(pmf, "chocolate")
-    pmf.Print()
+    pmf.print()
 
     # Solution
 

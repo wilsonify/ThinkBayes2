@@ -14,7 +14,7 @@ from thinkbayes import thinkplot
 
 
 def DirichletMarginal(dirichlet, i):
-    return dirichlet.marginal_beta(i).MakePmf()
+    return dirichlet.marginal_beta(i).make_pmf()
 
 
 Dirichlet.Marginal = DirichletMarginal
@@ -32,7 +32,7 @@ class LionsTigersBears(Suite, Joint):
     What is the probability that the next animal we see is a bear?
     """
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """
         
         data: string 'L' , 'T', 'B'
@@ -49,9 +49,9 @@ class LionsTigersBears(Suite, Joint):
 
 
 def plot_marginal_cdfs(joint):
-    pmf_lion = joint.Marginal(0)
-    pmf_tiger = joint.Marginal(1)
-    pmf_bear = joint.Marginal(2)
+    pmf_lion = joint.marginal(0)
+    pmf_tiger = joint.marginal(1)
+    pmf_bear = joint.marginal(2)
 
     thinkplot.plot_cdf_line(pmf_lion.make_cdf(), label="lions")
     thinkplot.plot_cdf_line(pmf_tiger.make_cdf(), label="tigers")
@@ -61,9 +61,9 @@ def plot_marginal_cdfs(joint):
 
 
 def plot_marginal_pmfs(joint):
-    pmf_lion = joint.Marginal(0)
-    pmf_tiger = joint.Marginal(1)
-    pmf_bear = joint.Marginal(2)
+    pmf_lion = joint.marginal(0)
+    pmf_tiger = joint.marginal(1)
+    pmf_bear = joint.marginal(2)
 
     thinkplot.plot_pdf_line(pmf_lion, label="lions")
     thinkplot.plot_pdf_line(pmf_tiger, label="tigers")
@@ -106,7 +106,7 @@ def test_dirichlet(suite):
     dirichlet = Dirichlet(3)
     plot_marginal_pmfs(dirichlet)
 
-    dirichlet.Update((3, 2, 1))
+    dirichlet.update((3, 2, 1))
 
     plot_marginal_pmfs(dirichlet)
 

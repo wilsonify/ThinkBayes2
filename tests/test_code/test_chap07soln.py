@@ -8,8 +8,8 @@ import logging
 
 import numpy as np
 from scipy.stats import poisson
-from thinkbayes import MakeMixture
-from thinkbayes import MakeNormalPmf
+from thinkbayes import make_mixture
+from thinkbayes import make_normal_pmf
 from thinkbayes import Pmf, Suite
 from thinkbayes import thinkplot
 
@@ -29,15 +29,15 @@ def test_chapt7():
 
     # Solution
 
-    from thinkbayes import EvalPoissonPmf
+    from thinkbayes import eval_poisson_pmf
 
-    EvalPoissonPmf(3, 2.9)
+    eval_poisson_pmf(3, 2.9)
 
     # Solution
 
-    from thinkbayes import MakePoissonPmf
+    from thinkbayes import make_poisson_pmf
 
-    pmf = MakePoissonPmf(2.9, high=10)
+    pmf = make_poisson_pmf(2.9, high=10)
     thinkplot.plot_hist_bar(pmf)
     thinkplot.config_plot(xlabel="Number of goals", ylabel="PMF", xlim=[-0.5, 10.5])
 
@@ -49,7 +49,7 @@ def test_chapt7():
 
     # Solution
 
-    pmf = MakePoissonPmf(2.9, high=30)
+    pmf = make_poisson_pmf(2.9, high=30)
     total = pmf + pmf + pmf
     thinkplot.plot_hist_bar(total)
     thinkplot.config_plot(xlabel="Number of goals", ylabel="PMF", xlim=[-0.5, 22.5])
@@ -57,7 +57,7 @@ def test_chapt7():
 
     # Solution
 
-    EvalPoissonPmf(9, 3 * 2.9)
+    eval_poisson_pmf(9, 3 * 2.9)
 
     # **Exercise:** Suppose that the long-run goal-scoring rate of the
     # Canucks against the Bruins is 2.6 goals per game.  Plot the distribution
@@ -69,9 +69,9 @@ def test_chapt7():
 
     # Solution
 
-    from thinkbayes import MakeExponentialPmf
+    from thinkbayes import make_exponential_pmf
 
-    pmf = MakeExponentialPmf(lam=2.6, high=2.5)
+    pmf = make_exponential_pmf(lam=2.6, high=2.5)
     thinkplot.plot_pdf_line(pmf)
     thinkplot.config_plot(xlabel="Time between goals", ylabel="PMF")
 
@@ -83,19 +83,19 @@ def test_chapt7():
 
     # Solution
 
-    from thinkbayes import EvalExponentialCdf
+    from thinkbayes import eval_exponential_cdf
 
-    EvalExponentialCdf(1 / 3, 2.6)
+    eval_exponential_cdf(1 / 3, 2.6)
 
     # **Exercise:** Assuming again that the goal scoring rate is 2.8, what is the probability that the Canucks get shut out (that is, don't score for an entire game)?  Answer this question two ways, using the CDF of the exponential distribution and the PMF of the Poisson distribution.
 
     # Solution
 
-    logging.info("%r", f"1 - EvalExponentialCdf(1, 2.6) = {1 - EvalExponentialCdf(1, 2.6)}")
+    logging.info("%r", f"1 - EvalExponentialCdf(1, 2.6) = {1 - eval_exponential_cdf(1, 2.6)}")
 
     # Solution
 
-    EvalPoissonPmf(0, 2.6)
+    eval_poisson_pmf(0, 2.6)
 
     # ## The Boston Bruins problem
     #
@@ -114,10 +114,10 @@ def test_chapt7():
             mu = 2.8
             sigma = 0.3
 
-            pmf = MakeNormalPmf(mu, sigma, num_sigmas=4, n=101)
+            pmf = make_normal_pmf(mu, sigma, num_sigmas=4, n=101)
             Suite.__init__(self, pmf, label=label)
 
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             Evaluates the Poisson PMF for lambda and k.
@@ -127,7 +127,7 @@ def test_chapt7():
             """
             lam = hypo
             k = data
-            like = EvalPoissonPmf(k, lam)
+            like = eval_poisson_pmf(k, lam)
             return like
 
     # Now we can initialize a suite for each team:
@@ -144,16 +144,16 @@ def test_chapt7():
 
     # And we can update each suite with the scores from the first 4 games.
 
-    suite1.UpdateSet([0, 2, 8, 4])
-    suite2.UpdateSet([1, 3, 1, 0])
+    suite1.update_set([0, 2, 8, 4])
+    suite2.update_set([1, 3, 1, 0])
 
     thinkplot.pre_plot(num=2)
     thinkplot.plot_pdf_line(suite1)
     thinkplot.plot_pdf_line(suite2)
     thinkplot.config_plot(xlabel="Goals per game", ylabel="Probability")
 
-    logging.info("%r", f"suite1.Mean() = {suite1.Mean()}")
-    logging.info("%r", f"suite2.Mean() = {suite2.Mean()}")
+    logging.info("%r", f"suite1.Mean() = {suite1.mean()}")
+    logging.info("%r", f"suite2.Mean() = {suite2.mean()}")
 
     # To predict the number of goals scored in the next game we can compute, for each hypothetical value of $\lambda$, a Poisson distribution of goals scored, then make a weighted mixture of Poissons:
 
@@ -167,11 +167,11 @@ def test_chapt7():
         """
         metapmf = Pmf()
 
-        for lam, prob in suite.Items():
-            pmf = MakePoissonPmf(lam, high)
-            metapmf.Set(pmf, prob)
+        for lam, prob in suite.items():
+            pmf = make_poisson_pmf(lam, high)
+            metapmf.set(pmf, prob)
 
-        mix = MakeMixture(metapmf, label=suite.label)
+        mix = make_mixture(metapmf, label=suite.label)
         return mix
 
     # Here's what the results look like.
@@ -184,15 +184,15 @@ def test_chapt7():
     thinkplot.plot_pmf_line(goal_dist2)
     thinkplot.config_plot(xlabel="Goals", ylabel="Probability", xlim=[-0.7, 11.5])
 
-    logging.info("%r", f"goal_dist1.Mean() = {goal_dist1.Mean()}")
-    logging.info("%r", f"goal_dist2.Mean() = {goal_dist2.Mean()}")
+    logging.info("%r", f"goal_dist1.Mean() = {goal_dist1.mean()}")
+    logging.info("%r", f"goal_dist2.Mean() = {goal_dist2.mean()}")
 
     # Now we can compute the probability that the Bruins win, lose, or tie in regulation time.
 
     diff = goal_dist1 - goal_dist2
-    p_win = diff.ProbGreater(0)
-    p_loss = diff.ProbLess(0)
-    p_tie = diff.Prob(0)
+    p_win = diff.prob_greater(0)
+    p_loss = diff.prob_less(0)
+    p_tie = diff.prob(0)
 
     print("Prob win, loss, tie:", p_win, p_loss, p_tie)
 
@@ -207,11 +207,11 @@ def test_chapt7():
         """
         metapmf = Pmf()
 
-        for lam, prob in suite.Items():
-            pmf = MakeExponentialPmf(lam, high=2.5, n=1001)
-            metapmf.Set(pmf, prob)
+        for lam, prob in suite.items():
+            pmf = make_exponential_pmf(lam, high=2.5, n=1001)
+            metapmf.set(pmf, prob)
 
-        mix = MakeMixture(metapmf, label=suite.label)
+        mix = make_mixture(metapmf, label=suite.label)
         return mix
 
     # Here's what the predictive distributions for `t` look like.
@@ -224,13 +224,13 @@ def test_chapt7():
     thinkplot.plot_pmf_line(time_dist2)
     thinkplot.config_plot(xlabel="Games until goal", ylabel="Probability")
 
-    logging.info("%r", f"time_dist1.Mean() = {time_dist1.Mean()}")
-    logging.info("%r", f"time_dist2.Mean() = {time_dist2.Mean()}")
+    logging.info("%r", f"time_dist1.Mean() = {time_dist1.mean()}")
+    logging.info("%r", f"time_dist2.Mean() = {time_dist2.mean()}")
 
     # In overtime the first team to score wins, so the probability of winning is the probability of generating a smaller value of `t`:
 
-    p_win_in_overtime = time_dist1.ProbLess(time_dist2)
-    p_adjust = time_dist1.ProbEqual(time_dist2)
+    p_win_in_overtime = time_dist1.prob_less(time_dist2)
+    p_adjust = time_dist1.prob_equal(time_dist2)
     p_win_in_overtime += p_adjust / 2
     print("p_win_in_overtime", p_win_in_overtime)
 
@@ -249,8 +249,8 @@ def test_chapt7():
     suite2.update(0)
     time_dist1 = MakeGoalTimePmf(suite1)
     time_dist2 = MakeGoalTimePmf(suite2)
-    p_win_in_overtime = time_dist1.ProbLess(time_dist2)
-    p_adjust = time_dist1.ProbEqual(time_dist2)
+    p_win_in_overtime = time_dist1.prob_less(time_dist2)
+    p_adjust = time_dist1.prob_equal(time_dist2)
     p_win_in_overtime += p_adjust / 2
     print("p_win_in_overtime", p_win_in_overtime)
     p_win_overall = p_win + p_tie * p_win_in_overtime
@@ -260,13 +260,13 @@ def test_chapt7():
     #
     # For a prior distribution on the goal-scoring rate for each team, use a gamma distribution with parameter 1.3.
 
-    from thinkbayes import MakeGammaPmf
+    from thinkbayes import make_gamma_pmf
 
     xs = np.linspace(0, 8, 101)
-    pmf = MakeGammaPmf(xs, 1.3)
+    pmf = make_gamma_pmf(xs, 1.3)
     thinkplot.plot_pdf_line(pmf)
     thinkplot.config_plot(xlabel="Goals per game")
-    pmf.Mean()
+    pmf.mean()
 
     # **Exercise:** In the 2014 FIFA World Cup, Germany played Brazil in a semifinal match. Germany scored after 11 minutes and again at the 23 minute mark. At that point in the match, how many goals would you expect Germany to score after 90 minutes? What was the probability that they would score 5 more goals (as, in fact, they did)?
     #

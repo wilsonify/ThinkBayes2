@@ -26,21 +26,21 @@ from thinkbayes import thinkplot
 # of hitting a skeet
 
 rhode_beta = Beta(1, 1, label="Rhode")
-rhode_beta.Update((22, 11))
+rhode_beta.update((22, 11))
 
 # Solution
 
 # And another Beta for Wei
 
 wei_beta = Beta(1, 1, label="Wei")
-wei_beta.Update((21, 12))
+wei_beta.update((21, 12))
 
 # Solution
 
 # Here's what the posteriors look like
 
-thinkplot.plot_pdf_line(rhode_beta.MakePmf())
-thinkplot.plot_pdf_line(wei_beta.MakePmf())
+thinkplot.plot_pdf_line(rhode_beta.make_pmf())
+thinkplot.plot_pdf_line(wei_beta.make_pmf())
 thinkplot.config_plot(xlabel="x", ylabel="Probability")
 
 # Solution
@@ -48,8 +48,8 @@ thinkplot.config_plot(xlabel="x", ylabel="Probability")
 # To estimate the probability of superiority, we can
 # draw samples from the posteriors and compare them
 
-rhode_sample = rhode_beta.Sample(10000)
-wei_sample = wei_beta.Sample(10000)
+rhode_sample = rhode_beta.sample(10000)
+wei_sample = wei_beta.sample(10000)
 
 # Solution
 

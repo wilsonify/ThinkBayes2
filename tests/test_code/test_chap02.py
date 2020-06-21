@@ -18,17 +18,17 @@ class Cookie(Pmf):
         """
         Pmf.__init__(self)
         for hypo in hypos:
-            self.Set(hypo, 1)
-        self.Normalize()
+            self.set(hypo, 1)
+        self.normalize()
 
     def Update(self, data):
         """Updates the PMF with new data.
 
         data: string cookie type
         """
-        for hypo in self.Values():
+        for hypo in self.values():
             self[hypo] *= self.Likelihood(data, hypo)
-        self.Normalize()
+        self.normalize()
 
     mixes = {
         "Bowl1": dict(vanilla=0.75, chocolate=0.25),
@@ -93,17 +93,17 @@ class FullMonty(Pmf):
         """
         Pmf.__init__(self)
         for hypo in hypos:
-            self.Set(hypo, 1)
-        self.Normalize()
+            self.set(hypo, 1)
+        self.normalize()
 
     def Update(self, data):
         """Updates each hypothesis based on the data.
 
         data: string 'A', 'B', or 'C'
         """
-        for hypo in self.Values():
+        for hypo in self.values():
             self[hypo] *= self.Likelihood(data, hypo)
-        self.Normalize()
+        self.normalize()
 
     def Likelihood(self, data, hypo):
         """Compute the likelihood of the data under the hypothesis.
@@ -134,7 +134,7 @@ class Monty(Suite):
 
     """
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         if hypo == data:
             return 0
         elif hypo == "A":
@@ -174,7 +174,7 @@ class M_and_M(Suite):
 
     hypotheses = dict(A=hypoA, B=hypoB)
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: string hypothesis (A or B)
@@ -193,9 +193,9 @@ def test_pmf(six_sided_die_pmf):
 
 
 def test_Prob(six_sided_die_pmf):
-    six_sided_die_pmf.Prob(1)  # To extract a value from a Pmf, you can use `Prob`
+    six_sided_die_pmf.prob(1)  # To extract a value from a Pmf, you can use `Prob`
     print(six_sided_die_pmf[1])  # Or you can use the bracket operator.
-    assert six_sided_die_pmf.Prob(1) == six_sided_die_pmf[1]
+    assert six_sided_die_pmf.prob(1) == six_sided_die_pmf[1]
 
 
 def test_exclusive(six_sided_die_pmf):
@@ -210,29 +210,29 @@ def test_cookie():
     pmf = Pmf()
     pmf["Bowl1"] = 0.5
     pmf["Bowl2"] = 0.5
-    pmf.Print()
+    pmf.print()
 
     # And we can update it using `Mult`
 
-    pmf.Mult("Bowl1", 0.75)
-    pmf.Mult("Bowl2", 0.5)
-    pmf.Print()
+    pmf.mult("Bowl1", 0.75)
+    pmf.mult("Bowl2", 0.5)
+    pmf.print()
 
     # Or here's the shorter way to construct the prior.
 
     pmf = Pmf(["Bowl1", "Bowl2"])
-    pmf.Print()
+    pmf.print()
 
     # And we can use `*=` for the update.
 
     pmf["Bowl1"] *= 0.75
     pmf["Bowl2"] *= 0.5
-    pmf.Print()
+    pmf.print()
 
     # Either way, we have to normalize the posterior distribution.
 
-    pmf.Normalize()
-    pmf.Print()
+    pmf.normalize()
+    pmf.print()
 
 
 def test_cookie_update():
@@ -240,7 +240,7 @@ def test_cookie_update():
 
     pmf = Cookie(["Bowl1", "Bowl2"])
     pmf.Update("vanilla")
-    pmf.Print()
+    pmf.print()
 
     # But this implementation is more general; it can handle any sequence of data.
 
@@ -249,29 +249,29 @@ def test_cookie_update():
     for data in dataset:
         pmf.Update(data)
 
-    pmf.Print()
+    pmf.print()
 
 
 def test_monty_hall():
     pmf = FullMonty("ABC")
     pmf.Update("B")
-    pmf.Print()
+    pmf.print()
 
     pmf = Monty("ABC")
     pmf.update("B")
-    pmf.Print()
+    pmf.print()
 
 
 def test_m_and_m():
     suite = M_and_M("AB")
     suite.update(("bag1", "yellow"))
     suite.update(("bag2", "green"))
-    suite.Print()
+    suite.print()
 
     # **Exercise:**  Suppose you draw another M&M from `bag1` and it's blue.  What can you conclude?  Run the update to confirm your intuition.
 
     suite.update(("bag1", "blue"))
-    suite.Print()
+    suite.print()
 
     # **Exercise:**  Now suppose you draw an M&M from `bag2` and it's blue.  What does that mean?  Run the update to see what happens.
 

@@ -121,7 +121,7 @@ def test_birthday_problem():
     # Here's a Suite that estimates the parameters of a logistic regression model, `b0` and `b1`.
 
     class August(Suite, Joint):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             x, d, t = data
             b0, b1 = hypo
 
@@ -147,8 +147,8 @@ def test_birthday_problem():
 
     # Here's the posterior marginal distribution for `b0`.
 
-    pmf0 = suite.Marginal(0)
-    b0 = pmf0.Mean()
+    pmf0 = suite.marginal(0)
+    b0 = pmf0.mean()
     print(b0)
     thinkplot.plot_pdf_line(pmf0)
 
@@ -160,8 +160,8 @@ def test_birthday_problem():
 
     # And the posterior marginal distribution for `b1`.
 
-    pmf1 = suite.Marginal(1)
-    b1 = pmf1.Mean()
+    pmf1 = suite.marginal(1)
+    b1 = pmf1.mean()
     print(b1)
     thinkplot.plot_pdf_line(pmf1)
 
@@ -174,7 +174,7 @@ def test_birthday_problem():
     # Let's see what the posterior regression lines look like, superimposed on the data.
 
     for _ in range(100):
-        b0, b1 = suite.Random()
+        b0, b1 = suite.random()
         ys = expit(b0 + b1 * xs) * 10000
         thinkplot.plot(xs, ys, color="green", alpha=0.01)
 
@@ -192,7 +192,7 @@ def test_birthday_problem():
     def posterior_predictive(x):
         pmf = Pmf()
 
-        for (b0, b1), p in suite.Items():
+        for (b0, b1), p in suite.items():
             base = expit(b0 + b1 * x) * 10000
             pmf[base] += p
 
@@ -201,10 +201,10 @@ def test_birthday_problem():
     # Here are posterior predictive CDFs for diagnosis rates.
 
     pmf0 = posterior_predictive(0)
-    thinkplot.plot_cdf_line(pmf0.MakeCdf(), label="September")
+    thinkplot.plot_cdf_line(pmf0.make_cdf(), label="September")
 
     pmf1 = posterior_predictive(11)
-    thinkplot.plot_cdf_line(pmf1.MakeCdf(), label="August")
+    thinkplot.plot_cdf_line(pmf1.make_cdf(), label="August")
 
     thinkplot.decorate(
         title="Posterior predictive distribution",
@@ -212,14 +212,14 @@ def test_birthday_problem():
         ylabel="CDF",
     )
 
-    pmf0.Mean()
+    pmf0.mean()
 
     # And we can compute the posterior predictive distribution for the difference.
 
     def posterior_predictive_diff():
         pmf = Pmf()
 
-        for (b0, b1), p in suite.Items():
+        for (b0, b1), p in suite.items():
             p0 = expit(b0) * 10000
             p1 = expit(b0 + b1 * 11) * 10000
             diff = p1 - p0
@@ -228,7 +228,7 @@ def test_birthday_problem():
         return pmf
 
     pmf_diff = posterior_predictive_diff()
-    thinkplot.plot_cdf_line(pmf_diff.MakeCdf())
+    thinkplot.plot_cdf_line(pmf_diff.make_cdf())
 
     thinkplot.decorate(
         title="Posterior predictive distribution",
@@ -238,13 +238,13 @@ def test_birthday_problem():
 
     # To summarize, we can compute the mean and 95% credible interval for this difference.
 
-    pmf_diff.Mean()
+    pmf_diff.mean()
 
     #
 
-    pmf_diff.CredibleInterval(95)
+    pmf_diff.credible_interval(95)
 
     # A difference of 21 diagnoses, on a base rate of 71 diagnoses, is an increase of 30% (18%, 42%)
 
-    logging.info("%r", f"pmf_diff.Mean() / pmf0.Mean() = {pmf_diff.Mean() / pmf0.Mean()}")
-    logging.info("%r", f"pmf_diff.CredibleInterval(95) / pmf0.Mean() = {pmf_diff.CredibleInterval(95) / pmf0.Mean()}")
+    logging.info("%r", f"pmf_diff.Mean() / pmf0.Mean() = {pmf_diff.mean() / pmf0.mean()}")
+    logging.info("%r", f"pmf_diff.CredibleInterval(95) / pmf0.Mean() = {pmf_diff.credible_interval(95) / pmf0.mean()}")

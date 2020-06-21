@@ -35,7 +35,7 @@ class Coin(thinkbayes.Suite):
     You might want to estimate the probability of landing "heads" up, which I'll call $x$.
     """
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         x = hypo / 100
         if data == "H":
             return x
@@ -68,7 +68,7 @@ def test_update():
     and the hypothesis that $x=0$ has been eliminated.
     """
     suite = Coin(range(0, 101))
-    posterior = suite.Copy()
+    posterior = suite.copy()
     posterior.update("H")
     thinkplot.plot_pdf_line(posterior)
 
@@ -81,7 +81,7 @@ def test_additional():
     (based on the assumption of a uniform prior).
     """
     suite = Coin(range(0, 101))
-    posterior = suite.Copy()
+    posterior = suite.copy()
     results = "HTHHTHHHTTHHHTH"
     for data in results:
         posterior.update(data)

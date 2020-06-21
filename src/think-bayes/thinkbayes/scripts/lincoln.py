@@ -94,7 +94,7 @@ def binom(k, n, p):
 class Lincoln(thinkbayes.Suite, thinkbayes.Joint):
     """Represents hypotheses about the number of errors."""
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: n, p1, p2
@@ -120,14 +120,14 @@ def main():
     suite = Lincoln(hypos)
     suite.update(data)
 
-    n_marginal = suite.Marginal(0)
+    n_marginal = suite.marginal(0)
 
     thinkplot.plot_pmf_line(n_marginal, label="n")
     thinkplot.save_plot(
         root="lincoln1", xlabel="number of bugs", ylabel="PMF", formats=["pdf", "png"]
     )
 
-    print("post mean n", n_marginal.Mean())
+    print("post mean n", n_marginal.mean())
     print("MAP n", n_marginal.MaximumLikelihood())
 
 

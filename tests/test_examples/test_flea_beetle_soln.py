@@ -98,7 +98,7 @@ def test_flea_beetles():
     # Now we can write the likelihood function concisely.
 
     class Beetle(Suite):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """
             data: sequence of width, height
             hypo: name of species
@@ -117,11 +117,11 @@ def test_flea_beetles():
     # We'll start with equal priors
 
     suite = Beetle(hypos)
-    suite.Print()
+    suite.print()
 
     # Now we can update with the data and print the posterior.
 
     suite.update((140, 15))
-    suite.Print()
+    suite.print()
 
     # Based on these measurements, the specimen is very likely to be an example of *Chaetocnema concinna*.

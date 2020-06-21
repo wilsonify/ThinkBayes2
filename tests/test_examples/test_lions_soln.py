@@ -26,7 +26,7 @@ def test_ltb():
     # I'll start with a grid algorithm, enumerating the space of prevalences, `p1`, `p2`, and `p3`, that add up to 1, and computing the likelihood of the data for each triple of prevalences.
 
     class LionsTigersBears(Suite, Joint):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """
 
             data: string 'L' , 'T', 'B'
@@ -37,7 +37,7 @@ def test_ltb():
     # Solution
 
     class LionsTigersBears(Suite, Joint):
-        def Likelihood(self, data, hypo):
+        def likelihood(self, data, hypo):
             """
 
             data: string 'L' , 'T', 'B'
@@ -80,9 +80,9 @@ def test_ltb():
     # Here are functions for displaying the distributions
 
     def plot_marginal_pmfs(joint):
-        pmf_lion = joint.Marginal(0)
-        pmf_tiger = joint.Marginal(1)
-        pmf_bear = joint.Marginal(2)
+        pmf_lion = joint.marginal(0)
+        pmf_tiger = joint.marginal(1)
+        pmf_bear = joint.marginal(2)
 
         thinkplot.plot_pdf_line(pmf_lion, label="lions")
         thinkplot.plot_pdf_line(pmf_tiger, label="tigers")
@@ -91,9 +91,9 @@ def test_ltb():
         thinkplot.decorate(xlabel="Prevalence", ylabel="PMF")
 
     def plot_marginal_cdfs(joint):
-        pmf_lion = joint.Marginal(0)
-        pmf_tiger = joint.Marginal(1)
-        pmf_bear = joint.Marginal(2)
+        pmf_lion = joint.marginal(0)
+        pmf_tiger = joint.marginal(1)
+        pmf_bear = joint.marginal(2)
 
         thinkplot.plot_cdf_line(pmf_lion.make_cdf(), label="lions")
         thinkplot.plot_cdf_line(pmf_tiger.make_cdf(), label="tigers")
@@ -116,11 +116,11 @@ def test_ltb():
 
     # To get the predictive probability of a bear, we can take the mean of the posterior marginal distribution:
 
-    suite.Marginal(2).Mean()
+    suite.marginal(2).mean()
 
     # Or we can do a pseudo-update and use the total probability of the data.
 
-    suite.Copy().update("B")
+    suite.copy().update("B")
 
     # ### Using the Dirichlet object
 
@@ -131,7 +131,7 @@ def test_ltb():
     from thinkbayes import Dirichlet
 
     def DirichletMarginal(dirichlet, i):
-        return dirichlet.marginal_beta(i).MakePmf()
+        return dirichlet.marginal_beta(i).make_pmf()
 
     Dirichlet.Marginal = DirichletMarginal
 
@@ -142,7 +142,7 @@ def test_ltb():
 
     # Here's the update.
 
-    dirichlet.Update((3, 2, 1))
+    dirichlet.update((3, 2, 1))
 
     # Here are the posterior PDFs.
 

@@ -8,12 +8,12 @@ MIT License: https://opensource.org/licenses/MIT
 from thinkbayes import Pmf
 
 pmf = Pmf()
-pmf.Set("Bowl1", 0.5)
-pmf.Set("Bowl2", 0.5)
+pmf.set("Bowl1", 0.5)
+pmf.set("Bowl2", 0.5)
 
-pmf.Mult("Bowl1", 0.75)
-pmf.Mult("Bowl2", 0.5)
+pmf.mult("Bowl1", 0.75)
+pmf.mult("Bowl2", 0.5)
 
-pmf.Normalize()
+pmf.normalize()
 
-print(pmf.Prob("Bowl1"))
+print(pmf.prob("Bowl1"))

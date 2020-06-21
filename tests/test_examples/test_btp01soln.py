@@ -11,7 +11,7 @@ from fractions import Fraction
 import numpy as np
 import pytest
 from thinkbayes import Hist, Pmf, Suite
-from thinkbayes import MakeMixture
+from thinkbayes import make_mixture
 from thinkbayes import thinkplot
 
 
@@ -27,7 +27,7 @@ class Socks(Suite):
     What is the chance that we picked the first drawer.
     """
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Probability of data under hypo.
 
         data: 'pair' or 'no pair'
@@ -60,7 +60,7 @@ class Chess(Suite):
 
     prob_I_beat = dict(A=0.4, B=0.7)
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Probability of data under hypo.
 
         data: sequence of 'W' and 'L'
@@ -111,7 +111,7 @@ class ThoughtPolice(Suite):
 
     """
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         if data == "gave away":
             if hypo == "everything":
                 return 0
@@ -168,7 +168,7 @@ class Robot(Suite):
 
     colors = "GRRGGG"
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """
 
         data: 'R' or 'G'
@@ -195,7 +195,7 @@ class Robot2(Suite):
 
     colors = "GRRGGG"
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """
 
         data: tuple (offset, 'R' or 'G')
@@ -218,7 +218,7 @@ class Dice(Suite):
     What is the probability that I rolled the second die (red on 4 sides)?
     """
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """
         data: 'Red' or 'Blue'
         hypo: a Die object
@@ -230,7 +230,7 @@ def test_sock():
     pmf = Pmf(["drawer 1", "drawer 2"])
     pmf["drawer 1"] *= (40 / 50) ** 2 + (10 / 50) ** 2
     pmf["drawer 2"] *= (30 / 50) ** 2 + (20 / 50) ** 2
-    pmf.Normalize()
+    pmf.normalize()
     assert pmf["drawer 1"] == pytest.approx(0.56, abs=0.01)
 
 
@@ -238,7 +238,7 @@ def test_sock15():
     pmf = Pmf(["drawer 1", "drawer 2"])
     pmf["drawer 1"] *= (40 / 50) ** 2 + (10 / 50) ** 2
     pmf["drawer 2"] *= (30 / 50) ** 2 + (20 / 50) ** 2
-    pmf.Normalize()
+    pmf.normalize()
     assert pmf["drawer 2"] == pytest.approx(0.43, abs=0.01)
 
 
@@ -246,8 +246,8 @@ def test_sock2():
     pmf = Pmf(["drawer 1", "drawer 2"])
     pmf["drawer 1"] *= (40 / 50) * (39 / 49) + (10 / 50) * (9 / 49)
     pmf["drawer 2"] *= (30 / 50) * (29 / 49) + (20 / 50) * (19 / 49)
-    pmf.Normalize()
-    pmf.Print()
+    pmf.normalize()
+    pmf.print()
 
 
 def test_sock3():
@@ -255,7 +255,7 @@ def test_sock3():
     socks = Socks()
     for white in range(n + 1):
         socks[white, n - white] = 1
-    socks.Normalize()
+    socks.normalize()
     thinkplot.plot_pdf_line(socks)
 
 
@@ -273,27 +273,27 @@ def test_chess():
     pmf = Pmf(["AB", "BA"])
     pmf["AB"] = 0.4 * 0.3
     pmf["BA"] = 0.7 * 0.6
-    pmf.Normalize()
-    pmf.Print()
+    pmf.normalize()
+    pmf.print()
 
 
 def test_chess2():
     chess = Chess(["AB", "BA"])
     chess.update("WL")
-    chess.Print()
+    chess.print()
 
 
 def test_1984():
     officer = {"everything": 0.15, "something": 0.25, "nothing": 0.6}
     pmf = ThoughtPolice(officer)
-    pmf.Print()
+    pmf.print()
 
 
 def test_19842():
     officer = {"everything": 0.15, "something": 0.25, "nothing": 0.6}
     pmf = ThoughtPolice(officer)
     pmf.update("none")
-    pmf.Print()
+    pmf.print()
 
 
 def test_robot():
@@ -307,8 +307,8 @@ def test_robot():
             pmf[hypo] *= 0.8
         else:
             pmf[hypo] *= 0.2
-    pmf.Normalize()
-    pmf.Print()
+    pmf.normalize()
+    pmf.print()
 
 
 def test_robot2():
@@ -316,7 +316,7 @@ def test_robot2():
     locs = range(len(colors))
     robot = Robot(locs)
     robot.update("R")
-    robot.Print()
+    robot.print()
 
 
 def test_robot3():
@@ -324,7 +324,7 @@ def test_robot3():
     locs = range(len(colors))
     robot = Robot2(locs)
     robot.update((0, "R"))
-    robot.Print()
+    robot.print()
 
 
 def test_robot4():
@@ -332,24 +332,24 @@ def test_robot4():
     locs = range(len(colors))
     robot = Robot2(locs)
     robot.update((1, "G"))
-    robot.Print()
+    robot.print()
 
 
 def test_red_dice():
     d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1 (bluish) ")
-    d1.Print()
+    d1.print()
 
 
 def test_red_dice2():
     d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2 (reddish)")
-    d2.Print()
+    d2.print()
 
 
 def test_red_dice3():
     d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1 (bluish) ")
     d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2 (reddish)")
     dice = Pmf({d1: Fraction(1), d2: Fraction(1)})
-    dice.Print()
+    dice.print()
 
 
 def test_red_dice4():
@@ -363,9 +363,9 @@ def test_red_dice5():
     d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1 (bluish) ")
     d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2 (reddish)")
     prior = Dice({d1: Fraction(1), d2: Fraction(1)})
-    posterior = prior.Copy()
+    posterior = prior.copy()
     posterior.update("Red")
-    # posterior.Print()
+    # posterior.print()
 
 
 def test_red_dice6():
@@ -380,9 +380,9 @@ def test_red_dice6():
     d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1 (bluish) ")
     d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2 (reddish)")
     prior = Dice({d1: Fraction(1), d2: Fraction(1)})
-    posterior = prior.Copy()
+    posterior = prior.copy()
     posterior.update("Red")
-    predictive = MakeMixture(posterior)
+    predictive = make_mixture(posterior)
     predictive.print_size()
 
 
@@ -397,9 +397,9 @@ def test_red_dice7():
     d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1 (bluish) ")
     d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2 (reddish)")
     prior = Dice({d1: Fraction(1), d2: Fraction(1)})
-    posterior = prior.Copy()
+    posterior = prior.copy()
     posterior.update("Red")
-    predictive = MakeMixture(prior)
+    predictive = make_mixture(prior)
     predictive.print_size()
 
 
@@ -430,13 +430,13 @@ def test_red_dice8():
     d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1 (bluish) ")
     d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2 (reddish)")
     prior = Dice({d1: Fraction(1), d2: Fraction(1)})
-    posterior = prior.Copy()
+    posterior = prior.copy()
     posterior.update("Red")
-    posterior = prior.Copy()
+    posterior = prior.copy()
     posterior[d1] *= 1
     posterior[d2] *= 2
-    posterior.Normalize()
-    # posterior.Print()
+    posterior.normalize()
+    # posterior.print()
 
 
 def test_red_dice9():
@@ -463,7 +463,7 @@ def test_red_dice9():
     d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1 (bluish) ")
     d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2 (reddish)")
     prior = Dice({d1: Fraction(1), d2: Fraction(1)})
-    posterior = prior.Copy()
+    posterior = prior.copy()
     print(posterior)
 
 
@@ -522,4 +522,4 @@ def test_bus():
     logging.info("%r", f"times = {times}")
 
     hist = Hist(buses)
-    logging.info("%r", f"hist[A] / hist.Total() = {hist['A'] / hist.Total()}")
+    logging.info("%r", f"hist[A] / hist.Total() = {hist['A'] / hist.total()}")

@@ -28,7 +28,7 @@ import thinkbayes
 class Soccer(thinkbayes.Suite):
     """Represents hypotheses about goal-scoring rates."""
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: goal rate in goals per game
@@ -36,7 +36,7 @@ class Soccer(thinkbayes.Suite):
         """
         x = data
         lam = hypo / 90
-        like = thinkbayes.EvalExponentialPdf(x, lam)
+        like = thinkbayes.eval_exponential_pdf(x, lam)
         return like
 
 
@@ -63,13 +63,13 @@ def test_soccer():
     )  # fake data chosen by trial and error to yield the observed prior mean
 
     thinkplot.plot_pdf_line(suite)
-    suite.Mean()
+    suite.mean()
 
     # Now that we have a prior, we can update with the time of the first goal, 11 minutes.
 
     suite.update(11)  # time until first goal is 11 minutes
     thinkplot.plot_pdf_line(suite)
-    suite.Mean()
+    suite.mean()
 
     # After the first goal, the posterior mean rate is almost 1.9 goals per game.
     #
@@ -77,7 +77,7 @@ def test_soccer():
 
     suite.update(12)  # time between first and second goals is 12 minutes
     thinkplot.plot_pdf_line(suite)
-    suite.Mean()
+    suite.mean()
 
     # After the second goal, the posterior mean goal rate is 2.3 goals per game.
     #
@@ -96,13 +96,13 @@ def test_soccer():
         rem_time: remaining time in the game in minutes
         """
         metapmf = thinkbayes.Pmf()
-        for lam, prob in suite.Items():
+        for lam, prob in suite.items():
             lt = lam * rem_time / 90
-            pred = thinkbayes.MakePoissonPmf(lt, 15)
+            pred = thinkbayes.make_poisson_pmf(lt, 15)
             metapmf[pred] = prob
             thinkplot.plot_pdf_line(pred, color="gray", alpha=0.3, linewidth=0.5)
 
-        mix = thinkbayes.MakeMixture(metapmf)
+        mix = thinkbayes.make_mixture(metapmf)
         return mix
 
     mix = PredRemaining(suite, 90 - 23)
@@ -120,11 +120,11 @@ def test_soccer():
     #
     # Now we can answer the original questions: what is the chance of scoring 5 or more additional goals:
 
-    mix.ProbGreater(4)
+    mix.prob_greater(4)
 
     # After the first two goals, there was only a 6% chance of scoring 5 more times.  And the expected number of additional goals was only 1.7.
 
-    mix.Mean()
+    mix.mean()
 
     # That's the end of this example.  But for completeness (and if you are curious), here is the code for `MakeMixture`:
 
@@ -138,7 +138,7 @@ def test_soccer():
         Returns: Pmf object.
         """
         mix = thinkbayes.Pmf(label=label)
-        for pmf, p1 in metapmf.Items():
-            for x, p2 in pmf.Items():
-                mix.Incr(x, p1 * p2)
+        for pmf, p1 in metapmf.items():
+            for x, p2 in pmf.items():
+                mix.incr(x, p1 * p2)
         return mix

@@ -68,7 +68,7 @@ def data_fixture(before, after):
 
 
 class Change(Suite, Joint):
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """
         
         data: array of counts
