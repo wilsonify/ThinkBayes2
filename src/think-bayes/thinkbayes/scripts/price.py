@@ -162,6 +162,8 @@ class Player(object):
         mu = 0
         sigma = np.std(diffs)
         self.pdf_error = thinkbayes.NormalPdf(mu, sigma)
+        self.prior = None
+        self.posterior = None
 
     def ErrorDensity(self, error):
         """Density of the given error in the distribution of error.
