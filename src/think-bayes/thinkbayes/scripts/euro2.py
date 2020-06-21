@@ -3,9 +3,8 @@ by Allen B. Downey, available from greenteapress.com
 
 Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
-"""
 
-"""This file contains a partial solution to a problem from
+This file contains a partial solution to a problem from
 MacKay, "Information Theory, Inference, and Learning Algorithms."
 
     Exercise 3.15 (page 50): A statistical statement appeared in
