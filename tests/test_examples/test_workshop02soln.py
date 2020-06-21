@@ -87,13 +87,12 @@ def test_bandit():
 
     # The following function simulates playing one machine once.
 
-    from random import random
     from collections import Counter
 
     counter = Counter()
 
     def flip(p):
-        return random() < p
+        return np.random.random() < p
 
     def play(i):
         counter[i] += 1
