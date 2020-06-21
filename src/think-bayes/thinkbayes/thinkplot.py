@@ -577,11 +577,11 @@ def plot_cdf(cumulative_density_function):
     Draws a Cdf with vertical lines at the observed test stat.
     """
 
-    def VertLine(x):
+    def vert_line(x):
         """Draws a vertical line at x."""
         plt.plot([x, x], [0, 1], color="0.8")
 
-    VertLine(cumulative_density_function.actual)
+    vert_line(cumulative_density_function.actual)
     plot_cdf_line(cumulative_density_function, complement=False, transform=None)
 
 
