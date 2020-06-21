@@ -240,7 +240,7 @@ def plot_posterior(suite, pcolor=False, contour=True):
     suite: Suite that maps (mu, sigma) to probability
     """
     thinkplot.clear_figure()
-    thinkplot.contour_plot(suite.GetDict(), pcolor_bool=pcolor, contour_bool=contour)
+    thinkplot.contour_plot(suite.d, pcolor_bool=pcolor, contour_bool=contour)
 
     thinkplot.save_plot(
         root="variability_posterior_%s" % suite.label,

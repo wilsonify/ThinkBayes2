@@ -91,6 +91,9 @@ class Game(object):
 
     convert = dict()
 
+    def __init__(self):
+        self.goals = None
+
     def clean(self):
         # noinspection PyUnresolvedReferences
         self.goals = self.pd1 + self.pd2 + self.pd3

@@ -143,7 +143,7 @@ def make_contour_plot(suite):
 
     suite: posterior joint distribution of location
     """
-    thinkplot.contour_plot(suite.GetDict(), contour_bool=False, pcolor_bool=True)
+    thinkplot.contour_plot(suite.d, contour_bool=False, pcolor_bool=True)
 
     thinkplot.save_plot(
         "paintball4",

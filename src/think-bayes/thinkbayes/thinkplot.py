@@ -397,7 +397,7 @@ def plot_hist_bar(histogram, **options):
 
     if "width" not in options:
         try:
-            options["width"] = 0.9 * np.diff(xs).min()
+            options["width"] = 0.9 * np.nanmin(np.diff(xs))
         except TypeError:
             warnings.warn(
                 "Hist: Can't compute bar width automatically."
@@ -445,7 +445,7 @@ def plot_pmf_line(probability_mass_function, **options):
     width = options.pop("width", None)
     if width is None:
         try:
-            width = np.diff(xs).min()
+            width = np.nanmin(np.diff(xs))
         except TypeError:
             warnings.warn(
                 "Pmf: Can't compute bar width automatically."
@@ -582,7 +582,7 @@ def plot_cdf(cumulative_density_function):
         plt.plot([x, x], [0, 1], color="0.8")
 
     vert_line(cumulative_density_function.actual)
-    plot_cdf_line(cumulative_density_function, complement=False, transform=None)
+    plot_cdf_line(cumulative_density_function, complement=False)
 
 
 def contour_plot(obj, pcolor_bool=False, contour_bool=True, imshow=False, **options):

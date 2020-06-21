@@ -2266,7 +2266,7 @@ class Dirichlet(object):
     See https://en.wikipedia.org/wiki/Dirichlet_distribution
     """
 
-    def __init__(self, n, conc=1, label=None):
+    def __init__(self, n, conc=1.0, label=None):
         """Initializes a Dirichlet distribution.
 
         n: number of dimensions
@@ -2395,7 +2395,7 @@ def normal_probability(ys, jitter_scale=0):
     xs.sort()
 
     if jitter_scale:
-        ys = jitter_scale(ys, jitter_scale)
+        ys = jitter(ys, jitter_scale)
     else:
         ys = np.array(ys)
     ys.sort()

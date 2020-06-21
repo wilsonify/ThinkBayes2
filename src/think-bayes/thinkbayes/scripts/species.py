@@ -162,7 +162,7 @@ class Subject(object):
         prevalences = np.array(counts, dtype=np.float) / total
         return prevalences
 
-    def process(self, low=None, high=500, conc=1, iters=100):
+    def process(self, low=None, high=500, conc=1.0, iters=100):
         """Computes the posterior distribution of n and the prevalences.
 
         Sets attribute: self.suite
@@ -808,7 +808,7 @@ class Species2(object):
     params represents the parameters of the Dirichlet distributions
     """
 
-    def __init__(self, ns, conc=1, iters=1000):
+    def __init__(self, ns, conc=1.0, iters=1000):
         self.ns = ns
         self.conc = conc
         self.probs = np.ones(len(ns), dtype=np.float)
@@ -988,7 +988,7 @@ class Species2(object):
             return [1.0]
 
         q_desired = self.random_q(n)
-        q_desired = max(q_desired, 1e-6)
+        q_desired = max(q_desired, 0.000001)
 
         params = self.unbias(n, self.m, q_desired)
 
@@ -1417,7 +1417,7 @@ def random_seed(x):
     np.random.seed(x)
 
 
-def generate_fake_sample(n, r, tr, conc=1):
+def generate_fake_sample(n, r, tr, conc=1.0):
     """Generates fake data with the given parameters.
 
     n: number of species
@@ -1508,7 +1508,7 @@ def scatter_prevalences(ms, actual):
     thinkplot.show_plot(xscale="log")
 
 
-def simulate_max_prev(m, conc=1):
+def simulate_max_prev(m, conc=1.0):
     """Returns random max prevalence from a Dirichlet distribution.
 
     m: int number of species
