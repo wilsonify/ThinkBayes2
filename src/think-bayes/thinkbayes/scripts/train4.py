@@ -5,8 +5,6 @@ Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-
-
 from thinkbayes import thinkplot
 from thinkbayes.scripts.dice import Dice
 
@@ -25,7 +23,7 @@ def main():
 
     for data in [32, 54, 70]:
         suite.Update(data)
-        thinkplot.Pmf(suite, label="after %d" % data)
+        thinkplot.Pmf(suite, label=f"after {data}")
 
     thinkplot.Show(xlabel="Number of trains", ylabel="PMF")
 
