@@ -25,7 +25,8 @@ class Soccer(thinkbayes.Suite):
         like = 1
         return like
 
-    def PredictiveDist(self, label="pred"):
+    @staticmethod
+    def PredictiveDist(label="pred"):
         """Computes the distribution of goals scored in a game.
 
         returns: new Pmf (mixture of Poissons)
