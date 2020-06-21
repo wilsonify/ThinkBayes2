@@ -47,7 +47,7 @@ def test_oliver():
     # `Pmf` provides an addition operator that computes the distribution of all pairs of outcomes:
 
     pairs = types + types
-    pairs.Print()
+    pairs.print_size()
 
     # Reading this table, we can see more explicitly that there are two outcomes that account for the data, `AB O` and `O AB`.
     #

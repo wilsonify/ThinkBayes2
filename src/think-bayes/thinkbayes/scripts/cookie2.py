@@ -21,13 +21,13 @@ class Cookie(Pmf):
             self.Set(hypo, 1)
         self.Normalize()
 
-    def Update(self, data):
+    def update(self, data):
         """Updates the PMF with new data.
 
         data: string cookie type
         """
         for hypo in self.Values():
-            like = self.Likelihood(data, hypo)
+            like = self.likelihood(data, hypo)
             self.Mult(hypo, like)
         self.Normalize()
 
@@ -36,7 +36,7 @@ class Cookie(Pmf):
         "Bowl2": dict(vanilla=0.5, chocolate=0.5),
     }
 
-    def Likelihood(self, data, hypo):
+    def likelihood(self, data, hypo):
         """The likelihood of the data under the hypothesis.
 
         data: string cookie type
@@ -52,7 +52,7 @@ def main():
 
     pmf = Cookie(hypos)
 
-    pmf.Update("vanilla")
+    pmf.update("vanilla")
 
     for hypo, prob in pmf.Items():
         print(hypo, prob)

@@ -30,7 +30,7 @@ def test_blog():
     posterior = prior.Copy()
     for hypo in posterior:
         posterior[hypo] *= likelihood[hypo]
-    posterior.Print()
+    posterior.print_size()
 
     # Normalizing the posterior distribution returns the total likelihood of the data, which is the normalizing constant.
 
@@ -38,6 +38,6 @@ def test_blog():
 
     # Now the posterior is a proper distribution:
 
-    posterior.Print()
+    posterior.print_size()
 
     # And the probability that the voter is from State 2 is about 32%.

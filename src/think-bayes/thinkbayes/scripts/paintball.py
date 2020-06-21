@@ -14,7 +14,7 @@ from thinkbayes import thinkplot
 FORMATS = ["pdf", "eps", "png"]
 
 
-def StrafingSpeed(alpha, beta, x):
+def strafing_speed(alpha, beta, x):
     """Computes strafing speed, given location of shooter and impact.
 
     alpha: x location of shooter
@@ -28,7 +28,7 @@ def StrafingSpeed(alpha, beta, x):
     return speed
 
 
-def MakeLocationPmf(alpha, beta, locations):
+def make_location_pmf(alpha, beta, locations):
     """Computes the Pmf of the locations, given alpha and beta. 
 
     Given that the shooter is at coordinates (alpha, beta),
@@ -43,7 +43,7 @@ def MakeLocationPmf(alpha, beta, locations):
     """
     pmf = thinkbayes.Pmf()
     for x in locations:
-        prob = 1.0 / StrafingSpeed(alpha, beta, x)
+        prob = 1.0 / strafing_speed(alpha, beta, x)
         pmf.Set(x, prob)
     pmf.Normalize()
     return pmf
@@ -76,12 +76,12 @@ class Paintball(thinkbayes.Suite, thinkbayes.Joint):
         """
         alpha, beta = hypo
         x = data
-        pmf = MakeLocationPmf(alpha, beta, self.locations)
+        pmf = make_location_pmf(alpha, beta, self.locations)
         like = pmf.Prob(x)
         return like
 
 
-def MakePmfPlot(alpha=10):
+def make_pmf_plot(alpha=10):
     """Plots Pmf of location for a range of betas."""
     locations = range(0, 31)
 
@@ -89,14 +89,14 @@ def MakePmfPlot(alpha=10):
     thinkplot.pre_plot(num=len(betas))
 
     for beta in betas:
-        pmf = MakeLocationPmf(alpha, beta, locations)
+        pmf = make_location_pmf(alpha, beta, locations)
         pmf.name = f"beta = {beta}"
         thinkplot.plot_pdf_line(pmf)
 
     thinkplot.save_plot("paintball1", xlabel="Distance", ylabel="Prob", formats=FORMATS)
 
 
-def MakePosteriorPlot(suite):
+def make_posterior_plot(suite):
     """Plots the posterior marginal distributions for alpha and beta.
 
     suite: posterior joint distribution of location
@@ -122,7 +122,7 @@ def MakePosteriorPlot(suite):
     )
 
 
-def MakeConditionalPlot(suite):
+def make_conditional_plot(suite):
     """Plots marginal CDFs for alpha conditioned on beta.
 
     suite: posterior joint distribution of location
@@ -138,7 +138,7 @@ def MakeConditionalPlot(suite):
     thinkplot.save_plot("paintball3", xlabel="Distance", ylabel="Prob", formats=FORMATS)
 
 
-def MakeContourPlot(suite):
+def make_contour_plot(suite):
     """Plots the posterior joint distribution as a contour plot.
 
     suite: posterior joint distribution of location
@@ -154,7 +154,7 @@ def MakeContourPlot(suite):
     )
 
 
-def MakeCrediblePlot(suite):
+def make_credible_plot(suite):
     """Makes a plot showing several two-dimensional credible intervals.
 
     suite: Suite
@@ -186,15 +186,15 @@ def main(script):
     suite = Paintball(alphas, betas, locations)
     suite.UpdateSet([15, 16, 18, 21])
 
-    MakeCrediblePlot(suite)
+    make_credible_plot(suite)
 
-    MakeContourPlot(suite)
+    make_contour_plot(suite)
 
-    MakePosteriorPlot(suite)
+    make_posterior_plot(suite)
 
-    MakeConditionalPlot(suite)
+    make_conditional_plot(suite)
 
-    MakePmfPlot()
+    make_pmf_plot()
 
 
 if __name__ == "__main__":

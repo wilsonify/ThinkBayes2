@@ -26,7 +26,7 @@ class Die(thinkbayes.Pmf):
         thinkbayes.Pmf.__init__(self, hypos, label=label)
 
 
-def PmfMax(pmf1, pmf2):
+def pmf_max(pmf1, pmf2):
     """Computes the distribution of the max of values drawn from two Pmfs.
 
     pmf1, pmf2: Pmf objects
@@ -68,11 +68,11 @@ def main():
     dice = [d6] * 3
     three = thinkbayes.SampleSum(dice, 1000)
     three.label = "sample"
-    three.Print()
+    three.print_size()
 
     three_exact = d6 + d6 + d6
     three_exact.label = "exact"
-    three_exact.Print()
+    three_exact.print_size()
 
     thinkplot.pre_plot(num=2)
     thinkplot.plot_pmf_line(three)
@@ -89,9 +89,9 @@ def main():
     thinkplot.pre_plot(num=1)
 
     # compute the distribution of the best attribute the hard way
-    best_attr2 = PmfMax(three_exact, three_exact)
-    best_attr4 = PmfMax(best_attr2, best_attr2)
-    best_attr6 = PmfMax(best_attr4, best_attr2)
+    best_attr2 = pmf_max(three_exact, three_exact)
+    best_attr4 = pmf_max(best_attr2, best_attr2)
+    best_attr6 = pmf_max(best_attr4, best_attr2)
     logging.debug("%r", f"best_attr6={best_attr6}")
     # thinkplot.Pmf(best_attr6)
 
@@ -99,7 +99,7 @@ def main():
     best_attr_cdf = three_exact.Max(6)
     best_attr_cdf.label = ""
     best_attr_pmf = best_attr_cdf.MakePmf()
-    best_attr_pmf.Print()
+    best_attr_pmf.print_size()
 
     thinkplot.plot_pmf_line(best_attr_pmf)
     thinkplot.save_plot(

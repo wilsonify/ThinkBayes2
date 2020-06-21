@@ -63,7 +63,7 @@ def test_urns():
     for data in B5G0:
         jacob.update(data)
 
-    jacob.Print()
+    jacob.print_size()
 
     tplt.plot_hist_bar(prior, color="gray")
     tplt.plot_hist_bar(jacob)
@@ -77,7 +77,7 @@ def test_urns():
     for data in B12G3:
         emily.update(data)
 
-    emily.Print()
+    emily.print_size()
 
     tplt.preplot(cols=2)
     tplt.plot_hist_bar(jacob, label="Jacob")

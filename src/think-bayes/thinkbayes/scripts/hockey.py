@@ -48,7 +48,7 @@ class Hockey(thinkbayes.Suite):
         return like
 
 
-def MakeGoalPmf(suite, high=10):
+def make_goal_pmf(suite, high=10):
     """Makes the distribution of goals scored, given distribution of lam.
 
     suite: distribution of goal-scoring rate
@@ -66,7 +66,7 @@ def MakeGoalPmf(suite, high=10):
     return mix
 
 
-def MakeGoalTimePmf(suite):
+def make_goal_time_pmf(suite):
     """Makes the distribution of time til first goal.
 
     suite: distribution of goal-scoring rate
@@ -96,7 +96,7 @@ class Game(object):
         self.goals = self.pd1 + self.pd2 + self.pd3
 
 
-def ReadHockeyData(filename="hockey_data.csv"):
+def read_hockey_data(filename="hockey_data.csv"):
     """Read game scores from the data file.
 
     filename: string
@@ -119,11 +119,11 @@ def ReadHockeyData(filename="hockey_data.csv"):
         entry = t1.total, t2.total
         pairs.setdefault(key, []).append(entry)
 
-    ProcessScoresTeamwise(pairs)
-    ProcessScoresPairwise(pairs)
+    process_scores_teamwise(pairs)
+    process_scores_pairwise(pairs)
 
 
-def ProcessScoresPairwise(pairs):
+def process_scores_pairwise(pairs):
     """Average number of goals for each team against each opponent.
 
     pairs: map from (team1, team2) to (score1, score2)
@@ -156,7 +156,7 @@ def ProcessScoresPairwise(pairs):
     print("BOS v VAN", pairs["BOS", "VAN"])
 
 
-def ProcessScoresTeamwise(pairs):
+def process_scores_teamwise(pairs):
     """Average number of goals for each team.
 
     pairs: map from (team1, team2) to (score1, score2)
@@ -213,8 +213,8 @@ def main():
         root="hockey1", xlabel="Goals per game", ylabel="Probability", formats=formats
     )
 
-    goal_dist1 = MakeGoalPmf(suite1)
-    goal_dist2 = MakeGoalPmf(suite2)
+    goal_dist1 = make_goal_pmf(suite1)
+    goal_dist2 = make_goal_pmf(suite2)
 
     thinkplot.clear_figure()
     thinkplot.pre_plot(num=2)
@@ -224,8 +224,8 @@ def main():
         root="hockey2", xlabel="Goals", ylabel="Probability", formats=formats
     )
 
-    time_dist1 = MakeGoalTimePmf(suite1)
-    time_dist2 = MakeGoalTimePmf(suite2)
+    time_dist1 = make_goal_time_pmf(suite1)
+    time_dist2 = make_goal_time_pmf(suite2)
 
     print("MLE bruins", suite1.MaximumLikelihood())
     print("MLE canucks", suite2.MaximumLikelihood())

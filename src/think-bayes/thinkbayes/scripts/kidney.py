@@ -27,7 +27,7 @@ def log2(x, denom=math.log(2)):
     return math.log(x) / denom
 
 
-def SimpleModel():
+def simple_model():
     """Runs calculations based on a simple model."""
 
     # time between discharge and diagnosis, in days
@@ -70,12 +70,12 @@ def SimpleModel():
     print(("vdt", vdt))
     print(("rdt", rdt))
 
-    cdf = MakeCdf()
+    cdf = make_cdf()
     p = cdf.Prob(rdt)
     print(("Prob{RDT > 2.4}", 1 - p))
 
 
-def MakeCdf():
+def make_cdf():
     """Uses the data from Zhang et al. to construct a CDF."""
     n = 53.0
     freqs = [0, 2, 31, 42, 48, 51, 52, 53]
@@ -86,7 +86,7 @@ def MakeCdf():
     return cdf
 
 
-def PlotCdf(cdf):
+def plot_cdf(cdf):
     """Plots the actual and fitted distributions.
 
     cdf: CDF object
@@ -109,7 +109,7 @@ def PlotCdf(cdf):
 
     thinkplot.clear_figure()
     thinkplot.pre_plot(num=2)
-    mxs, mys = ModelCdf()
+    mxs, mys = model_cdf()
     thinkplot.plot_line(mxs, mys, label="model", linestyle="dashed")
 
     thinkplot.plot_line(xs, ps, "gs", label="data")
@@ -124,7 +124,7 @@ def PlotCdf(cdf):
     )
 
 
-def QQPlot(cdf, fit):
+def qq_plot(cdf, fit):
     """Makes a QQPlot of the values from actual and fitted distributions.
 
     cdf: actual Cdf of RDT
@@ -141,7 +141,7 @@ def QQPlot(cdf, fit):
     thinkplot.save_plot(root="kidney3", formats=FORMATS, xlabel="Actual", ylabel="Model")
 
 
-def FitCdf(cdf):
+def fit_cdf(cdf):
     """Fits a line to the log CCDF and returns the slope.
 
     cdf: Cdf of RDT
@@ -156,7 +156,7 @@ def FitCdf(cdf):
     return -slope
 
 
-def CorrelatedGenerator(cdf, rho):
+def correlated_generator(cdf, rho):
     """Generates a sequence of values from cdf with correlation.
 
     Generates a correlated standard Normal series, then transforms to
@@ -166,7 +166,7 @@ def CorrelatedGenerator(cdf, rho):
     rho: target coefficient of correlation
     """
 
-    def Transform(location):
+    def transform(location):
         """Maps from a Normal variate to a variate with the given CDF."""
         p = thinkbayes.StandardNormalCdf(location)
         y = cdf.Value(p)
@@ -174,17 +174,17 @@ def CorrelatedGenerator(cdf, rho):
 
     # for the first value, choose from a Normal and transform it
     x = np.random.normal(0, 1)
-    yield Transform(x)
+    yield transform(x)
 
     # for subsequent values, choose from the conditional distribution
     # based on the previous value
     sigma = math.sqrt(1 - rho ** 2)
     while True:
         x = np.random.normal(x * rho, sigma)
-        yield Transform(x)
+        yield transform(x)
 
 
-def UncorrelatedGenerator(cdf, _rho=None):
+def uncorrelated_generator(cdf, _rho=None):
     """Generates a sequence of values from cdf with no correlation.
 
     Ignores rho, which is accepted as a parameter to provide the
@@ -198,19 +198,19 @@ def UncorrelatedGenerator(cdf, _rho=None):
         yield x
 
 
-def RdtGenerator(cdf, rho):
+def rdt_generator(cdf, rho):
     """Returns an iterator with n values from cdf and the given correlation.
 
     cdf: Cdf object
     rho: coefficient of correlation
     """
     if rho == 0.0:
-        return UncorrelatedGenerator(cdf)
+        return uncorrelated_generator(cdf)
     else:
-        return CorrelatedGenerator(cdf, rho)
+        return correlated_generator(cdf, rho)
 
 
-def GenerateRdt(pc, lam1, lam2):
+def generate_rdt(pc, lam1, lam2):
     """Generate an RDT from a mixture of exponential distributions.
 
     With prob pc, generate a negative value with param lam2;
@@ -222,7 +222,7 @@ def GenerateRdt(pc, lam1, lam2):
         return np.random.exponential(1 / lam1)
 
 
-def GenerateSample(n, pc, lam1, lam2):
+def generate_sample(n, pc, lam1, lam2):
     """Generates a sample of RDTs.
 
     n: sample size
@@ -232,11 +232,11 @@ def GenerateSample(n, pc, lam1, lam2):
 
     Returns: list of random variates
     """
-    xs = [GenerateRdt(pc, lam1, lam2) for _ in range(n)]
+    xs = [generate_rdt(pc, lam1, lam2) for _ in range(n)]
     return xs
 
 
-def GenerateCdf(n=1000, pc=0.35, lam1=0.79, lam2=5.0):
+def generate_cdf(n=1000, pc=0.35, lam1=0.79, lam2=5.0):
     """Generates a sample of RDTs and returns its CDF.
 
     n: sample size
@@ -246,12 +246,12 @@ def GenerateCdf(n=1000, pc=0.35, lam1=0.79, lam2=5.0):
 
     Returns: Cdf of generated sample
     """
-    xs = GenerateSample(n, pc, lam1, lam2)
+    xs = generate_sample(n, pc, lam1, lam2)
     cdf = thinkbayes.MakeCdfFromList(xs)
     return cdf
 
 
-def ModelCdf(pc=0.35, lam1=0.79, lam2=5.0):
+def model_cdf(pc=0.35, lam1=0.79, lam2=5.0):
     """
 
     pc: probablity of negative growth
@@ -268,7 +268,7 @@ def ModelCdf(pc=0.35, lam1=0.79, lam2=5.0):
     return list(x1) + list(x2), y1 + y2
 
 
-def BucketToCm(y, factor=BUCKET_FACTOR):
+def bucket_to_cm(y, factor=BUCKET_FACTOR):
     """Computes the linear dimension for a given bucket.
 
     t: bucket number
@@ -279,7 +279,7 @@ def BucketToCm(y, factor=BUCKET_FACTOR):
     return math.exp(y / factor)
 
 
-def CmToBucket(x, factor=BUCKET_FACTOR):
+def cm_to_bucket(x, factor=BUCKET_FACTOR):
     """Computes the bucket for a given linear dimension.
 
     x: linear dimension in cm
@@ -290,7 +290,7 @@ def CmToBucket(x, factor=BUCKET_FACTOR):
     return round(factor * math.log(x))
 
 
-def Diameter(volume, factor=3 / math.pi / 4, exp=1 / 3.0):
+def diameter(volume, factor=3 / math.pi / 4, exp=1 / 3.0):
     """Converts a volume to a diameter.
 
     d = 2r = 2 * (3/4/pi V)^1/3
@@ -298,7 +298,7 @@ def Diameter(volume, factor=3 / math.pi / 4, exp=1 / 3.0):
     return 2 * (factor * volume) ** exp
 
 
-def Volume(diameter, factor=4 * math.pi / 3):
+def volume(diameter, factor=4 * math.pi / 3):
     """Converts a diameter to a volume.
 
     V = 4/3 pi (d/2)^3
@@ -320,15 +320,15 @@ class Cache(object):
         self.sequences = {}
         self.initial_rdt = []
 
-    def GetBuckets(self):
+    def get_buckets(self):
         """Returns an iterator for the keys in the cache."""
         return self.sequences.keys()
 
-    def GetSequence(self, bucket):
+    def get_sequence(self, bucket):
         """Looks up a bucket in the cache."""
         return self.sequences[bucket]
 
-    def ConditionalCdf(self, bucket, name=""):
+    def conditional_cdf(self, bucket, name=""):
         """Forms the cdf of ages for a given bucket.
 
         bucket: int bucket number
@@ -338,18 +338,18 @@ class Cache(object):
         cdf = pmf.make_cdf()
         return cdf
 
-    def ProbOlder(self, cm, age):
+    def prob_older(self, cm, age):
         """Computes the probability of exceeding age, given size.
 
         cm: size in cm
         age: age in years
         """
-        bucket = CmToBucket(cm)
-        cdf = self.ConditionalCdf(bucket)
+        bucket = cm_to_bucket(cm)
+        cdf = self.conditional_cdf(bucket)
         p = cdf.Prob(age)
         return 1 - p
 
-    def GetDistAgeSize(self, size_thresh=MAXSIZE):
+    def get_dist_age_size(self, size_thresh=MAXSIZE):
         """Gets the joint distribution of age and size.
 
         Map from (age, log size in cm) to log freq
@@ -360,7 +360,7 @@ class Cache(object):
 
         for val, freq in self.joint.Items():
             age, bucket = val
-            cm = BucketToCm(bucket)
+            cm = bucket_to_cm(bucket)
             if cm > size_thresh:
                 continue
             log_cm = math.log10(cm)
@@ -368,7 +368,7 @@ class Cache(object):
 
         return joint
 
-    def Add(self, age, seq, rdt):
+    def add_observation(self, age, seq, rdt):
         """Adds this observation point to the cache.
 
         age: age of the tumor in years
@@ -376,8 +376,8 @@ class Cache(object):
         rdt: RDT during this interval
         """
         final = seq[-1]
-        cm = Diameter(final)
-        bucket = CmToBucket(cm)
+        cm = diameter(final)
+        bucket = cm_to_bucket(cm)
         self.joint.Incr((age, bucket))
 
         self.sequences.setdefault(bucket, []).append(seq)
@@ -385,14 +385,14 @@ class Cache(object):
         initial = seq[-2]
         self.initial_rdt.append((initial, rdt))
 
-    def Print(self):
+    def print_size(self):
         """Prints the size (cm) for each bucket, and the number of sequences."""
-        for bucket in sorted(self.GetBuckets()):
-            ss = self.GetSequence(bucket)
-            diameter = BucketToCm(bucket)
+        for bucket in sorted(self.get_buckets()):
+            ss = self.get_sequence(bucket)
+            diameter = bucket_to_cm(bucket)
             print((diameter, len(ss)))
 
-    def Correlation(self):
+    def correlation(self):
         """Computes the correlation between log volumes and rdts."""
         vs, rdts = zip(*self.initial_rdt)
         lvs = [math.log(v) for v in vs]
@@ -406,7 +406,7 @@ class Calculator(object):
         """Initializes the cache."""
         self.cache = Cache()
 
-    def MakeSequences(self, n, rho, cdf):
+    def make_sequences(self, n, rho, cdf):
         """Returns a list of sequences of volumes.
 
         n: number of sequences to make
@@ -417,8 +417,8 @@ class Calculator(object):
         """
         sequences = []
         for i in range(n):
-            rdt_seq = RdtGenerator(cdf, rho)
-            seq = self.MakeSequence(rdt_seq)
+            rdt_seq = rdt_generator(cdf, rho)
+            seq = self.make_sequence(rdt_seq)
             sequences.append(seq)
 
             if i % 100 == 0:
@@ -426,7 +426,7 @@ class Calculator(object):
 
         return sequences
 
-    def MakeSequence(self, rdt_seq, v0=0.01, interval=INTERVAL, vmax=Volume(MAXSIZE)):
+    def make_sequence(self, rdt_seq, v0=0.01, interval=INTERVAL, vmax=volume(MAXSIZE)):
         """Simulate the growth of a tumor.
 
         rdt_seq: sequence of rdts
@@ -441,13 +441,13 @@ class Calculator(object):
 
         for rdt in rdt_seq:
             age += interval
-            final, seq = self.ExtendSequence(age, seq, rdt, interval)
+            final, seq = self.extend_sequence(age, seq, rdt, interval)
             if final > vmax:
                 break
 
         return seq
 
-    def ExtendSequence(self, age, seq, rdt, interval):
+    def extend_sequence(self, age, seq, rdt, interval):
         """Generates a new random value and adds it to the end of seq.
 
         Side-effect: adds sub-sequences to the cache.
@@ -463,24 +463,24 @@ class Calculator(object):
         doublings = rdt * interval
         final = initial * 2 ** doublings
         new_seq = seq + (final,)
-        self.cache.Add(age, new_seq, rdt)
+        self.cache.add_observation(age, new_seq, rdt)
 
         return final, new_seq
 
-    def PlotBucket(self, bucket, color="blue"):
+    def plot_bucket(self, bucket, color="blue"):
         """Plots the set of sequences for the given bucket.
 
         bucket: int bucket number
         color: string
         """
-        sequences = self.cache.GetSequence(bucket)
+        sequences = self.cache.get_sequence(bucket)
         for seq in sequences:
             n = len(seq)
             age = n * INTERVAL
             ts = np.linspace(-age, 0, n)
-            PlotSequence(ts, seq, color)
+            plot_sequence(ts, seq, color)
 
-    def PlotBuckets(self, buckets=None):
+    def plot_buckets(self, buckets=None):
         """Plots the set of sequences that ended in a given bucket."""
         # 2.01, 4.95 cm, 9.97 cm
         if buckets is None:
@@ -492,7 +492,7 @@ class Calculator(object):
 
         thinkplot.clear_figure()
         for bucket, color in zip(buckets, colors):
-            self.PlotBucket(bucket, color)
+            self.plot_bucket(bucket, color)
 
         thinkplot.save_plot(
             root="kidney5",
@@ -504,23 +504,23 @@ class Calculator(object):
             yscale="log",
         )
 
-    def PlotJointDist(self):
+    def plot_joint_dist(self):
         """Makes a pcolor plot of the age-size joint distribution."""
         thinkplot.clear_figure()
 
-        joint = self.cache.GetDistAgeSize()
+        joint = self.cache.get_dist_age_size()
         thinkplot.contour_plot(joint, contour_bool=False, pcolor_bool=True)
 
         thinkplot.save_plot(
             root="kidney8",
             formats=FORMATS,
             axis=[0, 41, -0.7, 1.31],
-            yticks=MakeLogTicks([0.2, 0.5, 1, 2, 5, 10, 20]),
+            yticks=make_log_ticks([0.2, 0.5, 1, 2, 5, 10, 20]),
             xlabel="ages",
             ylabel=DIAMETER_LABEL,
         )
 
-    def PlotConditionalCdfs(self):
+    def plot_conditional_cdfs(self):
         """Plots the cdf of ages for each bucket."""
         buckets = [7.0, 16.0, 23.0, 27.0]
         # 2.01, 4.95 cm, 9.97 cm, 14.879 cm
@@ -528,7 +528,7 @@ class Calculator(object):
         cdfs = []
 
         for bucket, name in zip(buckets, names):
-            cdf = self.cache.ConditionalCdf(bucket, name)
+            cdf = self.cache.conditional_cdf(bucket, name)
             cdfs.append(cdf)
 
         thinkplot.clear_figure()
@@ -544,7 +544,7 @@ class Calculator(object):
             loc=4,
         )
 
-    def PlotCredibleIntervals(self, xscale="linear"):
+    def plot_credible_intervals(self, xscale="linear"):
         """Plots the confidence interval for each bucket."""
         xs = []
         ts = []
@@ -554,18 +554,18 @@ class Calculator(object):
         # loop through the buckets, accumulate
         # xs: sequence of sizes in cm
         # ts: sequence of percentile tuples
-        for _, bucket in enumerate(sorted(self.cache.GetBuckets())):
-            cm = BucketToCm(bucket)
+        for _, bucket in enumerate(sorted(self.cache.get_buckets())):
+            cm = bucket_to_cm(bucket)
             if cm < min_size or cm > 20.0:
                 continue
             xs.append(cm)
-            cdf = self.cache.ConditionalCdf(bucket)
+            cdf = self.cache.conditional_cdf(bucket)
             ps = [cdf.Percentile(p) for p in percentiles]
             ts.append(ps)
 
         # dump the results into a table
         fp = open("kidney_table.tex", "w")
-        PrintTable(fp, xs, ts)
+        print_table(fp, xs, ts)
         fp.close()
 
         # make the figure
@@ -591,7 +591,7 @@ class Calculator(object):
 
             # plot the fit lines
             fxs = [min_size, 20.0]
-            fys = FitLine(xs, ys, fxs)
+            fys = fit_line(xs, ys, fxs)
 
             thinkplot.plot_line(fxs, fys, **options)
 
@@ -614,13 +614,13 @@ class Calculator(object):
             xlabel=DIAMETER_LABEL,
             ylabel="tumor age (years)",
             xscale=xscale,
-            xticks=MakeTicks([0.5, 1, 2, 5, 10, 20]),
+            xticks=make_ticks([0.5, 1, 2, 5, 10, 20]),
             axis=[0.25, 35, 0, 45],
             legend=False,
         )
 
 
-def PlotSequences(sequences):
+def plot_sequences(sequences):
     """Plots linear measurement vs time.
 
     sequences: list of sequences of volumes
@@ -634,7 +634,7 @@ def PlotSequences(sequences):
         n = len(seq)
         age = n * INTERVAL
         ts = np.linspace(0, age, n)
-        PlotSequence(ts, seq)
+        plot_sequence(ts, seq)
 
     thinkplot.save_plot(
         root="kidney4",
@@ -642,13 +642,13 @@ def PlotSequences(sequences):
         axis=[0, 40, MINSIZE, 20],
         title="Simulations of tumor growth",
         xlabel="tumor age (years)",
-        yticks=MakeTicks([0.2, 0.5, 1, 2, 5, 10, 20]),
+        yticks=make_ticks([0.2, 0.5, 1, 2, 5, 10, 20]),
         ylabel=DIAMETER_LABEL,
         yscale="log",
     )
 
 
-def PlotSequence(ts, seq, color="blue"):
+def plot_sequence(ts, seq, color="blue"):
     """Plots a time series of linear measurements.
 
     ts: sequence of times in years
@@ -656,12 +656,12 @@ def PlotSequence(ts, seq, color="blue"):
     color: color string
     """
     options = dict(color=color, linewidth=1, alpha=0.2)
-    xs = [Diameter(v) for v in seq]
+    xs = [diameter(v) for v in seq]
 
     thinkplot.plot_line(ts, xs, **options)
 
 
-def PrintCI(fp, cm, ps):
+def print_ci(fp, cm, ps):
     """Writes a line in the LaTeX table.
 
     fp: file pointer
@@ -674,7 +674,7 @@ def PrintCI(fp, cm, ps):
     fp.write(r"\\" "\n")
 
 
-def PrintTable(fp, xs, ts):
+def print_table(fp, xs, ts):
     """Writes the data in a LaTeX table.
 
     fp: file pointer
@@ -691,13 +691,13 @@ def PrintTable(fp, xs, ts):
     for i, (cm, ps) in enumerate(zip(xs, ts)):
         # print cm, ps
         if i % 3 == 0:
-            PrintCI(fp, cm, ps)
+            print_ci(fp, cm, ps)
 
     fp.write(hline_str)
     fp.write(r"\end{tabular}" "\n")
 
 
-def FitLine(xs, ys, fxs):
+def fit_line(xs, ys, fxs):
     """Fits a line to the xs and ys, and returns fitted values for fxs.
 
     Applies a log transform to the xs.
@@ -716,7 +716,7 @@ def FitLine(xs, ys, fxs):
     return fys
 
 
-def MakeTicks(xs):
+def make_ticks(xs):
     """Makes a pair of sequences for use as pyplot ticks.
 
     xs: sequence of floats
@@ -727,7 +727,7 @@ def MakeTicks(xs):
     return xs, labels
 
 
-def MakeLogTicks(xs):
+def make_log_ticks(xs):
     """Makes a pair of sequences for use as pyplot ticks.
 
     xs: sequence of floats
@@ -739,7 +739,7 @@ def MakeLogTicks(xs):
     return lxs, labels
 
 
-def TestCorrelation(cdf):
+def test_correlation(cdf):
     """Tests the correlated generator.
 
     Makes sure that the sequence has the right distribution and correlation.
@@ -747,7 +747,7 @@ def TestCorrelation(cdf):
     n = 10000
     rho = 0.4
 
-    rdt_seq = CorrelatedGenerator(cdf, rho)
+    rdt_seq = correlated_generator(cdf, rho)
     xs = [next(rdt_seq) for _ in range(n)]
 
     rho2 = thinkbayes.SerialCorr(xs)
@@ -761,41 +761,41 @@ def TestCorrelation(cdf):
 def main(script):
     logging.debug("%r", f"script={script}")
     for size in [1, 5, 10]:
-        bucket = CmToBucket(size)
+        bucket = cm_to_bucket(size)
         print(("Size, bucket", size, bucket))
 
-    SimpleModel()
+    simple_model()
 
     np.random.seed(17)
 
-    cdf = MakeCdf()
+    cdf = make_cdf()
 
-    lam1 = FitCdf(cdf)
-    fit = GenerateCdf(lam1=lam1)
+    lam1 = fit_cdf(cdf)
+    fit = generate_cdf(lam1=lam1)
 
     # TestCorrelation(fit)
 
-    PlotCdf(cdf)
+    plot_cdf(cdf)
     # QQPlot(cdf, fit)
 
     calc = Calculator()
     rho = 0.0
-    sequences = calc.MakeSequences(100, rho, fit)
-    PlotSequences(sequences)
+    sequences = calc.make_sequences(100, rho, fit)
+    plot_sequences(sequences)
 
-    calc.PlotBuckets()
+    calc.plot_buckets()
 
-    _ = calc.MakeSequences(1900, rho, fit)
-    print(("V0-RDT correlation", calc.cache.Correlation()))
+    _ = calc.make_sequences(1900, rho, fit)
+    print(("V0-RDT correlation", calc.cache.correlation()))
 
-    print(("15.5 Probability age > 8 year", calc.cache.ProbOlder(15.5, 8)))
-    print(("6.0 Probability age > 8 year", calc.cache.ProbOlder(6.0, 8)))
+    print(("15.5 Probability age > 8 year", calc.cache.prob_older(15.5, 8)))
+    print(("6.0 Probability age > 8 year", calc.cache.prob_older(6.0, 8)))
 
-    calc.PlotConditionalCdfs()
+    calc.plot_conditional_cdfs()
 
-    calc.PlotCredibleIntervals(xscale="log")
+    calc.plot_credible_intervals(xscale="log")
 
-    calc.PlotJointDist()
+    calc.plot_joint_dist()
 
 
 if __name__ == "__main__":

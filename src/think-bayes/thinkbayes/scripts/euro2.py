@@ -56,7 +56,7 @@ class Euro2(thinkbayes.Suite):
         return like
 
 
-def Version1():
+def version1():
     suite = Euro(range(0, 101))
     heads, tails = 140, 110
     dataset = "H" * heads + "T" * tails
@@ -67,7 +67,7 @@ def Version1():
     return suite
 
 
-def Version2():
+def version2():
     suite = Euro(range(0, 101))
     heads, tails = 140, 110
     dataset = "H" * heads + "T" * tails
@@ -76,7 +76,7 @@ def Version2():
     return suite
 
 
-def Version3():
+def version3():
     suite = Euro2(range(0, 101))
     heads, tails = 140, 110
 
@@ -85,7 +85,7 @@ def Version3():
 
 
 def main():
-    suite = Version3()
+    suite = version3()
     print(suite.Mean())
 
     thinkplot.plot_pdf_line(suite)

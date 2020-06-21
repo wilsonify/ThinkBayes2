@@ -319,7 +319,7 @@ def read_heights(nrows=None):
 
     nrows: number of rows to read
     """
-    resp = brfss.ReadBrfss(nrows=nrows).dropna(subset=["sex", "htm3"])
+    resp = brfss.read_brfss(nrows=nrows).dropna(subset=["sex", "htm3"])
     groups = resp.groupby("sex")
 
     d = {}

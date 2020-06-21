@@ -41,7 +41,7 @@ class Euro(thinkbayes.Suite):
         return like
 
 
-def TrianglePrior():
+def triangle_prior():
     """Makes a Suite with a triangular prior."""
     suite = Euro()
     for x in range(0, 51):
@@ -52,7 +52,7 @@ def TrianglePrior():
     return suite
 
 
-def SuiteLikelihood(suite, data):
+def suite_likelihood(suite, data):
     """Computes the weighted average of likelihoods for sub-hypotheses.
 
     suite: Suite that maps sub-hypotheses to probability
@@ -62,12 +62,12 @@ def SuiteLikelihood(suite, data):
     """
     total = 0
     for hypo, prob in suite.Items():
-        like = suite.Likelihood(data, hypo)
+        like = suite.likelihood(data, hypo)
         total += prob * like
     return total
 
 
-def Main():
+def main():
     data = 140, 110
     logging.debug("%r", f"data={data}")
     data = 8, 12
@@ -90,11 +90,11 @@ def Main():
     b_uniform = Euro(range(0, 101))
     b_uniform.Remove(50)
     b_uniform.Normalize()
-    likelihood = SuiteLikelihood(b_uniform, data)
+    likelihood = suite_likelihood(b_uniform, data)
     print("p(D|B_uniform)", likelihood)
     print("p(D|B_uniform) / p(D|F)", likelihood / like_f)
 
-    b_tri = TrianglePrior()
+    b_tri = triangle_prior()
     b_tri.Remove(50)
     b_tri.Normalize()
     likelihood = b_tri.update(data)
@@ -103,4 +103,4 @@ def Main():
 
 
 if __name__ == "__main__":
-    Main()
+    main()

@@ -340,7 +340,7 @@ def test_flea_beetles(flea_beetles_df):
 
     class Classifier(Suite):
         def Likelihood(self, data, hypo):
-            return hypo.Likelihood(data)
+            return hypo.likelihood(data)
 
     suite = Classifier(species.values())
     for hypo, prob in suite.Items():

@@ -781,7 +781,7 @@ class Species(thinkbayes.Suite):
         # and add them up
         like = 0
         for _ in range(self.iters):
-            like += dirichlet.Likelihood(data)
+            like += dirichlet.likelihood(data)
 
         # correct for the number of ways the observed species
         # might have been chosen from all species
@@ -1107,7 +1107,7 @@ class Species4(Species):
         dirichlet = hypo
         like = 0
         for _ in range(self.iters):
-            like += dirichlet.Likelihood(data)
+            like += dirichlet.likelihood(data)
 
         # correct for the number of unseen species the new one
         # could have been

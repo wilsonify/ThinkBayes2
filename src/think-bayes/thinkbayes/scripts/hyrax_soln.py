@@ -36,13 +36,13 @@ class Hyrax2(thinkbayes.Suite):
         hypo: total population (N)
         data: # tagged (K), # caught (n), # of caught who were tagged (k)
         """
-        N = hypo
-        K, n, k = data
+        n_total_population = hypo
+        k_tagged, n_caught, k_caught_tagged = data
 
-        if hypo < K + (n - k):
+        if hypo < k_tagged + (n_caught - k_caught_tagged):
             return 0
 
-        like = thinkbayes.EvalHypergeomPmf(k, N, K, n)
+        like = thinkbayes.EvalHypergeomPmf(k_caught_tagged, n_total_population, k_tagged, n_caught)
         return like
 
 

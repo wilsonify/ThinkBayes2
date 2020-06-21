@@ -8,7 +8,7 @@ MIT License: https://opensource.org/licenses/MIT
 from thinkbayes import Suite
 
 
-class M_and_M(Suite):
+class MAndM(Suite):
     """Map from hypothesis (A or B) to probability."""
 
     mix94 = dict(brown=30, yellow=20, red=20, green=10, orange=10, tan=10, blue=0)
@@ -33,7 +33,7 @@ class M_and_M(Suite):
 
 
 def main():
-    suite = M_and_M("AB")
+    suite = MAndM("AB")
 
     suite.update(("bag1", "yellow"))
     suite.update(("bag2", "green"))

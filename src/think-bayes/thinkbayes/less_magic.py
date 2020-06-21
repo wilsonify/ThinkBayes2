@@ -22,21 +22,21 @@ ex.add_config(
 )
 
 
-def get_model(C, gamma, kernel):
-    return svm.SVC(C=C, kernel=kernel, gamma=gamma)
+def get_model(c_support, gamma, kernel):
+    return svm.SVC(C=c_support, kernel=kernel, gamma=gamma)
 
 
 @ex.main  # Using main, command-line arguments will not be interpreted in any special way.
 def run(_config):
     x_array, y_array = datasets.load_breast_cancer(return_X_y=True)
-    x_array_train, X_test, y_train, y_test = model_selection.train_test_split(
+    x_array_train, x_test, y_train, y_test = model_selection.train_test_split(
         x_array, y_array, test_size=0.2
     )
     clf = get_model(
         _config["C"], _config["gamma"], _config["kernel"]
     )  # Parameters are passed explicitly.
     clf.fit(x_array_train, y_train)
-    return clf.score(X_test, y_test)
+    return clf.score(x_test, y_test)
 
 
 if __name__ == "__main__":

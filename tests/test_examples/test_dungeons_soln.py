@@ -140,7 +140,7 @@ def test_add():
     If we have two players, there are three possible outcomes:
     """
     player = coin(0.7)
-    (player + player).Print()
+    (player + player).print_size()
 
 
 @pytest.fixture(name="prior")

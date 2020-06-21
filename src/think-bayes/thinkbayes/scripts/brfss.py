@@ -14,7 +14,7 @@ import thinkbayes
 from thinkbayes import thinkplot
 
 
-def Summarize(df, column, title):
+def summarize(df, column, title):
     """Print summary statistics male, female and all."""
 
     items = [
@@ -32,7 +32,7 @@ def Summarize(df, column, title):
         print(f"{key}\t{len(series)}\t{mean:4.2f}\t{var:4.2f}\t{std:4.2f}\t{cv:4.4f}")
 
 
-def CleanBrfssFrame(df):
+def clean_brfss_frame(df):
     """Recodes BRFSS variables.
 
     df: DataFrame
@@ -52,7 +52,7 @@ def CleanBrfssFrame(df):
     df["wtyrago"] = df.wtyrago.apply(lambda x: x / 2.2 if x < 9000 else x - 9000)
 
 
-def ReadBrfss(filename="CDBRFS08.ASC.gz", compression="gzip", nrows=None):
+def read_brfss(filename="CDBRFS08.ASC.gz", compression="gzip", nrows=None):
     """Reads the BRFSS data.
 
     filename: string
@@ -75,11 +75,11 @@ def ReadBrfss(filename="CDBRFS08.ASC.gz", compression="gzip", nrows=None):
     dct = thinkbayes.FixedWidthVariables(variables, index_base=1)
 
     df = dct.ReadFixedWidth(filename, compression=compression, nrows=nrows)
-    CleanBrfssFrame(df)
+    clean_brfss_frame(df)
     return df
 
 
-def MakeNormalModel(weights):
+def make_normal_model(weights):
     """Plots a CDF with a Normal model.
 
     weights: sequence
@@ -98,7 +98,7 @@ def MakeNormalModel(weights):
     thinkplot.plot_cdf_line(cdf)
 
 
-def MakeNormalPlot(weights):
+def make_normal_plot(weights):
     """Generates a normal probability plot of birth weights.
 
     weights: sequence
@@ -114,29 +114,29 @@ def MakeNormalPlot(weights):
     thinkplot.plot_line(xs, ys, label="weights")
 
 
-def MakeFigures(df):
+def make_figures(df):
     """Generates CDFs and normal prob plots for weights and log weights."""
     weights = df.wtkg2.dropna()
     log_weights = np.log10(weights)
 
     # plot weights on linear and log scales
     thinkplot.pre_plot(cols=2)
-    MakeNormalModel(weights)
+    make_normal_model(weights)
     thinkplot.config_plot(xlabel="adult weight (kg)", ylabel="CDF")
 
     thinkplot.sub_plot(2)
-    MakeNormalModel(log_weights)
+    make_normal_model(log_weights)
     thinkplot.config_plot(xlabel="adult weight (log10 kg)")
 
     thinkplot.save_plot(root="brfss_weight")
 
     # make normal probability plots on linear and log scales
     thinkplot.pre_plot(cols=2)
-    MakeNormalPlot(weights)
+    make_normal_plot(weights)
     thinkplot.config_plot(xlabel="z", ylabel="weights (kg)")
 
     thinkplot.sub_plot(2)
-    MakeNormalPlot(log_weights)
+    make_normal_plot(log_weights)
     thinkplot.config_plot(xlabel="z", ylabel="weights (log10 kg)")
 
     thinkplot.save_plot(root="brfss_weight_normal")
@@ -150,12 +150,12 @@ def main(script, nrows=1000):
     thinkbayes.RandomSeed(17)
 
     nrows = int(nrows)
-    df = ReadBrfss(nrows=nrows)
-    MakeFigures(df)
+    df = read_brfss(nrows=nrows)
+    make_figures(df)
 
-    Summarize(df, "htm3", "Height (cm):")
-    Summarize(df, "wtkg2", "Weight (kg):")
-    Summarize(df, "wtyrago", "Weight year ago (kg):")
+    summarize(df, "htm3", "Height (cm):")
+    summarize(df, "wtkg2", "Weight (kg):")
+    summarize(df, "wtyrago", "Weight year ago (kg):")
 
     if nrows == 1000:
         assert df.age.value_counts()[40] == 28

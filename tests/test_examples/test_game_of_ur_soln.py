@@ -93,7 +93,7 @@ def test_ur_problem():
 
     posterior = pmf_13.Copy()
     posterior.Normalize()
-    posterior.Print()
+    posterior.print_size()
 
     # That sure looks similar to what we got by simulation.  Let's compare them.
 

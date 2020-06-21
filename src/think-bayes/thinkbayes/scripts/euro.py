@@ -56,13 +56,13 @@ class Euro2(thinkbayes.Suite):
         return like
 
 
-def UniformPrior():
+def uniform_prior():
     """Makes a Suite with a uniform prior."""
     suite = Euro(range(0, 101))
     return suite
 
 
-def TrianglePrior():
+def triangle_prior():
     """Makes a Suite with a triangular prior."""
     suite = Euro()
     for x in range(0, 51):
@@ -73,7 +73,7 @@ def TrianglePrior():
     return suite
 
 
-def RunUpdate(suite, heads=140, tails=110):
+def run_update(suite, heads=140, tails=110):
     """Updates the Suite with the given number of heads and tails.
 
     suite: Suite object
@@ -86,7 +86,7 @@ def RunUpdate(suite, heads=140, tails=110):
         suite.update(data)
 
 
-def Summarize(suite):
+def summarize(suite):
     """Prints summary statistics for the suite."""
     print(suite.Prob(50))
 
@@ -101,7 +101,7 @@ def Summarize(suite):
     print("CI", suite.CredibleInterval(90))
 
 
-def PlotSuites(suites, root):
+def plot_suites(suites, root):
     """Plots two suites.
 
     suite1, suite2: Suite objects
@@ -116,25 +116,25 @@ def PlotSuites(suites, root):
 
 def main():
     # make the priors
-    suite1 = UniformPrior()
+    suite1 = uniform_prior()
     suite1.name = "uniform"
 
-    suite2 = TrianglePrior()
+    suite2 = triangle_prior()
     suite2.name = "triangle"
 
     # plot the priors
-    PlotSuites([suite1, suite2], "euro2")
+    plot_suites([suite1, suite2], "euro2")
 
     # update
-    RunUpdate(suite1)
-    Summarize(suite1)
+    run_update(suite1)
+    summarize(suite1)
 
-    RunUpdate(suite2)
-    Summarize(suite2)
+    run_update(suite2)
+    summarize(suite2)
 
     # plot the posteriors
-    PlotSuites([suite1], "euro1")
-    PlotSuites([suite1, suite2], "euro3")
+    plot_suites([suite1], "euro1")
+    plot_suites([suite1, suite2], "euro3")
 
 
 if __name__ == "__main__":
