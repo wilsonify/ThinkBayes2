@@ -11,7 +11,6 @@ import math
 import sys
 
 import numpy
-
 import thinkbayes
 from thinkbayes import thinkplot
 
@@ -239,8 +238,8 @@ class Sat(thinkbayes.Suite):
         thinkplot.Clf()
         thinkplot.PrePlot(num=2)
 
-        cdf1 = thinkbayes.Cdf(self, label="posterior %d" % self.score)
-        cdf2 = thinkbayes.Cdf(other, label="posterior %d" % other.score)
+        cdf1 = thinkbayes.Cdf(self, label=f"posterior {self.score}")
+        cdf2 = thinkbayes.Cdf(other, label=f"posterior {other.score}")
 
         thinkplot.Cdfs([cdf1, cdf2])
         thinkplot.Save(
@@ -289,8 +288,8 @@ class Sat2(thinkbayes.Suite):
         thinkplot.Clf()
         thinkplot.PrePlot(num=2)
 
-        cdf1 = thinkbayes.Cdf(self, label="posterior %d" % self.score)
-        cdf2 = thinkbayes.Cdf(other, label="posterior %d" % other.score)
+        cdf1 = thinkbayes.Cdf(self, label=f"posterior {self.score}")
+        cdf2 = thinkbayes.Cdf(other, label=f"posterior {other.score}")
 
         thinkplot.Cdfs([cdf1, cdf2])
         thinkplot.Save(
