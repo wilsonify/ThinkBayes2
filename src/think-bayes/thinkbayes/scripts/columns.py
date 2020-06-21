@@ -76,7 +76,7 @@ def make_object(row, names, constructor):
         func = constructor.convert.get(name, int)
         try:
             val = func(val)
-        except:
+        except (KeyError, ValueError, AttributeError):
             pass
         setattr(obj, name, val)
     obj.clean()
