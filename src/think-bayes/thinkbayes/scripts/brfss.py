@@ -10,7 +10,6 @@ import sys
 
 import numpy as np
 import pandas
-
 import thinkbayes
 from thinkbayes import thinkplot
 
@@ -30,8 +29,7 @@ def Summarize(df, column, title):
         mean, var = series.mean(), series.var()
         std = math.sqrt(var)
         cv = std / mean
-        t = key, len(series), mean, var, std, cv
-        print("%s\t%d\t%4.2f\t%4.2f\t%4.2f\t%4.4f" % t)
+        print(f"{key}\t{len(series)}\t{mean:4.2f}\t{var:4.2f}\t{std:4.2f}\t{cv:4.4f}")
 
 
 def CleanBrfssFrame(df):
