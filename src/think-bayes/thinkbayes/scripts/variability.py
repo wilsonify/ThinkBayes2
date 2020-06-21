@@ -60,10 +60,10 @@ class Height(thinkbayes.Suite, thinkbayes.Joint):
         """
         x = data
         mu, sigma = hypo
-        loglike = EvalNormalLogPdf(x, mu, sigma)
+        loglike = eval_normal_log_pdf(x, mu, sigma)
         return loglike
 
-    def LogUpdateSetFast(self, data):
+    def log_update_set_fast(self, data):
         """Updates the suite using a faster implementation.
 
         Computes the sum of the log likelihoods directly.
@@ -76,11 +76,11 @@ class Height(thinkbayes.Suite, thinkbayes.Joint):
 
         for hypo in self.Values():
             mu, sigma = hypo
-            total = Summation(xs, mu)
+            total = summation(xs, mu)
             loglike = -n * math.log(sigma) - total / 2 / sigma ** 2
             self.Incr(hypo, loglike)
 
-    def LogUpdateSetMeanVar(self, data):
+    def log_update_set_mean_var(self, data):
         """Updates the suite using ABC and mean/var.
 
         Args:
@@ -92,9 +92,9 @@ class Height(thinkbayes.Suite, thinkbayes.Joint):
         m = numpy.mean(xs)
         s = numpy.std(xs)
 
-        self.LogUpdateSetABC(n, m, s)
+        self.log_update_set_abc(n, m, s)
 
-    def LogUpdateSetMedianIPR(self, data):
+    def log_update_set_median_ipr(self, data):
         """Updates the suite using ABC and median/iqr.
 
         Args:
@@ -104,12 +104,12 @@ class Height(thinkbayes.Suite, thinkbayes.Joint):
         n = len(xs)
 
         # compute summary stats
-        median, s = MedianS(xs, num_sigmas=NUM_SIGMAS)
+        median, s = median_s(xs, num_sigmas=NUM_SIGMAS)
         print("median, s", median, s)
 
-        self.LogUpdateSetABC(n, median, s)
+        self.log_update_set_abc(n, median, s)
 
-    def LogUpdateSetABC(self, n, m, s):
+    def log_update_set_abc(self, n, m, s):
         """Updates the suite using ABC.
 
         n: sample size
@@ -121,16 +121,16 @@ class Height(thinkbayes.Suite, thinkbayes.Joint):
 
             # compute log likelihood of m, given hypo
             stderr_m = sigma / math.sqrt(n)
-            loglike = EvalNormalLogPdf(m, mu, stderr_m)
+            loglike = eval_normal_log_pdf(m, mu, stderr_m)
 
             # compute log likelihood of s, given hypo
             stderr_s = sigma / math.sqrt(2 * (n - 1))
-            loglike += EvalNormalLogPdf(s, sigma, stderr_s)
+            loglike += eval_normal_log_pdf(s, sigma, stderr_s)
 
             self.Incr(hypo, loglike)
 
 
-def EvalNormalLogPdf(x, mu, sigma):
+def eval_normal_log_pdf(x, mu, sigma):
     """Computes the log PDF of x given mu and sigma.
 
     x: float values
@@ -141,7 +141,7 @@ def EvalNormalLogPdf(x, mu, sigma):
     return scipy.stats.norm.logpdf(x, mu, sigma)
 
 
-def FindPriorRanges(xs, num_points, num_stderrs=3.0, median_flag=False):
+def find_prior_ranges(xs, num_points, num_stderrs=3.0, median_flag=False):
     """Find ranges for mu and sigma with non-negligible likelihood.
 
     xs: sample
@@ -151,7 +151,7 @@ def FindPriorRanges(xs, num_points, num_stderrs=3.0, median_flag=False):
     Returns: sequence of mus, sequence of sigmas    
     """
 
-    def MakeRange(estimate, stderr):
+    def make_range(estimate, stderr):
         """Makes a linear range around the estimate.
 
         estimate: central value
@@ -166,7 +166,7 @@ def FindPriorRanges(xs, num_points, num_stderrs=3.0, median_flag=False):
     # estimate mean and stddev of xs
     n = len(xs)
     if median_flag:
-        m, s = MedianS(xs, num_sigmas=NUM_SIGMAS)
+        m, s = median_s(xs, num_sigmas=NUM_SIGMAS)
     else:
         m = numpy.mean(xs)
         s = numpy.std(xs)
@@ -175,15 +175,15 @@ def FindPriorRanges(xs, num_points, num_stderrs=3.0, median_flag=False):
 
     # compute ranges for m and s
     stderr_m = s / math.sqrt(n)
-    mus = MakeRange(m, stderr_m)
+    mus = make_range(m, stderr_m)
 
     stderr_s = s / math.sqrt(2 * (n - 1))
-    sigmas = MakeRange(s, stderr_s)
+    sigmas = make_range(s, stderr_s)
 
     return mus, sigmas
 
 
-def Summation(xs, mu, cache=None):
+def summation(xs, mu, cache=None):
     """Computes the sum of (x-mu)**2 for x in t.
 
     Caches previous results.
@@ -203,7 +203,7 @@ def Summation(xs, mu, cache=None):
         return total
 
 
-def CoefVariation(suite):
+def coef_variation(suite):
     """Computes the distribution of CV.
 
     suite: Pmf that maps (x, y) to z
@@ -216,7 +216,7 @@ def CoefVariation(suite):
     return pmf
 
 
-def PlotCdfs(d, labels):
+def plot_cdfs(d, labels):
     """Plot CDFs for each sequence in a dictionary.
 
     Jitters the data and subtracts away the mean.
@@ -234,7 +234,7 @@ def PlotCdfs(d, labels):
     thinkplot.Show()
 
 
-def PlotPosterior(suite, pcolor=False, contour=True):
+def plot_posterior(suite, pcolor=False, contour=True):
     """Makes a contour plot.
     
     suite: Suite that maps (mu, sigma) to probability
@@ -250,7 +250,7 @@ def PlotPosterior(suite, pcolor=False, contour=True):
     )
 
 
-def PlotCoefVariation(suites):
+def plot_coef_variation(suites):
     """Plot the posterior distributions for CV.
 
     suites: map from label to Pmf of CVs.
@@ -260,7 +260,7 @@ def PlotCoefVariation(suites):
 
     pmfs = {}
     for label, suite in suites.items():
-        pmf = CoefVariation(suite)
+        pmf = coef_variation(suite)
         print("CV posterior mean", pmf.Mean())
         cdf = thinkbayes.MakeCdfFromPmf(pmf, label)
         thinkplot.Cdf(cdf)
@@ -275,7 +275,7 @@ def PlotCoefVariation(suites):
     print("male bigger", thinkbayes.PmfProbGreater(pmfs["male"], pmfs["female"]))
 
 
-def PlotOutliers(samples):
+def plot_outliers(samples):
     """Make CDFs showing the distribution of outliers."""
     cdfs = []
     for label, sample in samples.items():
@@ -294,7 +294,7 @@ def PlotOutliers(samples):
     )
 
 
-def PlotMarginals(suite):
+def plot_marginals(suite):
     """Plots marginal distributions from a joint distribution.
 
     suite: joint distribution of mu and sigma.
@@ -314,7 +314,7 @@ def PlotMarginals(suite):
     thinkplot.Show()
 
 
-def ReadHeights(nrows=None):
+def read_heights(nrows=None):
     """Read the BRFSS dataset, extract the heights and pickle them.
 
     nrows: number of rows to read
@@ -329,7 +329,7 @@ def ReadHeights(nrows=None):
     return d
 
 
-def UpdateSuite1(suite, xs):
+def update_suite1(suite, xs):
     """Computes the posterior distibution of mu and sigma.
 
     Computes untransformed likelihoods.
@@ -340,7 +340,7 @@ def UpdateSuite1(suite, xs):
     suite.UpdateSet(xs)
 
 
-def UpdateSuite2(suite, xs):
+def update_suite2(suite, xs):
     """Computes the posterior distibution of mu and sigma.
 
     Computes log likelihoods.
@@ -354,7 +354,7 @@ def UpdateSuite2(suite, xs):
     suite.Normalize()
 
 
-def UpdateSuite3(suite, xs):
+def update_suite3(suite, xs):
     """Computes the posterior distibution of mu and sigma.
 
     Computes log likelihoods efficiently.
@@ -363,12 +363,12 @@ def UpdateSuite3(suite, xs):
     t: sequence
     """
     suite.Log()
-    suite.LogUpdateSetFast(xs)
+    suite.log_update_set_fast(xs)
     suite.Exp()
     suite.Normalize()
 
 
-def UpdateSuite4(suite, xs):
+def update_suite4(suite, xs):
     """Computes the posterior distibution of mu and sigma.
 
     Computes log likelihoods efficiently.
@@ -377,12 +377,12 @@ def UpdateSuite4(suite, xs):
     t: sequence
     """
     suite.Log()
-    suite.LogUpdateSetMeanVar(xs)
+    suite.log_update_set_mean_var(xs)
     suite.Exp()
     suite.Normalize()
 
 
-def UpdateSuite5(suite, xs):
+def update_suite5(suite, xs):
     """Computes the posterior distibution of mu and sigma.
 
     Computes log likelihoods efficiently.
@@ -391,12 +391,12 @@ def UpdateSuite5(suite, xs):
     t: sequence
     """
     suite.Log()
-    suite.LogUpdateSetMedianIPR(xs)
+    suite.log_update_set_median_ipr(xs)
     suite.Exp()
     suite.Normalize()
 
 
-def MedianIPR(xs, p):
+def median_ipr(xs, p):
     """Computes the median and interpercentile range.
 
     xs: sequence of values
@@ -412,7 +412,7 @@ def MedianIPR(xs, p):
     return median, ipr
 
 
-def MedianS(xs, num_sigmas):
+def median_s(xs, num_sigmas):
     """Computes the median and an estimate of sigma.
 
     Based on an interpercentile range (IPR).
@@ -420,13 +420,13 @@ def MedianS(xs, num_sigmas):
     factor: number of standard deviations spanned by the IPR
     """
     half_p = thinkbayes.StandardNormalCdf(num_sigmas) - 0.5
-    median, ipr = MedianIPR(xs, half_p * 2)
+    median, ipr = median_ipr(xs, half_p * 2)
     s = ipr / 2 / num_sigmas
 
     return median, s
 
 
-def Summarize(xs):
+def summarize(xs):
     """Prints summary statistics from a sequence of values.
 
     xs: sequence of values
@@ -441,13 +441,13 @@ def Summarize(xs):
     print(cdf.Percentile(25), cdf.Percentile(50), cdf.Percentile(75))
 
 
-def RunEstimate(update_func, num_points=31, median_flag=False):
+def run_estimate(update_func, num_points=31, median_flag=False):
     """Runs the whole analysis.
 
     update_func: which of the update functions to use
     num_points: number of points in the Suite (in each dimension)
     """
-    d = ReadHeights(nrows=None)
+    d = read_heights(nrows=None)
     labels = {1: "male", 2: "female"}
 
     # PlotCdfs(d, labels)
@@ -456,17 +456,17 @@ def RunEstimate(update_func, num_points=31, median_flag=False):
     for key, xs in d.items():
         label = labels[key]
         print(label, len(xs))
-        Summarize(xs)
+        summarize(xs)
 
         xs = thinkbayes.Jitter(xs, 1.3)
 
-        mus, sigmas = FindPriorRanges(xs, num_points, median_flag=median_flag)
+        mus, sigmas = find_prior_ranges(xs, num_points, median_flag=median_flag)
         suite = Height(mus, sigmas, label)
         suites[label] = suite
         update_func(suite, xs)
         print("MLE", suite.MaximumLikelihood())
 
-        PlotPosterior(suite)
+        plot_posterior(suite)
 
         pmf_m = suite.Marginal(0)
         pmf_s = suite.Marginal(1)
@@ -475,15 +475,15 @@ def RunEstimate(update_func, num_points=31, median_flag=False):
 
         # PlotMarginals(suite)
 
-    PlotCoefVariation(suites)
+    plot_coef_variation(suites)
 
 
 def main():
     random.seed(17)
 
-    func = UpdateSuite5
-    median_flag = func == UpdateSuite5
-    RunEstimate(func, median_flag=median_flag)
+    func = update_suite5
+    median_flag = func == update_suite5
+    run_estimate(func, median_flag=median_flag)
 
 
 if __name__ == "__main__":

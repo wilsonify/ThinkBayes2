@@ -8,7 +8,7 @@ import logging
 from random import random
 
 import thinkbayes
-from thinkbayes.scripts.variability import UpdateSuite5, Height, FindPriorRanges, Summarize, ReadHeights
+from thinkbayes.scripts.variability import update_suite5, Height, find_prior_ranges, summarize, read_heights
 
 
 def RunEstimate(update_func, num_points=31, median_flag=False):
@@ -17,18 +17,18 @@ def RunEstimate(update_func, num_points=31, median_flag=False):
     update_func: which of the update functions to use
     num_points: number of points in the Suite (in each dimension)
     """
-    d = ReadHeights(nrows=None)
+    d = read_heights(nrows=None)
     labels = {1: "male", 2: "female"}
 
     suites = {}
     for key, xs in d.items():
         label = labels[key]
         print(label, len(xs))
-        Summarize(xs)
+        summarize(xs)
 
         xs = thinkbayes.Jitter(xs, 1.3)
 
-        mus, sigmas = FindPriorRanges(xs, num_points, median_flag=median_flag)
+        mus, sigmas = find_prior_ranges(xs, num_points, median_flag=median_flag)
         suite = Height(mus, sigmas, label)
         suites[label] = suite
         update_func(suite, xs)
@@ -45,8 +45,8 @@ def RunEstimate(update_func, num_points=31, median_flag=False):
 def main():
     random.seed(17)
 
-    func = UpdateSuite5
-    median_flag = func == UpdateSuite5
+    func = update_suite5
+    median_flag = func == update_suite5
     RunEstimate(func, median_flag=median_flag)
 
 
