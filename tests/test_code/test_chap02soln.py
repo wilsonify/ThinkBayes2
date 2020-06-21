@@ -49,25 +49,25 @@ def test_pmf_class():
     # Here's a Pmf that represents the prior distribution.
 
     pmf = Pmf()
-    pmf["Bowl 1"] = 0.5
-    pmf["Bowl 2"] = 0.5
+    pmf["Bowl1"] = 0.5
+    pmf["Bowl2"] = 0.5
     pmf.Print()
 
     # And we can update it using `Mult`
 
-    pmf.Mult("Bowl 1", 0.75)
-    pmf.Mult("Bowl 2", 0.5)
+    pmf.Mult("Bowl1", 0.75)
+    pmf.Mult("Bowl2", 0.5)
     pmf.Print()
 
     # Or here's the shorter way to construct the prior.
 
-    pmf = Pmf(["Bowl 1", "Bowl 2"])
+    pmf = Pmf(["Bowl1", "Bowl2"])
     pmf.Print()
 
     # And we can use `*=` for the update.
 
-    pmf["Bowl 1"] *= 0.75
-    pmf["Bowl 2"] *= 0.5
+    pmf["Bowl1"] *= 0.75
+    pmf["Bowl2"] *= 0.5
     pmf.Print()
 
     # Either way, we have to normalize the posterior distribution.
@@ -102,8 +102,8 @@ def test_pmf_class():
             self.Normalize()
 
         mixes = {
-            "Bowl 1": dict(vanilla=0.75, chocolate=0.25),
-            "Bowl 2": dict(vanilla=0.5, chocolate=0.5),
+            "Bowl1": dict(vanilla=0.75, chocolate=0.25),
+            "Bowl2": dict(vanilla=0.5, chocolate=0.5),
         }
 
         def Likelihood(self, data, hypo):
@@ -118,7 +118,7 @@ def test_pmf_class():
 
     # We can confirm that we get the same result.
 
-    pmf = Cookie(["Bowl 1", "Bowl 2"])
+    pmf = Cookie(["Bowl1", "Bowl2"])
     pmf.Update("vanilla")
     pmf.Print()
 

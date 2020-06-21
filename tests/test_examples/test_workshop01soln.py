@@ -69,13 +69,13 @@ def test_pmfs():
     # Create a Pmf with two equally likely hypotheses.
     #
 
-    cookie = Pmf(["Bowl 1", "Bowl 2"])
+    cookie = Pmf(["Bowl1", "Bowl2"])
     cookie.Print()
 
     # Update each hypothesis with the likelihood of the data (a vanilla cookie).
 
-    cookie["Bowl 1"] *= 0.75
-    cookie["Bowl 2"] *= 0.5
+    cookie["Bowl1"] *= 0.75
+    cookie["Bowl2"] *= 0.5
     cookie.Normalize()
 
     # Print the posterior probabilities.
@@ -88,8 +88,8 @@ def test_pmfs():
 
     # Solution
 
-    cookie["Bowl 1"] *= 0.25
-    cookie["Bowl 2"] *= 0.5
+    cookie["Bowl1"] *= 0.25
+    cookie["Bowl2"] *= 0.5
     cookie.Normalize()
     cookie.Print()
 
@@ -101,9 +101,9 @@ def test_pmfs():
 
     # Solution
 
-    cookie = Pmf(["Bowl 1", "Bowl 2"])
-    cookie["Bowl 1"] *= 0.75 * 0.25
-    cookie["Bowl 2"] *= 0.5 * 0.5
+    cookie = Pmf(["Bowl1", "Bowl2"])
+    cookie["Bowl1"] *= 0.75 * 0.25
+    cookie["Bowl2"] *= 0.5 * 0.5
     cookie.Normalize()
     cookie.Print()
 

@@ -58,7 +58,7 @@ class BayesTable(pd.DataFrame):
 
 @pytest.fixture(name="table")
 def table_fixture():
-    return BayesTable(["Bowl 1", "Bowl 2"])
+    return BayesTable(["Bowl1", "Bowl2"])
 
 
 def test_bayestable(table):

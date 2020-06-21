@@ -32,8 +32,8 @@ class Cookie(Pmf):
         self.Normalize()
 
     mixes = {
-        "Bowl 1": dict(vanilla=0.75, chocolate=0.25),
-        "Bowl 2": dict(vanilla=0.5, chocolate=0.5),
+        "Bowl1": dict(vanilla=0.75, chocolate=0.25),
+        "Bowl2": dict(vanilla=0.5, chocolate=0.5),
     }
 
     def Likelihood(self, data, hypo):
@@ -48,7 +48,7 @@ class Cookie(Pmf):
 
 
 def main():
-    hypos = ["Bowl 1", "Bowl 2"]
+    hypos = ["Bowl1", "Bowl2"]
 
     pmf = Cookie(hypos)
 
