@@ -1445,7 +1445,7 @@ def GenerateFakeSample(n, r, tr, conc=1):
 
     # extract a subset of the data
     if tr > r:
-        random.shuffle(sample)
+        np.random.shuffle(sample)
         subsample = sample[:r]
         subhist = thinkbayes.Hist(subsample)
     else:
