@@ -90,7 +90,7 @@ def MakePmfPlot(alpha=10):
 
     for beta in betas:
         pmf = MakeLocationPmf(alpha, beta, locations)
-        pmf.name = "beta = %d" % beta
+        pmf.name = f"beta = {beta}"
         thinkplot.Pdf(pmf)
 
     thinkplot.Save("paintball1", xlabel="Distance", ylabel="Prob", formats=FORMATS)
@@ -132,7 +132,7 @@ def MakeConditionalPlot(suite):
 
     for beta in betas:
         cond = suite.Conditional(0, 1, beta)
-        cond.name = "beta = %d" % beta
+        cond.name = f"beta = {beta}"
         thinkplot.Pdf(cond)
 
     thinkplot.Save("paintball3", xlabel="Distance", ylabel="Prob", formats=FORMATS)
