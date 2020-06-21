@@ -166,9 +166,9 @@ def CorrelatedGenerator(cdf, rho):
     rho: target coefficient of correlation
     """
 
-    def Transform(x):
+    def Transform(location):
         """Maps from a Normal variate to a variate with the given CDF."""
-        p = thinkbayes.StandardNormalCdf(x)
+        p = thinkbayes.StandardNormalCdf(location)
         y = cdf.Value(p)
         return y
 

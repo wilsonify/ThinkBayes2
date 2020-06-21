@@ -1280,10 +1280,10 @@ class Cdf:
             tuple of (xs, ps)
         """
 
-        def interleave(a, b):
-            c = np.empty(a.shape[0] + b.shape[0])
-            c[::2] = a
-            c[1::2] = b
+        def interleave(a_interleave, b_interleave):
+            c = np.empty(a_interleave.shape[0] + b_interleave.shape[0])
+            c[::2] = a_interleave
+            c[1::2] = b_interleave
             return c
 
         a = np.array(self.xs)

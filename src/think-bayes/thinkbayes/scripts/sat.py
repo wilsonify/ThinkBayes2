@@ -30,8 +30,8 @@ def ReadScale(filename="sat_scale.csv", col=2):
 
         s: string
         """
-        t = [int(x) for x in s.split("-")]
-        return 1.0 * sum(t) / len(t)
+        s_split = [int(x) for x in s.split("-")]
+        return 1.0 * sum(s_split) / len(s_split)
 
     fp = open(filename)
     reader = csv.reader(fp)
@@ -308,10 +308,10 @@ def PlotJointDist(pmf1, pmf2, thresh=0.8):
     thresh: lower bound of the range to be plotted
     """
 
-    def Clean(pmf):
+    def Clean(probability_mass_function):
         """Removes values below thresh."""
-        vals = [val for val in pmf.Values() if val < thresh]
-        [pmf.Remove(val) for val in vals]
+        vals = [val for val in probability_mass_function.Values() if val < thresh]
+        [probability_mass_function.Remove(val) for val in vals]
 
     Clean(pmf1)
     Clean(pmf2)

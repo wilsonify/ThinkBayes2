@@ -100,10 +100,10 @@ class Subject(object):
         clean_param: parameter that controls the number of legit species
         """
 
-        def prob_bogus(k, r):
+        def prob_bogus(k_species, r_species):
             """Compute the probability that a species is bogus."""
-            q = clean_param / r
-            p = (1 - q) ** k
+            q = clean_param / r_species
+            p = (1 - q) ** k_species
             return p
 
         print(self.code, clean_param)
