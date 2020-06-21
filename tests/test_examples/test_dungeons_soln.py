@@ -6,6 +6,7 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 import pytest
+import numpy as np
 import thinkbayes
 from thinkbayes import Pmf, Suite
 from thinkbayes import thinkplot
