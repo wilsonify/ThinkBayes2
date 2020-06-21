@@ -18,7 +18,7 @@ FORMATS = ["pdf", "eps"]
 MINSIZE = 0.2
 MAXSIZE = 20
 BUCKET_FACTOR = 10
-
+DEFAULT_Y_LABEL = "diameter (cm, log scale)"
 
 def log2(x, denom=math.log(2)):
     """Computes log base 2."""
@@ -492,13 +492,14 @@ class Calculator(object):
         for bucket, color in zip(buckets, colors):
             self.PlotBucket(bucket, color)
 
+
         thinkplot.Save(
             root="kidney5",
             formats=FORMATS,
             title="History of simulated tumors",
             axis=[-40, 1, MINSIZE, 12],
             xlabel="years",
-            ylabel="diameter (cm, log scale)",
+            ylabel=DEFAULT_Y_LABEL,
             yscale="log",
         )
 
@@ -515,7 +516,7 @@ class Calculator(object):
             axis=[0, 41, -0.7, 1.31],
             yticks=MakeLogTicks([0.2, 0.5, 1, 2, 5, 10, 20]),
             xlabel="ages",
-            ylabel="diameter (cm, log scale)",
+            ylabel=DEFAULT_Y_LABEL,
         )
 
     def PlotConditionalCdfs(self):
@@ -608,7 +609,7 @@ class Calculator(object):
             root="kidney7",
             formats=FORMATS,
             title="Credible interval for age vs diameter",
-            xlabel="diameter (cm, log scale)",
+            xlabel=DEFAULT_Y_LABEL,
             ylabel="tumor age (years)",
             xscale=xscale,
             xticks=MakeTicks([0.5, 1, 2, 5, 10, 20]),
@@ -640,7 +641,7 @@ def PlotSequences(sequences):
         title="Simulations of tumor growth",
         xlabel="tumor age (years)",
         yticks=MakeTicks([0.2, 0.5, 1, 2, 5, 10, 20]),
-        ylabel="diameter (cm, log scale)",
+        ylabel=DEFAULT_Y_LABEL,
         yscale="log",
     )
 
