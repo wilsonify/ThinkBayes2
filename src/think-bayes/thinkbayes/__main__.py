@@ -978,9 +978,8 @@ class Cdf:
         """
         self.label = label if label is not None else DEFAULT_LABEL
 
-        if isinstance(obj, (_DictWrapper, Cdf, Pdf)):
-            if not label:
-                self.label = label if label is not None else obj.label
+        if isinstance(obj, (_DictWrapper, Cdf, Pdf)) and not label:
+            self.label = label if label is not None else obj.label
 
         if obj is None:
             # caller does not provide obj, make an empty Cdf
