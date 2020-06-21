@@ -7,14 +7,14 @@ def test_tinder():
 
     mu = 1
     pmf = thinkbayes.MakeExponentialPmf(mu, high=1.0)
-    thinkplot.Pdf(pmf)
+    thinkplot.plot_pdf_line(pmf)
 
     active = ""
     # Ignore
 
     mu = 5
     pmf = thinkbayes.MakeExponentialPmf(mu, high=1.0)
-    thinkplot.Pdf(pmf)
+    thinkplot.plot_pdf_line(pmf)
 
     active = ""
     # Ignore
@@ -27,13 +27,13 @@ def test_tinder():
         metapmf[pmf] = prob
 
     interarrival = thinkbayes.MakeMixture(metapmf)
-    thinkplot.Pdf(interarrival)
+    thinkplot.plot_pdf_line(interarrival)
 
     # Ok, let's start here.  Suppose we know $\lambda$.  We can compute the distribution of interarrival times (times between logins).
 
     lam = 0.1  # average arrival rate in logins per day
     interarrival = pmf = thinkbayes.MakeExponentialPmf(lam, high=90)
-    thinkplot.Pdf(interarrival)
+    thinkplot.plot_pdf_line(interarrival)
 
     # If we observe someone, we are more likely to land during a longer interval.
 
@@ -43,7 +43,7 @@ def test_tinder():
     observed.Normalize()
 
     print(interarrival.Mean(), observed.Mean())
-    thinkplot.Pdf(observed)
+    thinkplot.plot_pdf_line(observed)
 
     # If we land during an intererval of duration $x$, the time since last login is uniform between 0 and $x$.  So the distribution of time since last login (`timesince`) is a mixture of uniform distributions.
 
@@ -56,12 +56,12 @@ def test_tinder():
 
     timesince = thinkbayes.MakeMixture(metapmf)
     print(timesince.Mean())
-    thinkplot.Pdf(timesince)
+    thinkplot.plot_pdf_line(timesince)
 
     # The data is in the form of "time since last login", so we need to be able to look up a time, $t$, and get the probability density at $t$.  But we have a PMF with lots of discrete times in it, so we can't just look it up.  One option: Compute the CDF, generate a sample, and estimate the PDF by KDE:
 
     cdf = thinkbayes.Cdf(timesince)
-    thinkplot.Cdf(cdf)
+    thinkplot.plot_cdf_line(cdf)
 
     # Get a sample:
 
@@ -70,7 +70,7 @@ def test_tinder():
     # Estimate the PDF:
 
     pdf = thinkbayes.EstimatedPdf(sample)
-    thinkplot.Pdf(pdf)
+    thinkplot.plot_pdf_line(pdf)
 
     # Second option: use numerical differentiation to compute the derivative of the CDF, which is the PDF:
 

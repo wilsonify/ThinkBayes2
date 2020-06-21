@@ -26,7 +26,7 @@ def test_wc3():
 
     xs = np.linspace(0, 8, 101)
     pmf = MakeGammaPmf(xs, 1.3)
-    thinkplot.Pdf(pmf)
+    thinkplot.plot_pdf_line(pmf)
     thinkplot.decorate(title="Gamma PDF", xlabel="Goals per game", ylabel="PDF")
     pmf.Mean()
 
@@ -52,15 +52,15 @@ def test_wc3():
     # Now we can create a `Soccer` object and initialize it with the prior Pmf:
 
     soccer = Soccer(pmf)
-    thinkplot.Pdf(soccer)
+    thinkplot.plot_pdf_line(soccer)
     thinkplot.decorate(title="Gamma prior", xlabel="Goals per game", ylabel="PDF")
     soccer.Mean()
 
     # Here's the update after first goal at 11 minutes.
 
-    thinkplot.Pdf(soccer, color="0.7")
+    thinkplot.plot_pdf_line(soccer, color="0.7")
     soccer.Update(11)
-    thinkplot.Pdf(soccer)
+    thinkplot.plot_pdf_line(soccer)
     thinkplot.decorate(
         title="Posterior after 1 goal", xlabel="Goals per game", ylabel="PDF"
     )
@@ -69,9 +69,9 @@ def test_wc3():
     # Here's the update after the second goal at 23 minutes (the time between first and second goals is 12 minutes).
     #
 
-    thinkplot.Pdf(soccer, color="0.7")
+    thinkplot.plot_pdf_line(soccer, color="0.7")
     soccer.Update(12)
-    thinkplot.Pdf(soccer)
+    thinkplot.plot_pdf_line(soccer)
     thinkplot.decorate(
         title="Posterior after 2 goals", xlabel="Goals per game", ylabel="PDF"
     )
@@ -112,7 +112,7 @@ def test_wc3():
 
     sample = np.random.poisson(lam * t, size=10000)
     pmf = Pmf(sample)
-    thinkplot.Hist(pmf)
+    thinkplot.plot_hist_bar(pmf)
     thinkplot.decorate(
         title="Distribution of goals, known lambda", xlabel="Goals scored", ylabel="PMF"
     )
@@ -148,7 +148,7 @@ def test_wc3():
     rem_time = 90 - 23
     lt = lam * rem_time / 90
     pred = MakePoissonPmf(lt, 10)
-    thinkplot.Hist(pred)
+    thinkplot.plot_hist_bar(pred)
     thinkplot.decorate(
         title="Distribution of goals, known lambda", xlabel="Goals scored", ylabel="PMF"
     )
@@ -170,7 +170,7 @@ def test_wc3():
     for lam, prob in soccer.Items():
         lt = lam * rem_time / 90
         pred = MakePoissonPmf(lt, 14)
-        thinkplot.Pdf(pred, color="gray", alpha=0.3, linewidth=0.5)
+        thinkplot.plot_pdf_line(pred, color="gray", alpha=0.3, linewidth=0.5)
 
     thinkplot.decorate(
         title="Distribution of goals, all lambda", xlabel="Goals scored", ylabel="PMF"
@@ -209,7 +209,7 @@ def test_wc3():
 
     # And here's what the mixture looks like.
 
-    thinkplot.Hist(mix)
+    thinkplot.plot_hist_bar(mix)
     thinkplot.decorate(
         title="Posterior predictive distribution", xlabel="Goals scored", ylabel="PMF"
     )

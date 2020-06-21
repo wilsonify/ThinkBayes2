@@ -94,8 +94,8 @@ def MakeNormalModel(weights):
     xmax = mean + 4 * std
 
     xs, ps = thinkbayes.RenderNormalCdf(mean, std, xmin, xmax)
-    thinkplot.Plot(xs, ps, label="model", linewidth=4, color="0.8")
-    thinkplot.Cdf(cdf)
+    thinkplot.plot_line(xs, ps, label="model", linewidth=4, color="0.8")
+    thinkplot.plot_cdf_line(cdf)
 
 
 def MakeNormalPlot(weights):
@@ -108,10 +108,10 @@ def MakeNormalPlot(weights):
 
     xs = [-5, 5]
     xs, ys = thinkbayes.FitLine(xs, mean, std)
-    thinkplot.Plot(xs, ys, color="0.8", label="model")
+    thinkplot.plot_line(xs, ys, color="0.8", label="model")
 
     xs, ys = thinkbayes.NormalProbability(weights)
-    thinkplot.Plot(xs, ys, label="weights")
+    thinkplot.plot_line(xs, ys, label="weights")
 
 
 def MakeFigures(df):
@@ -120,26 +120,26 @@ def MakeFigures(df):
     log_weights = np.log10(weights)
 
     # plot weights on linear and log scales
-    thinkplot.PrePlot(cols=2)
+    thinkplot.pre_plot(cols=2)
     MakeNormalModel(weights)
-    thinkplot.Config(xlabel="adult weight (kg)", ylabel="CDF")
+    thinkplot.config_plot(xlabel="adult weight (kg)", ylabel="CDF")
 
-    thinkplot.SubPlot(2)
+    thinkplot.sub_plot(2)
     MakeNormalModel(log_weights)
-    thinkplot.Config(xlabel="adult weight (log10 kg)")
+    thinkplot.config_plot(xlabel="adult weight (log10 kg)")
 
-    thinkplot.Save(root="brfss_weight")
+    thinkplot.save_plot(root="brfss_weight")
 
     # make normal probability plots on linear and log scales
-    thinkplot.PrePlot(cols=2)
+    thinkplot.pre_plot(cols=2)
     MakeNormalPlot(weights)
-    thinkplot.Config(xlabel="z", ylabel="weights (kg)")
+    thinkplot.config_plot(xlabel="z", ylabel="weights (kg)")
 
-    thinkplot.SubPlot(2)
+    thinkplot.sub_plot(2)
     MakeNormalPlot(log_weights)
-    thinkplot.Config(xlabel="z", ylabel="weights (log10 kg)")
+    thinkplot.config_plot(xlabel="z", ylabel="weights (log10 kg)")
 
-    thinkplot.Save(root="brfss_weight_normal")
+    thinkplot.save_plot(root="brfss_weight_normal")
 
 
 def main(script, nrows=1000):

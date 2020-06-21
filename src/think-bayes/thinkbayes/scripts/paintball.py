@@ -86,14 +86,14 @@ def MakePmfPlot(alpha=10):
     locations = range(0, 31)
 
     betas = [10, 20, 40]
-    thinkplot.PrePlot(num=len(betas))
+    thinkplot.pre_plot(num=len(betas))
 
     for beta in betas:
         pmf = MakeLocationPmf(alpha, beta, locations)
         pmf.name = f"beta = {beta}"
-        thinkplot.Pdf(pmf)
+        thinkplot.plot_pdf_line(pmf)
 
-    thinkplot.Save("paintball1", xlabel="Distance", ylabel="Prob", formats=FORMATS)
+    thinkplot.save_plot("paintball1", xlabel="Distance", ylabel="Prob", formats=FORMATS)
 
 
 def MakePosteriorPlot(suite):
@@ -109,15 +109,15 @@ def MakePosteriorPlot(suite):
     print("alpha CI", marginal_alpha.CredibleInterval(50))
     print("beta CI", marginal_beta.CredibleInterval(50))
 
-    thinkplot.PrePlot(num=2)
+    thinkplot.pre_plot(num=2)
 
     # thinkplot.Pmf(marginal_alpha)
     # thinkplot.Pmf(marginal_beta)
 
-    thinkplot.Cdf(thinkbayes.MakeCdfFromPmf(marginal_alpha))
-    thinkplot.Cdf(thinkbayes.MakeCdfFromPmf(marginal_beta))
+    thinkplot.plot_cdf_line(thinkbayes.MakeCdfFromPmf(marginal_alpha))
+    thinkplot.plot_cdf_line(thinkbayes.MakeCdfFromPmf(marginal_beta))
 
-    thinkplot.Save(
+    thinkplot.save_plot(
         "paintball2", xlabel="Distance", ylabel="Prob", loc=4, formats=FORMATS
     )
 
@@ -128,14 +128,14 @@ def MakeConditionalPlot(suite):
     suite: posterior joint distribution of location
     """
     betas = [10, 20, 40]
-    thinkplot.PrePlot(num=len(betas))
+    thinkplot.pre_plot(num=len(betas))
 
     for beta in betas:
         cond = suite.Conditional(0, 1, beta)
         cond.name = f"beta = {beta}"
-        thinkplot.Pdf(cond)
+        thinkplot.plot_pdf_line(cond)
 
-    thinkplot.Save("paintball3", xlabel="Distance", ylabel="Prob", formats=FORMATS)
+    thinkplot.save_plot("paintball3", xlabel="Distance", ylabel="Prob", formats=FORMATS)
 
 
 def MakeContourPlot(suite):
@@ -143,9 +143,9 @@ def MakeContourPlot(suite):
 
     suite: posterior joint distribution of location
     """
-    thinkplot.Contour(suite.GetDict(), contour_bool=False, pcolor_bool=True)
+    thinkplot.contour_plot(suite.GetDict(), contour_bool=False, pcolor_bool=True)
 
-    thinkplot.Save(
+    thinkplot.save_plot(
         "paintball4",
         xlabel="alpha",
         ylabel="beta",
@@ -167,12 +167,12 @@ def MakeCrediblePlot(suite):
         for pair in interval:
             d[pair] += 1
 
-    thinkplot.Contour(d, contour_bool=False, pcolor_bool=True)
-    thinkplot.Text(17, 4, "25", color="white")
-    thinkplot.Text(17, 15, "50", color="white")
-    thinkplot.Text(17, 30, "75")
+    thinkplot.contour_plot(d, contour_bool=False, pcolor_bool=True)
+    thinkplot.annotate_figure(17, 4, "25", color="white")
+    thinkplot.annotate_figure(17, 15, "50", color="white")
+    thinkplot.annotate_figure(17, 30, "75")
 
-    thinkplot.Save(
+    thinkplot.save_plot(
         "paintball5", xlabel="alpha", ylabel="beta", formats=FORMATS, legend=False
     )
 

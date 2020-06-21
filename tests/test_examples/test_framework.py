@@ -53,7 +53,7 @@ def test_coin():
     As expected, the prior is uniform.
     """
     suite = Coin(range(0, 101))
-    thinkplot.Pdf(suite)
+    thinkplot.plot_pdf_line(suite)
 
 
 def test_update():
@@ -70,7 +70,7 @@ def test_update():
     suite = Coin(range(0, 101))
     posterior = suite.Copy()
     posterior.Update("H")
-    thinkplot.Pdf(posterior)
+    thinkplot.plot_pdf_line(posterior)
 
 
 def test_additional():
@@ -85,4 +85,4 @@ def test_additional():
     results = "HTHHTHHHTTHHHTH"
     for data in results:
         posterior.Update(data)
-    thinkplot.Pdf(posterior)
+    thinkplot.plot_pdf_line(posterior)

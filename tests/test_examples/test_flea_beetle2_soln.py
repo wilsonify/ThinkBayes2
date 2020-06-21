@@ -58,9 +58,9 @@ def test_flea_beetle_problem():
     def plot_cdfs(df, col):
         for name, group in df.groupby("Species"):
             cdf = Cdf(group[col], label=name)
-            thinkplot.Cdf(cdf)
+            thinkplot.plot_cdf_line(cdf)
 
-        thinkplot.Config(xlabel=col, legend=True, loc="lower right")
+        thinkplot.config_plot(xlabel=col, legend=True, loc="lower right")
 
     plot_cdfs(df, "Width")
 
@@ -109,7 +109,7 @@ def test_flea_beetle_problem():
 
     for name, group in groups:
         suite = MakeWidthSuite(group.Width)
-        thinkplot.Contour(suite)
+        thinkplot.contour_plot(suite)
         print(name, suite.PredictiveProb(140))
 
     # Now we can do the same thing for the angles.
@@ -123,7 +123,7 @@ def test_flea_beetle_problem():
 
     for name, group in groups:
         suite = MakeAngleSuite(group.Angle)
-        thinkplot.Contour(suite)
+        thinkplot.contour_plot(suite)
         print(name, suite.PredictiveProb(15))
 
     # These posterior distributions are used to compute the likelihoods of the measurements.

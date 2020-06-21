@@ -38,8 +38,8 @@ def test_chapt7():
     from thinkbayes import MakePoissonPmf
 
     pmf = MakePoissonPmf(2.9, high=10)
-    thinkplot.Hist(pmf)
-    thinkplot.Config(xlabel="Number of goals", ylabel="PMF", xlim=[-0.5, 10.5])
+    thinkplot.plot_hist_bar(pmf)
+    thinkplot.config_plot(xlabel="Number of goals", ylabel="PMF", xlim=[-0.5, 10.5])
 
     # **Exercise:**  Assuming again that the goal scoring rate is 2.9, what is the probability of scoring a total of 9 goals in three games?  Answer this question two ways:
     #
@@ -51,8 +51,8 @@ def test_chapt7():
 
     pmf = MakePoissonPmf(2.9, high=30)
     total = pmf + pmf + pmf
-    thinkplot.Hist(total)
-    thinkplot.Config(xlabel="Number of goals", ylabel="PMF", xlim=[-0.5, 22.5])
+    thinkplot.plot_hist_bar(total)
+    thinkplot.config_plot(xlabel="Number of goals", ylabel="PMF", xlim=[-0.5, 22.5])
     logging.info("%r", f"total[9] = {total[9]}")
 
     # Solution
@@ -72,8 +72,8 @@ def test_chapt7():
     from thinkbayes import MakeExponentialPmf
 
     pmf = MakeExponentialPmf(lam=2.6, high=2.5)
-    thinkplot.Pdf(pmf)
-    thinkplot.Config(xlabel="Time between goals", ylabel="PMF")
+    thinkplot.plot_pdf_line(pmf)
+    thinkplot.config_plot(xlabel="Time between goals", ylabel="PMF")
 
     # Solution
 
@@ -137,20 +137,20 @@ def test_chapt7():
 
     # Here's what the priors look like:
 
-    thinkplot.PrePlot(num=2)
-    thinkplot.Pdf(suite1)
-    thinkplot.Pdf(suite2)
-    thinkplot.Config(xlabel="Goals per game", ylabel="Probability")
+    thinkplot.pre_plot(num=2)
+    thinkplot.plot_pdf_line(suite1)
+    thinkplot.plot_pdf_line(suite2)
+    thinkplot.config_plot(xlabel="Goals per game", ylabel="Probability")
 
     # And we can update each suite with the scores from the first 4 games.
 
     suite1.UpdateSet([0, 2, 8, 4])
     suite2.UpdateSet([1, 3, 1, 0])
 
-    thinkplot.PrePlot(num=2)
-    thinkplot.Pdf(suite1)
-    thinkplot.Pdf(suite2)
-    thinkplot.Config(xlabel="Goals per game", ylabel="Probability")
+    thinkplot.pre_plot(num=2)
+    thinkplot.plot_pdf_line(suite1)
+    thinkplot.plot_pdf_line(suite2)
+    thinkplot.config_plot(xlabel="Goals per game", ylabel="Probability")
 
     logging.info("%r", f"suite1.Mean() = {suite1.Mean()}")
     logging.info("%r", f"suite2.Mean() = {suite2.Mean()}")
@@ -179,10 +179,10 @@ def test_chapt7():
     goal_dist1 = MakeGoalPmf(suite1)
     goal_dist2 = MakeGoalPmf(suite2)
 
-    thinkplot.PrePlot(num=2)
-    thinkplot.Pmf(goal_dist1)
-    thinkplot.Pmf(goal_dist2)
-    thinkplot.Config(xlabel="Goals", ylabel="Probability", xlim=[-0.7, 11.5])
+    thinkplot.pre_plot(num=2)
+    thinkplot.plot_pmf_line(goal_dist1)
+    thinkplot.plot_pmf_line(goal_dist2)
+    thinkplot.config_plot(xlabel="Goals", ylabel="Probability", xlim=[-0.7, 11.5])
 
     logging.info("%r", f"goal_dist1.Mean() = {goal_dist1.Mean()}")
     logging.info("%r", f"goal_dist2.Mean() = {goal_dist2.Mean()}")
@@ -219,10 +219,10 @@ def test_chapt7():
     time_dist1 = MakeGoalTimePmf(suite1)
     time_dist2 = MakeGoalTimePmf(suite2)
 
-    thinkplot.PrePlot(num=2)
-    thinkplot.Pmf(time_dist1)
-    thinkplot.Pmf(time_dist2)
-    thinkplot.Config(xlabel="Games until goal", ylabel="Probability")
+    thinkplot.pre_plot(num=2)
+    thinkplot.plot_pmf_line(time_dist1)
+    thinkplot.plot_pmf_line(time_dist2)
+    thinkplot.config_plot(xlabel="Games until goal", ylabel="Probability")
 
     logging.info("%r", f"time_dist1.Mean() = {time_dist1.Mean()}")
     logging.info("%r", f"time_dist2.Mean() = {time_dist2.Mean()}")
@@ -264,8 +264,8 @@ def test_chapt7():
 
     xs = np.linspace(0, 8, 101)
     pmf = MakeGammaPmf(xs, 1.3)
-    thinkplot.Pdf(pmf)
-    thinkplot.Config(xlabel="Goals per game")
+    thinkplot.plot_pdf_line(pmf)
+    thinkplot.config_plot(xlabel="Goals per game")
     pmf.Mean()
 
     # **Exercise:** In the 2014 FIFA World Cup, Germany played Brazil in a semifinal match. Germany scored after 11 minutes and again at the 23 minute mark. At that point in the match, how many goals would you expect Germany to score after 90 minutes? What was the probability that they would score 5 more goals (as, in fact, they did)?

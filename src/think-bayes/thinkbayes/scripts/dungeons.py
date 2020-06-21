@@ -56,8 +56,8 @@ def main():
 
     mix = thinkbayes.MakeMixture(pmf_dice)
 
-    thinkplot.Hist(mix, width=0.9)
-    thinkplot.Save(
+    thinkplot.plot_hist_bar(mix, width=0.9)
+    thinkplot.save_plot(
         root="dungeons3", xlabel="Outcome", ylabel="Probability", formats=FORMATS
     )
 
@@ -74,10 +74,10 @@ def main():
     three_exact.label = "exact"
     three_exact.Print()
 
-    thinkplot.PrePlot(num=2)
-    thinkplot.Pmf(three)
-    thinkplot.Pmf(three_exact, linestyle="dashed")
-    thinkplot.Save(
+    thinkplot.pre_plot(num=2)
+    thinkplot.plot_pmf_line(three)
+    thinkplot.plot_pmf_line(three_exact, linestyle="dashed")
+    thinkplot.save_plot(
         root="dungeons1",
         xlabel="Sum of three d6",
         ylabel="Probability",
@@ -85,8 +85,8 @@ def main():
         formats=FORMATS,
     )
 
-    thinkplot.Clf()
-    thinkplot.PrePlot(num=1)
+    thinkplot.clear_figure()
+    thinkplot.pre_plot(num=1)
 
     # compute the distribution of the best attribute the hard way
     best_attr2 = PmfMax(three_exact, three_exact)
@@ -101,8 +101,8 @@ def main():
     best_attr_pmf = best_attr_cdf.MakePmf()
     best_attr_pmf.Print()
 
-    thinkplot.Pmf(best_attr_pmf)
-    thinkplot.Save(
+    thinkplot.plot_pmf_line(best_attr_pmf)
+    thinkplot.save_plot(
         root="dungeons2",
         xlabel="Best of three d6",
         ylabel="Probability",

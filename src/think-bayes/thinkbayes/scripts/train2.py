@@ -15,14 +15,14 @@ class Train(Dice):
     for the Dice problem."""
 
 
-def Mean(suite):
+def compute_mean(suite):
     total = 0
     for hypo, prob in suite.Items():
         total += hypo * prob
     return total
 
 
-def MakePosterior(high, dataset):
+def make_posterior(high, dataset):
     hypos = range(1, high + 1)
     suite = Train(hypos)
     suite.name = str(high)
@@ -30,7 +30,7 @@ def MakePosterior(high, dataset):
     for data in dataset:
         suite.Update(data)
 
-    thinkplot.Pmf(suite)
+    thinkplot.plot_pmf_line(suite)
     return suite
 
 
@@ -38,10 +38,10 @@ def main():
     dataset = [30, 60, 90]
 
     for high in [500, 1000, 2000]:
-        suite = MakePosterior(high, dataset)
+        suite = make_posterior(high, dataset)
         print(high, suite.Mean())
 
-    thinkplot.Save(root="train2", xlabel="Number of trains", ylabel="Probability")
+    thinkplot.save_plot(root="train2", xlabel="Number of trains", ylabel="Probability")
 
 
 if __name__ == "__main__":

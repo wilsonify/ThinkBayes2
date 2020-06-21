@@ -28,13 +28,13 @@ def main():
     hypos = numpy.linspace(0, 100, 101)
     suite = Electorate(hypos)
 
-    thinkplot.Pdf(suite, label="prior")
+    thinkplot.plot_pdf_line(suite, label="prior")
 
     data = 1.1, 3.7, 53
     suite.Update(data)
 
-    thinkplot.Pdf(suite, label="posterior")
-    thinkplot.Show()
+    thinkplot.plot_pdf_line(suite, label="posterior")
+    thinkplot.show_plot()
 
 
 if __name__ == "__main__":

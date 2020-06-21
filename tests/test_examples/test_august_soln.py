@@ -150,7 +150,7 @@ def test_birthday_problem():
     pmf0 = suite.Marginal(0)
     b0 = pmf0.Mean()
     print(b0)
-    thinkplot.Pdf(pmf0)
+    thinkplot.plot_pdf_line(pmf0)
 
     thinkplot.decorate(
         title="Posterior marginal distribution",
@@ -163,7 +163,7 @@ def test_birthday_problem():
     pmf1 = suite.Marginal(1)
     b1 = pmf1.Mean()
     print(b1)
-    thinkplot.Pdf(pmf1)
+    thinkplot.plot_pdf_line(pmf1)
 
     thinkplot.decorate(
         title="Posterior marginal distribution",
@@ -201,10 +201,10 @@ def test_birthday_problem():
     # Here are posterior predictive CDFs for diagnosis rates.
 
     pmf0 = posterior_predictive(0)
-    thinkplot.Cdf(pmf0.MakeCdf(), label="September")
+    thinkplot.plot_cdf_line(pmf0.MakeCdf(), label="September")
 
     pmf1 = posterior_predictive(11)
-    thinkplot.Cdf(pmf1.MakeCdf(), label="August")
+    thinkplot.plot_cdf_line(pmf1.MakeCdf(), label="August")
 
     thinkplot.decorate(
         title="Posterior predictive distribution",
@@ -228,7 +228,7 @@ def test_birthday_problem():
         return pmf
 
     pmf_diff = posterior_predictive_diff()
-    thinkplot.Cdf(pmf_diff.MakeCdf())
+    thinkplot.plot_cdf_line(pmf_diff.MakeCdf())
 
     thinkplot.decorate(
         title="Posterior predictive distribution",

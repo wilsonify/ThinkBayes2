@@ -62,13 +62,13 @@ def test_soccer():
         134
     )  # fake data chosen by trial and error to yield the observed prior mean
 
-    thinkplot.Pdf(suite)
+    thinkplot.plot_pdf_line(suite)
     suite.Mean()
 
     # Now that we have a prior, we can update with the time of the first goal, 11 minutes.
 
     suite.Update(11)  # time until first goal is 11 minutes
-    thinkplot.Pdf(suite)
+    thinkplot.plot_pdf_line(suite)
     suite.Mean()
 
     # After the first goal, the posterior mean rate is almost 1.9 goals per game.
@@ -76,7 +76,7 @@ def test_soccer():
     # Now we update with the second goal:
 
     suite.Update(12)  # time between first and second goals is 12 minutes
-    thinkplot.Pdf(suite)
+    thinkplot.plot_pdf_line(suite)
     suite.Mean()
 
     # After the second goal, the posterior mean goal rate is 2.3 goals per game.
@@ -100,7 +100,7 @@ def test_soccer():
             lt = lam * rem_time / 90
             pred = thinkbayes.MakePoissonPmf(lt, 15)
             metapmf[pred] = prob
-            thinkplot.Pdf(pred, color="gray", alpha=0.3, linewidth=0.5)
+            thinkplot.plot_pdf_line(pred, color="gray", alpha=0.3, linewidth=0.5)
 
         mix = thinkbayes.MakeMixture(metapmf)
         return mix
@@ -113,8 +113,8 @@ def test_soccer():
     #
     # Finally, `PredRemaining` uses `MakeMixture` to compute the mixture of the distributions.  Here's what the predictive distribution looks like.
 
-    thinkplot.Hist(mix)
-    thinkplot.Config(xlim=[-0.5, 10.5])
+    thinkplot.plot_hist_bar(mix)
+    thinkplot.config_plot(xlim=[-0.5, 10.5])
 
     # After the first two goals, the most likely outcome is that Germany will score once more, but there is a substantial chance of scoring 0 or 2--4 additional goals.
     #

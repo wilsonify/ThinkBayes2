@@ -52,7 +52,7 @@ def test_social_desirability_problem():
     prior = np.linspace(0, 1, 101)
     suite = Social(prior)
 
-    thinkplot.Pdf(suite, label="Prior")
+    thinkplot.plot_pdf_line(suite, label="Prior")
     thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
 
     # Solution
@@ -65,7 +65,7 @@ def test_social_desirability_problem():
 
     # Solution
 
-    thinkplot.Pdf(suite, label="Posterior")
+    thinkplot.plot_pdf_line(suite, label="Posterior")
     thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
 
     # Solution
@@ -79,9 +79,9 @@ def test_social_desirability_problem():
 
     beta = Beta(1, 1)
     beta.Update((60, 40))
-    thinkplot.Pdf(beta.MakePmf(), label="Direct", color="gray")
+    thinkplot.plot_pdf_line(beta.MakePmf(), label="Direct", color="gray")
 
-    thinkplot.Pdf(suite, label="Randomized")
+    thinkplot.plot_pdf_line(suite, label="Randomized")
     thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
 
     # Solution
@@ -92,9 +92,9 @@ def test_social_desirability_problem():
     factor = 4
     beta = Beta(1, 1)
     beta.Update((60 / factor, 40 / factor))
-    thinkplot.Pdf(beta.MakePmf(), label="Direct", color="gray")
+    thinkplot.plot_pdf_line(beta.MakePmf(), label="Direct", color="gray")
 
-    thinkplot.Pdf(suite, label="Randomized")
+    thinkplot.plot_pdf_line(suite, label="Randomized")
     thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
 
     # Solution

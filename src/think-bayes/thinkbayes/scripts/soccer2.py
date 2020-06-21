@@ -54,9 +54,9 @@ def main():
     print("posterior mean Argentina", suite2.Mean())
 
     # plot the posteriors
-    thinkplot.PrePlot(2)
-    thinkplot.Pdfs([suite1, suite2])
-    thinkplot.Show()
+    thinkplot.pre_plot(2)
+    thinkplot.plot_pdfs([suite1, suite2])
+    thinkplot.show_plot()
 
     # TODO: compute posterior prob Germany is better than Argentina
 
@@ -67,9 +67,9 @@ def main():
     pred2 = suite2.PredictiveDist(label="Argentina")
 
     # plot the predictive distributions
-    thinkplot.PrePlot(2)
-    thinkplot.Pdfs([pred1, pred2])
-    thinkplot.Show()
+    thinkplot.pre_plot(2)
+    thinkplot.plot_pdfs([pred1, pred2])
+    thinkplot.show_plot()
 
     # TODO: compute predictive probability of winning rematch
 

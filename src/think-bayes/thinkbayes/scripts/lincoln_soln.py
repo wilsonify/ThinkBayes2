@@ -122,8 +122,8 @@ def main():
 
     n_marginal = suite.Marginal(0)
 
-    thinkplot.Pmf(n_marginal, label="n")
-    thinkplot.Save(
+    thinkplot.plot_pmf_line(n_marginal, label="n")
+    thinkplot.save_plot(
         root="lincoln1", xlabel="number of bugs", ylabel="PMF", formats=["pdf", "png"]
     )
 
@@ -133,9 +133,9 @@ def main():
     p1_marginal = suite.Marginal(1, label="p1")
     p2_marginal = suite.Marginal(2, label="p2")
 
-    thinkplot.Pdf(p1_marginal)
-    thinkplot.Pdf(p2_marginal)
-    thinkplot.Show()
+    thinkplot.plot_pdf_line(p1_marginal)
+    thinkplot.plot_pdf_line(p2_marginal)
+    thinkplot.show_plot()
 
     print("post mean p1", p1_marginal.Mean())
     print("MAP p1", p1_marginal.MaximumLikelihood())

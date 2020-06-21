@@ -68,20 +68,20 @@ def test_improving_reading_ability():
 
     # After the update, we can plot the probability of each `mu`-`sigma` pair as a contour plot.
 
-    thinkplot.Contour(control, pcolor_bool=True)
-    thinkplot.Config(xlabel="mu", ylabel="sigma")
+    thinkplot.contour_plot(control, pcolor_bool=True)
+    thinkplot.config_plot(xlabel="mu", ylabel="sigma")
 
     # And then we can extract the marginal distribution of `mu`
 
     pmf_mu0 = control.Marginal(0)
-    thinkplot.Pdf(pmf_mu0)
-    thinkplot.Config(xlabel="mu", ylabel="Pmf")
+    thinkplot.plot_pdf_line(pmf_mu0)
+    thinkplot.config_plot(xlabel="mu", ylabel="Pmf")
 
     # And the marginal distribution of `sigma`
 
     pmf_sigma0 = control.Marginal(1)
-    thinkplot.Pdf(pmf_sigma0)
-    thinkplot.Config(xlabel="sigma", ylabel="Pmf")
+    thinkplot.plot_pdf_line(pmf_sigma0)
+    thinkplot.config_plot(xlabel="sigma", ylabel="Pmf")
 
     # **Exercise:** Run this analysis again for the control group.  What is the distribution of the difference between the groups?  What is the probability that the average "reading power" for the treatment group is higher?  What is the probability that the variance of the treatment group is higher?
 
@@ -95,24 +95,24 @@ def test_improving_reading_ability():
 
     # Here's the posterior joint distribution for the treated group
 
-    thinkplot.Contour(treated, pcolor_bool=True)
-    thinkplot.Config(xlabel="mu", ylabel="Pmf")
+    thinkplot.contour_plot(treated, pcolor_bool=True)
+    thinkplot.config_plot(xlabel="mu", ylabel="Pmf")
 
     # Solution
 
     # The marginal distribution of mu
 
     pmf_mu1 = treated.Marginal(0)
-    thinkplot.Pdf(pmf_mu1)
-    thinkplot.Config(xlabel="mu", ylabel="Pmf")
+    thinkplot.plot_pdf_line(pmf_mu1)
+    thinkplot.config_plot(xlabel="mu", ylabel="Pmf")
 
     # Solution
 
     # The marginal distribution of sigma
 
     pmf_sigma1 = treated.Marginal(1)
-    thinkplot.Pdf(pmf_sigma1)
-    thinkplot.Config(xlabel="sigma", ylabel="Pmf")
+    thinkplot.plot_pdf_line(pmf_sigma1)
+    thinkplot.config_plot(xlabel="sigma", ylabel="Pmf")
 
     # Solution
 
@@ -127,7 +127,7 @@ def test_improving_reading_ability():
 
     pmf_diff = pmf_mu1 - pmf_mu0
     cdf_diff = pmf_diff.MakeCdf()
-    thinkplot.Cdf(cdf_diff)
+    thinkplot.plot_cdf_line(cdf_diff)
     logging.info("%r", f"cdf_diff[0] = {cdf_diff[0]}")
 
     # Solution
@@ -245,14 +245,14 @@ def test_improving_reading_ability():
     locations = range(0, 31)
     alpha = 10
     betas = [10, 20, 40]
-    thinkplot.PrePlot(num=len(betas))
+    thinkplot.pre_plot(num=len(betas))
 
     for beta in betas:
         pmf = MakeLocationPmf(alpha, beta, locations)
         pmf.label = f"beta = {beta}"
-        thinkplot.Pdf(pmf)
+        thinkplot.plot_pdf_line(pmf)
 
-    thinkplot.Config(xlabel="Distance", ylabel="Prob")
+    thinkplot.config_plot(xlabel="Distance", ylabel="Prob")
 
     # Here are the marginal posterior distributions for `alpha` and `beta`.
 
@@ -262,30 +262,30 @@ def test_improving_reading_ability():
     print("alpha CI", marginal_alpha.CredibleInterval(50))
     print("beta CI", marginal_beta.CredibleInterval(50))
 
-    thinkplot.PrePlot(num=2)
+    thinkplot.pre_plot(num=2)
 
-    thinkplot.Cdf(Cdf(marginal_alpha))
-    thinkplot.Cdf(Cdf(marginal_beta))
+    thinkplot.plot_cdf_line(Cdf(marginal_alpha))
+    thinkplot.plot_cdf_line(Cdf(marginal_beta))
 
-    thinkplot.Config(xlabel="Distance", ylabel="Prob")
+    thinkplot.config_plot(xlabel="Distance", ylabel="Prob")
 
     # To visualize the joint posterior, I take slices for a few values of `beta` and plot the conditional distributions of `alpha`.  If the shooter is close to the wall, we can be somewhat confident of his position.  The farther away he is, the less certain we are.
 
     betas = [10, 20, 40]
-    thinkplot.PrePlot(num=len(betas))
+    thinkplot.pre_plot(num=len(betas))
 
     for beta in betas:
         cond = suite.Conditional(0, 1, beta)
         cond.label = f"beta = {beta}"
-        thinkplot.Pdf(cond)
+        thinkplot.plot_pdf_line(cond)
 
-    thinkplot.Config(xlabel="Distance", ylabel="Prob")
+    thinkplot.config_plot(xlabel="Distance", ylabel="Prob")
 
     # Another way to visualize the posterio distribution: a pseudocolor plot of probability as a function of `alpha` and `beta`.
 
-    thinkplot.Contour(suite.GetDict(), contour_bool=False, pcolor_bool=True)
+    thinkplot.contour_plot(suite.GetDict(), contour_bool=False, pcolor_bool=True)
 
-    thinkplot.Config(xlabel="alpha", ylabel="beta", axis=[0, 30, 0, 20])
+    thinkplot.config_plot(xlabel="alpha", ylabel="beta", axis=[0, 30, 0, 20])
 
     # Here's another visualization that shows posterior credible regions.
 
@@ -297,12 +297,12 @@ def test_improving_reading_ability():
         for pair in interval:
             d[pair] += 1
 
-    thinkplot.Contour(d, contour_bool=False, pcolor_bool=True)
-    thinkplot.Text(17, 4, "25", color="white")
-    thinkplot.Text(17, 15, "50", color="white")
-    thinkplot.Text(17, 30, "75")
+    thinkplot.contour_plot(d, contour_bool=False, pcolor_bool=True)
+    thinkplot.annotate_figure(17, 4, "25", color="white")
+    thinkplot.annotate_figure(17, 15, "50", color="white")
+    thinkplot.annotate_figure(17, 30, "75")
 
-    thinkplot.Config(xlabel="alpha", ylabel="beta", legend=False)
+    thinkplot.config_plot(xlabel="alpha", ylabel="beta", legend=False)
 
     # **Exercise:** From [John D. Cook](http://www.johndcook.com/blog/2010/07/13/lincoln-index/)
     #
@@ -357,8 +357,8 @@ def test_improving_reading_ability():
     # Solution
 
     n_marginal = suite.Marginal(0)
-    thinkplot.Pmf(n_marginal, label="n")
-    thinkplot.Config(xlabel="number of bugs", ylabel="PMF")
+    thinkplot.plot_pmf_line(n_marginal, label="n")
+    thinkplot.config_plot(xlabel="number of bugs", ylabel="PMF")
 
     # Solution
 
@@ -445,11 +445,11 @@ def test_improving_reading_ability():
 
     # Solution
 
-    thinkplot.PrePlot(2)
+    thinkplot.pre_plot(2)
     pdfx = joint.Marginal(0)
     pdfy = joint.Marginal(1)
-    thinkplot.Pdf(pdfx, label="posterior x")
-    thinkplot.Pdf(pdfy, label="posterior y")
+    thinkplot.plot_pdf_line(pdfx, label="posterior x")
+    thinkplot.plot_pdf_line(pdfy, label="posterior y")
 
     # Solution
 
@@ -502,9 +502,9 @@ def test_improving_reading_ability():
     def plot_cdfs(df, col):
         for name, group in df.groupby("Species"):
             cdf = Cdf(group[col], label=name)
-            thinkplot.Cdf(cdf)
+            thinkplot.plot_cdf_line(cdf)
 
-        thinkplot.Config(xlabel=col, legend=True, loc="lower right")
+        thinkplot.config_plot(xlabel=col, legend=True, loc="lower right")
 
     plot_cdfs(df, "Width")
 
@@ -546,7 +546,7 @@ def test_improving_reading_ability():
 
     for name, group in groups:
         suite = MakeWidthSuite(group.Width)
-        thinkplot.Contour(suite)
+        thinkplot.contour_plot(suite)
         print(name, suite.PredictiveProb(137))
 
     def MakeAngleSuite(data):
@@ -558,7 +558,7 @@ def test_improving_reading_ability():
 
     for name, group in groups:
         suite = MakeAngleSuite(group.Angle)
-        thinkplot.Contour(suite)
+        thinkplot.contour_plot(suite)
         print(name, suite.PredictiveProb(13))
 
     class Species:

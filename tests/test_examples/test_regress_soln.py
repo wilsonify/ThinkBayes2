@@ -81,17 +81,17 @@ def test_bayes_reg():
     for data in zip(xs, ys):
         suite.Update(data)
 
-    thinkplot.Pdf(suite.Marginal(0))
+    thinkplot.plot_pdf_line(suite.Marginal(0))
     thinkplot.decorate(
         xlabel="Slope", ylabel="PMF", title="Posterior marginal distribution"
     )
 
-    thinkplot.Pdf(suite.Marginal(1))
+    thinkplot.plot_pdf_line(suite.Marginal(1))
     thinkplot.decorate(
         xlabel="Intercept", ylabel="PMF", title="Posterior marginal distribution"
     )
 
-    thinkplot.Pdf(suite.Marginal(2))
+    thinkplot.plot_pdf_line(suite.Marginal(2))
     thinkplot.decorate(
         xlabel="Sigma", ylabel="PMF", title="Posterior marginal distribution"
     )

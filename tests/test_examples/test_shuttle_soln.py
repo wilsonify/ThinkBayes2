@@ -109,12 +109,12 @@ def test_shuttle():
         print(data)
         suite.Update(data)
 
-    thinkplot.Pdf(suite.Marginal(0))
+    thinkplot.plot_pdf_line(suite.Marginal(0))
     thinkplot.decorate(
         xlabel="Intercept", ylabel="PMF", title="Posterior marginal distribution"
     )
 
-    thinkplot.Pdf(suite.Marginal(1))
+    thinkplot.plot_pdf_line(suite.Marginal(1))
     thinkplot.decorate(
         xlabel="Log odds ratio", ylabel="PMF", title="Posterior marginal distribution"
     )

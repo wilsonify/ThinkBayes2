@@ -149,8 +149,8 @@ def ProcessScoresPairwise(pairs):
 
     # make the distribution of average goals scored
     cdf = thinkbayes.MakeCdfFromList(lams)
-    thinkplot.Cdf(cdf)
-    thinkplot.Show()
+    thinkplot.plot_cdf_line(cdf)
+    thinkplot.show_plot()
 
     mu, var = thinkbayes.MeanVar(lams)
     print("mu, sig", mu, math.sqrt(var))
@@ -180,8 +180,8 @@ def ProcessScoresTeamwise(pairs):
 
     # make the distribution of average goals scored
     cdf = thinkbayes.MakeCdfFromList(lams)
-    thinkplot.Cdf(cdf)
-    thinkplot.Show()
+    thinkplot.plot_cdf_line(cdf)
+    thinkplot.show_plot()
 
     mu, var = thinkbayes.MeanVar(lams)
     print("mu, sig", mu, math.sqrt(var))
@@ -196,33 +196,33 @@ def main():
     suite1 = Hockey("bruins")
     suite2 = Hockey("canucks")
 
-    thinkplot.Clf()
-    thinkplot.PrePlot(num=2)
-    thinkplot.Pmf(suite1)
-    thinkplot.Pmf(suite2)
-    thinkplot.Save(
+    thinkplot.clear_figure()
+    thinkplot.pre_plot(num=2)
+    thinkplot.plot_pmf_line(suite1)
+    thinkplot.plot_pmf_line(suite2)
+    thinkplot.save_plot(
         root="hockey0", xlabel="Goals per game", ylabel="Probability", formats=formats
     )
 
     suite1.UpdateSet([0, 2, 8, 4])
     suite2.UpdateSet([1, 3, 1, 0])
 
-    thinkplot.Clf()
-    thinkplot.PrePlot(num=2)
-    thinkplot.Pmf(suite1)
-    thinkplot.Pmf(suite2)
-    thinkplot.Save(
+    thinkplot.clear_figure()
+    thinkplot.pre_plot(num=2)
+    thinkplot.plot_pmf_line(suite1)
+    thinkplot.plot_pmf_line(suite2)
+    thinkplot.save_plot(
         root="hockey1", xlabel="Goals per game", ylabel="Probability", formats=formats
     )
 
     goal_dist1 = MakeGoalPmf(suite1)
     goal_dist2 = MakeGoalPmf(suite2)
 
-    thinkplot.Clf()
-    thinkplot.PrePlot(num=2)
-    thinkplot.Pmf(goal_dist1)
-    thinkplot.Pmf(goal_dist2)
-    thinkplot.Save(
+    thinkplot.clear_figure()
+    thinkplot.pre_plot(num=2)
+    thinkplot.plot_pmf_line(goal_dist1)
+    thinkplot.plot_pmf_line(goal_dist2)
+    thinkplot.save_plot(
         root="hockey2", xlabel="Goals", ylabel="Probability", formats=formats
     )
 
@@ -232,11 +232,11 @@ def main():
     print("MLE bruins", suite1.MaximumLikelihood())
     print("MLE canucks", suite2.MaximumLikelihood())
 
-    thinkplot.Clf()
-    thinkplot.PrePlot(num=2)
-    thinkplot.Pmf(time_dist1)
-    thinkplot.Pmf(time_dist2)
-    thinkplot.Save(
+    thinkplot.clear_figure()
+    thinkplot.pre_plot(num=2)
+    thinkplot.plot_pmf_line(time_dist1)
+    thinkplot.plot_pmf_line(time_dist2)
+    thinkplot.save_plot(
         root="hockey3", xlabel="Games until goal", ylabel="Probability", formats=formats
     )
 

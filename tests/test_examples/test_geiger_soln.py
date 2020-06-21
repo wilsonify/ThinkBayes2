@@ -41,7 +41,7 @@ def test_geiger_counter_problem():
     f = 0.1
 
     pmf = MakePoissonPmf(r, high=500)
-    thinkplot.Hist(pmf)
+    thinkplot.plot_hist_bar(pmf)
 
     total = 0
     for n, p in pmf.Items():
@@ -89,7 +89,7 @@ def test_geiger_counter_problem():
 
     suite.Update(15)
 
-    thinkplot.Pdf(suite)
+    thinkplot.plot_pdf_line(suite)
     thinkplot.decorate(
         xlabel="Emission rate (particles/second)",
         ylabel="PMF",
@@ -115,11 +115,11 @@ def test_geiger_counter_problem():
         k = pm.Binomial("k", n, f, observed=15)
         trace = pm.sample_prior_predictive(1000)
 
-    thinkplot.Cdf(Cdf(trace["r"]))
+    thinkplot.plot_cdf_line(Cdf(trace["r"]))
 
-    thinkplot.Cdf(Cdf(trace["n"]))
+    thinkplot.plot_cdf_line(Cdf(trace["n"]))
 
-    thinkplot.Cdf(Cdf(trace["k"]))
+    thinkplot.plot_cdf_line(Cdf(trace["k"]))
 
     with model:
         trace = pm.sample(1000, tune=3000)
@@ -127,13 +127,13 @@ def test_geiger_counter_problem():
     pm.traceplot(trace)
 
     n_sample = trace["n"]
-    thinkplot.Cdf(Cdf(n_sample))
+    thinkplot.plot_cdf_line(Cdf(n_sample))
 
     r_sample = trace["r"]
-    thinkplot.Cdf(Cdf(r_sample))
+    thinkplot.plot_cdf_line(Cdf(r_sample))
 
-    thinkplot.Cdf(suite.MakeCdf())
-    thinkplot.Cdf(Cdf(r_sample))
+    thinkplot.plot_cdf_line(suite.MakeCdf())
+    thinkplot.plot_cdf_line(Cdf(r_sample))
 
     # ### Grid algorithm, version 2
 
@@ -166,7 +166,7 @@ def test_geiger_counter_problem():
     suite.Update(15)
 
     pmf_r = suite.Marginal(0)
-    thinkplot.Pdf(pmf_r)
+    thinkplot.plot_pdf_line(pmf_r)
     thinkplot.decorate(
         xlabel="Emission rate (particles/second)",
         ylabel="PMF",
@@ -174,7 +174,7 @@ def test_geiger_counter_problem():
     )
 
     pmf_n = suite.Marginal(1)
-    thinkplot.Pdf(pmf_n)
+    thinkplot.plot_pdf_line(pmf_n)
     thinkplot.decorate(
         xlabel="Number of particles (n)",
         ylabel="PMF",
@@ -239,8 +239,8 @@ def test_geiger_counter_problem():
     for detector, p in suite.Items():
         pmf_r[detector.r] = p
 
-    thinkplot.Pdf(pmf_r)
+    thinkplot.plot_pdf_line(pmf_r)
 
     mix = MakeMixture(suite)
 
-    thinkplot.Pdf(mix)
+    thinkplot.plot_pdf_line(mix)

@@ -116,7 +116,7 @@ def test_lincoln_index_problem():
     print("post mean n", n_marginal.Mean())
     print("MAP n", n_marginal.MaximumLikelihood())
 
-    thinkplot.Pdf(n_marginal, label="n")
+    thinkplot.plot_pdf_line(n_marginal, label="n")
     thinkplot.decorate(xlabel="Number of bugs", ylabel="PMF")
 
     p1_marginal = suite.Marginal(1, label="p1")
@@ -128,7 +128,7 @@ def test_lincoln_index_problem():
     print("post mean p2", p2_marginal.Mean())
     print("MAP p2", p2_marginal.MaximumLikelihood())
 
-    thinkplot.Pdf(p1_marginal)
-    thinkplot.Pdf(p2_marginal)
+    thinkplot.plot_pdf_line(p1_marginal)
+    thinkplot.plot_pdf_line(p2_marginal)
 
     thinkplot.decorate(xlabel="Probability of finding a bug", ylabel="PMF")

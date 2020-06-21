@@ -26,7 +26,7 @@ def test_dinner_party():
     pmf = thinkplot.MakeBinomialPmf(n_allergic, p_allergic) + thinkplot.MakeBinomialPmf(
         n_non, p_non
     )
-    thinkplot.Hist(pmf)
+    thinkplot.plot_hist_bar(pmf)
 
     # +
     # Solution
@@ -84,7 +84,7 @@ def test_dinner_party():
     # Solution
 
     prior = Gluten(range(0, 35 + 1))
-    thinkplot.Pdf(prior)
+    thinkplot.plot_pdf_line(prior)
 
     # +
     # Solution
@@ -96,8 +96,8 @@ def test_dinner_party():
     # +
     # Solution
 
-    thinkplot.Pdf(posterior)
-    thinkplot.Config(xlabel="# who are gluten sensitive", ylabel="PMF", legend=False)
+    thinkplot.plot_pdf_line(posterior)
+    thinkplot.config_plot(xlabel="# who are gluten sensitive", ylabel="PMF", legend=False)
 
     # +
     # Solution

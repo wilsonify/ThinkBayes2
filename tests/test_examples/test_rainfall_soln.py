@@ -118,14 +118,14 @@ def test_gamma():
 
     post_k = suite.Marginal(0)
     print(post_k.Mean())
-    thinkplot.Pdf(post_k)
+    thinkplot.plot_pdf_line(post_k)
     thinkplot.decorate(xlabel="k", ylabel="PDF")
 
     # And here's the posterior marginal for `theta`
 
     post_theta = suite.Marginal(1)
     print(post_theta.Mean())
-    thinkplot.Pdf(post_theta)
+    thinkplot.plot_pdf_line(post_theta)
     thinkplot.decorate(xlabel="theta", ylabel="PDF")
 
     # To make the predictive distribution, we'll need to make PMF approximations to gamma distributions.
@@ -138,7 +138,7 @@ def test_gamma():
 
     xs = np.linspace(0, 20)
     pmf = make_gamma_pmf(xs, 3, 2)
-    thinkplot.Pdf(pmf)
+    thinkplot.plot_pdf_line(pmf)
 
     # Now we can make a mixture of gamma distributions with parameters from the posterior joint distribution.
 
@@ -153,7 +153,7 @@ def test_gamma():
 
     pred_pmf = MakeMixture(metapmf)
     print(pred_pmf.Mean())
-    thinkplot.Pdf(pred_pmf)
+    thinkplot.plot_pdf_line(pred_pmf)
 
     # ### Now with PyMC
     #
@@ -205,8 +205,8 @@ def test_gamma():
     # Comparing the results from MCMC and the grid algorithm
 
     cdf = Cdf(pred["rain"].flatten())
-    thinkplot.Cdf(cdf, label="MCMC")
-    thinkplot.Cdf(pred_pmf.MakeCdf(), label="Grid")
+    thinkplot.plot_cdf_line(cdf, label="MCMC")
+    thinkplot.plot_cdf_line(pred_pmf.MakeCdf(), label="Grid")
     thinkplot.decorate(xlabel="Predicted rainfall", ylabel="CDF")
 
     # Looks good.  The predictive means are not quite the same; the most likely culprit is the resolution of the grid algorithm.

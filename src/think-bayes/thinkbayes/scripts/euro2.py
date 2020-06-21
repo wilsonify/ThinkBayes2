@@ -89,8 +89,8 @@ def main():
     suite = Version3()
     print(suite.Mean())
 
-    thinkplot.Pdf(suite)
-    thinkplot.Show(legend=False)
+    thinkplot.plot_pdf_line(suite)
+    thinkplot.show_plot(legend=False)
 
 
 if __name__ == "__main__":

@@ -100,7 +100,7 @@ def test_BayesTable():
     d1 = Pmf(range(1, n1 + 1))
     d2 = Pmf(range(1, n2 + 1))
     total = d1 + d2
-    thinkplot.Hist(total)
+    thinkplot.plot_hist_bar(total)
 
     # And here's the general function:
 

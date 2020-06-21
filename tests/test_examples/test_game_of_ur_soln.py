@@ -62,7 +62,7 @@ def test_ur_problem():
 
     pmf_sim.Print()
 
-    thinkplot.Hist(pmf_sim, label="Simulation")
+    thinkplot.plot_hist_bar(pmf_sim, label="Simulation")
     thinkplot.decorate(xlabel="Number of rolls to get to space 13", ylabel="PMF")
 
     # ### Bayes
@@ -97,8 +97,8 @@ def test_ur_problem():
 
     # That sure looks similar to what we got by simulation.  Let's compare them.
 
-    thinkplot.Hist(pmf_sim, label="Simulation")
-    thinkplot.Pmf(posterior, color="orange", label="Normalized likelihoods")
+    thinkplot.plot_hist_bar(pmf_sim, label="Simulation")
+    thinkplot.plot_pmf_line(posterior, color="orange", label="Normalized likelihoods")
     thinkplot.decorate(xlabel="Number of rolls (n)", ylabel="PMF")
 
     # Since the posterior distribution based on a uniform prior matches the simulation, it seems like the uniform prior must be correct.  But it is not obvious (to me) why.

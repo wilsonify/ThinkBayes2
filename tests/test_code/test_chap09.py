@@ -201,20 +201,20 @@ def test_reading(drp_scores_df):
     data = df[df.Treatment == "Control"].Response
     control.Update(data)
 
-    thinkplot.Contour(
+    thinkplot.contour_plot(
         control, pcolor_bool=True
     )  # plot the probability of each `mu`-`sigma` pair as a contour plot.
-    thinkplot.Config(xlabel="mu", ylabel="sigma")
+    thinkplot.config_plot(xlabel="mu", ylabel="sigma")
 
     pmf_mu0 = control.Marginal(
         0
     )  # And then we can extract the marginal distribution of `mu`
-    thinkplot.Pdf(pmf_mu0)
-    thinkplot.Config(xlabel="mu", ylabel="Pmf")
+    thinkplot.plot_pdf_line(pmf_mu0)
+    thinkplot.config_plot(xlabel="mu", ylabel="Pmf")
 
     pmf_sigma0 = control.Marginal(1)  # And the marginal distribution of `sigma`
-    thinkplot.Pdf(pmf_sigma0)
-    thinkplot.Config(xlabel="sigma", ylabel="Pmf")
+    thinkplot.plot_pdf_line(pmf_sigma0)
+    thinkplot.config_plot(xlabel="sigma", ylabel="Pmf")
 
 
 def test_paintball():
@@ -242,14 +242,14 @@ def test_paintball():
     locations = range(0, 31)
     alpha = 10
     betas = [10, 20, 40]
-    thinkplot.PrePlot(num=len(betas))
+    thinkplot.pre_plot(num=len(betas))
 
     for beta in betas:
         pmf = MakeLocationPmf(alpha, beta, locations)
         pmf.label = f"beta = {beta}"
-        thinkplot.Pdf(pmf)
+        thinkplot.plot_pdf_line(pmf)
 
-    thinkplot.Config(xlabel="Distance", ylabel="Prob")
+    thinkplot.config_plot(xlabel="Distance", ylabel="Prob")
 
     marginal_alpha = suite.Marginal(
         0, label="alpha"
@@ -259,28 +259,28 @@ def test_paintball():
     print("alpha CI", marginal_alpha.CredibleInterval(50))
     print("beta CI", marginal_beta.CredibleInterval(50))
 
-    thinkplot.PrePlot(num=2)
+    thinkplot.pre_plot(num=2)
 
-    thinkplot.Cdf(Cdf(marginal_alpha))
-    thinkplot.Cdf(Cdf(marginal_beta))
+    thinkplot.plot_cdf_line(Cdf(marginal_alpha))
+    thinkplot.plot_cdf_line(Cdf(marginal_beta))
 
-    thinkplot.Config(xlabel="Distance", ylabel="Prob")
+    thinkplot.config_plot(xlabel="Distance", ylabel="Prob")
 
     betas = [10, 20, 40]
-    thinkplot.PrePlot(num=len(betas))
+    thinkplot.pre_plot(num=len(betas))
 
     for beta in betas:
         cond = suite.Conditional(0, 1, beta)
         cond.label = f"beta = {beta}"
-        thinkplot.Pdf(cond)
+        thinkplot.plot_pdf_line(cond)
 
-    thinkplot.Config(xlabel="Distance", ylabel="Prob")
+    thinkplot.config_plot(xlabel="Distance", ylabel="Prob")
 
-    thinkplot.Contour(
+    thinkplot.contour_plot(
         suite.GetDict(), contour_bool=False, pcolor_bool=True
     )  # Another way to visualize the posterior distribution
 
-    thinkplot.Config(xlabel="alpha", ylabel="beta", axis=[0, 30, 0, 20])
+    thinkplot.config_plot(xlabel="alpha", ylabel="beta", axis=[0, 30, 0, 20])
 
     d = dict((pair, 0) for pair in suite.Values())
 
@@ -290,21 +290,21 @@ def test_paintball():
         for pair in interval:
             d[pair] += 1
 
-    thinkplot.Contour(d, contour_bool=False, pcolor_bool=True)
-    thinkplot.Text(17, 4, "25", color="white")
-    thinkplot.Text(17, 15, "50", color="white")
-    thinkplot.Text(17, 30, "75")
+    thinkplot.contour_plot(d, contour_bool=False, pcolor_bool=True)
+    thinkplot.annotate_figure(17, 4, "25", color="white")
+    thinkplot.annotate_figure(17, 15, "50", color="white")
+    thinkplot.annotate_figure(17, 30, "75")
 
-    thinkplot.Config(xlabel="alpha", ylabel="beta", legend=False)
+    thinkplot.config_plot(xlabel="alpha", ylabel="beta", legend=False)
 
 
 def test_flea_beetles(flea_beetles_df):
     def plot_cdfs(df, col):
         for name, group in df.groupby("Species"):
             cdf = Cdf(group[col], label=name)
-            thinkplot.Cdf(cdf)
+            thinkplot.plot_cdf_line(cdf)
 
-        thinkplot.Config(xlabel=col, legend=True, loc="lower right")
+        thinkplot.config_plot(xlabel=col, legend=True, loc="lower right")
 
     df = flea_beetles_df
     plot_cdfs(df, "Width")
@@ -314,7 +314,7 @@ def test_flea_beetles(flea_beetles_df):
 
     for name, group in groups:
         suite = MakeWidthSuite(group.Width)
-        thinkplot.Contour(suite)
+        thinkplot.contour_plot(suite)
         print(name, suite.PredictiveProb(137))
 
     def MakeAngleSuite(data):
@@ -326,7 +326,7 @@ def test_flea_beetles(flea_beetles_df):
 
     for name, group in groups:
         suite = MakeAngleSuite(group.Angle)
-        thinkplot.Contour(suite)
+        thinkplot.contour_plot(suite)
         print(name, suite.PredictiveProb(13))
 
     species = {}

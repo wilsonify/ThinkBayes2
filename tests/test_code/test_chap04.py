@@ -202,7 +202,7 @@ def test_uniform():
 
     # And here's what the posterior looks like.
 
-    thinkplot.Pdf(suite)
+    thinkplot.plot_pdf_line(suite)
 
     # We can summarize the posterior several ways, including the mean:
 
@@ -230,16 +230,16 @@ def test_priors():
     uniform = UniformPrior()
     suites = [triangle, uniform]
 
-    thinkplot.Pdfs(suites)
-    thinkplot.Config(xlabel="x", ylabel="Probability")
+    thinkplot.plot_pdfs(suites)
+    thinkplot.config_plot(xlabel="x", ylabel="Probability")
 
     for suite in suites:
         RunUpdate(suite)
 
     # The results are almost identical; the remaining difference is unlikely to matter in practice.
 
-    thinkplot.Pdfs(suites)
-    thinkplot.Config(xlabel="x", ylabel="Probability")
+    thinkplot.plot_pdfs(suites)
+    thinkplot.config_plot(xlabel="x", ylabel="Probability")
 
 
 def test_euro2():
@@ -251,7 +251,7 @@ def test_euro2():
 
     # Here's what the posterior looks like.
 
-    thinkplot.Pdf(suite)
+    thinkplot.plot_pdf_line(suite)
 
 
 def test_beta():
@@ -265,7 +265,7 @@ def test_beta():
 
     # And here's the posterior.
 
-    thinkplot.Pdf(beta.MakePmf())
+    thinkplot.plot_pdf_line(beta.MakePmf())
 
     # Amazing, no?
 

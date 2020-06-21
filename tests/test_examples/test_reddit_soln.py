@@ -46,7 +46,7 @@ def test_unreliable_evaluators():
 
     beta = Beta(2, 1)
     redditor = beta.MakePmf(11)
-    thinkplot.Pdf(redditor)
+    thinkplot.plot_pdf_line(redditor)
     thinkplot.decorate(xlabel="Reliability (R)", ylabel="PMF")
 
     mean_r = redditor.Mean()
@@ -57,7 +57,7 @@ def test_unreliable_evaluators():
 
     beta = Beta(1, 1)
     item = beta.MakePmf(11)
-    thinkplot.Pdf(item)
+    thinkplot.plot_pdf_line(item)
     thinkplot.decorate(xlabel="Quality (Q))", ylabel="PMF")
 
     mean_q = item.Mean()
@@ -105,7 +105,7 @@ def test_unreliable_evaluators():
 
     redditor_post.Total()
 
-    thinkplot.Pdf(redditor_post)
+    thinkplot.plot_pdf_line(redditor_post)
     ylim = 0, redditor_post.MaxLike() * 1.05
     thinkplot.decorate(xlabel="Reliability (R)", ylabel="PMF", ylim=ylim)
 
@@ -117,7 +117,7 @@ def test_unreliable_evaluators():
 
     item_post.Total()
 
-    thinkplot.Pdf(item_post)
+    thinkplot.plot_pdf_line(item_post)
     ylim = 0, item_post.MaxLike() * 1.05
     thinkplot.decorate(xlabel="Quality (Q))", ylabel="PMF", ylim=ylim)
 

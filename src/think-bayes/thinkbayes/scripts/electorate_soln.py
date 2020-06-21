@@ -28,13 +28,13 @@ def main():
     hypos = range(0, 101)
     suite = Electorate(hypos)
 
-    thinkplot.PrePlot(3)
-    thinkplot.Pdf(suite, label="prior")
+    thinkplot.pre_plot(3)
+    thinkplot.plot_pdf_line(suite, label="prior")
 
     data = 1.1, 3.7, 53
     suite.Update(data)
-    thinkplot.Pdf(suite, label="posterior1")
-    thinkplot.Save(
+    thinkplot.plot_pdf_line(suite, label="posterior1")
+    thinkplot.save_plot(
         root="electorate1",
         xlabel="percentage of electorate",
         ylabel="PMF",
@@ -49,8 +49,8 @@ def main():
     data = -2.3, 4.1, 49
     suite.Update(data)
 
-    thinkplot.Pdf(suite, label="posterior2")
-    thinkplot.Save(
+    thinkplot.plot_pdf_line(suite, label="posterior2")
+    thinkplot.save_plot(
         root="electorate2",
         xlabel="percentage of electorate",
         ylabel="PMF",

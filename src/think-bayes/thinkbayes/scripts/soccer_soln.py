@@ -40,8 +40,8 @@ class Soccer(thinkbayes.Suite):
 
         mix = thinkbayes.MakeMixture(metapmf)
         mix += score
-        thinkplot.Hist(mix)
-        thinkplot.Show()
+        thinkplot.plot_hist_bar(mix)
+        thinkplot.show_plot()
 
 
 def main():
@@ -54,18 +54,18 @@ def main():
 
     # start with a prior based on the mean interarrival time
     suite.Update(mean_interarrival)
-    thinkplot.Pdf(suite, label="prior")
+    thinkplot.plot_pdf_line(suite, label="prior")
     print("prior mean", suite.Mean())
 
     suite.Update(11)
-    thinkplot.Pdf(suite, label="posterior 1")
+    thinkplot.plot_pdf_line(suite, label="posterior 1")
     print("after one goal", suite.Mean())
 
     suite.Update(12)
-    thinkplot.Pdf(suite, label="posterior 2")
+    thinkplot.plot_pdf_line(suite, label="posterior 2")
     print("after two goals", suite.Mean())
 
-    thinkplot.Show()
+    thinkplot.show_plot()
 
     # plot the predictive distribution
     suite.PredRemaining(90 - 23, 2)

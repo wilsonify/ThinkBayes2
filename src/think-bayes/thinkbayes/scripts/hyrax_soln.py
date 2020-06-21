@@ -55,9 +55,9 @@ def main():
     suite.Update(data)
     suite2.Update(data)
 
-    thinkplot.Pdf(suite, label="binomial")
-    thinkplot.Pdf(suite, label="hypergeom")
-    thinkplot.Show()
+    thinkplot.plot_pdf_line(suite, label="binomial")
+    thinkplot.plot_pdf_line(suite, label="hypergeom")
+    thinkplot.show_plot()
 
 
 if __name__ == "__main__":

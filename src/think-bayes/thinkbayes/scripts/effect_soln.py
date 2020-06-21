@@ -48,8 +48,8 @@ def RunEstimate(update_func, num_points=31, median_flag=False):
 
     pmf_d = diff / sigma
 
-    thinkplot.Cdf(pmf_d.MakeCdf())
-    thinkplot.Show(xlabel="# stddev between means", ylabel="PMF")
+    thinkplot.plot_cdf_line(pmf_d.MakeCdf())
+    thinkplot.show_plot(xlabel="# stddev between means", ylabel="PMF")
 
 
 def main():

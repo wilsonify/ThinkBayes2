@@ -245,14 +245,14 @@ class Subject(object):
         print("90% CI for N:", pmf.CredibleInterval(90))
         pmf.label = self.code
 
-        thinkplot.Clf()
-        thinkplot.PrePlot(num=1)
+        thinkplot.clear_figure()
+        thinkplot.pre_plot(num=1)
 
-        thinkplot.Pmf(pmf)
+        thinkplot.plot_pmf_line(pmf)
 
         root = "species-ndist-%s" % self.code
 
-        thinkplot.Save(
+        thinkplot.save_plot(
             root=root, xlabel=SPECIES_LABEL, ylabel="Prob", formats=FORMATS,
         )
 
@@ -261,14 +261,14 @@ class Subject(object):
 
         num: how many species (starting with the highest prevalence)
         """
-        thinkplot.Clf()
-        thinkplot.PrePlot(num=5)
+        thinkplot.clear_figure()
+        thinkplot.pre_plot(num=5)
 
         for rank in range(1, num + 1):
             self.PlotPrevalence(rank)
 
         root = "species-prev-%s" % self.code
-        thinkplot.Save(
+        thinkplot.save_plot(
             root=root,
             xlabel="Prevalence",
             ylabel="Prob",
@@ -294,9 +294,9 @@ class Subject(object):
 
         if cdf_flag:
             cdf = mix.MakeCdf()
-            thinkplot.Cdf(cdf)
+            thinkplot.plot_cdf_line(cdf)
         else:
-            thinkplot.Pmf(mix)
+            thinkplot.plot_pmf_line(mix)
 
     def PlotMixture(self, rank=1):
         """Plots dist of prevalence for all n, and the mix.
@@ -311,14 +311,14 @@ class Subject(object):
 
         metapmf, mix = self.suite.DistOfPrevalence(index)
 
-        thinkplot.Clf()
+        thinkplot.clear_figure()
         for pmf in metapmf.Values():
-            thinkplot.Pmf(pmf, color="blue", alpha=0.2, linewidth=0.5)
+            thinkplot.plot_pmf_line(pmf, color="blue", alpha=0.2, linewidth=0.5)
 
-        thinkplot.Pmf(mix, color="blue", alpha=0.9, linewidth=2)
+        thinkplot.plot_pmf_line(mix, color="blue", alpha=0.9, linewidth=2)
 
         root = "species-mix-%s" % self.code
-        thinkplot.Save(
+        thinkplot.save_plot(
             root=root,
             xlabel="Prevalence",
             ylabel="Prob",
@@ -693,16 +693,16 @@ def PlotCurves(curves, root="species-rare"):
 
     curves is a list of curves; each curve is a list of (x, y) pairs.
     """
-    thinkplot.Clf()
+    thinkplot.clear_figure()
     color = "#225EA8"
 
     n = len(curves)
     for i, curve in enumerate(curves):
         curve = OffsetCurve(curve, i, n)
         xs, ys = zip(*curve)
-        thinkplot.Plot(xs, ys, color=color, alpha=0.3, linewidth=0.5)
+        thinkplot.plot_line(xs, ys, color=color, alpha=0.3, linewidth=0.5)
 
-    thinkplot.Save(
+    thinkplot.save_plot(
         root=root, xlabel="# samples", ylabel="# species", formats=FORMATS, legend=False
     )
 
@@ -713,12 +713,12 @@ def PlotConditionals(cdfs, root="species-cond"):
     cdfs: list of Cdf
     root: string filename root
     """
-    thinkplot.Clf()
-    thinkplot.PrePlot(num=len(cdfs))
+    thinkplot.clear_figure()
+    thinkplot.pre_plot(num=len(cdfs))
 
-    thinkplot.Cdfs(cdfs)
+    thinkplot.plot_cdfs(cdfs)
 
-    thinkplot.Save(root=root, xlabel="# new species", ylabel="Prob", formats=FORMATS)
+    thinkplot.save_plot(root=root, xlabel="# new species", ylabel="Prob", formats=FORMATS)
 
 
 def PlotFracCdfs(cdfs, root="species-frac"):
@@ -726,13 +726,13 @@ def PlotFracCdfs(cdfs, root="species-frac"):
 
     cdfs: map from k to CDF of fraction of species seen after k samples
     """
-    thinkplot.Clf()
+    thinkplot.clear_figure()
     color = "#225EA8"
 
     for k, cdf in cdfs.items():
         xs, ys = cdf.Render()
         ys = [1 - y for y in ys]
-        thinkplot.Plot(xs, ys, color=color, linewidth=1)
+        thinkplot.plot_line(xs, ys, color=color, linewidth=1)
 
         x = 0.9
         y = 1 - cdf.Prob(x)
@@ -747,7 +747,7 @@ def PlotFracCdfs(cdfs, root="species-frac"):
             bbox=dict(facecolor="white", edgecolor="none"),
         )
 
-    thinkplot.Save(
+    thinkplot.save_plot(
         root=root,
         xlabel="Fraction of species seen",
         ylabel="Probability",
@@ -1235,9 +1235,9 @@ def PlotAllVersions():
         suite = MakePosterior(constructor, data, ns)
         pmf = suite.DistN()
         pmf.label = f"{constructor.__name__}"
-        thinkplot.Pmf(pmf)
+        thinkplot.plot_pmf_line(pmf)
 
-    thinkplot.Save(root="species3", xlabel=SPECIES_LABEL, ylabel="Prob")
+    thinkplot.save_plot(root="species3", xlabel=SPECIES_LABEL, ylabel="Prob")
 
 
 def PlotMedium():
@@ -1251,9 +1251,9 @@ def PlotMedium():
         suite = MakePosterior(constructor, data, ns)
         pmf = suite.DistN()
         pmf.label = f"{constructor.__name__}"
-        thinkplot.Pmf(pmf)
+        thinkplot.plot_pmf_line(pmf)
 
-    thinkplot.Show()
+    thinkplot.show_plot()
 
 
 def SimpleDirichletExample():
@@ -1261,8 +1261,8 @@ def SimpleDirichletExample():
 
     This is the case where we know there are exactly three species.
     """
-    thinkplot.Clf()
-    thinkplot.PrePlot(3)
+    thinkplot.clear_figure()
+    thinkplot.pre_plot(3)
 
     names = ["lions", "tigers", "bears"]
     data = [3, 2, 1]
@@ -1278,9 +1278,9 @@ def SimpleDirichletExample():
         print("mean", names[i], beta.Mean())
 
         pmf = beta.MakePmf(label=names[i])
-        thinkplot.Pmf(pmf)
+        thinkplot.plot_pmf_line(pmf)
 
-    thinkplot.Save(
+    thinkplot.save_plot(
         root="species1", xlabel="Prevalence", ylabel="Prob", formats=FORMATS,
     )
 
@@ -1294,12 +1294,12 @@ def HierarchicalExample():
     data = [3, 2, 1]
     suite.Update(data)
 
-    thinkplot.Clf()
-    thinkplot.PrePlot(num=1)
+    thinkplot.clear_figure()
+    thinkplot.pre_plot(num=1)
 
     pmf = suite.DistN()
-    thinkplot.Pdf(pmf)
-    thinkplot.Save(
+    thinkplot.plot_pdf_line(pmf)
+    thinkplot.save_plot(
         root="species2", xlabel=SPECIES_LABEL, ylabel="Prob", formats=FORMATS,
     )
 
@@ -1318,9 +1318,9 @@ def CompareHierarchicalExample():
         suite = MakePosterior(constructor, data, ns, iters)
         pmf = suite.DistN()
         pmf.label = f"{constructor.__name__}"
-        thinkplot.Pmf(pmf)
+        thinkplot.plot_pmf_line(pmf)
 
-    thinkplot.Show()
+    thinkplot.show_plot()
 
 
 def ProcessSubjects(codes):
@@ -1328,8 +1328,8 @@ def ProcessSubjects(codes):
 
     code: sequence of string codes
     """
-    thinkplot.Clf()
-    thinkplot.PrePlot(len(codes))
+    thinkplot.clear_figure()
+    thinkplot.pre_plot(len(codes))
 
     subjects = ReadRarefactedData()
     pmfs = []
@@ -1339,14 +1339,14 @@ def ProcessSubjects(codes):
         subject.Process()
         pmf = subject.suite.DistN()
         pmf.label = subject.code
-        thinkplot.Pmf(pmf)
+        thinkplot.plot_pmf_line(pmf)
 
         pmfs.append(pmf)
 
     print("ProbGreater", thinkbayes.PmfProbGreater(pmfs[0], pmfs[1]))
     print("ProbLess", thinkbayes.PmfProbLess(pmfs[0], pmfs[1]))
 
-    thinkplot.Save(
+    thinkplot.save_plot(
         root="species4", xlabel=SPECIES_LABEL, ylabel="Prob", formats=FORMATS,
     )
 
@@ -1497,8 +1497,8 @@ def PlotActualPrevalences():
     cdf_actual = pmf_actual.MakeCdf(label="actual")
     cdf_sim = pmf_sim.MakeCdf(label="sim")
 
-    thinkplot.Cdfs([cdf_actual, cdf_sim])
-    thinkplot.Show()
+    thinkplot.plot_cdfs([cdf_actual, cdf_sim])
+    thinkplot.show_plot()
 
 
 def ScatterPrevalences(ms, actual):
@@ -1509,10 +1509,10 @@ def ScatterPrevalences(ms, actual):
     """
     for conc in [1, 0.5, 0.2, 0.1]:
         expected = [ExpectedMaxPrev(m, conc) for m in ms]
-        thinkplot.Plot(ms, expected)
+        thinkplot.plot_line(ms, expected)
 
-    thinkplot.Scatter(ms, actual)
-    thinkplot.Show(xscale="log")
+    thinkplot.scatter_plot(ms, actual)
+    thinkplot.show_plot(xscale="log")
 
 
 def SimulateMaxPrev(m, conc=1):
@@ -1616,25 +1616,25 @@ class Calibrator(object):
 
         high = max(xs + ys)
 
-        thinkplot.Plot([0, high], [0, high], color="gray")
-        thinkplot.Scatter(xs, ys)
-        thinkplot.Save(root=root, xlabel="Actual n", ylabel="Predicted")
+        thinkplot.plot_line([0, high], [0, high], color="gray")
+        thinkplot.scatter_plot(xs, ys)
+        thinkplot.save_plot(root=root, xlabel="Actual n", ylabel="Predicted")
 
     def PlotQ(self, root="species-q"):
         """Makes a scatter plot of simulated vs actual prev_unseen (q).
         """
-        thinkplot.Plot([0, 0.2], [0, 0.2], color="gray")
+        thinkplot.plot_line([0, 0.2], [0, 0.2], color="gray")
         xs, ys = zip(*self.q_seq)
-        thinkplot.Scatter(xs, ys)
-        thinkplot.Save(root=root, xlabel="Actual q", ylabel="Predicted")
+        thinkplot.scatter_plot(xs, ys)
+        thinkplot.save_plot(root=root, xlabel="Actual q", ylabel="Predicted")
 
     def PlotL(self, root="species-n"):
         """Makes a scatter plot of simulated vs actual l.
         """
-        thinkplot.Plot([0, 20], [0, 20], color="gray")
+        thinkplot.plot_line([0, 20], [0, 20], color="gray")
         xs, ys = zip(*self.l_seq)
-        thinkplot.Scatter(xs, ys)
-        thinkplot.Save(root=root, xlabel="Actual l", ylabel="Predicted")
+        thinkplot.scatter_plot(xs, ys)
+        thinkplot.save_plot(root=root, xlabel="Actual l", ylabel="Predicted")
 
     def PlotCalibrationCurves(self, root="species5"):
         """Plots calibration curves"""
@@ -1642,15 +1642,15 @@ class Calibrator(object):
         print(self.total_q)
         print(self.total_l)
 
-        thinkplot.Plot([0, 100], [0, 100], color="gray", alpha=0.2)
+        thinkplot.plot_line([0, 100], [0, 100], color="gray", alpha=0.2)
 
         if self.total_n[0] >= 0:
-            thinkplot.Plot(self.ps, self.total_n, label="n")
+            thinkplot.plot_line(self.ps, self.total_n, label="n")
 
-        thinkplot.Plot(self.ps, self.total_q, label="q")
-        thinkplot.Plot(self.ps, self.total_l, label="l")
+        thinkplot.plot_line(self.ps, self.total_q, label="q")
+        thinkplot.plot_line(self.ps, self.total_l, label="l")
 
-        thinkplot.Save(
+        thinkplot.save_plot(
             root=root,
             axis=[0, 100, 0, 100],
             xlabel="Ideal percentages",
@@ -1845,7 +1845,7 @@ def PlotSubjectCdf(code=None, clean_param=0):
     # plot the cdf
     options = dict(linewidth=3, color="blue", alpha=0.5)
     cdf = subject.MakeCdf()
-    thinkplot.Cdf(cdf, **options)
+    thinkplot.plot_cdf_line(cdf, **options)
 
     options = dict(linewidth=1, color="green", alpha=0.5)
 
@@ -1854,10 +1854,10 @@ def PlotSubjectCdf(code=None, clean_param=0):
         prevalences = subject.suite.SamplePrevalences(m)
         fake = FakeSubject(prevalences=prevalences)
         cdf = fake.MakeCdf()
-        thinkplot.Cdf(cdf, **options)
+        thinkplot.plot_cdf_line(cdf, **options)
 
     root = "species-cdf-%s" % code
-    thinkplot.Save(
+    thinkplot.save_plot(
         root=root, xlabel="rank", ylabel="CDF", xscale="log", formats=FORMATS,
     )
 

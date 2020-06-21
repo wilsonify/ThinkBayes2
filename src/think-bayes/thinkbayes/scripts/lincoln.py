@@ -122,8 +122,8 @@ def main():
 
     n_marginal = suite.Marginal(0)
 
-    thinkplot.Pmf(n_marginal, label="n")
-    thinkplot.Save(
+    thinkplot.plot_pmf_line(n_marginal, label="n")
+    thinkplot.save_plot(
         root="lincoln1", xlabel="number of bugs", ylabel="PMF", formats=["pdf", "png"]
     )
 

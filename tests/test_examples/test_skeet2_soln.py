@@ -32,9 +32,9 @@ def test_comparing_distributions():
 
     # Based on the data, the distribution for Rhode is slightly farther right than the distribution for Wei, but there is a lot of overlap.
 
-    thinkplot.Pdf(rhode.MakePmf())
-    thinkplot.Pdf(wei.MakePmf())
-    thinkplot.Config(xlabel="x", ylabel="Probability")
+    thinkplot.plot_pdf_line(rhode.MakePmf())
+    thinkplot.plot_pdf_line(wei.MakePmf())
+    thinkplot.config_plot(xlabel="x", ylabel="Probability")
 
     # To compute the probability that Rhode actually has a higher value of `p`, there are two options:
     #
@@ -122,7 +122,7 @@ def test_comparing_distributions():
     # Or, realizing that the distribution of `k` is binomial, we can simplify the code using NumPy:
 
     rhode_rematch = np.random.binomial(25, rhode_sample)
-    thinkplot.Hist(Pmf(rhode_rematch))
+    thinkplot.plot_hist_bar(Pmf(rhode_rematch))
 
     wei_rematch = np.random.binomial(25, wei_sample)
     np.mean(rhode_rematch > wei_rematch)
@@ -143,9 +143,9 @@ def test_comparing_distributions():
 
     rhode_rematch = MakeBinomialMix(rhode.MakePmf(), label="Rhode")
     wei_rematch = MakeBinomialMix(wei.MakePmf(), label="Wei")
-    thinkplot.Pdf(rhode_rematch)
-    thinkplot.Pdf(wei_rematch)
-    thinkplot.Config(xlabel="hits")
+    thinkplot.plot_pdf_line(rhode_rematch)
+    thinkplot.plot_pdf_line(wei_rematch)
+    thinkplot.config_plot(xlabel="hits")
 
     rhode_rematch.ProbGreater(wei_rematch), rhode_rematch.ProbLess(wei_rematch)
 
@@ -184,13 +184,13 @@ def test_comparing_distributions():
         k = rhode_rematch.Random() + wei_rematch.Random()
         pmf[k] += 1
     pmf.Normalize()
-    thinkplot.Hist(pmf)
+    thinkplot.plot_hist_bar(pmf)
 
     # Or we could use `Sample` and NumPy:
 
     ks = rhode_rematch.Sample(iters) + wei_rematch.Sample(iters)
     pmf = Pmf(ks)
-    thinkplot.Hist(pmf)
+    thinkplot.plot_hist_bar(pmf)
 
     # Alternatively, we could compute the distribution of the sum by enumeration:
 
@@ -204,19 +204,19 @@ def test_comparing_distributions():
     # Here's how it's used:
 
     pmf = AddPmfs(rhode_rematch, wei_rematch)
-    thinkplot.Pdf(pmf)
+    thinkplot.plot_pdf_line(pmf)
 
     # The `Pmf` class provides a `+` operator that does the same thing.
 
     pmf = rhode_rematch + wei_rematch
-    thinkplot.Pdf(pmf)
+    thinkplot.plot_pdf_line(pmf)
 
     # **Exercise:**  The Pmf class also provides the `-` operator, which computes the distribution of the difference in values from two distributions.  Use the distributions from the previous section to compute the distribution of the differential between Rhode and Wei in a rematch.  On average, how many clays should we expect Rhode to win by?  What is the probability that Rhode wins by 10 or more?
 
     # Solution
 
     pmf = rhode_rematch - wei_rematch
-    thinkplot.Pdf(pmf)
+    thinkplot.plot_pdf_line(pmf)
 
     # Solution
 
@@ -249,7 +249,7 @@ def test_comparing_distributions():
         ks = rhode_rematch.Sample(6)
         pmf[max(ks)] += 1
     pmf.Normalize()
-    thinkplot.Hist(pmf)
+    thinkplot.plot_hist_bar(pmf)
 
     # And here's a version using NumPy.  I'll generate an array with 6 rows and 10 columns:
 
@@ -265,7 +265,7 @@ def test_comparing_distributions():
     # And then plot the distribution of maximums:
 
     pmf = Pmf(maxes)
-    thinkplot.Hist(pmf)
+    thinkplot.plot_hist_bar(pmf)
 
     # Or we can figure it out analytically.  If the maximum is less-than-or-equal-to some value `k`, all 6 random selections must be less-than-or-equal-to `k`, so:
     #
@@ -274,7 +274,7 @@ def test_comparing_distributions():
     # `Pmf` provides a method that computes and returns this `Cdf`, so we can compute the distribution of the maximum like this:
 
     pmf = rhode_rematch.Max(6).MakePmf()
-    thinkplot.Hist(pmf)
+    thinkplot.plot_hist_bar(pmf)
 
     # **Exercise:**  Here's how Pmf.Max works:
     #
@@ -297,4 +297,4 @@ def test_comparing_distributions():
         return cdf
 
     pmf = Min(rhode_rematch, 6).MakePmf()
-    thinkplot.Hist(pmf)
+    thinkplot.plot_hist_bar(pmf)

@@ -39,9 +39,9 @@ wei_beta.Update((21, 12))
 
 # Here's what the posteriors look like
 
-thinkplot.Pdf(rhode_beta.MakePmf())
-thinkplot.Pdf(wei_beta.MakePmf())
-thinkplot.Config(xlabel="x", ylabel="Probability")
+thinkplot.plot_pdf_line(rhode_beta.MakePmf())
+thinkplot.plot_pdf_line(wei_beta.MakePmf())
+thinkplot.config_plot(xlabel="x", ylabel="Probability")
 
 # Solution
 
@@ -70,7 +70,7 @@ np.mean(rhode_sample < wei_sample)
 # with parameters `p` and `n=25`.
 
 rhode_rematch = np.random.binomial(25, rhode_sample)
-thinkplot.Hist(Pmf(rhode_rematch))
+thinkplot.plot_hist_bar(Pmf(rhode_rematch))
 
 # Solution
 

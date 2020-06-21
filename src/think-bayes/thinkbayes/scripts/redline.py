@@ -260,11 +260,11 @@ class WaitTimeCalculator(object):
         """
         pmfs = ScaleDists([self.pmf_z, self.pmf_zb], 1.0 / 60)
 
-        thinkplot.Clf()
-        thinkplot.PrePlot(2)
-        thinkplot.Pmfs(pmfs)
+        thinkplot.clear_figure()
+        thinkplot.pre_plot(2)
+        thinkplot.plot_pmfs(pmfs)
 
-        thinkplot.Save(root=root, xlabel=TIME_LABEL, ylabel="CDF", formats=FORMATS)
+        thinkplot.save_plot(root=root, xlabel=TIME_LABEL, ylabel="CDF", formats=FORMATS)
 
     def MakePlot(self, root="redline2"):
         """Plots the computed CDFs.
@@ -281,10 +281,10 @@ class WaitTimeCalculator(object):
 
         cdfs = ScaleDists([cdf_z, cdf_zb, cdf_y], 1.0 / 60)
 
-        thinkplot.Clf()
-        thinkplot.PrePlot(3)
-        thinkplot.Cdfs(cdfs)
-        thinkplot.Save(root=root, xlabel=TIME_LABEL, ylabel="CDF", formats=FORMATS)
+        thinkplot.clear_figure()
+        thinkplot.pre_plot(3)
+        thinkplot.plot_cdfs(cdfs)
+        thinkplot.save_plot(root=root, xlabel=TIME_LABEL, ylabel="CDF", formats=FORMATS)
 
 
 def SplitGaps(zs):
@@ -356,10 +356,10 @@ class ElapsedTimeEstimator(object):
 
         cdfs = ScaleDists([cdf_prior_x, cdf_post_x, cdf_y], 1.0 / 60)
 
-        thinkplot.Clf()
-        thinkplot.PrePlot(3)
-        thinkplot.Cdfs(cdfs)
-        thinkplot.Save(root=root, xlabel=TIME_LABEL, ylabel="CDF", formats=FORMATS)
+        thinkplot.clear_figure()
+        thinkplot.pre_plot(3)
+        thinkplot.plot_cdfs(cdfs)
+        thinkplot.save_plot(root=root, xlabel=TIME_LABEL, ylabel="CDF", formats=FORMATS)
 
 
 class ArrivalRate(thinkbayes.Suite):
@@ -408,16 +408,16 @@ class ArrivalRateEstimator(object):
 
         root: string
         """
-        thinkplot.Clf()
-        thinkplot.PrePlot(2)
+        thinkplot.clear_figure()
+        thinkplot.pre_plot(2)
 
         # convert units to passengers per minute
         prior = self.prior_lam.MakeCdf().Scale(60)
         post = self.post_lam.MakeCdf().Scale(60)
 
-        thinkplot.Cdfs([prior, post])
+        thinkplot.plot_cdfs([prior, post])
 
-        thinkplot.Save(
+        thinkplot.save_plot(
             root=root,
             xlabel="Arrival rate (passengers / min)",
             ylabel="CDF",
@@ -601,17 +601,17 @@ class GapTimeEstimator(object):
         print("Mean z", self.post_z.Mean())
         print("Mean zb", self.post_zb.Mean())
 
-        thinkplot.Pmf(self.pmf_y)
-        thinkplot.Pmf(self.post_z)
-        thinkplot.Pmf(self.post_zb)
+        thinkplot.plot_pmf_line(self.pmf_y)
+        thinkplot.plot_pmf_line(self.post_z)
+        thinkplot.plot_pmf_line(self.post_zb)
 
     def MakePlot(self):
         """Plot the CDFs."""
-        thinkplot.Cdf(self.pmf_y.MakeCdf())
-        thinkplot.Cdf(self.prior_zb.MakeCdf())
-        thinkplot.Cdf(self.post_zb.MakeCdf())
-        thinkplot.Cdf(self.pmf_mean_zb.MakeCdf())
-        thinkplot.Show()
+        thinkplot.plot_cdf_line(self.pmf_y.MakeCdf())
+        thinkplot.plot_cdf_line(self.prior_zb.MakeCdf())
+        thinkplot.plot_cdf_line(self.post_zb.MakeCdf())
+        thinkplot.plot_cdf_line(self.pmf_mean_zb.MakeCdf())
+        thinkplot.show_plot()
 
 
 def Floor(x, factor=10):
@@ -644,10 +644,10 @@ def TestGte():
 
     ite = GapTimeEstimator(xs, pcounts, passenger_data)
 
-    thinkplot.Clf()
+    thinkplot.clear_figure()
 
     # thinkplot.Cdf(wtc.pmf_z.MakeCdf(label="actual z"))
-    thinkplot.Cdf(wtc.pmf_zb.MakeCdf(label="actual zb"))
+    thinkplot.plot_cdf_line(wtc.pmf_zb.MakeCdf(label="actual zb"))
     ite.MakePlot()
 
 
@@ -676,22 +676,22 @@ class WaitMixtureEstimator(object):
 
     def MakePlot(self, root="redline4"):
         """Makes a plot showing the mixture."""
-        thinkplot.Clf()
+        thinkplot.clear_figure()
 
         # plot the MetaPmf
         for pmf, prob in sorted(self.metapmf.Items()):
             cdf = pmf.MakeCdf().Scale(1.0 / 60)
             width = 2 / math.log(-math.log(prob))
-            thinkplot.Plot(
+            thinkplot.plot_line(
                 cdf.xs, cdf.ps, alpha=0.2, linewidth=width, color="blue", label=""
             )
 
         # plot the mixture and the distribution based on a point estimate
-        thinkplot.PrePlot(2)
+        thinkplot.pre_plot(2)
         # thinkplot.Cdf(self.point.MakeCdf(label='point').Scale(1.0/60))
-        thinkplot.Cdf(self.mixture.MakeCdf(label="mix").Scale(1.0 / 60))
+        thinkplot.plot_cdf_line(self.mixture.MakeCdf(label="mix").Scale(1.0 / 60))
 
-        thinkplot.Save(
+        thinkplot.save_plot(
             root=root,
             xlabel=WAIT_TIME_LABEL,
             ylabel="CDF",
@@ -812,7 +812,7 @@ def RunLoop(gap_times, nums, lam=0.0333):
     global UPPER_BOUND
     UPPER_BOUND = 4000
 
-    thinkplot.Clf()
+    thinkplot.clear_figure()
 
     RandomSeed(18)
 
@@ -846,8 +846,8 @@ def RunLoop(gap_times, nums, lam=0.0333):
 
         # thinkplot.Cdf(ete.pmf_y.MakeCdf(label=str(num_passengers)))
 
-    thinkplot.Plot(nums, probs)
-    thinkplot.Save(
+    thinkplot.plot_line(nums, probs)
+    thinkplot.save_plot(
         root="redline5",
         xlabel="Num passengers",
         ylabel="P(y > 15 min)",

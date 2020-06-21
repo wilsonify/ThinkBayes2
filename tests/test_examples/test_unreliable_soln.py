@@ -47,7 +47,7 @@ class UnreliableCoin(Suite):
 def test_UnreliableCoin():
     prior = range(0, 101)
     suite = UnreliableCoin(prior, y=0.9)
-    thinkplot.Pdf(suite)
+    thinkplot.plot_pdf_line(suite)
 
     # +
     # Solution
@@ -57,7 +57,7 @@ def test_UnreliableCoin():
     for outcome in "HHHTTTTTTT":
         suite.Update(outcome)
 
-    thinkplot.Pdf(suite)
+    thinkplot.plot_pdf_line(suite)
 
     # +
     # Solution
@@ -70,7 +70,7 @@ def test_UnreliableCoin():
         for outcome in "HHHTTTTTTT":
             suite.Update(outcome)
 
-        thinkplot.Pdf(suite, label="y=%g" % y)
+        thinkplot.plot_pdf_line(suite, label="y=%g" % y)
 
     # +
     # Solution
@@ -188,7 +188,7 @@ def test_UnreliableCoin():
     for val, prob in beta.MakePmf().Items():
         redditor.Set(val * 100, prob)
 
-    thinkplot.Pdf(redditor)
+    thinkplot.plot_pdf_line(redditor)
     mean_r = redditor.Mean() / 100.0
 
     # +
@@ -198,7 +198,7 @@ def test_UnreliableCoin():
 
     item = Item(range(0, 101), label="item")
 
-    thinkplot.Pdf(item)
+    thinkplot.plot_pdf_line(item)
     mean_q = item.Mean() / 100.0
 
     # +
@@ -218,7 +218,7 @@ def test_UnreliableCoin():
     # And here are the results.  Since we knew nothing about the item,
     # the vote provides no information about the redditor:
 
-    thinkplot.Pdf(redditor)
+    thinkplot.plot_pdf_line(redditor)
     print(redditor.Mean(), redditor.CredibleInterval(90))
 
     # +
@@ -227,7 +227,7 @@ def test_UnreliableCoin():
     # But since we think the redditor is reliable, the vote provides
     # some information about the item:
 
-    thinkplot.Pdf(item)
+    thinkplot.plot_pdf_line(item)
     print(item.Mean(), item.CredibleInterval(90))
 
     # +

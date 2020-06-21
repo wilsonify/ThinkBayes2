@@ -84,9 +84,9 @@ def test_ltb():
         pmf_tiger = joint.Marginal(1)
         pmf_bear = joint.Marginal(2)
 
-        thinkplot.Pdf(pmf_lion, label="lions")
-        thinkplot.Pdf(pmf_tiger, label="tigers")
-        thinkplot.Pdf(pmf_bear, label="bears")
+        thinkplot.plot_pdf_line(pmf_lion, label="lions")
+        thinkplot.plot_pdf_line(pmf_tiger, label="tigers")
+        thinkplot.plot_pdf_line(pmf_bear, label="bears")
 
         thinkplot.decorate(xlabel="Prevalence", ylabel="PMF")
 
@@ -95,9 +95,9 @@ def test_ltb():
         pmf_tiger = joint.Marginal(1)
         pmf_bear = joint.Marginal(2)
 
-        thinkplot.Cdf(pmf_lion.MakeCdf(), label="lions")
-        thinkplot.Cdf(pmf_tiger.MakeCdf(), label="tigers")
-        thinkplot.Cdf(pmf_bear.MakeCdf(), label="bears")
+        thinkplot.plot_cdf_line(pmf_lion.MakeCdf(), label="lions")
+        thinkplot.plot_cdf_line(pmf_tiger.MakeCdf(), label="tigers")
+        thinkplot.plot_cdf_line(pmf_bear.MakeCdf(), label="bears")
 
         thinkplot.decorate(xlabel="Prevalence", ylabel="CDF")
 
@@ -154,7 +154,7 @@ def test_ltb():
 
     # And we can confirm that we get the same results as the grid algorithm.
 
-    thinkplot.PrePlot(6)
+    thinkplot.pre_plot(6)
     plot_marginal_cdfs(dirichlet)
     plot_marginal_cdfs(suite)
 
@@ -209,9 +209,9 @@ def test_ltb():
         cdf_tiger = Cdf(rows[1])
         cdf_bear = Cdf(rows[2])
 
-        thinkplot.Cdf(cdf_lion, label="lions")
-        thinkplot.Cdf(cdf_tiger, label="tigers")
-        thinkplot.Cdf(cdf_bear, label="bears")
+        thinkplot.plot_cdf_line(cdf_lion, label="lions")
+        thinkplot.plot_cdf_line(cdf_tiger, label="tigers")
+        thinkplot.plot_cdf_line(cdf_bear, label="bears")
 
         thinkplot.decorate(xlabel="Prevalence", ylabel="CDF")
 
@@ -219,7 +219,7 @@ def test_ltb():
 
     # And compare them to what we got with Dirichlet:
 
-    thinkplot.PrePlot(6)
+    thinkplot.pre_plot(6)
     plot_marginal_cdfs(dirichlet)
     plot_trace_cdfs(trace)
 
@@ -252,7 +252,7 @@ def test_ltb():
 
     pm.traceplot(trace)
 
-    thinkplot.PrePlot(6)
+    thinkplot.pre_plot(6)
     plot_marginal_cdfs(dirichlet)
     plot_trace_cdfs(trace)
 

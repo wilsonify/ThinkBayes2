@@ -34,26 +34,26 @@ def test_bandit():
     # We'll start with a uniform distribution from 0 to 100.
 
     bandit = Bandit(range(101))
-    thinkplot.Pdf(bandit)
-    thinkplot.Config(xlabel="x", ylabel="Probability")
+    thinkplot.plot_pdf_line(bandit)
+    thinkplot.config_plot(xlabel="x", ylabel="Probability")
 
     # Now we can update with a single loss:
 
     bandit.Update("L")
-    thinkplot.Pdf(bandit)
-    thinkplot.Config(xlabel="x", ylabel="Probability", legend=False)
+    thinkplot.plot_pdf_line(bandit)
+    thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
 
     # Another loss:
 
     bandit.Update("L")
-    thinkplot.Pdf(bandit)
-    thinkplot.Config(xlabel="x", ylabel="Probability", legend=False)
+    thinkplot.plot_pdf_line(bandit)
+    thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
 
     # And a win:
 
     bandit.Update("W")
-    thinkplot.Pdf(bandit)
-    thinkplot.Config(xlabel="x", ylabel="Probability", legend=False)
+    thinkplot.plot_pdf_line(bandit)
+    thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
 
     # Starting over, here's what it looks like after 1 win and 9 losses.
 
@@ -62,8 +62,8 @@ def test_bandit():
     for outcome in "WLLLLLLLLL":
         bandit.Update(outcome)
 
-    thinkplot.Pdf(bandit)
-    thinkplot.Config(xlabel="x", ylabel="Probability", legend=False)
+    thinkplot.plot_pdf_line(bandit)
+    thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
 
     # The posterior mean is about 17%
 
@@ -121,8 +121,8 @@ def test_bandit():
         thinkplot.preplot(rows=2, cols=2)
         for i, b in enumerate(beliefs):
             thinkplot.subplot(i + 1)
-            thinkplot.Pdf(b, label=i)
-            thinkplot.Config(**options)
+            thinkplot.plot_pdf_line(b, label=i)
+            thinkplot.config_plot(**options)
 
     plot(beliefs, legend=True)
 

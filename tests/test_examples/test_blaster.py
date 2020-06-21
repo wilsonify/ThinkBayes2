@@ -79,7 +79,7 @@ def test_blaster(prior):
     :return:
     """
 
-    thinkplot.Pdf(prior.MakePmf())
+    thinkplot.plot_pdf_line(prior.MakePmf())
     assert prior.Mean() == 0.4
 
 
@@ -111,7 +111,7 @@ def test_blaster31(prior):
     pmf = Beta(1, 1).MakePmf()
     blaster = AlienBlaster(pmf)
     blaster.Update(2)
-    thinkplot.Pdf(blaster)
+    thinkplot.plot_pdf_line(blaster)
     assert prior.Mean() < blaster.Mean()
 
 
@@ -125,7 +125,7 @@ def test_blaster32(prior):
     pmf = Beta(2, 3).MakePmf()
     blaster = AlienBlaster(pmf)
     blaster.Update(2)
-    thinkplot.Pdf(blaster)
+    thinkplot.plot_pdf_line(blaster)
 
     assert (
             prior.Mean() > blaster.Mean()
@@ -146,7 +146,7 @@ def test_blaster35(prior):
     pmf = Beta(2, 3).MakePmf()
     blaster = AlienBlaster(pmf)
     blaster.Update(2)
-    thinkplot.Pdf(blaster)
+    thinkplot.plot_pdf_line(blaster)
 
     assert (
             prior.MAP() > blaster.MAP()
@@ -206,7 +206,7 @@ def test_blaster5():
         ks.append(k_success)
 
     pmf = Pmf(ks)
-    thinkplot.Hist(pmf)  # Here's what the distribution looks like.
+    thinkplot.plot_hist_bar(pmf)  # Here's what the distribution looks like.
     assert len(ks) == 1000
 
 
@@ -235,7 +235,7 @@ def test_blaster55():
         ks.append(k_success)
 
     pmf = Pmf(ks)
-    thinkplot.Hist(pmf)  # Here's what the distribution looks like.
+    thinkplot.plot_hist_bar(pmf)  # Here's what the distribution looks like.
 
     assert np.mean(ks) == pytest.approx(3.7, abs=0.2)  # The mean should be near 3.7.
 
@@ -257,7 +257,7 @@ def test_blaster6():
     ks = np.random.binomial(n_const, xs)  # Then for each `x` we generate a `k`:
 
     pmf = Pmf(ks)
-    thinkplot.Hist(pmf)  # And the results look similar.
+    thinkplot.plot_hist_bar(pmf)  # And the results look similar.
     assert np.mean(ks) == pytest.approx(3.7, abs=0.2)
 
 
@@ -282,7 +282,7 @@ def test_blaster7():
     ]  # Here's how we can draw samples from the meta-Pmf:
 
     pmf = Pmf(ks)
-    thinkplot.Hist(pmf)  # And here are the results, one more time:
+    thinkplot.plot_hist_bar(pmf)  # And here are the results, one more time:
     assert np.mean(ks) == pytest.approx(3.7, abs=0.1)
 
 
@@ -323,5 +323,5 @@ def test_blaster8():
     pmf2 = MakeBinomialPmf(n_const, x2)
     metapmf = Pmf({pmf1: 0.3, pmf2: 0.7})
     mix = MakeMixture(metapmf)
-    thinkplot.Hist(mix)
+    thinkplot.plot_hist_bar(mix)
     assert mix.Mean() == pytest.approx(3.7, abs=0.2)

@@ -53,7 +53,7 @@ def test_flea_beetles():
     def plot_cdfs(df, col):
         for name, group in df.groupby("Species"):
             cdf = Cdf(group[col], label=name)
-            thinkplot.Cdf(cdf)
+            thinkplot.plot_cdf_line(cdf)
 
         thinkplot.decorate(xlabel=col, ylabel="CDF", loc="lower right")
 

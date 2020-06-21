@@ -41,7 +41,7 @@ def test_battle():
 
     mix = thinkbayes.MakeMixture(metapmf)
     mix.Mean()
-    thinkplot.Hist(mix)
+    thinkplot.plot_hist_bar(mix)
     thinkplot.decorate(xlabel="Number of passengers", ylabel="PMF")
 
     logging.info("%r", f"likelihood = {mix[10]}")

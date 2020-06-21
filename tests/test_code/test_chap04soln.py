@@ -41,7 +41,7 @@ def test_euro_problem():
 
     # And here's what the posterior looks like.
 
-    thinkplot.Pdf(suite)
+    thinkplot.plot_pdf_line(suite)
 
     # We can summarize the posterior several ways, including the mean:
 
@@ -92,8 +92,8 @@ def test_euro_problem():
     uniform = UniformPrior()
     suites = [triangle, uniform]
 
-    thinkplot.Pdfs(suites)
-    thinkplot.Config(xlabel="x", ylabel="Probability")
+    thinkplot.plot_pdfs(suites)
+    thinkplot.config_plot(xlabel="x", ylabel="Probability")
 
     # If we update them both with the same data:
 
@@ -113,8 +113,8 @@ def test_euro_problem():
 
     # The results are almost identical; the remaining difference is unlikely to matter in practice.
 
-    thinkplot.Pdfs(suites)
-    thinkplot.Config(xlabel="x", ylabel="Probability")
+    thinkplot.plot_pdfs(suites)
+    thinkplot.config_plot(xlabel="x", ylabel="Probability")
 
     # ## The binomial likelihood function
     #
@@ -144,7 +144,7 @@ def test_euro_problem():
 
     # Here's what the posterior looks like.
 
-    thinkplot.Pdf(suite)
+    thinkplot.plot_pdf_line(suite)
 
     # ## The Beta distribution
     #
@@ -255,7 +255,7 @@ def test_euro_problem():
 
     # And here's the posterior.
 
-    thinkplot.Pdf(beta.MakePmf())
+    thinkplot.plot_pdf_line(beta.MakePmf())
 
     # Amazing, no?
 
@@ -270,14 +270,14 @@ def test_euro_problem():
     # Here's the uniform prior
 
     uniform = Beta(1, 1, label="uniform")
-    thinkplot.Pdf(uniform.MakePmf())
+    thinkplot.plot_pdf_line(uniform.MakePmf())
 
     # Solution
 
     # And here's what it looks like after the update
 
     uniform.Update(dataset)
-    thinkplot.Pdf(beta.MakePmf())
+    thinkplot.plot_pdf_line(beta.MakePmf())
 
     # Solution
 
@@ -285,14 +285,14 @@ def test_euro_problem():
     # background knowledge about coins.
 
     beta = Beta(100, 100, label="beta")
-    thinkplot.Pdf(beta.MakePmf())
+    thinkplot.plot_pdf_line(beta.MakePmf())
 
     # Solution
 
     # And here's what it looks like after the update
 
     beta.Update(dataset)
-    thinkplot.Pdf(beta.MakePmf())
+    thinkplot.plot_pdf_line(beta.MakePmf())
 
     # Solution
 
@@ -300,6 +300,6 @@ def test_euro_problem():
     # prior influences the location and spread of the
     # posterior.
 
-    thinkplot.Pdf(beta.MakePmf())
-    thinkplot.Pdf(uniform.MakePmf())
-    thinkplot.Config(xlabel="x", ylabel="Probability")
+    thinkplot.plot_pdf_line(beta.MakePmf())
+    thinkplot.plot_pdf_line(uniform.MakePmf())
+    thinkplot.config_plot(xlabel="x", ylabel="Probability")

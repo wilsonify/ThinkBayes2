@@ -23,9 +23,9 @@ def main():
 
     for data in [32, 54, 70]:
         suite.Update(data)
-        thinkplot.Pmf(suite, label=f"after {data}")
+        thinkplot.plot_pmf_line(suite, label=f"after {data}")
 
-    thinkplot.Show(xlabel="Number of trains", ylabel="PMF")
+    thinkplot.show_plot(xlabel="Number of trains", ylabel="PMF")
 
     print("posterior mean", suite.Mean())
 

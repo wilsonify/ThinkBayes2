@@ -28,7 +28,7 @@ def test_alien_blaster_problem():
     # Here's the prior
 
     prior = Beta(5, 10)
-    thinkplot.Pdf(prior.MakePmf())
+    thinkplot.plot_pdf_line(prior.MakePmf())
     thinkplot.decorate(xlabel="Probability of hit", ylabel="PMF")
     prior.Mean()
 
@@ -64,7 +64,7 @@ def test_alien_blaster_problem():
     pmf = Beta(1, 1).MakePmf()
     blaster = AlienBlaster(pmf)
     blaster.Update(2)
-    thinkplot.Pdf(blaster)
+    thinkplot.plot_pdf_line(blaster)
     thinkplot.decorate(xlabel="Probability of hit", ylabel="PMF")
 
     # Solution
@@ -75,9 +75,9 @@ def test_alien_blaster_problem():
 
     pmf = Beta(5, 10).MakePmf()
     blaster = AlienBlaster(pmf)
-    thinkplot.Pdf(blaster, color="gray")
+    thinkplot.plot_pdf_line(blaster, color="gray")
     blaster.Update(2)
-    thinkplot.Pdf(blaster)
+    thinkplot.plot_pdf_line(blaster)
     thinkplot.decorate(xlabel="Probability of hit", ylabel="PMF")
 
     # Solution
@@ -144,7 +144,7 @@ def test_alien_blaster_problem():
     # Here's what the distribution looks like.
 
     pmf = Pmf(ks)
-    thinkplot.Hist(pmf)
+    thinkplot.plot_hist_bar(pmf)
     thinkplot.decorate(xlabel="Number of hits", ylabel="PMF")
 
     logging.info("%r", f"len(ks) = {len(ks)}")
@@ -162,7 +162,7 @@ def test_alien_blaster_problem():
     # And the results look similar.
 
     pmf = Pmf(ks)
-    thinkplot.Hist(pmf)
+    thinkplot.plot_hist_bar(pmf)
     thinkplot.decorate(xlabel="Number of hits", ylabel="PMF")
     np.mean(ks)
 
@@ -183,7 +183,7 @@ def test_alien_blaster_problem():
     # And here are the results, one more time:
 
     pmf = Pmf(ks)
-    thinkplot.Hist(pmf)
+    thinkplot.plot_hist_bar(pmf)
     thinkplot.decorate(xlabel="Number of hits", ylabel="PMF")
     np.mean(ks)
 
@@ -216,7 +216,7 @@ def test_alien_blaster_problem():
     from thinkbayes import MakeMixture
 
     mix = MakeMixture(metapmf)
-    thinkplot.Hist(mix)
+    thinkplot.plot_hist_bar(mix)
     mix.Mean()
 
     assert mix[3] == pytest.approx(0.23, abs=0.1)

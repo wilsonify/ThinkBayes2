@@ -17,12 +17,12 @@ class Train(Dice):
     """
 
     def Likelihood(self, data, hypo):
-        N = hypo
+        sample_size = hypo
         k, m = data
-        if N < m:
+        if sample_size < m:
             return 0
 
-        return m ** (k - 1) / N ** k
+        return m ** (k - 1) / sample_size ** k
 
 
 def main():
@@ -33,8 +33,8 @@ def main():
     suite.Update(data)
     print("posterior mean", suite.Mean())
 
-    thinkplot.Pmf(suite, label="after 70")
-    thinkplot.Show(xlabel="Number of trains", ylabel="PMF")
+    thinkplot.plot_pmf_line(suite, label="after 70")
+    thinkplot.show_plot(xlabel="Number of trains", ylabel="PMF")
 
 
 if __name__ == "__main__":

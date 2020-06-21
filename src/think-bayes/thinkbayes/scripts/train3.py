@@ -30,7 +30,7 @@ class Train2(Dice):
         self.Normalize()
 
 
-def MakePosterior(high, dataset, constructor):
+def make_posterior(high, dataset, constructor):
     """Makes and updates a Suite.
 
     high: upper bound on the range of hypotheses
@@ -49,38 +49,38 @@ def MakePosterior(high, dataset, constructor):
     return suite
 
 
-def ComparePriors():
+def compare_priors():
     """Runs the analysis with two different priors and compares them."""
     dataset = [60]
     high = 1000
 
-    thinkplot.Clf()
-    thinkplot.PrePlot(num=2)
+    thinkplot.clear_figure()
+    thinkplot.pre_plot(num=2)
 
     constructors = [Train, Train2]
     labels = ["uniform", "power law"]
 
     for constructor, label in zip(constructors, labels):
-        suite = MakePosterior(high, dataset, constructor)
+        suite = make_posterior(high, dataset, constructor)
         suite.name = label
-        thinkplot.Pmf(suite)
+        thinkplot.plot_pmf_line(suite)
 
-    thinkplot.Save(root="train4", xlabel="Number of trains", ylabel="Probability")
+    thinkplot.save_plot(root="train4", xlabel="Number of trains", ylabel="Probability")
 
 
 def main():
-    ComparePriors()
+    compare_priors()
 
     dataset = [30, 60, 90]
 
-    thinkplot.Clf()
-    thinkplot.PrePlot(num=3)
+    thinkplot.clear_figure()
+    thinkplot.pre_plot(num=3)
 
     for high in [500, 1000, 2000]:
-        suite = MakePosterior(high, dataset, Train2)
+        suite = make_posterior(high, dataset, Train2)
         print(high, suite.Mean())
 
-    thinkplot.Save(root="train3", xlabel="Number of trains", ylabel="Probability")
+    thinkplot.save_plot(root="train3", xlabel="Number of trains", ylabel="Probability")
 
     interval = suite.Percentile(5), suite.Percentile(95)
     print(interval)

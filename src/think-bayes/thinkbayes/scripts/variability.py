@@ -224,14 +224,14 @@ def plot_cdfs(d, labels):
     d: map from key to sequence of values
     labels: map from key to string label
     """
-    thinkplot.Clf()
+    thinkplot.clear_figure()
     for key, xs in d.items():
         mu = thinkbayes.Mean(xs)
         xs = thinkbayes.Jitter(xs, 1.3)
         xs = [x - mu for x in xs]
         cdf = thinkbayes.MakeCdfFromList(xs)
-        thinkplot.Cdf(cdf, label=labels[key])
-    thinkplot.Show()
+        thinkplot.plot_cdf_line(cdf, label=labels[key])
+    thinkplot.show_plot()
 
 
 def plot_posterior(suite, pcolor=False, contour=True):
@@ -239,10 +239,10 @@ def plot_posterior(suite, pcolor=False, contour=True):
     
     suite: Suite that maps (mu, sigma) to probability
     """
-    thinkplot.Clf()
-    thinkplot.Contour(suite.GetDict(), pcolor_bool=pcolor, contour_bool=contour)
+    thinkplot.clear_figure()
+    thinkplot.contour_plot(suite.GetDict(), pcolor_bool=pcolor, contour_bool=contour)
 
-    thinkplot.Save(
+    thinkplot.save_plot(
         root="variability_posterior_%s" % suite.label,
         title="Posterior joint distribution",
         xlabel="Mean height (cm)",
@@ -255,19 +255,19 @@ def plot_coef_variation(suites):
 
     suites: map from label to Pmf of CVs.
     """
-    thinkplot.Clf()
-    thinkplot.PrePlot(num=2)
+    thinkplot.clear_figure()
+    thinkplot.pre_plot(num=2)
 
     pmfs = {}
     for label, suite in suites.items():
         pmf = coef_variation(suite)
         print("CV posterior mean", pmf.Mean())
         cdf = thinkbayes.MakeCdfFromPmf(pmf, label)
-        thinkplot.Cdf(cdf)
+        thinkplot.plot_cdf_line(cdf)
 
         pmfs[label] = pmf
 
-    thinkplot.Save(
+    thinkplot.save_plot(
         root="variability_cv", xlabel="Coefficient of variation", ylabel="Probability"
     )
 
@@ -284,9 +284,9 @@ def plot_outliers(samples):
         cdf = thinkbayes.MakeCdfFromList(outliers, label)
         cdfs.append(cdf)
 
-    thinkplot.Clf()
-    thinkplot.Cdfs(cdfs)
-    thinkplot.Save(
+    thinkplot.clear_figure()
+    thinkplot.plot_cdfs(cdfs)
+    thinkplot.save_plot(
         root="variability_cdfs",
         title="CDF of height",
         xlabel="Reported height (cm)",
@@ -299,19 +299,19 @@ def plot_marginals(suite):
 
     suite: joint distribution of mu and sigma.
     """
-    thinkplot.Clf()
+    thinkplot.clear_figure()
 
     pyplot.subplot(1, 2, 1)
     pmf_m = suite.Marginal(0)
     cdf_m = thinkbayes.MakeCdfFromPmf(pmf_m)
-    thinkplot.Cdf(cdf_m)
+    thinkplot.plot_cdf_line(cdf_m)
 
     pyplot.subplot(1, 2, 2)
     pmf_s = suite.Marginal(1)
     cdf_s = thinkbayes.MakeCdfFromPmf(pmf_s)
-    thinkplot.Cdf(cdf_s)
+    thinkplot.plot_cdf_line(cdf_s)
 
-    thinkplot.Show()
+    thinkplot.show_plot()
 
 
 def read_heights(nrows=None):

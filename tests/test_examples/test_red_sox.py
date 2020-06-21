@@ -13,7 +13,7 @@ from thinkbayes import thinkplot
 def test_beta():
     beta = Beta(5, 5)
     prior = beta.MakePmf()
-    thinkplot.Pdf(prior)
+    thinkplot.plot_pdf_line(prior)
     thinkplot.decorate(xlabel="Prob Red Sox win (x)", ylabel="PDF")
 
     # %psource beta.Update
@@ -21,8 +21,8 @@ def test_beta():
     beta.Update((15, 0))
     posterior = beta.MakePmf()
 
-    thinkplot.Pdf(prior, color="gray", label="prior")
-    thinkplot.Pdf(posterior, label="posterior")
+    thinkplot.plot_pdf_line(prior, color="gray", label="prior")
+    thinkplot.plot_pdf_line(posterior, label="posterior")
     thinkplot.decorate(xlabel="Prob Red Sox win (x)", ylabel="PDF")
 
     posterior.Mean()
@@ -42,6 +42,6 @@ def test_beta():
     simulate(7, posterior)
 
     sample = [simulate(7, posterior) for i in range(100000)]
-    thinkplot.Hist(Pmf(sample))
+    thinkplot.plot_hist_bar(Pmf(sample))
 
     np.mean(np.array(sample) >= 4)

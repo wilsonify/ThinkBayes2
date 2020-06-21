@@ -256,7 +256,7 @@ def test_sock3():
     for white in range(n + 1):
         socks[white, n - white] = 1
     socks.Normalize()
-    thinkplot.Pdf(socks)
+    thinkplot.plot_pdf_line(socks)
 
 
 def test_sock4():
@@ -265,8 +265,8 @@ def test_sock4():
     for white in range(n + 1):
         socks[white, n - white] = 1
     socks.Update("pair")
-    thinkplot.Pdf(socks)
-    thinkplot.Config(ylim=[0, 0.03])
+    thinkplot.plot_pdf_line(socks)
+    thinkplot.config_plot(ylim=[0, 0.03])
 
 
 def test_chess():

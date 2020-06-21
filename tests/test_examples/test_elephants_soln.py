@@ -200,7 +200,7 @@ def test_elephant():
 
     # And here's what it looks like.
 
-    thinkplot.Hist(pmf_n)
+    thinkplot.plot_hist_bar(pmf_n)
     print(pmf_n.Mean())
     thinkplot.decorate(xlabel="n", ylabel="PMF", title="Posterior distribution of n")
 

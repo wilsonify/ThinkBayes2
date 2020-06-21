@@ -42,14 +42,14 @@ def test_pmfs():
 
     # `thinkplot` provides methods for plotting Pmfs in a few different styles.
 
-    thinkplot.Hist(d6)
+    thinkplot.plot_hist_bar(d6)
 
     # **Exercise 1:**  The Pmf object provides `__add__`, so you can use the `+` operator to compute the Pmf of the sum of two dice.
     #
     # Compute and plot the Pmf of the sum of two 6-sided dice.
 
     # Solution
-    thinkplot.Hist(d6 + d6)
+    thinkplot.plot_hist_bar(d6 + d6)
 
     # **Exercise 2:** Suppose I roll two dice and tell you the result is greater than 3.
     #
@@ -61,7 +61,7 @@ def test_pmfs():
     pmf[2] = 0
     pmf[3] = 0
     pmf.Normalize()
-    thinkplot.Hist(pmf)
+    thinkplot.plot_hist_bar(pmf)
     pmf.Mean()
 
     # The cookie problem
@@ -185,7 +185,7 @@ def test_pmfs():
 
     tank = Tank(range(100))
     tank.Update(37)
-    thinkplot.Pdf(tank)
+    thinkplot.plot_pdf_line(tank)
     tank.Mean()
 
     # **Exercise 7:**  Suppose we see another tank with serial number 17.  What effect does this have on the posterior probabilities?
@@ -194,9 +194,9 @@ def test_pmfs():
 
     # Solution
 
-    thinkplot.Pdf(tank, color="0.7")
+    thinkplot.plot_pdf_line(tank, color="0.7")
     tank.Update(17)
-    thinkplot.Pdf(tank)
+    thinkplot.plot_pdf_line(tank)
     tank.Mean()
 
     # The Euro problem
@@ -231,22 +231,22 @@ def test_pmfs():
     # We'll start with a uniform distribution from 0 to 100.
 
     euro = Euro(range(101))
-    thinkplot.Pdf(euro)
+    thinkplot.plot_pdf_line(euro)
 
     # Now we can update with a single heads:
 
     euro.Update("H")
-    thinkplot.Pdf(euro)
+    thinkplot.plot_pdf_line(euro)
 
     # Another heads:
 
     euro.Update("H")
-    thinkplot.Pdf(euro)
+    thinkplot.plot_pdf_line(euro)
 
     # And a tails:
 
     euro.Update("T")
-    thinkplot.Pdf(euro)
+    thinkplot.plot_pdf_line(euro)
 
     # Starting over, here's what it looks like after 7 heads and 3 tails.
 
@@ -255,7 +255,7 @@ def test_pmfs():
     for outcome in "HHHHHHHTTT":
         euro.Update(outcome)
 
-    thinkplot.Pdf(euro)
+    thinkplot.plot_pdf_line(euro)
     euro.MaximumLikelihood()
 
     # The maximum posterior probability is 70%, which is the observed proportion.
@@ -268,7 +268,7 @@ def test_pmfs():
     for outcome in evidence:
         euro.Update(outcome)
 
-    thinkplot.Pdf(euro)
+    thinkplot.plot_pdf_line(euro)
 
     # The posterior mean s about 56%
 
@@ -300,8 +300,8 @@ def test_pmfs():
 
     euro1 = Euro(range(101), label="uniform")
     euro2 = TrianglePrior()
-    thinkplot.Pdfs([euro1, euro2])
-    thinkplot.Config(title="Priors")
+    thinkplot.plot_pdfs([euro1, euro2])
+    thinkplot.config_plot(title="Priors")
 
     # **Exercise 9:** Update euro1 and euro2 with the same data we used before (140 heads and 110 tails) and plot the posteriors.  How big is the difference in the means?
 
@@ -312,6 +312,6 @@ def test_pmfs():
         euro1.Update(outcome)
         euro2.Update(outcome)
 
-    thinkplot.Pdfs([euro1, euro2])
-    thinkplot.Config(title="Posteriors")
+    thinkplot.plot_pdfs([euro1, euro2])
+    thinkplot.config_plot(title="Posteriors")
     euro1.Mean(), euro2.Mean()

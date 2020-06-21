@@ -23,11 +23,11 @@ class Subclass(Suite):
 
 def test_subclass():
     prior = Subclass([1, 2, 3])
-    thinkplot.Hist(prior)
-    thinkplot.Config(xlabel="x", ylabel="PMF")
+    thinkplot.plot_hist_bar(prior)
+    thinkplot.config_plot(xlabel="x", ylabel="PMF")
 
     posterior = prior.Copy()
     posterior.Update(1)
-    thinkplot.Hist(prior, color="gray")
-    thinkplot.Hist(posterior)
-    thinkplot.Config(xlabel="x", ylabel="PMF")
+    thinkplot.plot_hist_bar(prior, color="gray")
+    thinkplot.plot_hist_bar(posterior)
+    thinkplot.config_plot(xlabel="x", ylabel="PMF")

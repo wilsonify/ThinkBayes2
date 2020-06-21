@@ -86,10 +86,10 @@ def test_Hockey():
 
     # Here's what the priors look like:
 
-    thinkplot.PrePlot(num=2)
-    thinkplot.Pdf(suite1)
-    thinkplot.Pdf(suite2)
-    thinkplot.Config(xlabel="Goals per game", ylabel="Probability")
+    thinkplot.pre_plot(num=2)
+    thinkplot.plot_pdf_line(suite1)
+    thinkplot.plot_pdf_line(suite2)
+    thinkplot.config_plot(xlabel="Goals per game", ylabel="Probability")
 
     # And we can update each suite with the scores from the first 4 games.
 
@@ -97,10 +97,10 @@ def test_Hockey():
     suite1.UpdateSet([0, 2, 8, 4])
     suite2.UpdateSet([1, 3, 1, 0])
 
-    thinkplot.PrePlot(num=2)
-    thinkplot.Pdf(suite1)
-    thinkplot.Pdf(suite2)
-    thinkplot.Config(xlabel="Goals per game", ylabel="Probability")
+    thinkplot.pre_plot(num=2)
+    thinkplot.plot_pdf_line(suite1)
+    thinkplot.plot_pdf_line(suite2)
+    thinkplot.config_plot(xlabel="Goals per game", ylabel="Probability")
 
     suite1.Mean(), suite2.Mean()
     # -
@@ -117,10 +117,10 @@ def test_Hockey():
     goal_dist1 = MakeGoalPmf(suite1)
     goal_dist2 = MakeGoalPmf(suite2)
 
-    thinkplot.PrePlot(num=2)
-    thinkplot.Pmf(goal_dist1)
-    thinkplot.Pmf(goal_dist2)
-    thinkplot.Config(xlabel="Goals", ylabel="Probability", xlim=[-0.7, 11.5])
+    thinkplot.pre_plot(num=2)
+    thinkplot.plot_pmf_line(goal_dist1)
+    thinkplot.plot_pmf_line(goal_dist2)
+    thinkplot.config_plot(xlabel="Goals", ylabel="Probability", xlim=[-0.7, 11.5])
 
     goal_dist1.Mean(), goal_dist2.Mean()
     # -
@@ -148,10 +148,10 @@ def test_Hockey():
     time_dist1 = MakeGoalTimePmf(suite1)
     time_dist2 = MakeGoalTimePmf(suite2)
 
-    thinkplot.PrePlot(num=2)
-    thinkplot.Pmf(time_dist1)
-    thinkplot.Pmf(time_dist2)
-    thinkplot.Config(xlabel="Games until goal", ylabel="Probability")
+    thinkplot.pre_plot(num=2)
+    thinkplot.plot_pmf_line(time_dist1)
+    thinkplot.plot_pmf_line(time_dist2)
+    thinkplot.config_plot(xlabel="Games until goal", ylabel="Probability")
 
     time_dist1.Mean(), time_dist2.Mean()
     # -
@@ -184,8 +184,8 @@ def test_Hockey():
 
     xs = np.linspace(0, 8, 101)
     pmf = MakeGammaPmf(xs, 1.3)
-    thinkplot.Pdf(pmf)
-    thinkplot.Config(xlabel="Goals per game")
+    thinkplot.plot_pdf_line(pmf)
+    thinkplot.config_plot(xlabel="Goals per game")
     pmf.Mean()
 
     # -

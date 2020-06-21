@@ -153,18 +153,18 @@ class Exam(object):
 
     def CalibrateDifficulty(self):
         """Make a plot showing the model distribution of raw scores."""
-        thinkplot.Clf()
-        thinkplot.PrePlot(num=2)
+        thinkplot.clear_figure()
+        thinkplot.pre_plot(num=2)
 
         cdf = thinkbayes.Cdf(self.raw, label="data")
-        thinkplot.Cdf(cdf)
+        thinkplot.plot_cdf_line(cdf)
 
         efficacies = thinkbayes.MakeNormalPmf(0, 1.5, 3)
         pmf = self.MakeRawScoreDist(efficacies)
         cdf = thinkbayes.Cdf(pmf, label="model")
-        thinkplot.Cdf(cdf)
+        thinkplot.plot_cdf_line(cdf)
 
-        thinkplot.Save(
+        thinkplot.save_plot(
             root="sat_calibrate",
             xlabel="raw score",
             ylabel="CDF",
@@ -235,14 +235,14 @@ class Sat(thinkbayes.Suite):
 
         self, other: Sat objects.
         """
-        thinkplot.Clf()
-        thinkplot.PrePlot(num=2)
+        thinkplot.clear_figure()
+        thinkplot.pre_plot(num=2)
 
         cdf1 = thinkbayes.Cdf(self, label=f"posterior {self.score}")
         cdf2 = thinkbayes.Cdf(other, label=f"posterior {other.score}")
 
-        thinkplot.Cdfs([cdf1, cdf2])
-        thinkplot.Save(
+        thinkplot.plot_cdfs([cdf1, cdf2])
+        thinkplot.save_plot(
             xlabel="p_correct",
             ylabel="CDF",
             axis=[0.7, 1.0, 0.0, 1.0],
@@ -285,14 +285,14 @@ class Sat2(thinkbayes.Suite):
 
         self, other: Sat objects.
         """
-        thinkplot.Clf()
-        thinkplot.PrePlot(num=2)
+        thinkplot.clear_figure()
+        thinkplot.pre_plot(num=2)
 
         cdf1 = thinkbayes.Cdf(self, label=f"posterior {self.score}")
         cdf2 = thinkbayes.Cdf(other, label=f"posterior {other.score}")
 
-        thinkplot.Cdfs([cdf1, cdf2])
-        thinkplot.Save(
+        thinkplot.plot_cdfs([cdf1, cdf2])
+        thinkplot.save_plot(
             xlabel="efficacy",
             ylabel="CDF",
             axis=[0, 4.6, 0.0, 1.0],
@@ -317,12 +317,12 @@ def PlotJointDist(pmf1, pmf2, thresh=0.8):
     Clean(pmf2)
     pmf = thinkbayes.MakeJoint(pmf1, pmf2)
 
-    thinkplot.Figure(figsize=(6, 6))
-    thinkplot.Contour(pmf, contour_bool=False, pcolor_bool=True)
+    thinkplot.underride_figure(figsize=(6, 6))
+    thinkplot.contour_plot(pmf, contour_bool=False, pcolor_bool=True)
 
-    thinkplot.Plot([thresh, 1.0], [thresh, 1.0], color="gray", alpha=0.2, linewidth=4)
+    thinkplot.plot_line([thresh, 1.0], [thresh, 1.0], color="gray", alpha=0.2, linewidth=4)
 
-    thinkplot.Save(
+    thinkplot.save_plot(
         root="sat_joint",
         xlabel="p_correct Alice",
         ylabel="p_correct Bob",
@@ -359,13 +359,13 @@ def PlotPriorDist(pmf):
 
     pmf: prior
     """
-    thinkplot.Clf()
-    thinkplot.PrePlot(num=1)
+    thinkplot.clear_figure()
+    thinkplot.pre_plot(num=1)
 
     cdf1 = thinkbayes.Cdf(pmf, label="prior")
 
-    thinkplot.Cdf(cdf1)
-    thinkplot.Save(
+    thinkplot.plot_cdf_line(cdf1)
+    thinkplot.save_plot(
         root="sat_prior", xlabel="p_correct", ylabel="CDF", formats=["pdf", "eps"]
     )
 

@@ -71,7 +71,7 @@ def test_wc2():
 
     xs = np.linspace(0, 8, 101)
     pmf = MakeGammaPmf(xs, 1.3)
-    thinkplot.Pdf(pmf)
+    thinkplot.plot_pdf_line(pmf)
     thinkplot.decorate(xlabel="Goal-scoring rate (λ)", ylabel="PMF")
     pmf.Mean()
 
@@ -79,8 +79,8 @@ def test_wc2():
 
     germany = suite.Copy(label="Germany")
     argentina = suite.Copy(label="Argentina")
-    thinkplot.Pdf(germany)
-    thinkplot.Pdf(argentina)
+    thinkplot.plot_pdf_line(germany)
+    thinkplot.plot_pdf_line(argentina)
     thinkplot.decorate(xlabel="Goal-scoring rate (λ)", ylabel="PMF")
     pmf.Mean()
 
@@ -104,8 +104,8 @@ def test_wc2():
     #
     # Here are the posteriors:
 
-    thinkplot.Pdf(germany)
-    thinkplot.Pdf(argentina)
+    thinkplot.plot_pdf_line(germany)
+    thinkplot.plot_pdf_line(argentina)
     thinkplot.decorate(xlabel="Goal-scoring rate (λ)", ylabel="PMF")
 
     # To answer the first question, "How much evidence does this victory provide that Germany had the better team?", we can compute the posterior probability that Germany had a higher goal-scoring rate:
@@ -177,8 +177,8 @@ def test_wc2():
     germany_pred = PredictiveDist(germany, label="germany")
     argentina_pred = PredictiveDist(argentina, label="argentina")
 
-    thinkplot.Hist(germany_pred, width=0.45, align="right")
-    thinkplot.Hist(argentina_pred, width=0.45, align="left")
+    thinkplot.plot_hist_bar(germany_pred, width=0.45, align="right")
+    thinkplot.plot_hist_bar(argentina_pred, width=0.45, align="left")
     thinkplot.decorate(xlabel="Predicted # goals", ylabel="Pmf")
 
     # Using the predictive distributions, we can compute probabilities for the outcomes of a rematch.

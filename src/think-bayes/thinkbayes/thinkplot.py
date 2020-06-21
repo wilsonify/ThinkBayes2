@@ -70,13 +70,13 @@ class _Brewer(object):
     current_figure = None
 
     @classmethod
-    def Colors(cls):
+    def colors(cls):
         """Returns the list of colors.
         """
         return cls.colors_list
 
     @classmethod
-    def ColorGenerator(cls, num):
+    def color_generator(cls, num):
         """Returns an iterator of color strings.
 
         n: how many colors will be used
@@ -86,40 +86,40 @@ class _Brewer(object):
         raise StopIteration("Ran out of colors in _Brewer.")
 
     @classmethod
-    def InitIter(cls, num):
+    def init_iter(cls, num):
         """Initializes the color iterator with the given number of colors."""
-        cls.color_iter = cls.ColorGenerator(num)
+        cls.color_iter = cls.color_generator(num)
         fig = plt.gcf()
         cls.current_figure = fig
 
     @classmethod
-    def ClearIter(cls):
+    def clear_iter(cls):
         """Sets the color iterator to None."""
         cls.color_iter = None
         cls.current_figure = None
 
     @classmethod
-    def GetIter(cls, num):
+    def get_iter(cls, num):
         """Gets the color iterator."""
         fig = plt.gcf()
         if fig != cls.current_figure:
-            cls.InitIter(num)
+            cls.init_iter(num)
             cls.current_figure = fig
 
         if cls.color_iter is None:
-            cls.InitIter(num)
+            cls.init_iter(num)
 
         return cls.color_iter
 
 
-def _UnderrideColor(options):
+def _underride_color(options):
     """If color is not in the options, chooses a color.
     """
     if "color" in options:
         return options
 
     # get the current color iterator; if there is none, init one
-    color_iter = _Brewer.GetIter(5)
+    color_iter = _Brewer.get_iter(5)
 
     try:
         options["color"] = next(color_iter)
@@ -127,13 +127,13 @@ def _UnderrideColor(options):
         # if you run out of colors, initialize the color iterator
         # and try again
         warnings.warn("Ran out of colors.  Starting over.")
-        _Brewer.ClearIter()
-        _UnderrideColor(options)
+        _Brewer.clear_iter()
+        _underride_color(options)
 
     return options
 
 
-def PrePlot(num=None, rows=None, cols=None):
+def pre_plot(num=None, rows=None, cols=None):
     """Takes hints about what's coming.
 
     num: number of lines that will be plotted
@@ -141,7 +141,7 @@ def PrePlot(num=None, rows=None, cols=None):
     cols: number of columns of subplots
     """
     if num:
-        _Brewer.InitIter(num)
+        _Brewer.init_iter(num)
 
     if rows is None and cols is None:
         return
@@ -181,7 +181,7 @@ def PrePlot(num=None, rows=None, cols=None):
     return ax
 
 
-def SubPlot(plot_number, rows=None, cols=None, **options):
+def sub_plot(plot_number, rows=None, cols=None, **options):
     """Configures the number of subplots and changes the current plot.
 
     rows: int
@@ -194,7 +194,7 @@ def SubPlot(plot_number, rows=None, cols=None, **options):
     return plt.subplot(rows, cols, plot_number, **options)
 
 
-def _Underride(d, **options):
+def _underride(d, **options):
     """Add key-value pairs to d only if key is not in d.
 
     If d is None, create a new dictionary.
@@ -211,23 +211,23 @@ def _Underride(d, **options):
     return d
 
 
-def Clf():
+def clear_figure():
     """Clears the figure and any hints that have been set."""
     global LOC
     LOC = None
-    _Brewer.ClearIter()
+    _Brewer.clear_iter()
     plt.clf()
     fig = plt.gcf()
     fig.set_size_inches(8, 6)
 
 
-def Figure(**options):
+def underride_figure(**options):
     """Sets options for the current figure."""
-    _Underride(options, figsize=(6, 8))
+    _underride(options, figsize=(6, 8))
     plt.figure(**options)
 
 
-def Plot(obj, ys=None, style="", **options):
+def plot_line(obj, ys=None, style="", **options):
     """Plots a line.
 
     Args:
@@ -238,8 +238,8 @@ def Plot(obj, ys=None, style="", **options):
     """
 
     label = getattr(obj, "label", "_nolegend_")
-    options = _UnderrideColor(options)
-    options = _Underride(options, linewidth=3, alpha=0.7, label=label)
+    options = _underride_color(options)
+    options = _underride(options, linewidth=3, alpha=0.7, label=label)
 
     xs = obj
     if ys is None:
@@ -255,7 +255,7 @@ def Plot(obj, ys=None, style="", **options):
         plt.plot(xs, ys, style, **options)
 
 
-def Vlines(xs, y1, y2, **options):
+def plot_vlines(xs, y1, y2, **options):
     """Plots a set of vertical lines.
 
     Args:
@@ -264,12 +264,12 @@ def Vlines(xs, y1, y2, **options):
       y2: sequence of y values
       options: keyword args passed to plt.vlines
     """
-    options = _UnderrideColor(options)
-    options = _Underride(options, linewidth=1, alpha=0.5)
+    options = _underride_color(options)
+    options = _underride(options, linewidth=1, alpha=0.5)
     plt.vlines(xs, y1, y2, **options)
 
 
-def Hlines(ys, x1, x2, **options):
+def plot_hlines(ys, x1, x2, **options):
     """Plots a set of horizontal lines.
 
     Args:
@@ -278,12 +278,12 @@ def Hlines(ys, x1, x2, **options):
       x2: sequence of x values
       options: keyword args passed to plt.vlines
     """
-    options = _UnderrideColor(options)
-    options = _Underride(options, linewidth=1, alpha=0.5)
+    options = _underride_color(options)
+    options = _underride(options, linewidth=1, alpha=0.5)
     plt.hlines(ys, x1, x2, **options)
 
 
-def FillBetween(xs, y1, y2=None, where=None, **options):
+def fill_between_lines(xs, y1, y2=None, where=None, **options):
     """Fills the space between two lines.
 
     Args:
@@ -293,12 +293,12 @@ def FillBetween(xs, y1, y2=None, where=None, **options):
       where: sequence of boolean
       options: keyword args passed to plt.fill_between
     """
-    options = _UnderrideColor(options)
-    options = _Underride(options, linewidth=0, alpha=0.5)
+    options = _underride_color(options)
+    options = _underride(options, linewidth=0, alpha=0.5)
     plt.fill_between(xs, y1, y2, where, **options)
 
 
-def Bar(xs, ys, **options):
+def bar_plot(xs, ys, **options):
     """Plots a line.
 
     Args:
@@ -306,19 +306,19 @@ def Bar(xs, ys, **options):
       ys: sequence of y values
       options: keyword args passed to plt.bar
     """
-    options = _UnderrideColor(options)
-    options = _Underride(options, linewidth=0, alpha=0.6)
+    options = _underride_color(options)
+    options = _underride(options, linewidth=0, alpha=0.6)
     plt.bar(xs, ys, **options)
 
 
-def Scatter(xs, ys=None, **options):
+def scatter_plot(xs, ys=None, **options):
     """Makes a scatter plot.
 
     xs: x values
     ys: y values
     options: options passed to plt.scatter
     """
-    options = _Underride(options, color="blue", alpha=0.2, s=30, edgecolors="none")
+    options = _underride(options, color="blue", alpha=0.2, s=30, edgecolors="none")
 
     if ys is None and isinstance(xs, pandas.Series):
         ys = xs.values
@@ -327,18 +327,18 @@ def Scatter(xs, ys=None, **options):
     plt.scatter(xs, ys, **options)
 
 
-def HexBin(xs, ys, **options):
+def scatter_hexbin(xs, ys, **options):
     """Makes a scatter plot.
 
     xs: x values
     ys: y values
     options: options passed to plt.scatter
     """
-    options = _Underride(options, cmap=matplotlib.cm.Blues)
+    options = _underride(options, cmap=matplotlib.cm.Blues)
     plt.hexbin(xs, ys, **options)
 
 
-def Pdf(pdf, **options):
+def plot_pdf_line(pdf, **options):
     """Plots a Pdf, Pmf, or Hist as a line.
 
     Args:
@@ -353,11 +353,11 @@ def Pdf(pdf, **options):
     logging.debug("%r", f"n={n}")
 
     xs, ps = pdf.Render()
-    options = _Underride(options, label=pdf.label)
-    Plot(xs, ps, **options)
+    options = _underride(options, label=pdf.label)
+    plot_line(xs, ps, **options)
 
 
-def Pdfs(pdfs, **options):
+def plot_pdfs(pdfs, **options):
     """Plots a sequence of PDFs.
 
     Options are passed along for all PDFs.  If you want different
@@ -368,10 +368,10 @@ def Pdfs(pdfs, **options):
       options: keyword args passed to plt.plot
     """
     for pdf in pdfs:
-        Pdf(pdf, **options)
+        plot_pdf_line(pdf, **options)
 
 
-def Hist(histogram, **options):
+def plot_hist_bar(histogram, **options):
     """Plots a Pmf or Hist with a bar plot.
 
     The default width of the bars is based on the minimum difference
@@ -405,18 +405,18 @@ def Hist(histogram, **options):
                 "Or try providing width option."
             )
 
-    options = _Underride(options, label=histogram.label)
-    options = _Underride(options, align="center")
+    options = _underride(options, label=histogram.label)
+    options = _underride(options, align="center")
     if options["align"] == "left":
         options["align"] = "edge"
     elif options["align"] == "right":
         options["align"] = "edge"
         options["width"] *= -1
 
-    Bar(xs, ys, **options)
+    bar_plot(xs, ys, **options)
 
 
-def Hists(histograms, **options):
+def plot_interleaved_hists(histograms, **options):
     """Plots two histograms as interleaved bar plots.
 
     Options are passed along for all PMFs.  If you want different
@@ -427,10 +427,10 @@ def Hists(histograms, **options):
       options: keyword args passed to plt.plot
     """
     for histogram in histograms:
-        Hist(histogram, **options)
+        plot_hist_bar(histogram, **options)
 
 
-def Pmf(probability_mass_function, **options):
+def plot_pmf_line(probability_mass_function, **options):
     """Plots a Pmf or Hist as a line.
 
     Args:
@@ -476,11 +476,11 @@ def Pmf(probability_mass_function, **options):
     if align == "right":
         pxs = np.array(pxs) - width
 
-    options = _Underride(options, label=probability_mass_function.label)
-    Plot(pxs, pys, **options)
+    options = _underride(options, label=probability_mass_function.label)
+    plot_line(pxs, pys, **options)
 
 
-def Pmfs(probability_mass_functions, **options):
+def plot_pmfs(probability_mass_functions, **options):
     """Plots a sequence of PMFs.
 
     Options are passed along for all PMFs.  If you want different
@@ -491,10 +491,10 @@ def Pmfs(probability_mass_functions, **options):
       options: keyword args passed to plt.plot
     """
     for probability_mass_function in probability_mass_functions:
-        Pmf(probability_mass_function, **options)
+        plot_pmf_line(probability_mass_function, **options)
 
 
-def Diff(t):
+def differences(t):
     """Compute the differences between adjacent elements in a sequence.
 
     Args:
@@ -507,7 +507,7 @@ def Diff(t):
     return diffs
 
 
-def Cdf(cumulative_density_function, complement=False, transform=None, **options):
+def plot_cdf_line(cumulative_density_function, complement=False, transform=None, **options):
     """Plots a CDF as a line.
 
     Args:
@@ -555,12 +555,12 @@ def Cdf(cumulative_density_function, complement=False, transform=None, **options
         ps = [-math.log(p) for p in ps]
         scale["yscale"] = "log"
 
-    options = _Underride(options, label=cumulative_density_function.label)
-    Plot(xs, ps, **options)
+    options = _underride(options, label=cumulative_density_function.label)
+    plot_line(xs, ps, **options)
     return scale
 
 
-def Cdfs(cumulative_density_functions, complement=False, transform=None, **options):
+def plot_cdfs(cumulative_density_functions, complement=False, transform=None, **options):
     """Plots a sequence of CDFs.
 
     cdfs: sequence of CDF objects
@@ -569,10 +569,10 @@ def Cdfs(cumulative_density_functions, complement=False, transform=None, **optio
     options: keyword args passed to plt.plot
     """
     for cumulative_density_function in cumulative_density_functions:
-        Cdf(cumulative_density_function, complement, transform, **options)
+        plot_cdf_line(cumulative_density_function, complement, transform, **options)
 
 
-def PlotCdf(cumulative_density_function):
+def plot_cdf(cumulative_density_function):
     """
     Draws a Cdf with vertical lines at the observed test stat.
     """
@@ -582,10 +582,10 @@ def PlotCdf(cumulative_density_function):
         plt.plot([x, x], [0, 1], color="0.8")
 
     VertLine(cumulative_density_function.actual)
-    Cdf(cumulative_density_function, complement=False, transform=None)
+    plot_cdf_line(cumulative_density_function, complement=False, transform=None)
 
 
-def Contour(obj, pcolor_bool=False, contour_bool=True, imshow=False, **options):
+def contour_plot(obj, pcolor_bool=False, contour_bool=True, imshow=False, **options):
     """Makes a contour plot.
 
     d: map from (x, y) to z, or object that provides GetDict
@@ -599,32 +599,32 @@ def Contour(obj, pcolor_bool=False, contour_bool=True, imshow=False, **options):
     except AttributeError:
         d = obj
 
-    _Underride(options, cmap=matplotlib.cm.Blues)
+    _underride(options, cmap=matplotlib.cm.Blues)
 
     xs, ys = zip(*d.keys())
     xs = sorted(set(xs))
     ys = sorted(set(ys))
 
-    X, Y = np.meshgrid(xs, ys)
+    x_meshgrid, y_meshgrid = np.meshgrid(xs, ys)
     func = lambda x, y: d.get((x, y), 0)
     func = np.vectorize(func)
-    Z = func(X, Y)
+    z_meshgrid = func(x_meshgrid, y_meshgrid)
 
     x_formatter = matplotlib.ticker.ScalarFormatter(useOffset=False)
     axes = plt.gca()
     axes.xaxis.set_major_formatter(x_formatter)
 
     if pcolor_bool:
-        plt.pcolormesh(X, Y, Z, **options)
+        plt.pcolormesh(x_meshgrid, y_meshgrid, z_meshgrid, **options)
     if contour_bool:
-        cs = plt.contour(X, Y, Z, **options)
+        cs = plt.contour(x_meshgrid, y_meshgrid, z_meshgrid, **options)
         plt.clabel(cs, inline=1, fontsize=10)
     if imshow:
         extent = xs[0], xs[-1], ys[0], ys[-1]
-        plt.imshow(Z, extent=extent, **options)
+        plt.imshow(z_meshgrid, extent=extent, **options)
 
 
-def Pcolor(xs, ys, zs, pcolor_bool=True, contour_bool=False, **options):
+def pseudocolor(xs, ys, zs, pcolor_bool=True, contour_bool=False, **options):
     """Makes a pseudocolor plot.
 
     xs:
@@ -634,24 +634,24 @@ def Pcolor(xs, ys, zs, pcolor_bool=True, contour_bool=False, **options):
     contour: boolean, whether to make a contour plot
     options: keyword args passed to plt.pcolor and/or plt.contour
     """
-    _Underride(options, linewidth=3, cmap=matplotlib.cm.Blues)
+    _underride(options, linewidth=3, cmap=matplotlib.cm.Blues)
 
-    X, Y = np.meshgrid(xs, ys)
-    Z = zs
+    x_meshgrid, y_meshgrid = np.meshgrid(xs, ys)
+    z_meshgrid = zs
 
     x_formatter = matplotlib.ticker.ScalarFormatter(useOffset=False)
     axes = plt.gca()
     axes.xaxis.set_major_formatter(x_formatter)
 
     if pcolor_bool:
-        plt.pcolormesh(X, Y, Z, **options)
+        plt.pcolormesh(x_meshgrid, y_meshgrid, z_meshgrid, **options)
 
     if contour_bool:
-        cs = plt.contour(X, Y, Z, **options)
+        cs = plt.contour(x_meshgrid, y_meshgrid, z_meshgrid, **options)
         plt.clabel(cs, inline=1, fontsize=10)
 
 
-def Text(x, y, s, **options):
+def annotate_figure(x, y, s, **options):
     """Puts text in a figure.
 
     x: number
@@ -659,7 +659,7 @@ def Text(x, y, s, **options):
     s: string
     options: keyword args passed to plt.text
     """
-    options = _Underride(
+    options = _underride(
         options, fontsize=16, verticalalignment="top", horizontalalignment="left"
     )
     plt.text(x, y, s, **options)
@@ -669,7 +669,7 @@ LEGEND = True
 LOC = None
 
 
-def Config(**options):
+def config_plot(**options):
     """Configures the plot.
 
     Pulls options out of the option dictionary and passes them to
@@ -756,7 +756,7 @@ def legend(**options):
     https://matplotlib.org/api/_as_gen/matplotlib.pyplot.legend.html
 
     """
-    _Underride(options, loc="best")
+    _underride(options, loc="best")
 
     ax = plt.gca()
     handles, labels = ax.get_legend_handles_labels()
@@ -764,7 +764,7 @@ def legend(**options):
         ax.legend(handles, labels, **options)
 
 
-def Show(**options):
+def show_plot(**options):
     """Shows the plot.
 
     For options, see Config.
@@ -772,13 +772,13 @@ def Show(**options):
     options: keyword args used to invoke various plt functions
     """
     clf_bool = options.pop("clf", True)
-    Config(**options)
+    config_plot(**options)
     plt.show()
     if clf_bool:
-        Clf()
+        clear_figure()
 
 
-def Plotly(**options):
+def show_plotly(**options):
     """Shows the plot.
 
     For options, see Config.
@@ -786,15 +786,15 @@ def Plotly(**options):
     options: keyword args used to invoke various plt functions
     """
     clf_bool = options.pop("clf", True)
-    Config(**options)
+    config_plot(**options)
 
     url = plotly.plot_mpl(plt.gcf())
     if clf_bool:
-        Clf()
+        clear_figure()
     return url
 
 
-def Save(root=None, formats=None, **options):
+def save_plot(root=None, formats=None, **options):
     """Saves the plot in the given formats and clears the figure.
 
     For options, see Config.
@@ -811,38 +811,38 @@ def Save(root=None, formats=None, **options):
         if option in options:
             save_options[option] = options.pop(option)
 
-    Config(**options)
+    config_plot(**options)
 
     if formats is None:
         formats = ["pdf", "png"]
 
     try:
         formats.remove("plotly")
-        Plotly(clf=False)
+        show_plotly(clf=False)
     except ValueError:
         pass
 
     if root:
         for fmt in formats:
-            SaveFormat(root, fmt, **save_options)
+            save_format(root, fmt, **save_options)
     if clf_bool:
-        Clf()
+        clear_figure()
 
 
-def SaveFormat(root, fmt="eps", **options):
+def save_format(root, fmt="eps", **options):
     """Writes the current figure to a file in the given format.
 
     Args:
       root: string filename root
       fmt: string format
     """
-    _Underride(options, dpi=300)
+    _underride(options, dpi=300)
     filename = "%s.%s" % (root, fmt)
     print("Writing", filename)
     plt.savefig(filename, format=fmt, **options)
 
 
-def RenderPdf(mu, sigma, n=101):
+def render_pdf(mu, sigma, n=101):
     """Makes xs and ys for a normal PDF with (mu, sigma).
 
     n: number of places to evaluate the PDF
@@ -853,32 +853,32 @@ def RenderPdf(mu, sigma, n=101):
 
 
 # provide aliases for calling functions with lower-case names
-preplot = PrePlot
-subplot = SubPlot
-clf = Clf
-figure = Figure
-plot = Plot
-vlines = Vlines
-hlines = Hlines
-fill_between = FillBetween
-text = Text
-scatter = Scatter
-pmf = Pmf
-pmfs = Pmfs
-hist = Hist
-hists = Hists
-diff = Diff
-cdf = Cdf
-cdfs = Cdfs
-contour = Contour
-pcolor = Pcolor
-config = Config
-show = Show
-save = Save
+preplot = pre_plot
+subplot = sub_plot
+clf = clear_figure
+figure = underride_figure
+plot = plot_line
+vlines = plot_vlines
+hlines = plot_hlines
+fill_between = fill_between_lines
+text = annotate_figure
+scatter = scatter_plot
+pmf = plot_pmf_line
+pmfs = plot_pmfs
+hist = plot_hist_bar
+hists = plot_interleaved_hists
+diff = differences
+cdf = plot_cdf_line
+cdfs = plot_cdfs
+contour = contour_plot
+pcolor = pseudocolor
+config = config_plot
+show = show_plot
+save = save_plot
 
 
 def main():
-    color_iter = _Brewer.ColorGenerator(7)
+    color_iter = _Brewer.color_generator(7)
     for color in color_iter:
         print(color)
 

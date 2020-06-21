@@ -25,9 +25,9 @@ def main():
     suite.Update(60)
     print(suite.Mean())
 
-    thinkplot.PrePlot(1)
-    thinkplot.Pmf(suite)
-    thinkplot.Save(
+    thinkplot.pre_plot(1)
+    thinkplot.plot_pmf_line(suite)
+    thinkplot.save_plot(
         root="train1",
         xlabel="Number of trains",
         ylabel="Probability",

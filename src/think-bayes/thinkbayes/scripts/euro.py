@@ -108,11 +108,11 @@ def PlotSuites(suites, root):
     suite1, suite2: Suite objects
     root: string filename to write
     """
-    thinkplot.Clf()
-    thinkplot.PrePlot(len(suites))
-    thinkplot.Pmfs(suites)
+    thinkplot.clear_figure()
+    thinkplot.pre_plot(len(suites))
+    thinkplot.plot_pmfs(suites)
 
-    thinkplot.Save(root=root, xlabel="x", ylabel="Probability", formats=["pdf", "eps"])
+    thinkplot.save_plot(root=root, xlabel="x", ylabel="Probability", formats=["pdf", "eps"])
 
 
 def main():

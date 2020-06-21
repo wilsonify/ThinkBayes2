@@ -65,13 +65,13 @@ def main():
     p2, q1 = Update(p2, q1, True)
     p2, q2 = Update(p2, q2, False)
 
-    thinkplot.PrePlot(num=4, rows=2)
-    thinkplot.Pmfs([p1, p2])
-    thinkplot.Config(legend=True)
+    thinkplot.pre_plot(num=4, rows=2)
+    thinkplot.plot_pmfs([p1, p2])
+    thinkplot.config_plot(legend=True)
 
-    thinkplot.SubPlot(2)
-    thinkplot.Pmfs([q1, q2])
-    thinkplot.Show()
+    thinkplot.sub_plot(2)
+    thinkplot.plot_pmfs([q1, q2])
+    thinkplot.show_plot()
 
     print("Prob p1 > p2", p1 > p2)
     print("Prob q1 > q2", q1 > q2)

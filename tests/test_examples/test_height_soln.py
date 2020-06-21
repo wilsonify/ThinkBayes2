@@ -123,8 +123,8 @@ def test_two():
     ps = dist_height["female"].pdf(hs)
     female_height_pmf = Pmf(dict(zip(hs, ps)))
 
-    thinkplot.Pdf(male_height_pmf, label="Male")
-    thinkplot.Pdf(female_height_pmf, label="Female")
+    thinkplot.plot_pdf_line(male_height_pmf, label="Male")
+    thinkplot.plot_pdf_line(female_height_pmf, label="Female")
 
     thinkplot.decorate(
         xlabel="Height (cm)", ylabel="PMF", title="Adult residents of the U.S."
@@ -143,7 +143,7 @@ def test_three():
     mix = MakeMixture(metapmf)
     mix.Mean()
 
-    thinkplot.Pdf(mix)
+    thinkplot.plot_pdf_line(mix)
     thinkplot.decorate(
         xlabel="Height (cm)", ylabel="PMF", title="Adult residents of the U.S."
     )
@@ -164,7 +164,7 @@ def test_four():
     suite = make_prior(mix, mix)
     suite.Total()
 
-    thinkplot.Contour(suite)
+    thinkplot.contour_plot(suite)
     thinkplot.decorate(
         xlabel="B Height (cm)",
         ylabel="A Height (cm)",
@@ -188,7 +188,7 @@ def test_five():
     suite.Total()
     suite.Update(0)
 
-    thinkplot.Contour(suite)
+    thinkplot.contour_plot(suite)
     thinkplot.decorate(
         xlabel="B Height (cm)",
         ylabel="A Height (cm)",
@@ -215,8 +215,8 @@ def test_six():
     posterior_a = suite.Marginal(0)
     posterior_b = suite.Marginal(1)
 
-    thinkplot.Pdf(posterior_a, label="A")
-    thinkplot.Pdf(posterior_b, label="B")
+    thinkplot.plot_pdf_line(posterior_a, label="A")
+    thinkplot.plot_pdf_line(posterior_b, label="B")
     thinkplot.decorate(
         xlabel="Height (cm)", ylabel="PMF", title="Posterior marginal distributions"
     )
@@ -243,7 +243,7 @@ def test_seven():
 
     A, B = faceoff(A, B, "B")
 
-    thinkplot.Pdf(A)
+    thinkplot.plot_pdf_line(A)
     A.Mean()
 
 
@@ -292,5 +292,5 @@ def test_eight():
     A_male = Joint(A).Marginal(0)
 
     A_height = Joint(A).Marginal(1)
-    thinkplot.Pdf(A_height)
+    thinkplot.plot_pdf_line(A_height)
     A_height.Mean()

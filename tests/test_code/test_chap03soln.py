@@ -59,7 +59,7 @@ def test_dice_problem():
 
     # Here's what the posterior looks like
 
-    thinkplot.Pdf(suite)
+    thinkplot.plot_pdf_line(suite)
 
     # And here's how we can compute the posterior mean
 
@@ -123,15 +123,15 @@ def test_dice_problem():
     hypos = range(1, high + 1)
     suite1 = Train(hypos)
     suite2 = Train2(hypos)
-    thinkplot.Pdf(suite1)
-    thinkplot.Pdf(suite2)
+    thinkplot.plot_pdf_line(suite1)
+    thinkplot.plot_pdf_line(suite2)
 
     # Now let's see what the posteriors look like after observing one train.
 
     dataset = [60]
     high = 1000
 
-    thinkplot.PrePlot(num=2)
+    thinkplot.pre_plot(num=2)
 
     constructors = [Train, Train2]
     labels = ["uniform", "power law"]
@@ -139,9 +139,9 @@ def test_dice_problem():
     for constructor, label in zip(constructors, labels):
         suite = MakePosterior(high, dataset, constructor)
         suite.label = label
-        thinkplot.Pmf(suite)
+        thinkplot.plot_pmf_line(suite)
 
-    thinkplot.Config(xlabel="Number of trains", ylabel="Probability")
+    thinkplot.config_plot(xlabel="Number of trains", ylabel="Probability")
 
     # The power law gives less prior probability to high values, which yields lower posterior means, and less sensitivity to the upper bound.
 
@@ -166,8 +166,8 @@ def test_dice_problem():
     # Also, a CDF can be a better way to visualize distributions.
 
     cdf = Cdf(suite)
-    thinkplot.Cdf(cdf)
-    thinkplot.Config(
+    thinkplot.plot_cdf_line(cdf)
+    thinkplot.config_plot(
         xlabel="Number of trains", ylabel="Cumulative Probability", legend=False
     )
 

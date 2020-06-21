@@ -307,9 +307,9 @@ def test_addition(d6):
     Here's the `Pmf` that represents the sum of two dice:
     """
 
-    thinkplot.Pdf(d6)
+    thinkplot.plot_pdf_line(d6)
     twice = d6 + d6
-    thinkplot.Pdf(twice, color="green")
+    thinkplot.plot_pdf_line(twice, color="green")
 
 
 def test_threedice(d6):
@@ -319,9 +319,9 @@ def test_threedice(d6):
     """
     twice = d6 + d6
     thrice = twice + d6
-    thinkplot.Pdf(d6)
-    thinkplot.Pdf(twice, color="green")
-    thinkplot.Pdf(thrice, color="red")
+    thinkplot.plot_pdf_line(d6)
+    thinkplot.plot_pdf_line(twice, color="green")
+    thinkplot.plot_pdf_line(thrice, color="red")
 
 
 def test_ex(d6):
@@ -368,7 +368,7 @@ def test_cumulative_probabilities(d6):
     thrice = twice + d6
     cdf = Cdf(thrice)
     cdf.Print()
-    thinkplot.Cdf(cdf)
+    thinkplot.plot_cdf_line(cdf)
 
 
 def test_cdf5(d6):
@@ -483,7 +483,7 @@ def test_max_min(d6):
     thrice = twice + d6
     cdf = Cdf(thrice)
     best = cdf.Max(6)
-    thinkplot.Cdf(best)
+    thinkplot.plot_cdf_line(best)
     assert best[10] == pytest.approx(0.0156, abs=0.001)
 
 
@@ -497,7 +497,7 @@ def test_ex_min(d6):
     thrice = twice + d6
     cdf = Cdf(thrice)
     worst = find_min(cdf, 6)
-    thinkplot.Cdf(worst)
+    thinkplot.plot_cdf_line(worst)
 
 
 def test_fft(d6):
@@ -531,9 +531,9 @@ def test_characteristic(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    thinkplot.Pdf(cf.make_pmf())
+    thinkplot.plot_pdf_line(cf.make_pmf())
     sixth = (cf * cf).make_pmf()
-    thinkplot.Pdf(sixth)
+    thinkplot.plot_pdf_line(sixth)
 
 
 def test_sixth(d6):
@@ -587,7 +587,7 @@ def test_dist(d6):
     cf = CharFunc(hs)
     sixth = (cf * cf).make_pmf()
     dist = Dist(sixth.d)
-    thinkplot.Pdf(dist)
+    thinkplot.plot_pdf_line(dist)
     assert dist[21] == pytest.approx(0.0928, abs=0.01)
 
 
@@ -635,7 +635,7 @@ def test_sample(d6):
     sixth = (cf * cf).make_pmf()
     dist = Dist(sixth.d)
     dist.Sample(10)
-    thinkplot.Cdf(dist.Max(6))
+    thinkplot.plot_cdf_line(dist.Max(6))
 
 
 def test_slow(d6):
@@ -650,7 +650,7 @@ def test_slow(d6):
     sixth = (cf * cf).make_pmf()
     dist = Dist(sixth.d)
     twelfth = dist + dist
-    thinkplot.Pdf(twelfth)
+    thinkplot.plot_pdf_line(twelfth)
     twelfth.Mean()
 
 
@@ -666,5 +666,5 @@ def test_mul(d6):
     sixth = (cf * cf).make_pmf()
     dist = Dist(sixth.d)
     twelfth_fft = dist * dist
-    thinkplot.Pdf(twelfth_fft)
+    thinkplot.plot_pdf_line(twelfth_fft)
     twelfth_fft.Mean()

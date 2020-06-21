@@ -68,8 +68,8 @@ def test_hydrax():
     # +
     # Solution
 
-    thinkplot.Pdf(suite)
-    thinkplot.Config(xlabel="Number of hyraxes", ylabel="PMF", legend=False)
+    thinkplot.plot_pdf_line(suite)
+    thinkplot.config_plot(xlabel="Number of hyraxes", ylabel="PMF", legend=False)
 
     # +
     # Solution

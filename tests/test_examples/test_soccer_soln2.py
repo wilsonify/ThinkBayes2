@@ -71,7 +71,7 @@ def test_soccer():
         0.33
     )  # fake data chosen by trial and error to yield the observed prior mean
 
-    thinkplot.Pdf(suite)
+    thinkplot.plot_pdf_line(suite)
     suite.Mean()
 
     # According to this prior, the goal-scoring rates are always greater than zero, with the most likely value (a priori) near 0.5.  Goal scoring rates greater than 5 are considered unlikely.
@@ -92,9 +92,9 @@ def test_soccer():
     #
     # Since both teams scored fewer goals than the prior mean (1.4), we expect both posterior means to be lower.  Germany's posterior mean is 1.2; Argentina's is 0.7.  We can plot the posteriors:
 
-    thinkplot.Pdf(germany)
-    thinkplot.Pdf(argentina)
-    thinkplot.Config(xlabel="goal-scoring rate", ylabel="probability")
+    thinkplot.plot_pdf_line(germany)
+    thinkplot.plot_pdf_line(argentina)
+    thinkplot.config_plot(xlabel="goal-scoring rate", ylabel="probability")
 
     # To answer the first question, "How much evidence does this victory provide that Germany had the better team?", we can compute the posterior probability that Germany had a higher goal-scoring rate:
 
@@ -141,9 +141,9 @@ def test_soccer():
     #
     # Finally, it uses `MakeMixture` to compute the mixture of the distributions.  Here's what the predictive distributions look like.
 
-    thinkplot.Hist(germany_pred, width=0.45, align="right")
-    thinkplot.Hist(argentina_pred, width=0.45, align="left")
-    thinkplot.Config(xlabel="predicted # goals", ylabel="probability", xlim=[-0.5, 7])
+    thinkplot.plot_hist_bar(germany_pred, width=0.45, align="right")
+    thinkplot.plot_hist_bar(argentina_pred, width=0.45, align="left")
+    thinkplot.config_plot(xlabel="predicted # goals", ylabel="probability", xlim=[-0.5, 7])
 
     # Using the predictive distributions, we can compute probabilities for the outcomes of a rematch.
 

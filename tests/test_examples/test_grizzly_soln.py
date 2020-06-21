@@ -70,8 +70,8 @@ def test_Grizzly():
 
     # Solution
 
-    thinkplot.Pdf(suite)
-    thinkplot.Config(xlabel="Number of bears", ylabel="PMF", legend=False)
+    thinkplot.plot_pdf_line(suite)
+    thinkplot.config_plot(xlabel="Number of bears", ylabel="PMF", legend=False)
 
     # Solution
 

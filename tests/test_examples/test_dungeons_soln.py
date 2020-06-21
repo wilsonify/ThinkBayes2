@@ -113,7 +113,7 @@ def test_game_day():
     dungeon_instance.game_day(10, 0.7)
     sample = [dungeon_instance.game_day(10, 0.7) for _ in range(1000)]
     pmf_sample = Pmf(sample)
-    thinkplot.Hist(pmf_sample)
+    thinkplot.plot_hist_bar(pmf_sample)
 
 
 def coin(p):
@@ -163,12 +163,12 @@ def test_compare():
     sample = [dungeon_instance.game_day(10, 0.7) for _ in range(1000)]
     pmf_sample = Pmf(sample)
 
-    thinkplot.Hist(pmf_sample, color="C0")
+    thinkplot.plot_hist_bar(pmf_sample, color="C0")
 
     player = coin(0.7)
     prior = sum([player] * 10)
 
-    thinkplot.Pmf(prior, color="C1")
+    thinkplot.plot_pmf_line(prior, color="C1")
     thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
 
 
@@ -184,8 +184,8 @@ def test_analytic(prior):
     """
 
     binomial = thinkbayes.MakeBinomialPmf(10, 0.7)
-    thinkplot.Pmf(prior, color="C1")
-    thinkplot.Pmf(binomial, color="C2", linestyle="dotted")
+    thinkplot.plot_pmf_line(prior, color="C1")
+    thinkplot.plot_pmf_line(binomial, color="C2", linestyle="dotted")
     thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
 
 
@@ -193,11 +193,11 @@ def test_eliminate(prior):
     """
     Since two players spoke, we can eliminate the possibility of 0 or 1 players:
     """
-    thinkplot.Pmf(prior, color="gray")
+    thinkplot.plot_pmf_line(prior, color="gray")
     del prior[0]
     del prior[1]
     prior.Normalize()
-    thinkplot.Pmf(prior, color="C1")
+    thinkplot.plot_pmf_line(prior, color="C1")
     thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
 
 
@@ -216,7 +216,7 @@ def thrice_fixture():
     d6 = Pmf([1, 2, 3, 4, 5, 6])
     d6.Print()
     thrice = sum([d6] * 3)
-    thinkplot.Pdf(thrice)
+    thinkplot.plot_pdf_line(thrice)
     thinkplot.decorate(xlabel="Attribute", ylabel="PMF")
     return thrice
 
@@ -262,10 +262,10 @@ def test_cdf_max(cdf_thrice):
     The `Max` method raises the CDF to a power.  So here's the CDF for the maximum of six attributes.
     """
 
-    thinkplot.Cdf(cdf_thrice)
+    thinkplot.plot_cdf_line(cdf_thrice)
     thinkplot.decorate(xlabel="Attribute", ylabel="CDF")
     cdf_max_6 = cdf_thrice.Max(6)
-    thinkplot.Cdf(cdf_max_6)
+    thinkplot.plot_cdf_line(cdf_max_6)
     thinkplot.decorate(
         xlabel="Attribute", ylabel="CDF", title="Maximum of 6 attributes"
     )
@@ -279,7 +279,7 @@ def test_n_cdf_max(cdf_thrice):
 
     for n in range(2, 10, 2):
         cdf_max = cdf_thrice.Max(n * 6)
-        thinkplot.Cdf(cdf_max, label="n=%s" % n)
+        thinkplot.plot_cdf_line(cdf_max, label="n=%s" % n)
 
     thinkplot.decorate(
         xlabel="Attribute", ylabel="CDF", title="Maximum of 6*n attributes"
@@ -293,9 +293,9 @@ def test_n_sim(cdf_thrice):
 
     n = 7
     cdf = cdf_thrice.Max(n * 6)
-    thinkplot.Cdf(cdf, label="n=%s" % n)
+    thinkplot.plot_cdf_line(cdf, label="n=%s" % n)
     sample_max = [max(cdf_thrice.Sample(42)) for _ in range(1000)]
-    thinkplot.Cdf(thinkbayes.Cdf(sample_max), label="sample")
+    thinkplot.plot_cdf_line(thinkbayes.Cdf(sample_max), label="sample")
     thinkplot.decorate(
         xlabel="Attribute", ylabel="CDF", title="Maximum of 6*n attributes"
     )
@@ -309,7 +309,7 @@ def test_compute_cdf_min(cdf_thrice):
     dungeon_instance = Dungeons()
     for n in range(2, 10, 2):
         cdf_min = dungeon_instance.compute_cdf_min(cdf_thrice, n * 6)
-        thinkplot.Cdf(cdf_min, label="n=%s" % n)
+        thinkplot.plot_cdf_line(cdf_min, label="n=%s" % n)
 
     thinkplot.decorate(
         xlabel="Attribute", ylabel="CDF", title="Minimum of 6*n attributes"
@@ -323,10 +323,10 @@ def test_compute_cdf_min_sim(cdf_thrice):
     dungeon_instance = Dungeons()
     n = 7
     cdf = dungeon_instance.compute_cdf_min(cdf_thrice, n * 6)
-    thinkplot.Cdf(cdf, label="n=%s" % n)
+    thinkplot.plot_cdf_line(cdf, label="n=%s" % n)
 
     sample_min = [min(cdf_thrice.Sample(42)) for _ in range(1000)]
-    thinkplot.Cdf(thinkbayes.Cdf(sample_min), label="sample")
+    thinkplot.plot_cdf_line(thinkbayes.Cdf(sample_min), label="sample")
 
     thinkplot.decorate(
         xlabel="Attribute", ylabel="CDF", title="Minimum of 6*n attributes"
