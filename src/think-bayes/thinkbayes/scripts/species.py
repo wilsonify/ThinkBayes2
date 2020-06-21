@@ -1234,7 +1234,7 @@ def PlotAllVersions():
     for constructor in [Species, Species2, Species3, Species4, Species5]:
         suite = MakePosterior(constructor, data, ns)
         pmf = suite.DistN()
-        pmf.label = "%s" % (constructor.__name__)
+        pmf.label = f"{constructor.__name__}"
         thinkplot.Pmf(pmf)
 
     thinkplot.Save(root="species3", xlabel=SPECIES_LABEL, ylabel="Prob")
@@ -1250,7 +1250,7 @@ def PlotMedium():
     for constructor in [Species, Species2, Species3, Species4, Species5]:
         suite = MakePosterior(constructor, data, ns)
         pmf = suite.DistN()
-        pmf.label = "%s" % (constructor.__name__)
+        pmf.label = f"{constructor.__name__}"
         thinkplot.Pmf(pmf)
 
     thinkplot.Show()
@@ -1317,7 +1317,7 @@ def CompareHierarchicalExample():
     for constructor, iters in zip(constructors, iters):
         suite = MakePosterior(constructor, data, ns, iters)
         pmf = suite.DistN()
-        pmf.label = "%s" % (constructor.__name__)
+        pmf.label = f"{constructor.__name__}"
         thinkplot.Pmf(pmf)
 
     thinkplot.Show()
