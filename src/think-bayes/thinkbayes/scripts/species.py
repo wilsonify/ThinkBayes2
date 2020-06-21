@@ -20,6 +20,7 @@ from thinkbayes import thinkplot
 warnings.simplefilter("error", RuntimeWarning)
 
 FORMATS = ["pdf", "eps", "png"]
+SPECIES_LABEL = "Number of species"
 
 
 class Locker(object):
@@ -250,8 +251,9 @@ class Subject(object):
         thinkplot.Pmf(pmf)
 
         root = "species-ndist-%s" % self.code
+
         thinkplot.Save(
-            root=root, xlabel="Number of species", ylabel="Prob", formats=FORMATS,
+            root=root, xlabel=SPECIES_LABEL, ylabel="Prob", formats=FORMATS,
         )
 
     def PlotPrevalences(self, num=5):
@@ -1235,7 +1237,7 @@ def PlotAllVersions():
         pmf.label = "%s" % (constructor.__name__)
         thinkplot.Pmf(pmf)
 
-    thinkplot.Save(root="species3", xlabel="Number of species", ylabel="Prob")
+    thinkplot.Save(root="species3", xlabel=SPECIES_LABEL, ylabel="Prob")
 
 
 def PlotMedium():
@@ -1298,7 +1300,7 @@ def HierarchicalExample():
     pmf = suite.DistN()
     thinkplot.Pdf(pmf)
     thinkplot.Save(
-        root="species2", xlabel="Number of species", ylabel="Prob", formats=FORMATS,
+        root="species2", xlabel=SPECIES_LABEL, ylabel="Prob", formats=FORMATS,
     )
 
 
@@ -1345,7 +1347,7 @@ def ProcessSubjects(codes):
     print("ProbLess", thinkbayes.PmfProbLess(pmfs[0], pmfs[1]))
 
     thinkplot.Save(
-        root="species4", xlabel="Number of species", ylabel="Prob", formats=FORMATS,
+        root="species4", xlabel=SPECIES_LABEL, ylabel="Prob", formats=FORMATS,
     )
 
 
