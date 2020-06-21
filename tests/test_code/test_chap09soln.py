@@ -126,7 +126,7 @@ def test_improving_reading_ability():
     # And CDF_diff(0), which is the probability that the difference is <= 0
 
     pmf_diff = pmf_mu1 - pmf_mu0
-    cdf_diff = pmf_diff.make_cdf()
+    cdf_diff = pmf_diff.MakeCdf()
     thinkplot.plot_cdf_line(cdf_diff)
     logging.info("%r", f"cdf_diff[0] = {cdf_diff[0]}")
 
@@ -587,7 +587,7 @@ def test_improving_reading_ability():
 
     class Classifier(Suite):
         def Likelihood(self, data, hypo):
-            return hypo.likelihood(data)
+            return hypo.Likelihood(data)
 
     suite = Classifier(species.values())
     for hypo, prob in suite.Items():

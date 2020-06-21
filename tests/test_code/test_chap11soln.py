@@ -69,7 +69,7 @@ def test_euro_problem():
         """
         total = 0
         for hypo, prob in suite.Items():
-            like = suite.likelihood(data, hypo)
+            like = suite.Likelihood(data, hypo)
             total += prob * like
         return total
 
