@@ -4,6 +4,7 @@ by Allen B. Downey, available from greenteapress.com
 Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 """This file contains a partial solution to a problem from
 MacKay, "Information Theory, Inference, and Learning Algorithms."
@@ -68,8 +69,9 @@ def SuiteLikelihood(suite, data):
 
 def Main():
     data = 140, 110
+    logging.debug("%r", f"data={data}")
     data = 8, 12
-
+    logging.debug("%r", f"data={data}")
     suite = Euro()
     like_f = suite.Likelihood(data, 50)
     print("p(D|F)", like_f)

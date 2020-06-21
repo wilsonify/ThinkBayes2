@@ -9,6 +9,7 @@ MIT License: https://opensource.org/licenses/MIT
 
 import csv
 import json
+import logging
 import os
 import sys
 from datetime import datetime, time
@@ -189,6 +190,7 @@ def GetInterarrivals(arrival_map):
 
 
 def main(script, command="collect"):
+    logging.debug("%r", f"script={script}")
     red = Redis()
 
     if command == "collect":

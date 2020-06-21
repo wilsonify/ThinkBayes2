@@ -6,10 +6,10 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 import csv
+import logging
 
 import matplotlib.pyplot as pyplot
 import numpy as np
-
 import thinkbayes
 from thinkbayes import thinkplot
 
@@ -152,6 +152,10 @@ class Player(object):
         bids: sequence of bids
         diffs: sequence of underness (negative means over)
         """
+        logging.debug("%r", f"prices={prices}")
+        logging.debug("%r", f"bids={bids}")
+        logging.debug("%r", f"diffs={diffs}")
+
         self.pdf_price = thinkbayes.EstimatedPdf(prices)
         self.cdf_diff = thinkbayes.MakeCdfFromList(diffs)
 

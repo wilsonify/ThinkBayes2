@@ -4,6 +4,7 @@ by Allen B. Downey, available from greenteapress.com
 Copyright 2014 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 import numpy
 
@@ -29,6 +30,7 @@ class Soccer(thinkbayes.Suite):
 
         returns: new Pmf (mixture of Poissons)
         """
+        logging.debug("%r", f"label={label}")
         # TODO: fill this in
         lam = 1
         pred = thinkbayes.MakePoissonPmf(lam, 15)

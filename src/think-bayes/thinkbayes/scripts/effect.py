@@ -4,6 +4,7 @@ by Allen B. Downey, available from greenteapress.com
 Copyright 2014 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 from random import random
 
 import thinkbayes
@@ -36,7 +37,8 @@ def RunEstimate(update_func, num_points=31, median_flag=False):
     # joint distributions of mu and sigma for men and women
     suite1 = suites["male"]
     suite2 = suites["female"]
-
+    logging.debug("%r", f"suite1={suite1}")
+    logging.debug("%r", f"suite2={suite2}")
     # TODO: compute and plot the distribution of d
 
 

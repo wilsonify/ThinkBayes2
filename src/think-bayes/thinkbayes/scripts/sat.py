@@ -6,6 +6,7 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 import csv
+import logging
 import math
 import sys
 
@@ -456,6 +457,7 @@ def ProbCorrectTable():
 
 
 def main(script):
+    logging.debug("%r", f"script={script}")
     ProbCorrectTable()
 
     exam = Exam()

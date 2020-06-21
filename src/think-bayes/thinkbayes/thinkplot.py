@@ -4,7 +4,7 @@ by Allen B. Downey, available from greenteapress.com
 Copyright 2014 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
-
+import logging
 import math
 import warnings
 
@@ -346,7 +346,12 @@ def Pdf(pdf, **options):
       options: keyword args passed to plt.plot
     """
     low, high = options.pop("low", None), options.pop("high", None)
+    logging.debug("%r", f"low={low}")
+    logging.debug("%r", f"high={high}")
+
     n = options.pop("n", 101)
+    logging.debug("%r", f"n={n}")
+
     xs, ps = pdf.Render()
     options = _Underride(options, label=pdf.label)
     Plot(xs, ps, **options)
@@ -434,6 +439,8 @@ def Pmf(pmf, **options):
     """
     xs, ys = pmf.Render()
     low, high = min(xs), max(xs)
+    logging.debug("%r", f"low={low}")
+    logging.debug("%r", f"high={high}")
 
     width = options.pop("width", None)
     if width is None:
@@ -565,7 +572,7 @@ def Cdfs(cdfs, complement=False, transform=None, **options):
         Cdf(cdf, complement, transform, **options)
 
 
-def PlotCdf(cdf, label=None):
+def PlotCdf(cdf):
     """Draws a Cdf with vertical lines at the observed test stat.
     """
 

@@ -4,7 +4,7 @@ by Allen B. Downey, available from greenteapress.com
 Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
-
+import logging
 import math
 
 import thinkbayes
@@ -45,6 +45,7 @@ def Update(p, q, correct):
 
     returns: pair of new Pmfs
     """
+    logging.debug("%r", f"correct={correct}")
     # TODO: fill this in
     # HINT: form a joint distribution, update it, then extract marginals
     return p, q

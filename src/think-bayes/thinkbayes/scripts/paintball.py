@@ -4,7 +4,7 @@ by Allen B. Downey, available from greenteapress.com
 Copyright 2014 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
-
+import logging
 import math
 import sys
 
@@ -178,6 +178,7 @@ def MakeCrediblePlot(suite):
 
 
 def main(script):
+    logging.debug("%r", f"script={script}")
     alphas = range(0, 31)
     betas = range(1, 51)
     locations = range(0, 31)

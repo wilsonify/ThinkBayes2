@@ -4,7 +4,7 @@ by Allen B. Downey, available from greenteapress.com
 Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
-
+import logging
 import random
 
 import thinkbayes
@@ -92,6 +92,7 @@ def main():
     best_attr2 = PmfMax(three_exact, three_exact)
     best_attr4 = PmfMax(best_attr2, best_attr2)
     best_attr6 = PmfMax(best_attr4, best_attr2)
+    logging.debug("%r", f"best_attr6={best_attr6}")
     # thinkplot.Pmf(best_attr6)
 
     # and the easy way

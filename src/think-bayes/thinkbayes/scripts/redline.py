@@ -4,7 +4,7 @@ by Allen B. Downey, available from greenteapress.com
 Copyright 2013 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
-
+import logging
 import math
 import random
 import sys
@@ -854,6 +854,7 @@ def RunLoop(gap_times, nums, lam=0.0333):
 
 
 def main(script):
+    logging.debug("%r", f"script={script}")
     RunLoop(OBSERVED_GAP_TIMES, nums=[0, 5, 10, 15, 20, 25, 30, 35])
     RunMixProcess(OBSERVED_GAP_TIMES)
 

@@ -1,3 +1,4 @@
+import logging
 import os
 import sys
 from glob import glob
@@ -11,6 +12,7 @@ def pipe(cmd):
 
 
 def main(script, files="*.py"):
+    logging.debug("%r", f"script={script}")
     for file in glob(files):
         if file in ["loop.py"]:
             continue

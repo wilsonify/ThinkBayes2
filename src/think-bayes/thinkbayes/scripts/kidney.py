@@ -4,7 +4,7 @@ by Allen B. Downey, available from greenteapress.com
 Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
-
+import logging
 import math
 import sys
 
@@ -215,9 +215,9 @@ def GenerateRdt(pc, lam1, lam2):
     otherwise generate a positive value with param lam1.
     """
     if np.random.random() < pc:
-        return -np.random.exponential(1/lam2)
+        return -np.random.exponential(1 / lam2)
     else:
-        return np.random.exponential(1/lam1)
+        return np.random.exponential(1 / lam1)
 
 
 def GenerateSample(n, pc, lam1, lam2):
@@ -478,11 +478,14 @@ class Calculator(object):
             ts = np.linspace(-age, 0, n)
             PlotSequence(ts, seq, color)
 
-    def PlotBuckets(self):
+    def PlotBuckets(self, buckets=None):
         """Plots the set of sequences that ended in a given bucket."""
         # 2.01, 4.95 cm, 9.97 cm
-        buckets = [7.0, 16.0, 23.0]
-        buckets = [23.0]
+        if buckets is None:
+            buckets = [7.0, 16.0, 23.0]
+            logging.debug("%r", f"buckets={buckets}")
+            buckets = [23.0]
+        logging.debug("%r", f"buckets={buckets}")
         colors = ["blue", "green", "red", "cyan"]
 
         thinkplot.Clf()
@@ -752,6 +755,7 @@ def TestCorrelation(cdf):
 
 
 def main(script):
+    logging.debug("%r", f"script={script}")
     for size in [1, 5, 10]:
         bucket = CmToBucket(size)
         print(("Size, bucket", size, bucket))

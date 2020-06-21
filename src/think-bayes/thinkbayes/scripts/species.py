@@ -6,6 +6,7 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 import csv
+import logging
 import shelve
 import sys
 import time
@@ -591,7 +592,9 @@ def ReadCompleteDataset(filename="BBB_data_from_Rob.csv", clean_param=0):
     fp = open(filename)
     reader = csv.reader(fp)
     header = next(reader)
+    logging.debug("%r", f"header={header}")
     header = next(reader)
+    logging.debug("%r", f"header={header}")
 
     subject_codes = header[1:-1]
     subject_codes = ["B" + code for code in subject_codes]
@@ -1888,6 +1891,7 @@ def RunTests():
 
 
 def main(script):
+    logging.debug("%r", f"script={script}")
     RandomSeed(17)
     RunSubject("B1242", conc=1, high=100)
 
