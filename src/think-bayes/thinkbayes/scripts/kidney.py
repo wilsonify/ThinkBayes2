@@ -215,9 +215,9 @@ def GenerateRdt(pc, lam1, lam2):
     otherwise generate a positive value with param lam1.
     """
     if np.random.random() < pc:
-        return -random.expovariate(lam2)
+        return -np.random.exponential(1/lam2)
     else:
-        return random.expovariate(lam1)
+        return np.random.exponential(1/lam1)
 
 
 def GenerateSample(n, pc, lam1, lam2):
