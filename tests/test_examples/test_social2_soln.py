@@ -58,10 +58,10 @@ def test_social_desirability_problem():
     # Solution
 
     for i in range(55):
-        suite.Update("YES")
+        suite.update("YES")
 
     for i in range(45):
-        suite.Update("NO")
+        suite.update("NO")
 
     # Solution
 

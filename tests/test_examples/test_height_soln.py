@@ -80,7 +80,7 @@ def make_prior(A, B):
 
 def prob_male(height):
     suite = Height(dict(male=0.49, female=0.51))
-    suite.Update(height)
+    suite.update(height)
     return suite["male"]
 
 
@@ -92,7 +92,7 @@ def faceoff(player1, player2, data):
     data: margin by which player1 beats player2
     """
     joint = make_prior(player1, player2)
-    joint.Update(data)
+    joint.update(data)
     return joint.Marginal(0), joint.Marginal(1)
 
 
@@ -101,7 +101,7 @@ def test_one():
     for hypo, prob in suite.Items():
         print(hypo, prob)
 
-    suite.Update(170)
+    suite.update(170)
     for hypo, prob in suite.Items():
         print(hypo, prob)
 
@@ -186,7 +186,7 @@ def test_five():
 
     suite = make_prior(mix, mix)
     suite.Total()
-    suite.Update(0)
+    suite.update(0)
 
     thinkplot.contour_plot(suite)
     thinkplot.decorate(
@@ -210,7 +210,7 @@ def test_six():
 
     suite = make_prior(mix, mix)
     suite.Total()
-    suite.Update(0)
+    suite.update(0)
 
     posterior_a = suite.Marginal(0)
     posterior_b = suite.Marginal(1)
@@ -278,7 +278,7 @@ def test_eight():
 
     def faceoff(player1, player2, data):
         joint = Heights2(MakeJoint(player1, player2))
-        joint.Update(data)
+        joint.update(data)
         return joint.Marginal(0), joint.Marginal(1)
 
     A = annotated_mix

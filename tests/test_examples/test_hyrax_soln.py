@@ -63,7 +63,7 @@ def test_hydrax():
     suite = Hyrax(hypos)
 
     data = 10, 10, 2
-    suite.Update(data)
+    suite.update(data)
 
     # +
     # Solution
@@ -108,7 +108,7 @@ def test_hydrax():
     suite = Hyrax2(hypos)
 
     data = 10, 10, 2
-    suite.Update(data)
+    suite.update(data)
 
     # +
     # Solution

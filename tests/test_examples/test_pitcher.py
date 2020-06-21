@@ -27,7 +27,7 @@ def test_subclass():
     thinkplot.config_plot(xlabel="x", ylabel="PMF")
 
     posterior = prior.Copy()
-    posterior.Update(1)
+    posterior.update(1)
     thinkplot.plot_hist_bar(prior, color="gray")
     thinkplot.plot_hist_bar(posterior)
     thinkplot.config_plot(xlabel="x", ylabel="PMF")

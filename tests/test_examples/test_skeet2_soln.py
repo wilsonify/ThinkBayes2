@@ -292,7 +292,7 @@ def test_comparing_distributions():
     # Write a function that takes a Pmf and an integer `n` and returns a Pmf that represents the distribution of the minimum of `k` values drawn from the given Pmf.  Use your function to compute the distribution of the minimum score Kim Rhode would be expected to shoot in six competitions.
 
     def Min(pmf, k):
-        cdf = pmf.MakeCdf()
+        cdf = pmf.make_cdf()
         cdf.ps = 1 - (1 - cdf.ps) ** k
         return cdf
 

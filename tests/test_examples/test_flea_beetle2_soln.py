@@ -100,7 +100,7 @@ def test_flea_beetle_problem():
         mus = np.linspace(115, 160, 51)
         sigmas = np.linspace(1, 10, 51)
         suite = Beetle(product(mus, sigmas))
-        suite.Update(data)
+        suite.update(data)
         return suite
 
     groups = df.groupby("Species")
@@ -118,7 +118,7 @@ def test_flea_beetle_problem():
         mus = np.linspace(8, 16, 101)
         sigmas = np.linspace(0.1, 2, 101)
         suite = Beetle(product(mus, sigmas))
-        suite.Update(data)
+        suite.update(data)
         return suite
 
     for name, group in groups:
@@ -164,7 +164,7 @@ def test_flea_beetle_problem():
     for hypo, prob in suite.Items():
         print(hypo, prob)
 
-    suite.Update(measurements)
+    suite.update(measurements)
     for hypo, prob in suite.Items():
         print(hypo, prob)
 

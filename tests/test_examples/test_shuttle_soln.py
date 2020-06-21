@@ -107,7 +107,7 @@ def test_shuttle():
 
     for data in zip(df.Temperature, df.Incident):
         print(data)
-        suite.Update(data)
+        suite.update(data)
 
     thinkplot.plot_pdf_line(suite.Marginal(0))
     thinkplot.decorate(
@@ -138,7 +138,7 @@ def test_shuttle():
     # Solution
 
     pred = suite.Copy()
-    pred.Update((31, True))
+    pred.update((31, True))
 
     # ### MCMC
     #

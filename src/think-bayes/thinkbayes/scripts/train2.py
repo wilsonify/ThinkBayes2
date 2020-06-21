@@ -28,7 +28,7 @@ def make_posterior(high, dataset):
     suite.name = str(high)
 
     for data in dataset:
-        suite.Update(data)
+        suite.update(data)
 
     thinkplot.plot_pmf_line(suite)
     return suite

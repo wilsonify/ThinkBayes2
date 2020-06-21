@@ -125,7 +125,7 @@ class Exam(object):
             PlotJointDist(a_sat, b_sat)
 
         top = TopLevel("AB")
-        top.Update((a_sat, b_sat))
+        top.update((a_sat, b_sat))
         top.Print()
 
         ratio = top.Prob("A") / top.Prob("B")
@@ -218,7 +218,7 @@ class Sat(thinkbayes.Suite):
         thinkbayes.Suite.__init__(self, exam.prior)
 
         # update based on an exam score
-        self.Update(score)
+        self.update(score)
 
     def Likelihood(self, data, hypo):
         """Computes the likelihood of a test score, given efficacy."""
@@ -263,7 +263,7 @@ class Sat2(thinkbayes.Suite):
         thinkbayes.Suite.__init__(self, efficacies)
 
         # update based on an exam score
-        self.Update(score)
+        self.update(score)
 
     def Likelihood(self, data, hypo):
         """Computes the likelihood of a test score, given efficacy."""
@@ -377,7 +377,7 @@ class TopLevel(thinkbayes.Suite):
     (or efficacy).
     """
 
-    def Update(self, data):
+    def update(self, data):
         a_sat, b_sat = data
 
         a_like = thinkbayes.PmfProbGreater(a_sat, b_sat)

@@ -64,7 +64,7 @@ def test_improving_reading_ability():
 
     control = Normal(product(mus, sigmas))
     data = df[df.Treatment == "Control"].Response
-    control.Update(data)
+    control.update(data)
 
     # After the update, we can plot the probability of each `mu`-`sigma` pair as a contour plot.
 
@@ -89,7 +89,7 @@ def test_improving_reading_ability():
 
     treated = Normal(product(mus, sigmas))
     data = df[df.Treatment == "Treated"].Response
-    treated.Update(data)
+    treated.update(data)
 
     # Solution
 
@@ -352,7 +352,7 @@ def test_improving_reading_ability():
                 hypos.append((n, p1, p2))
 
     suite = Lincoln(hypos)
-    suite.Update(data)
+    suite.update(data)
 
     # Solution
 
@@ -422,11 +422,11 @@ def test_improving_reading_ability():
 
     coords = np.linspace(-100, 100, 10)
     joint = Gps(product(coords, coords))
-    joint.Update((51, -15))
+    joint.update((51, -15))
 
     # Solution
 
-    joint.Update((48, 90))
+    joint.update((48, 90))
 
     # Solution
 
@@ -539,7 +539,7 @@ def test_improving_reading_ability():
         mus = np.linspace(115, 160, 5)
         sigmas = np.linspace(1, 10, 5)
         suite = Beetle(product(mus, sigmas))
-        suite.Update(data)
+        suite.update(data)
         return suite
 
     groups = df.groupby("Species")
@@ -553,7 +553,7 @@ def test_improving_reading_ability():
         mus = np.linspace(8, 16, 10)
         sigmas = np.linspace(0.1, 2, 10)
         suite = Beetle(product(mus, sigmas))
-        suite.Update(data)
+        suite.update(data)
         return suite
 
     for name, group in groups:
@@ -593,6 +593,6 @@ def test_improving_reading_ability():
     for hypo, prob in suite.Items():
         print(hypo, prob)
 
-    suite.Update((145, 14))
+    suite.update((145, 14))
     for hypo, prob in suite.Items():
         print(hypo, prob)

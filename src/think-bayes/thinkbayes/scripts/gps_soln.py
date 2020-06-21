@@ -34,8 +34,8 @@ def main():
     coords = numpy.linspace(-100, 100, 101)
     joint = Gps(product(coords, coords))
 
-    joint.Update((51, -15))
-    joint.Update((48, 90))
+    joint.update((51, -15))
+    joint.update((48, 90))
 
     pairs = [
         (11.903060613102866, 19.79168669735705),

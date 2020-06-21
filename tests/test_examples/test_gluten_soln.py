@@ -91,7 +91,7 @@ def test_dinner_party():
 
     posterior = prior.Copy()
     data = 12, 23
-    posterior.Update(data)
+    posterior.update(data)
 
     # +
     # Solution

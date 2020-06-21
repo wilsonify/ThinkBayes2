@@ -79,7 +79,7 @@ def test_bayes_reg():
     suite = Regress(hypos)
 
     for data in zip(xs, ys):
-        suite.Update(data)
+        suite.update(data)
 
     thinkplot.plot_pdf_line(suite.Marginal(0))
     thinkplot.decorate(

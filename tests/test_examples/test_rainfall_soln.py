@@ -206,7 +206,7 @@ def test_gamma():
 
     cdf = Cdf(pred["rain"].flatten())
     thinkplot.plot_cdf_line(cdf, label="MCMC")
-    thinkplot.plot_cdf_line(pred_pmf.MakeCdf(), label="Grid")
+    thinkplot.plot_cdf_line(pred_pmf.make_cdf(), label="Grid")
     thinkplot.decorate(xlabel="Predicted rainfall", ylabel="CDF")
 
     # Looks good.  The predictive means are not quite the same; the most likely culprit is the resolution of the grid algorithm.

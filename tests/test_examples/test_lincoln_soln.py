@@ -109,7 +109,7 @@ def test_lincoln_index_problem():
     suite = Lincoln(hypos)
 
     data = 20, 15, 3
-    suite.Update(data)
+    suite.update(data)
 
     n_marginal = suite.Marginal(0)
 

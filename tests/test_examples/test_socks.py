@@ -15,12 +15,12 @@ class Socks(thinkbayes.Suite):
         self.matched = 0
         self.unmatched = 0
 
-    def Update(self, data):
+    def update(self, data):
         """Updates the suite based on data.
         
         data: 'u' if we picked an unmatched sock, 'm' otherwise
         """
-        thinkbayes.Suite.Update(self, data)
+        thinkbayes.Suite.update(self, data)
         if data == "u":
             self.unmatched += 1
         else:
@@ -53,7 +53,7 @@ def test_socks():
     hypos = range(1, 1001)
     suite = Socks(hypos)
     for datum in "u" * 11:
-        suite.Update("u")
+        suite.update("u")
     thinkplot.plot_hist_bar(suite)
     thinkplot.config_plot(xlabel="# pairs", ylabel="PMF", xlim=[0, 30])
 
@@ -82,7 +82,7 @@ def test_socks():
     joint = thinkbayes.MakeJoint(prior_n_pairs, prior_n_odds)
     suite = Socks2(joint)
     for datum in "u" * 11:
-        suite.Update("u")
+        suite.update("u")
 
     post_n_pairs = suite.Marginal(0)
     thinkplot.plot_hist_bar(post_n_pairs)

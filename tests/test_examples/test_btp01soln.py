@@ -264,7 +264,7 @@ def test_sock4():
     socks = Socks()
     for white in range(n + 1):
         socks[white, n - white] = 1
-    socks.Update("pair")
+    socks.update("pair")
     thinkplot.plot_pdf_line(socks)
     thinkplot.config_plot(ylim=[0, 0.03])
 
@@ -279,7 +279,7 @@ def test_chess():
 
 def test_chess2():
     chess = Chess(["AB", "BA"])
-    chess.Update("WL")
+    chess.update("WL")
     chess.Print()
 
 
@@ -292,7 +292,7 @@ def test_1984():
 def test_19842():
     officer = {"everything": 0.15, "something": 0.25, "nothing": 0.6}
     pmf = ThoughtPolice(officer)
-    pmf.Update("none")
+    pmf.update("none")
     pmf.Print()
 
 
@@ -315,7 +315,7 @@ def test_robot2():
     colors = "GRRGGG"
     locs = range(len(colors))
     robot = Robot(locs)
-    robot.Update("R")
+    robot.update("R")
     robot.Print()
 
 
@@ -323,7 +323,7 @@ def test_robot3():
     colors = "GRRGGG"
     locs = range(len(colors))
     robot = Robot2(locs)
-    robot.Update((0, "R"))
+    robot.update((0, "R"))
     robot.Print()
 
 
@@ -331,7 +331,7 @@ def test_robot4():
     colors = "GRRGGG"
     locs = range(len(colors))
     robot = Robot2(locs)
-    robot.Update((1, "G"))
+    robot.update((1, "G"))
     robot.Print()
 
 
@@ -364,7 +364,7 @@ def test_red_dice5():
     d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2 (reddish)")
     prior = Dice({d1: Fraction(1), d2: Fraction(1)})
     posterior = prior.Copy()
-    posterior.Update("Red")
+    posterior.update("Red")
     # posterior.Print()
 
 
@@ -381,7 +381,7 @@ def test_red_dice6():
     d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2 (reddish)")
     prior = Dice({d1: Fraction(1), d2: Fraction(1)})
     posterior = prior.Copy()
-    posterior.Update("Red")
+    posterior.update("Red")
     predictive = MakeMixture(posterior)
     predictive.Print()
 
@@ -398,7 +398,7 @@ def test_red_dice7():
     d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2 (reddish)")
     prior = Dice({d1: Fraction(1), d2: Fraction(1)})
     posterior = prior.Copy()
-    posterior.Update("Red")
+    posterior.update("Red")
     predictive = MakeMixture(prior)
     predictive.Print()
 
@@ -431,7 +431,7 @@ def test_red_dice8():
     d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2 (reddish)")
     prior = Dice({d1: Fraction(1), d2: Fraction(1)})
     posterior = prior.Copy()
-    posterior.Update("Red")
+    posterior.update("Red")
     posterior = prior.Copy()
     posterior[d1] *= 1
     posterior[d2] *= 2

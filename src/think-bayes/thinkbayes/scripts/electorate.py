@@ -31,7 +31,7 @@ def main():
     thinkplot.plot_pdf_line(suite, label="prior")
 
     data = 1.1, 3.7, 53
-    suite.Update(data)
+    suite.update(data)
 
     thinkplot.plot_pdf_line(suite, label="posterior")
     thinkplot.show_plot()

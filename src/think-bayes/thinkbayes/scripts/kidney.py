@@ -335,7 +335,7 @@ class Cache(object):
         name: string
         """
         pmf = self.joint.Conditional(0, 1, bucket, label=name)
-        cdf = pmf.MakeCdf()
+        cdf = pmf.make_cdf()
         return cdf
 
     def ProbOlder(self, cm, age):

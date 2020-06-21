@@ -52,8 +52,8 @@ def main():
     suite2 = Hyrax2(hypos)
 
     data = 10, 10, 2
-    suite.Update(data)
-    suite2.Update(data)
+    suite.update(data)
+    suite2.update(data)
 
     thinkplot.plot_pdf_line(suite, label="binomial")
     thinkplot.plot_pdf_line(suite, label="hypergeom")

@@ -22,7 +22,7 @@ def main():
     suite = Train(hypos)
 
     for data in [32, 54, 70]:
-        suite.Update(data)
+        suite.update(data)
         thinkplot.plot_pmf_line(suite, label=f"after {data}")
 
     thinkplot.show_plot(xlabel="Number of trains", ylabel="PMF")

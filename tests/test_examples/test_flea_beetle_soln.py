@@ -121,7 +121,7 @@ def test_flea_beetles():
 
     # Now we can update with the data and print the posterior.
 
-    suite.Update((140, 15))
+    suite.update((140, 15))
     suite.Print()
 
     # Based on these measurements, the specimen is very likely to be an example of *Chaetocnema concinna*.

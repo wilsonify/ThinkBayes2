@@ -22,7 +22,7 @@ def main():
     hypos = range(1, 1001)
     suite = Train(hypos)
 
-    suite.Update(60)
+    suite.update(60)
     print(suite.Mean())
 
     thinkplot.pre_plot(1)

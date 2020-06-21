@@ -118,7 +118,7 @@ def main():
                 hypos.append((n, p1, p2))
 
     suite = Lincoln(hypos)
-    suite.Update(data)
+    suite.update(data)
 
     n_marginal = suite.Marginal(0)
 

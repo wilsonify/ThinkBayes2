@@ -156,13 +156,13 @@ def test_pmfs():
     # Now we can create a `Dice` object and update it.
 
     dice = Dice([4, 6, 8, 12])
-    dice.Update(6)
+    dice.update(6)
     dice.Print()
 
     # If we get more data, we can perform more updates.
 
     for roll in [8, 7, 7, 5, 4]:
-        dice.Update(roll)
+        dice.update(roll)
 
     # Here are the results.
 
@@ -184,7 +184,7 @@ def test_pmfs():
     # Here are the posterior probabilities after seeing Tank #37.
 
     tank = Tank(range(100))
-    tank.Update(37)
+    tank.update(37)
     thinkplot.plot_pdf_line(tank)
     tank.Mean()
 
@@ -195,7 +195,7 @@ def test_pmfs():
     # Solution
 
     thinkplot.plot_pdf_line(tank, color="0.7")
-    tank.Update(17)
+    tank.update(17)
     thinkplot.plot_pdf_line(tank)
     tank.Mean()
 
@@ -235,17 +235,17 @@ def test_pmfs():
 
     # Now we can update with a single heads:
 
-    euro.Update("H")
+    euro.update("H")
     thinkplot.plot_pdf_line(euro)
 
     # Another heads:
 
-    euro.Update("H")
+    euro.update("H")
     thinkplot.plot_pdf_line(euro)
 
     # And a tails:
 
-    euro.Update("T")
+    euro.update("T")
     thinkplot.plot_pdf_line(euro)
 
     # Starting over, here's what it looks like after 7 heads and 3 tails.
@@ -253,7 +253,7 @@ def test_pmfs():
     euro = Euro(range(101))
 
     for outcome in "HHHHHHHTTT":
-        euro.Update(outcome)
+        euro.update(outcome)
 
     thinkplot.plot_pdf_line(euro)
     euro.MaximumLikelihood()
@@ -266,7 +266,7 @@ def test_pmfs():
 
     evidence = "H" * 140 + "T" * 110
     for outcome in evidence:
-        euro.Update(outcome)
+        euro.update(outcome)
 
     thinkplot.plot_pdf_line(euro)
 
@@ -309,8 +309,8 @@ def test_pmfs():
 
     evidence = "H" * 140 + "T" * 110
     for outcome in evidence:
-        euro1.Update(outcome)
-        euro2.Update(outcome)
+        euro1.update(outcome)
+        euro2.update(outcome)
 
     thinkplot.plot_pdfs([euro1, euro2])
     thinkplot.config_plot(title="Posteriors")

@@ -87,7 +87,7 @@ def test_geiger_counter_problem():
 
     suite = Logistic(rs)
 
-    suite.Update(15)
+    suite.update(15)
 
     thinkplot.plot_pdf_line(suite)
     thinkplot.decorate(
@@ -163,7 +163,7 @@ def test_geiger_counter_problem():
 
     suite.Normalize()
 
-    suite.Update(15)
+    suite.update(15)
 
     pmf_r = suite.Marginal(0)
     thinkplot.plot_pdf_line(pmf_r)
@@ -215,7 +215,7 @@ def test_geiger_counter_problem():
 
     suite = Detector(r, f)
 
-    suite.Update(15)
+    suite.update(15)
 
     class Emitter(Suite):
         """Represents hypotheses about r."""
@@ -226,14 +226,14 @@ def test_geiger_counter_problem():
             data: number of counted per unit time
             hypo: Detector object
             """
-            return hypo.Update(data)
+            return hypo.update(data)
 
     rs = np.linspace(0, 300, 51)
 
     detectors = [Detector(r, f=0.1) for r in rs[1:]]
     suite = Emitter(detectors)
 
-    suite.Update(15)
+    suite.update(15)
 
     pmf_r = Pmf()
     for detector, p in suite.Items():

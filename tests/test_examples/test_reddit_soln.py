@@ -95,7 +95,7 @@ def test_unreliable_evaluators():
 
     # Solution
 
-    suite.Update("up")
+    suite.update("up")
 
     # Solution
 

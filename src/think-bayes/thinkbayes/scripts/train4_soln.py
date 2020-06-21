@@ -30,7 +30,7 @@ def main():
     suite = Train(hypos)
 
     data = 3, 70
-    suite.Update(data)
+    suite.update(data)
     print("posterior mean", suite.Mean())
 
     thinkplot.plot_pmf_line(suite, label="after 70")

@@ -83,7 +83,7 @@ def RunUpdate(suite, heads=140, tails=110):
     dataset = "H" * heads + "T" * tails
 
     for data in dataset:
-        suite.Update(data)
+        suite.update(data)
 
 
 def Summarize(suite):

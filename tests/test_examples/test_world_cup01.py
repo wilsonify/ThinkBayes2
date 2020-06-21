@@ -59,7 +59,7 @@ def test_wc3():
     # Here's the update after first goal at 11 minutes.
 
     thinkplot.plot_pdf_line(soccer, color="0.7")
-    soccer.Update(11)
+    soccer.update(11)
     thinkplot.plot_pdf_line(soccer)
     thinkplot.decorate(
         title="Posterior after 1 goal", xlabel="Goals per game", ylabel="PDF"
@@ -70,7 +70,7 @@ def test_wc3():
     #
 
     thinkplot.plot_pdf_line(soccer, color="0.7")
-    soccer.Update(12)
+    soccer.update(12)
     thinkplot.plot_pdf_line(soccer)
     thinkplot.decorate(
         title="Posterior after 2 goals", xlabel="Goals per game", ylabel="PDF"

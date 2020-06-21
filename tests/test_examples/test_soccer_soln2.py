@@ -67,7 +67,7 @@ def test_soccer():
 
     hypos = numpy.linspace(0, 12, 201)
     suite = Soccer(hypos)
-    suite.Update(
+    suite.update(
         0.33
     )  # fake data chosen by trial and error to yield the observed prior mean
 
@@ -82,8 +82,8 @@ def test_soccer():
 
     germany = suite.Copy(label="Germany")
     argentina = suite.Copy(label="Argentina")
-    germany.Update(1)
-    argentina.Update(0)
+    germany.update(1)
+    argentina.update(0)
 
     print("posterior mean Germany", germany.Mean())
     print("posterior mean Argentina", argentina.Mean())

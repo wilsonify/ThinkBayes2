@@ -69,7 +69,7 @@ def test_update():
     """
     suite = Coin(range(0, 101))
     posterior = suite.Copy()
-    posterior.Update("H")
+    posterior.update("H")
     thinkplot.plot_pdf_line(posterior)
 
 
@@ -84,5 +84,5 @@ def test_additional():
     posterior = suite.Copy()
     results = "HTHHTHHHTTHHHTH"
     for data in results:
-        posterior.Update(data)
+        posterior.update(data)
     thinkplot.plot_pdf_line(posterior)

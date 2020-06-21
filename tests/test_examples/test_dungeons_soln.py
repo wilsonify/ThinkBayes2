@@ -373,7 +373,7 @@ def test_min_max_same(d6):
 
     suite = Dungeons(prior)
 
-    suite.Update((5, 16, False))
+    suite.update((5, 16, False))
 
     ci = suite.CredibleInterval()
     print(ci)

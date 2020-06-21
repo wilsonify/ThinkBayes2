@@ -49,7 +49,7 @@ def Update(p, q, correct):
     """
     joint = thinkbayes.MakeJoint(p, q)
     suite = Sat(joint)
-    suite.Update(correct)
+    suite.update(correct)
     p, q = suite.Marginal(0, label=p.label), suite.Marginal(1, label=q.label)
     return p, q
 

@@ -39,7 +39,7 @@ def main():
     thinkplot.plot_pdf_line(suite, label="prior")
     print("prior mean", suite.Mean())
 
-    suite.Update(11)
+    suite.update(11)
     thinkplot.plot_pdf_line(suite, label="posterior 1")
     print("after one goal", suite.Mean())
 

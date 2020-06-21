@@ -14,7 +14,7 @@ from thinkbayes import thinkplot
 
 
 def DirichletMarginal(dirichlet, i):
-    return dirichlet.MarginalBeta(i).MakePmf()
+    return dirichlet.marginal_beta(i).MakePmf()
 
 
 Dirichlet.Marginal = DirichletMarginal
@@ -53,9 +53,9 @@ def plot_marginal_cdfs(joint):
     pmf_tiger = joint.Marginal(1)
     pmf_bear = joint.Marginal(2)
 
-    thinkplot.plot_cdf_line(pmf_lion.MakeCdf(), label="lions")
-    thinkplot.plot_cdf_line(pmf_tiger.MakeCdf(), label="tigers")
-    thinkplot.plot_cdf_line(pmf_bear.MakeCdf(), label="bears")
+    thinkplot.plot_cdf_line(pmf_lion.make_cdf(), label="lions")
+    thinkplot.plot_cdf_line(pmf_tiger.make_cdf(), label="tigers")
+    thinkplot.plot_cdf_line(pmf_bear.make_cdf(), label="bears")
 
     thinkplot.decorate(xlabel="Prevalence", ylabel="CDF")
 
@@ -93,7 +93,7 @@ def test_ltb(suite):
 
     for data in "LLLTTB":
         print(data)
-        suite.Update([data])
+        suite.update([data])
 
     plot_marginal_pmfs(suite)
 

@@ -53,15 +53,15 @@ def main():
     mean_interarrival = 90 / mean_rate
 
     # start with a prior based on the mean interarrival time
-    suite.Update(mean_interarrival)
+    suite.update(mean_interarrival)
     thinkplot.plot_pdf_line(suite, label="prior")
     print("prior mean", suite.Mean())
 
-    suite.Update(11)
+    suite.update(11)
     thinkplot.plot_pdf_line(suite, label="posterior 1")
     print("after one goal", suite.Mean())
 
-    suite.Update(12)
+    suite.update(12)
     thinkplot.plot_pdf_line(suite, label="posterior 2")
     print("after two goals", suite.Mean())
 

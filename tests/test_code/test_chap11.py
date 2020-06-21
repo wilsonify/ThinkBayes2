@@ -110,7 +110,7 @@ def test_euro():
     b_tri = TrianglePrior()
     b_tri.Remove(50)
     b_tri.Normalize()
-    likelihood = b_tri.Update(data)
+    likelihood = b_tri.update(data)
     print("p(D|B_tri)", likelihood)
     print("p(D|B_tri) / p(D|F)", likelihood / like_f)
 
@@ -125,13 +125,13 @@ def test_euro():
     logging.info("%r", f"likelihood = {likelihood}")
 
     euro = Euro(b_uniform)
-    euro.Update(data)
+    euro.update(data)
 
     likelihood = SuiteLikelihood(b_tri, data)
     logging.info("%r", f"likelihood = {likelihood}")
 
 
     euro = Euro(b_tri)
-    euro.Update(data)
+    euro.update(data)
 
     # This observation is the basis of hierarchical Bayesian models, of which this solution to the Euro problem is a simple example.

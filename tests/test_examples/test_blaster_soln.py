@@ -63,7 +63,7 @@ def test_alien_blaster_problem():
 
     pmf = Beta(1, 1).MakePmf()
     blaster = AlienBlaster(pmf)
-    blaster.Update(2)
+    blaster.update(2)
     thinkplot.plot_pdf_line(blaster)
     thinkplot.decorate(xlabel="Probability of hit", ylabel="PMF")
 
@@ -76,7 +76,7 @@ def test_alien_blaster_problem():
     pmf = Beta(5, 10).MakePmf()
     blaster = AlienBlaster(pmf)
     thinkplot.plot_pdf_line(blaster, color="gray")
-    blaster.Update(2)
+    blaster.update(2)
     thinkplot.plot_pdf_line(blaster)
     thinkplot.decorate(xlabel="Probability of hit", ylabel="PMF")
 

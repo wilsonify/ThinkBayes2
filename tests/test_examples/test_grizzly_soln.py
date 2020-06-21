@@ -66,7 +66,7 @@ def test_Grizzly():
     suite = Grizzly(hypos)
 
     data = 23, 19, 4
-    suite.Update(data)
+    suite.update(data)
 
     # Solution
 
@@ -110,7 +110,7 @@ def test_Grizzly():
     suite = Grizzly2(hypos)
 
     data = 23, 19, 4
-    suite.Update(data)
+    suite.update(data)
 
     # Solution
 

@@ -39,19 +39,19 @@ def test_bandit():
 
     # Now we can update with a single loss:
 
-    bandit.Update("L")
+    bandit.update("L")
     thinkplot.plot_pdf_line(bandit)
     thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
 
     # Another loss:
 
-    bandit.Update("L")
+    bandit.update("L")
     thinkplot.plot_pdf_line(bandit)
     thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
 
     # And a win:
 
-    bandit.Update("W")
+    bandit.update("W")
     thinkplot.plot_pdf_line(bandit)
     thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
 
@@ -60,7 +60,7 @@ def test_bandit():
     bandit = Bandit(range(101))
 
     for outcome in "WLLLLLLLLL":
-        bandit.Update(outcome)
+        bandit.update(outcome)
 
     thinkplot.plot_pdf_line(bandit)
     thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
@@ -129,7 +129,7 @@ def test_bandit():
     # Now suppose we play each machine 10 times.  This function updates our beliefs about one of the machines based on one outcome.
 
     def update(beliefs, i, outcome):
-        beliefs[i].Update(outcome)
+        beliefs[i].update(outcome)
 
     for i in range(4):
         for _ in range(10):

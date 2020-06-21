@@ -55,7 +55,7 @@ def test_UnreliableCoin():
     # And update with 3 heads and 7 tails.
 
     for outcome in "HHHTTTTTTT":
-        suite.Update(outcome)
+        suite.update(outcome)
 
     thinkplot.plot_pdf_line(suite)
 
@@ -68,7 +68,7 @@ def test_UnreliableCoin():
         prior = range(0, 101)
         suite = UnreliableCoin(prior, y=y)
         for outcome in "HHHTTTTTTT":
-            suite.Update(outcome)
+            suite.update(outcome)
 
         thinkplot.plot_pdf_line(suite, label="y=%g" % y)
 
@@ -209,8 +209,8 @@ def test_UnreliableCoin():
     # Note: this is a shortcut that should give us an approximate solution; later
     # we will come back and do this right with a joint distribution of q and r.
 
-    redditor.Update(("up", mean_q))
-    item.Update(("up", mean_r))
+    redditor.update(("up", mean_q))
+    item.update(("up", mean_r))
 
     # +
     # Solution

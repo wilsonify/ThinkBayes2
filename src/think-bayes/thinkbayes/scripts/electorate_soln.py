@@ -32,7 +32,7 @@ def main():
     thinkplot.plot_pdf_line(suite, label="prior")
 
     data = 1.1, 3.7, 53
-    suite.Update(data)
+    suite.update(data)
     thinkplot.plot_pdf_line(suite, label="posterior1")
     thinkplot.save_plot(
         root="electorate1",
@@ -47,7 +47,7 @@ def main():
     print(suite.ProbLess(50))
 
     data = -2.3, 4.1, 49
-    suite.Update(data)
+    suite.update(data)
 
     thinkplot.plot_pdf_line(suite, label="posterior2")
     thinkplot.save_plot(

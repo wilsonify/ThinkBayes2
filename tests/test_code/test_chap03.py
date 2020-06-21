@@ -60,7 +60,7 @@ def MakePosterior(high, dataset, constructor=Train):
     suite = constructor(hypos)
 
     for data in dataset:
-        suite.Update(data)
+        suite.update(data)
 
     return suite
 
@@ -81,11 +81,11 @@ def test_dice():
     # Here's what the update looks like:
 
     suite = Dice([4, 6, 8, 12, 20])
-    suite.Update(6)
+    suite.update(6)
     suite.Print()
     # And here's what it looks like after more data:
     for roll in [6, 8, 7, 7, 5, 4]:
-        suite.Update(roll)
+        suite.update(roll)
     suite.Print()
 
 
@@ -94,7 +94,7 @@ def test_hypos():
 
     hypos = range(1, 1001)
     suite = Train(hypos)
-    suite.Update(60)
+    suite.update(60)
 
     # Here's what the posterior looks like
 
@@ -165,7 +165,7 @@ def test_Train2():
     # +
     hypos = range(1, 1001)
     suite = Train(hypos)
-    suite.Update(60)
+    suite.update(60)
 
     suite.Percentile(5), suite.Percentile(95)
     # -

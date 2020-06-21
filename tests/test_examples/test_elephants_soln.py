@@ -181,7 +181,7 @@ def test_elephant():
 
     # We can update the top level of the hierarchy by calling `Update`
 
-    suite.Update(data)
+    suite.update(data)
 
     # We have to update the bottom level explicitly.
 

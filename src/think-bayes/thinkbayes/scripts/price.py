@@ -206,7 +206,7 @@ class Player(object):
         pmf = self.PmfPrice()
         self.prior = Price(pmf, self, label="prior")
         self.posterior = self.prior.Copy(label="posterior")
-        self.posterior.Update(guess)
+        self.posterior.update(guess)
 
     def OptimalBid(self, guess, opponent):
         """Computes the bid that maximizes expected return.

@@ -45,12 +45,12 @@ def main():
     # start with a prior based on a pseudo observation
     # chosen to yield the right prior mean
     suite1 = Soccer(hypos, label="Germany")
-    suite1.Update(0.34)
+    suite1.update(0.34)
     suite2 = suite1.Copy(label="Argentina")
 
     # update with the results of World Cup 2014 final
-    suite1.Update(1)
-    suite2.Update(0)
+    suite1.update(1)
+    suite2.update(0)
 
     print("posterior mean Germany", suite1.Mean())
     print("posterior mean Argentina", suite2.Mean())

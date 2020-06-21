@@ -58,7 +58,7 @@ def test_soccer():
 
     hypos = numpy.linspace(0, 12, 201)
     suite = Soccer(hypos)
-    suite.Update(
+    suite.update(
         134
     )  # fake data chosen by trial and error to yield the observed prior mean
 
@@ -67,7 +67,7 @@ def test_soccer():
 
     # Now that we have a prior, we can update with the time of the first goal, 11 minutes.
 
-    suite.Update(11)  # time until first goal is 11 minutes
+    suite.update(11)  # time until first goal is 11 minutes
     thinkplot.plot_pdf_line(suite)
     suite.Mean()
 
@@ -75,7 +75,7 @@ def test_soccer():
     #
     # Now we update with the second goal:
 
-    suite.Update(12)  # time between first and second goals is 12 minutes
+    suite.update(12)  # time between first and second goals is 12 minutes
     thinkplot.plot_pdf_line(suite)
     suite.Mean()
 

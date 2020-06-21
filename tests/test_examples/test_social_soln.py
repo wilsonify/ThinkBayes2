@@ -59,10 +59,10 @@ def test_social():
     # Solution
 
     for i in range(80):
-        suite.Update("YES")
+        suite.update("YES")
 
     for i in range(20):
-        suite.Update("NO")
+        suite.update("NO")
 
     # Solution
 

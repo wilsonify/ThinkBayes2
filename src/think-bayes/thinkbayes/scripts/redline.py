@@ -275,9 +275,9 @@ class WaitTimeCalculator(object):
         print("Mean zb", self.pmf_zb.Mean() / 60)
         print("Mean y", self.pmf_y.Mean() / 60)
 
-        cdf_z = self.pmf_z.MakeCdf()
-        cdf_zb = self.pmf_zb.MakeCdf()
-        cdf_y = self.pmf_y.MakeCdf()
+        cdf_z = self.pmf_z.make_cdf()
+        cdf_zb = self.pmf_zb.make_cdf()
+        cdf_y = self.pmf_y.make_cdf()
 
         cdfs = ScaleDists([cdf_z, cdf_zb, cdf_y], 1.0 / 60)
 
@@ -339,7 +339,7 @@ class ElapsedTimeEstimator(object):
 
         # posterior of elapsed time (based on number of passengers)
         self.post_x = self.prior_x.Copy(label="posterior x")
-        self.post_x.Update((lam, num_passengers))
+        self.post_x.update((lam, num_passengers))
 
         # predictive distribution of wait time
         self.pmf_y = PredictWaitTime(wtc.pmf_zb, self.post_x)
@@ -351,8 +351,8 @@ class ElapsedTimeEstimator(object):
         """
         # observed gaps
         cdf_prior_x = self.prior_x.MakeCdf()
-        cdf_post_x = self.post_x.MakeCdf()
-        cdf_y = self.pmf_y.MakeCdf()
+        cdf_post_x = self.post_x.make_cdf()
+        cdf_y = self.pmf_y.make_cdf()
 
         cdfs = ScaleDists([cdf_prior_x, cdf_post_x, cdf_y], 1.0 / 60)
 
@@ -399,7 +399,7 @@ class ArrivalRateEstimator(object):
         self.post_lam = self.prior_lam.Copy(label="posterior")
 
         for _k1, y, k2 in passenger_data:
-            self.post_lam.Update((y, k2))
+            self.post_lam.update((y, k2))
 
         print("Mean posterior lambda", self.post_lam.Mean())
 
@@ -413,7 +413,7 @@ class ArrivalRateEstimator(object):
 
         # convert units to passengers per minute
         prior = self.prior_lam.MakeCdf().Scale(60)
-        post = self.post_lam.MakeCdf().Scale(60)
+        post = self.post_lam.make_cdf().Scale(60)
 
         thinkplot.plot_cdfs([prior, post])
 
@@ -528,7 +528,7 @@ class GapDirichlet(thinkbayes.Dirichlet):
         print(k, y)
         prior = self.PredictivePmf(self.xs)
         gaps = Gaps(prior)
-        gaps.Update(y)
+        gaps.update(y)
         probs = gaps.Probs(self.xs)
 
         self.params += numpy.array(probs)
@@ -608,8 +608,8 @@ class GapTimeEstimator(object):
     def MakePlot(self):
         """Plot the CDFs."""
         thinkplot.plot_cdf_line(self.pmf_y.MakeCdf())
-        thinkplot.plot_cdf_line(self.prior_zb.MakeCdf())
-        thinkplot.plot_cdf_line(self.post_zb.MakeCdf())
+        thinkplot.plot_cdf_line(self.prior_zb.make_cdf())
+        thinkplot.plot_cdf_line(self.post_zb.make_cdf())
         thinkplot.plot_cdf_line(self.pmf_mean_zb.MakeCdf())
         thinkplot.show_plot()
 
@@ -647,7 +647,7 @@ def TestGte():
     thinkplot.clear_figure()
 
     # thinkplot.Cdf(wtc.pmf_z.MakeCdf(label="actual z"))
-    thinkplot.plot_cdf_line(wtc.pmf_zb.MakeCdf(label="actual zb"))
+    thinkplot.plot_cdf_line(wtc.pmf_zb.make_cdf(label="actual zb"))
     ite.MakePlot()
 
 
@@ -680,7 +680,7 @@ class WaitMixtureEstimator(object):
 
         # plot the MetaPmf
         for pmf, prob in sorted(self.metapmf.Items()):
-            cdf = pmf.MakeCdf().Scale(1.0 / 60)
+            cdf = pmf.make_cdf().Scale(1.0 / 60)
             width = 2 / math.log(-math.log(prob))
             thinkplot.plot_line(
                 cdf.xs, cdf.ps, alpha=0.2, linewidth=width, color="blue", label=""
@@ -689,7 +689,7 @@ class WaitMixtureEstimator(object):
         # plot the mixture and the distribution based on a point estimate
         thinkplot.pre_plot(2)
         # thinkplot.Cdf(self.point.MakeCdf(label='point').Scale(1.0/60))
-        thinkplot.plot_cdf_line(self.mixture.MakeCdf(label="mix").Scale(1.0 / 60))
+        thinkplot.plot_cdf_line(self.mixture.make_cdf(label="mix").Scale(1.0 / 60))
 
         thinkplot.save_plot(
             root=root,
@@ -823,7 +823,7 @@ def RunLoop(gap_times, nums, lam=0.0333):
     pmf_z = thinkbayes.Pmf(sample_z)
 
     # compute the biased pmf and add some long delays
-    cdf_zp = BiasPmf(pmf_z).MakeCdf()
+    cdf_zp = BiasPmf(pmf_z).make_cdf()
     sample_zb = numpy.append(cdf_zp.Sample(n), [1800, 2400, 3000])
 
     # smooth the distribution of zb
@@ -840,7 +840,7 @@ def RunLoop(gap_times, nums, lam=0.0333):
         ete = ElapsedTimeEstimator(wtc, lam, num_passengers)
 
         # compute the posterior prob of waiting more than 15 minutes
-        cdf_y = ete.pmf_y.MakeCdf()
+        cdf_y = ete.pmf_y.make_cdf()
         prob = 1 - cdf_y.Prob(900)
         probs.append(prob)
 

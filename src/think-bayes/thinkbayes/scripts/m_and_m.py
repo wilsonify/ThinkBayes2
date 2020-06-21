@@ -35,8 +35,8 @@ class M_and_M(Suite):
 def main():
     suite = M_and_M("AB")
 
-    suite.Update(("bag1", "yellow"))
-    suite.Update(("bag2", "green"))
+    suite.update(("bag1", "yellow"))
+    suite.update(("bag2", "green"))
 
     suite.Print()
 

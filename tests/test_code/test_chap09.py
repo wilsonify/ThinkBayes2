@@ -139,7 +139,7 @@ def MakeWidthSuite(data):
     mus = np.linspace(115, 160, 51)
     sigmas = np.linspace(1, 10, 51)
     suite = Beetle(product(mus, sigmas))
-    suite.Update(data)
+    suite.update(data)
     return suite
 
 
@@ -199,7 +199,7 @@ def test_reading(drp_scores_df):
     sigmas = np.linspace(5, 30, 10)
     control = Normal(product(mus, sigmas))
     data = df[df.Treatment == "Control"].Response
-    control.Update(data)
+    control.update(data)
 
     thinkplot.contour_plot(
         control, pcolor_bool=True
@@ -321,7 +321,7 @@ def test_flea_beetles(flea_beetles_df):
         mus = np.linspace(8, 16, 10)
         sigmas = np.linspace(0.1, 2, 10)
         suite = Beetle(product(mus, sigmas))
-        suite.Update(data)
+        suite.update(data)
         return suite
 
     for name, group in groups:
@@ -346,7 +346,7 @@ def test_flea_beetles(flea_beetles_df):
     for hypo, prob in suite.Items():
         print(hypo, prob)
 
-    suite.Update((145, 14))
+    suite.update((145, 14))
     for hypo, prob in suite.Items():
         print(hypo, prob)
 

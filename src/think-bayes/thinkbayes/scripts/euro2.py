@@ -62,7 +62,7 @@ def Version1():
     dataset = "H" * heads + "T" * tails
 
     for data in dataset:
-        suite.Update(data)
+        suite.update(data)
 
     return suite
 
@@ -80,7 +80,7 @@ def Version3():
     suite = Euro2(range(0, 101))
     heads, tails = 140, 110
 
-    suite.Update((heads, tails))
+    suite.update((heads, tails))
     return suite
 
 

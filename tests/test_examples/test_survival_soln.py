@@ -156,7 +156,7 @@ def test_weibull():
 
     # Solution
 
-    suite.Update(1)
+    suite.update(1)
 
     # Solution
 

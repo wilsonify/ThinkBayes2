@@ -61,7 +61,7 @@ def test_urns():
     B5G0 = "B" * 5
 
     for data in B5G0:
-        jacob.Update(data)
+        jacob.update(data)
 
     jacob.Print()
 
@@ -75,7 +75,7 @@ def test_urns():
     B12G3 = "B" * 12 + "G" * 3
 
     for data in B12G3:
-        emily.Update(data)
+        emily.update(data)
 
     emily.Print()
 
@@ -121,21 +121,21 @@ def test_urns():
     # Here's the effect on Jacob.
 
     print(prob_b_next(jacob))
-    jacob.Update("B")
+    jacob.update("B")
     print(prob_b_next(jacob))
 
     # And on Emily.
 
     print(prob_b_next(emily))
-    emily.Update("B")
+    emily.update("B")
     print(prob_b_next(emily))
 
     # Suppose we draw a **green** marble from the same urn and show it to Jacob and Emily.  How much do their beliefs about Bnext change?
 
     print(prob_b_next(jacob))
-    jacob.Update("G")
+    jacob.update("G")
     print(prob_b_next(jacob))
 
     print(prob_b_next(emily))
-    emily.Update("G")
+    emily.update("G")
     print(prob_b_next(emily))

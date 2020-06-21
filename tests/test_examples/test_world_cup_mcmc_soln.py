@@ -55,7 +55,7 @@ def test_world_cup():
     # Here's the update after the first goal at 11 minutes.
 
     posterior1 = prior.Copy()
-    posterior1.Update(11)
+    posterior1.update(11)
 
     thinkplot.plot_pdf_line(prior, color="0.7")
     thinkplot.plot_pdf_line(posterior1)
@@ -68,7 +68,7 @@ def test_world_cup():
     #
 
     posterior2 = posterior1.Copy()
-    posterior2.Update(12)
+    posterior2.update(12)
 
     thinkplot.plot_pdf_line(prior, color="0.7")
     thinkplot.plot_pdf_line(posterior1, color="0.7")
@@ -130,7 +130,7 @@ def test_world_cup():
     #
     # Building the MCMC model incrementally, start with just the prior distribution for `lam`.
 
-    cdf_gamma = pmf_gamma.MakeCdf()
+    cdf_gamma = pmf_gamma.make_cdf()
 
     mean_rate = 1.3
 
@@ -176,7 +176,7 @@ def test_world_cup():
     print(posterior1.Mean())
     cdf_lam = Cdf(lam_sample)
 
-    thinkplot.plot_cdf_line(posterior1.MakeCdf(), label="Posterior analytic")
+    thinkplot.plot_cdf_line(posterior1.make_cdf(), label="Posterior analytic")
     thinkplot.plot_cdf_line(cdf_lam, label="Posterior MCMC")
     thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
 
@@ -196,7 +196,7 @@ def test_world_cup():
     print(posterior2.Mean())
     cdf_lam = Cdf(lam_sample)
 
-    thinkplot.plot_cdf_line(posterior2.MakeCdf(), label="Posterior analytic")
+    thinkplot.plot_cdf_line(posterior2.make_cdf(), label="Posterior analytic")
     thinkplot.plot_cdf_line(cdf_lam, label="Posterior MCMC")
     thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
 
@@ -265,7 +265,7 @@ def test_world_cup():
 
     germany = Soccer2(pmf)
 
-    germany.Update(1)
+    germany.update(1)
 
     def PredictiveDist(suite, duration=1, label="pred"):
         """Computes the distribution of goals scored in a game.
@@ -286,6 +286,6 @@ def test_world_cup():
     thinkplot.plot_hist_bar(pmf_goals, width=0.45, align="left")
     thinkplot.decorate(xlabel="Predicted # goals", ylabel="Pmf")
 
-    thinkplot.plot_cdf_line(germany_pred.MakeCdf(), label="Grid")
+    thinkplot.plot_cdf_line(germany_pred.make_cdf(), label="Grid")
     thinkplot.plot_cdf_line(Cdf(goal_sample), label="MCMC")
     thinkplot.decorate(xlabel="Predicted # goals", ylabel="Pmf")

@@ -245,8 +245,8 @@ def test_chapt7():
 
     # Solution
 
-    suite1.Update(0)
-    suite2.Update(0)
+    suite1.update(0)
+    suite2.update(0)
     time_dist1 = MakeGoalTimePmf(suite1)
     time_dist2 = MakeGoalTimePmf(suite2)
     p_win_in_overtime = time_dist1.ProbLess(time_dist2)

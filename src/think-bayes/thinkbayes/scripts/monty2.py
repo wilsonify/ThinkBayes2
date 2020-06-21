@@ -25,7 +25,7 @@ class Monty(Suite):
 
 def main():
     suite = Monty("ABC")
-    suite.Update("B")
+    suite.update("B")
     suite.Print()
 
 

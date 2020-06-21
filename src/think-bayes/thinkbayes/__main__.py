@@ -1384,7 +1384,7 @@ class UnimplementedMethodException(Exception):
 class Suite(Pmf):
     """Represents a suite of hypotheses and their probabilities."""
 
-    def Update(self, data):
+    def update(self, data):
         """Updates each hypothesis based on the data.
 
         data: any representation of the data
@@ -1720,7 +1720,7 @@ def CredibleInterval(pmf, percentage=90):
     Returns:
         sequence of two floats, low and high
     """
-    cdf = pmf.MakeCdf()
+    cdf = pmf.make_cdf()
     prob = (1 - percentage / 100) / 2
     interval = cdf.Value(prob), cdf.Value(1 - prob)
     return interval

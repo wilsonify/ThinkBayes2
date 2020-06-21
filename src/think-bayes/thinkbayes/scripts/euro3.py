@@ -97,7 +97,7 @@ def Main():
     b_tri = TrianglePrior()
     b_tri.Remove(50)
     b_tri.Normalize()
-    likelihood = b_tri.Update(data)
+    likelihood = b_tri.update(data)
     print("p(D|B_tri)", likelihood)
     print("p(D|B_tri) / p(D|F)", likelihood / like_f)
 

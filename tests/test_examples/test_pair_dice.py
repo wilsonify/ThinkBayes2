@@ -193,9 +193,9 @@ def test_BayesTable():
 
     # And the posterior:
 
-    suite.Update(3)
+    suite.update(3)
     suite.Print()
 
     # And the posterior probability of getting `11` on the next roll.
 
-    suite.Update(11)
+    suite.update(11)

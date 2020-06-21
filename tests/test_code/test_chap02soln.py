@@ -238,7 +238,7 @@ def test_pmf_class():
     # And it works.
 
     pmf = Monty("ABC")
-    pmf.Update("B")
+    pmf.update("B")
     pmf.Print()
 
     # ## The M&M problem
@@ -286,13 +286,13 @@ def test_pmf_class():
     # And here's an update:
 
     suite = M_and_M("AB")
-    suite.Update(("bag1", "yellow"))
-    suite.Update(("bag2", "green"))
+    suite.update(("bag1", "yellow"))
+    suite.update(("bag2", "green"))
     suite.Print()
 
     # **Exercise:**  Suppose you draw another M&M from `bag1` and it's blue.  What can you conclude?  Run the update to confirm your intuition.
 
-    suite.Update(("bag1", "blue"))
+    suite.update(("bag1", "blue"))
     suite.Print()
 
     # **Exercise:**  Now suppose you draw an M&M from `bag2` and it's blue.  What does that mean?  Run the update to see what happens.

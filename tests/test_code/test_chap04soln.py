@@ -37,7 +37,7 @@ def test_euro_problem():
     dataset = "H" * 140 + "T" * 110
 
     for data in dataset:
-        suite.Update(data)
+        suite.update(data)
 
     # And here's what the posterior looks like.
 
@@ -106,7 +106,7 @@ def test_euro_problem():
         """
         dataset = "H" * heads + "T" * tails
         for data in dataset:
-            suite.Update(data)
+            suite.update(data)
 
     for suite in suites:
         RunUpdate(suite)
@@ -140,7 +140,7 @@ def test_euro_problem():
 
     suite = Euro2(range(0, 101))
     dataset = 140, 110
-    suite.Update(dataset)
+    suite.update(dataset)
 
     # Here's what the posterior looks like.
 

@@ -63,7 +63,7 @@ def RunUpdate(suite, heads=140, tails=110):
     """
     dataset = "H" * heads + "T" * tails
     for data in dataset:
-        suite.Update(data)
+        suite.update(data)
 
 
 class Euro2(Suite):
@@ -197,7 +197,7 @@ def test_uniform():
     dataset = "H" * 140 + "T" * 110
 
     for data in dataset:
-        suite.Update(data)
+        suite.update(data)
     # -
 
     # And here's what the posterior looks like.
@@ -247,7 +247,7 @@ def test_euro2():
 
     suite = Euro2(range(0, 101))
     dataset = 140, 110
-    suite.Update(dataset)
+    suite.update(dataset)
 
     # Here's what the posterior looks like.
 

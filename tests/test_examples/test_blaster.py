@@ -110,7 +110,7 @@ def test_blaster31(prior):
 
     pmf = Beta(1, 1).MakePmf()
     blaster = AlienBlaster(pmf)
-    blaster.Update(2)
+    blaster.update(2)
     thinkplot.plot_pdf_line(blaster)
     assert prior.Mean() < blaster.Mean()
 
@@ -124,7 +124,7 @@ def test_blaster32(prior):
     """
     pmf = Beta(2, 3).MakePmf()
     blaster = AlienBlaster(pmf)
-    blaster.Update(2)
+    blaster.update(2)
     thinkplot.plot_pdf_line(blaster)
 
     assert (
@@ -145,7 +145,7 @@ def test_blaster35(prior):
     """
     pmf = Beta(2, 3).MakePmf()
     blaster = AlienBlaster(pmf)
-    blaster.Update(2)
+    blaster.update(2)
     thinkplot.plot_pdf_line(blaster)
 
     assert (

@@ -143,7 +143,7 @@ def test_birthday_problem():
     # Here's the update.
 
     for data in zip(xs, diagnosed, totals):
-        suite.Update(data)
+        suite.update(data)
 
     # Here's the posterior marginal distribution for `b0`.
 
