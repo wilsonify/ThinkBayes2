@@ -1824,7 +1824,7 @@ def PlotSubjectCdf(code=None, clean_param=0):
 
     if code is None:
         subjects = subject_map.values()
-        subject = random.choice(subjects)
+        subject = np.random.choice(subjects)
         code = subject.code
     elif code == "uber":
         subject = uber_subject
