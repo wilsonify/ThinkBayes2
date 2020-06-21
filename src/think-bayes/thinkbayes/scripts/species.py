@@ -285,9 +285,9 @@ class Subject(object):
 
         _, mix = self.suite.DistOfPrevalence(index)
         count, _ = self.GetSpecies(index)
-        mix.label = "%d (%d)" % (rank, count)
+        mix.label = f"{rank} ({count})"
 
-        print("90%% CI for prevalence of species %d:" % rank, end=" ")
+        print(f"90%% CI for prevalence of species {rank}: ")
         print(mix.CredibleInterval(90))
 
         if cdf_flag:
@@ -473,10 +473,10 @@ def MakeConditionals(curves, ks):
     cdfs = []
     for k in ks:
         pmf = joint.Conditional(1, 0, k)
-        pmf.label = "k=%d" % k
+        pmf.label = f"k={k}"
         cdf = pmf.MakeCdf()
         cdfs.append(cdf)
-        print("90%% credible interval for %d" % k, end=" ")
+        print(f"90%% credible interval for {k} ")
         print(cdf.CredibleInterval(90))
     return cdfs
 
@@ -533,7 +533,7 @@ def SpeciesGenerator(names, num):
         i += 1
 
     while i < num:
-        yield "unseen-%d" % i
+        yield f"unseen-{i}"
         i += 1
 
 
@@ -566,7 +566,7 @@ def ReadRarefactedData(filename="journal.pone.0047712.s001.csv", clean_param=0):
 
         # append a number to the species names so they're unique
         species = t[1]
-        species = "%s-%d" % (species, i)
+        species = f"{species}-{i}"
         i += 1
 
         count = int(t[2])
@@ -616,7 +616,7 @@ def ReadCompleteDataset(filename="BBB_data_from_Rob.csv", clean_param=0):
         otu_names = t[-1]
         taxons = otu_names.split(";")
         species = taxons[-1]
-        species = "%s-%d" % (species, i)
+        species = f"{species}-{i}"
         i += 1
 
         counts = [int(x) for x in t[1:-1]]
@@ -1393,9 +1393,8 @@ def PrintSummary(subject):
     subject: Subject
     """
     print(subject.code)
-    print("found %d species in %d reads" % (subject.num_species, subject.num_reads))
-
-    print("total %d species in %d reads" % (subject.total_species, subject.total_reads))
+    print(f"found {subject.num_species} species in {subject.num_reads} reads")
+    print(f"total {subject.total_species} species in {subject.total_reads} reads")
 
     cdf = subject.suite.DistN().MakeCdf()
     print("n")
