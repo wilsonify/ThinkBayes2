@@ -102,7 +102,8 @@ class Interpolator(object):
         """Looks up y and returns the corresponding value of x."""
         return self._Bisect(y, self.ys, self.xs)
 
-    def _Bisect(self, x, xs, ys):
+    @staticmethod
+    def _Bisect(x, xs, ys):
         """Helper function."""
         if x <= xs[0]:
             return ys[0]
@@ -2971,7 +2972,7 @@ def PercentileRows(ys_seq, percents):
     array = np.zeros((nrows, ncols))
 
     for i, ys in enumerate(ys_seq):
-        array[i,] = ys
+        array[i, ] = ys
 
     array = np.sort(array, axis=0)
 
