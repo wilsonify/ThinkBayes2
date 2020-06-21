@@ -2738,7 +2738,6 @@ def CorrelatedGenerator(rho):
 
     sigma = np.sqrt(1 - rho ** 2)
     while True:
-
         x = np.random.normal(x * rho, sigma)
         yield x
 
@@ -3042,7 +3041,7 @@ class HypothesisTest(object):
 
 
 def main():
-    pass
+    print("Usage: import thinkbayes")
 
 
 if __name__ == "__main__":
