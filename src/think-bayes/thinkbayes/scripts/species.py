@@ -223,8 +223,8 @@ class Subject(object):
         for _ in range(num_sims):
             _, observations = self.GenerateObservations(add_reads)
             all_seen = seen.union(observations)
-            l = len(all_seen) - len(seen)
-            pmf.Incr(l)
+            len_all_seen_minus_seen = len(all_seen) - len(seen)
+            pmf.Incr(len_all_seen_minus_seen)
 
         pmf.Normalize()
         self.pmf_l = pmf
