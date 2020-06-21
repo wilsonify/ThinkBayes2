@@ -164,7 +164,7 @@ class Subject(object):
         """
         counts = self.GetCounts()
         total = sum(counts)
-        prevalences = np.array(counts, dtype=numpy.float) / total
+        prevalences = np.array(counts, dtype=np.float) / total
         return prevalences
 
     def Process(self, low=None, high=500, conc=1, iters=100):
