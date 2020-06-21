@@ -246,7 +246,7 @@ def test_paintball():
 
     for beta in betas:
         pmf = MakeLocationPmf(alpha, beta, locations)
-        pmf.label = "beta = %d" % beta
+        pmf.label = f"beta = {beta}"
         thinkplot.Pdf(pmf)
 
     thinkplot.Config(xlabel="Distance", ylabel="Prob")
@@ -271,7 +271,7 @@ def test_paintball():
 
     for beta in betas:
         cond = suite.Conditional(0, 1, beta)
-        cond.label = "beta = %d" % beta
+        cond.label = f"beta = {beta}"
         thinkplot.Pdf(cond)
 
     thinkplot.Config(xlabel="Distance", ylabel="Prob")
