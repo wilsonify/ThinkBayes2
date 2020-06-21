@@ -110,7 +110,7 @@ WAIT_TIME_LABEL = "Wait time (min)"
 TIME_LABEL = "Time (min)"
 
 
-def BiasPmf(pmf, label=None, invert=False):
+def bias_pmf(pmf, label=None, invert=False):
     """Returns the Pmf with oversampling proportional to value.
 
     If pmf is the distribution of true values, the result is the
@@ -142,7 +142,7 @@ def BiasPmf(pmf, label=None, invert=False):
     return new_pmf
 
 
-def UnbiasPmf(pmf, label=None):
+def unbias_pmf(pmf, label=None):
     """Returns the Pmf with oversampling proportional to 1/value.
 
     Args:
@@ -152,21 +152,21 @@ def UnbiasPmf(pmf, label=None):
      Returns:
        Pmf object
     """
-    return BiasPmf(pmf, label, invert=True)
+    return bias_pmf(pmf, label, invert=True)
 
 
-def MakeUniformPmf(low, high):
+def make_uniform_pmf(low, high):
     """Make a uniform Pmf.
 
     low: lowest value (inclusive)
     high: highest value (inclusive)
     """
-    xs = MakeRange(low, high)
+    xs = make_range(low, high)
     pmf = thinkbayes.Pmf(xs)
     return pmf
 
 
-def MakeRange(low=10, high=None, skip=10):
+def make_range(low=10, high=None, skip=10):
     """Makes a range representing possible gap times in seconds.
 
     low: where to start
@@ -197,19 +197,19 @@ class WaitTimeCalculator(object):
         """
         if inverse:
             self.pmf_zb = pmf
-            self.pmf_z = UnbiasPmf(pmf, label="z")
+            self.pmf_z = unbias_pmf(pmf, label="z")
         else:
             self.pmf_z = pmf
-            self.pmf_zb = BiasPmf(pmf, label="zb")
+            self.pmf_zb = bias_pmf(pmf, label="zb")
 
         # distribution of wait time
-        self.pmf_y = PmfOfWaitTime(self.pmf_zb)
+        self.pmf_y = pmf_of_wait_time(self.pmf_zb)
 
         # the distribution of elapsed time is the same as the
         # distribution of wait time
         self.pmf_x = self.pmf_y
 
-    def GenerateSampleWaitTimes(self, n):
+    def generate_sample_wait_times(self, n):
         """Generates a random sample of wait times.
 
         n: sample size
@@ -220,7 +220,7 @@ class WaitTimeCalculator(object):
         sample = cdf_y.Sample(n)
         return sample
 
-    def GenerateSampleGaps(self, n):
+    def generate_sample_gaps(self, n):
         """Generates a random sample of gaps seen by passengers.
 
         n: sample size
@@ -231,7 +231,7 @@ class WaitTimeCalculator(object):
         sample = cdf_zb.Sample(n)
         return sample
 
-    def GenerateSamplePassengers(self, lam, n):
+    def generate_sample_passengers(self, lam, n):
         """Generates a sample wait time and number of arrivals.
 
         lam: arrival rate in passengers per second
@@ -242,8 +242,8 @@ class WaitTimeCalculator(object):
         y: wait time
         k2: passengers arrived while waiting
         """
-        zs = self.GenerateSampleGaps(n)
-        xs, ys = SplitGaps(zs)
+        zs = self.generate_sample_gaps(n)
+        xs, ys = split_gaps(zs)
 
         res = []
         for x, y in zip(xs, ys):
@@ -253,12 +253,12 @@ class WaitTimeCalculator(object):
 
         return res
 
-    def PlotPmfs(self, root="redline0"):
+    def plot_pmfs(self, root="redline0"):
         """Plots the computed Pmfs.
 
         root: string
         """
-        pmfs = ScaleDists([self.pmf_z, self.pmf_zb], 1.0 / 60)
+        pmfs = scale_dists([self.pmf_z, self.pmf_zb], 1.0 / 60)
 
         thinkplot.clear_figure()
         thinkplot.pre_plot(2)
@@ -266,7 +266,7 @@ class WaitTimeCalculator(object):
 
         thinkplot.save_plot(root=root, xlabel=TIME_LABEL, ylabel="CDF", formats=FORMATS)
 
-    def MakePlot(self, root="redline2"):
+    def make_plot(self, root="redline2"):
         """Plots the computed CDFs.
 
         root: string
@@ -279,7 +279,7 @@ class WaitTimeCalculator(object):
         cdf_zb = self.pmf_zb.make_cdf()
         cdf_y = self.pmf_y.make_cdf()
 
-        cdfs = ScaleDists([cdf_z, cdf_zb, cdf_y], 1.0 / 60)
+        cdfs = scale_dists([cdf_z, cdf_zb, cdf_y], 1.0 / 60)
 
         thinkplot.clear_figure()
         thinkplot.pre_plot(3)
@@ -287,7 +287,7 @@ class WaitTimeCalculator(object):
         thinkplot.save_plot(root=root, xlabel=TIME_LABEL, ylabel="CDF", formats=FORMATS)
 
 
-def SplitGaps(zs):
+def split_gaps(zs):
     """Splits zs into xs and ys.
 
     zs: sequence of gaps
@@ -299,7 +299,7 @@ def SplitGaps(zs):
     return xs, ys
 
 
-def PmfOfWaitTime(pmf_zb):
+def pmf_of_wait_time(pmf_zb):
     """Distribution of wait time.
 
     pmf_zb: dist of gap time as seen by a random observer
@@ -308,14 +308,14 @@ def PmfOfWaitTime(pmf_zb):
     """
     metapmf = thinkbayes.Pmf()
     for gap, prob in pmf_zb.Items():
-        uniform = MakeUniformPmf(0, gap)
+        uniform = make_uniform_pmf(0, gap)
         metapmf.Set(uniform, prob)
 
     pmf_y = thinkbayes.MakeMixture(metapmf, label="y")
     return pmf_y
 
 
-def ScaleDists(dists, factor):
+def scale_dists(dists, factor):
     """Scales each of the distributions in a sequence.
 
     dists: sequence of Pmf or Cdf
@@ -342,9 +342,9 @@ class ElapsedTimeEstimator(object):
         self.post_x.update((lam, num_passengers))
 
         # predictive distribution of wait time
-        self.pmf_y = PredictWaitTime(wtc.pmf_zb, self.post_x)
+        self.pmf_y = predict_wait_time(wtc.pmf_zb, self.post_x)
 
-    def MakePlot(self, root="redline3"):
+    def make_plot(self, root="redline3"):
         """Plot the CDFs.
 
         root: string
@@ -354,7 +354,7 @@ class ElapsedTimeEstimator(object):
         cdf_post_x = self.post_x.make_cdf()
         cdf_y = self.pmf_y.make_cdf()
 
-        cdfs = ScaleDists([cdf_prior_x, cdf_post_x, cdf_y], 1.0 / 60)
+        cdfs = scale_dists([cdf_prior_x, cdf_post_x, cdf_y], 1.0 / 60)
 
         thinkplot.clear_figure()
         thinkplot.pre_plot(3)
@@ -403,7 +403,7 @@ class ArrivalRateEstimator(object):
 
         print("Mean posterior lambda", self.post_lam.Mean())
 
-    def MakePlot(self, root="redline1"):
+    def make_plot(self, root="redline1"):
         """Plot the prior and posterior CDF of passengers arrival rate.
 
         root: string
@@ -442,7 +442,7 @@ class Elapsed(thinkbayes.Suite):
         return like
 
 
-def PredictWaitTime(pmf_zb, pmf_x):
+def predict_wait_time(pmf_zb, pmf_x):
     """Computes the distribution of wait times.
 
     Enumerate all pairs of zb from pmf_zb and x from pmf_x,
@@ -453,11 +453,11 @@ def PredictWaitTime(pmf_zb, pmf_x):
     """
     pmf_y = pmf_zb - pmf_x
     pmf_y.label = "pred y"
-    RemoveNegatives(pmf_y)
+    remove_negatives(pmf_y)
     return pmf_y
 
 
-def RemoveNegatives(pmf):
+def remove_negatives(pmf):
     """Removes negative values from a PMF.
 
     pmf: Pmf
@@ -502,14 +502,14 @@ class GapDirichlet(thinkbayes.Dirichlet):
         self.xs = xs
         self.mean_zbs = []
 
-    def PmfMeanZb(self):
+    def pmf_mean_zb(self):
         """Makes the Pmf of mean zb.
 
         Values stored in mean_zbs.
         """
         return thinkbayes.Pmf(self.mean_zbs)
 
-    def Preload(self, data):
+    def preload(self, data):
         """Adds pseudocounts to the parameters.
 
         data: sequence of pseudocounts
@@ -557,7 +557,7 @@ class GapDirichlet2(GapDirichlet):
         elapsed = ElapsedTimeEstimator(wtc, lam=0.0333, num_passengers=k)
 
         # use posterior_x and observed y to estimate observed z
-        obs_zb = elapsed.post_x + Floor(y)
+        obs_zb = elapsed.post_x + floor(y)
         probs = obs_zb.Probs(self.xs)
 
         mean_zb = obs_zb.Mean()
@@ -582,7 +582,7 @@ class GapTimeEstimator(object):
         dirichlet = GapDirichlet2(self.xs)
         dirichlet.params /= 1.0
 
-        dirichlet.Preload(self.pcounts)
+        dirichlet.preload(self.pcounts)
         dirichlet.params /= 20.0
 
         self.prior_zb = dirichlet.PredictivePmf(self.xs, label="prior zb")
@@ -590,12 +590,12 @@ class GapTimeEstimator(object):
         for k1, y, _k2 in passenger_data:
             dirichlet.Update((k1, y))
 
-        self.pmf_mean_zb = dirichlet.PmfMeanZb()
+        self.pmf_mean_zb = dirichlet.pmf_mean_zb()
 
         self.post_zb = dirichlet.PredictivePmf(self.xs, label="post zb")
-        self.post_z = UnbiasPmf(self.post_zb, label="post z")
+        self.post_z = unbias_pmf(self.post_zb, label="post z")
 
-    def PlotPmfs(self):
+    def plot_pmfs(self):
         """Plot the PMFs."""
         print("Mean y", self.pmf_y.Mean())
         print("Mean z", self.post_z.Mean())
@@ -605,7 +605,7 @@ class GapTimeEstimator(object):
         thinkplot.plot_pmf_line(self.post_z)
         thinkplot.plot_pmf_line(self.post_zb)
 
-    def MakePlot(self):
+    def make_plot(self):
         """Plot the CDFs."""
         thinkplot.plot_cdf_line(self.pmf_y.MakeCdf())
         thinkplot.plot_cdf_line(self.prior_zb.make_cdf())
@@ -614,7 +614,7 @@ class GapTimeEstimator(object):
         thinkplot.show_plot()
 
 
-def Floor(x, factor=10):
+def floor(x, factor=10):
     """Rounds down to the nearest multiple of factor.
 
     When factor=10, all numbers from 10 to 19 get floored to 10.
@@ -622,7 +622,7 @@ def Floor(x, factor=10):
     return int(x / factor) * factor
 
 
-def TestGte():
+def test_gap_time_estimator():
     """Tests the GapTimeEstimator."""
     random.seed(17)
 
@@ -638,7 +638,7 @@ def TestGte():
 
     lam = 0.0333
     n = 100
-    passenger_data = wtc.GenerateSamplePassengers(lam, n)
+    passenger_data = wtc.generate_sample_passengers(lam, n)
 
     pcounts = [0, 0, 0]
 
@@ -648,7 +648,7 @@ def TestGte():
 
     # thinkplot.Cdf(wtc.pmf_z.MakeCdf(label="actual z"))
     thinkplot.plot_cdf_line(wtc.pmf_zb.make_cdf(label="actual zb"))
-    ite.MakePlot()
+    ite.make_plot()
 
 
 class WaitMixtureEstimator(object):
@@ -674,7 +674,7 @@ class WaitMixtureEstimator(object):
         ete = ElapsedTimeEstimator(wtc, lam, num_passengers)
         self.point = ete.pmf_y
 
-    def MakePlot(self, root="redline4"):
+    def make_plot(self, root="redline4"):
         """Makes a plot showing the mixture."""
         thinkplot.clear_figure()
 
@@ -700,23 +700,23 @@ class WaitMixtureEstimator(object):
         )
 
 
-def GenerateSampleData(gap_times, lam=0.0333, n=10):
+def generate_sample_data(gap_times, lam=0.0333, n=10):
     """Generates passenger data based on actual gap times.
 
     gap_times: sequence of float
     lam: arrival rate in passengers per second
     n: number of simulated observations
     """
-    xs = MakeRange(low=10)
+    xs = make_range(low=10)
     pdf_z = thinkbayes.EstimatedPdf(gap_times)
     pmf_z = pdf_z.MakePmf(xs=xs, label="z")
 
     wtc = WaitTimeCalculator(pmf_z, inverse=False)
-    passenger_data = wtc.GenerateSamplePassengers(lam, n)
+    passenger_data = wtc.generate_sample_passengers(lam, n)
     return wtc, passenger_data
 
 
-def RandomSeed(x):
+def random_seed(x):
     """Initialize the random and numpy.random generators.
 
     x: int seed
@@ -725,7 +725,7 @@ def RandomSeed(x):
     numpy.random.seed(x)
 
 
-def RunSimpleProcess(gap_times, lam=0.0333, num_passengers=15, plot=True):
+def run_simple_process(gap_times, lam=0.0333, num_passengers=15, plot=True):
     """Runs the basic analysis and generates figures.
 
     gap_times: sequence of float
@@ -741,7 +741,7 @@ def RunSimpleProcess(gap_times, lam=0.0333, num_passengers=15, plot=True):
     cdf_z = thinkbayes.Cdf(gap_times).Scale(1.0 / 60)
     print("CI z", cdf_z.CredibleInterval(90))
 
-    xs = MakeRange(low=10)
+    xs = make_range(low=10)
 
     pdf_z = thinkbayes.EstimatedPdf(gap_times)
     pmf_z = pdf_z.MakePmf(xs=xs, label="z")
@@ -749,18 +749,18 @@ def RunSimpleProcess(gap_times, lam=0.0333, num_passengers=15, plot=True):
     wtc = WaitTimeCalculator(pmf_z, inverse=False)
 
     if plot:
-        wtc.PlotPmfs()
-        wtc.MakePlot()
+        wtc.plot_pmfs()
+        wtc.make_plot()
 
     ete = ElapsedTimeEstimator(wtc, lam, num_passengers)
 
     if plot:
-        ete.MakePlot()
+        ete.make_plot()
 
     return wtc, ete
 
 
-def RunMixProcess(gap_times, lam=0.0333, num_passengers=15, plot=True):
+def run_mix_process(gap_times, lam=0.0333, num_passengers=15, plot=True):
     """Runs the analysis for unknown lambda.
 
     gap_times: sequence of float
@@ -773,10 +773,10 @@ def RunMixProcess(gap_times, lam=0.0333, num_passengers=15, plot=True):
     global UPPER_BOUND
     UPPER_BOUND = 1200
 
-    wtc, _ete = RunSimpleProcess(gap_times, lam, num_passengers)
+    wtc, _ete = run_simple_process(gap_times, lam, num_passengers)
 
-    RandomSeed(20)
-    passenger_data = wtc.GenerateSamplePassengers(lam, n=5)
+    random_seed(20)
+    passenger_data = wtc.generate_sample_passengers(lam, n=5)
 
     total_y = 0
     total_k2 = 0
@@ -790,17 +790,17 @@ def RunMixProcess(gap_times, lam=0.0333, num_passengers=15, plot=True):
     are = ArrivalRateEstimator(passenger_data)
 
     if plot:
-        are.MakePlot()
+        are.make_plot()
 
     wme = WaitMixtureEstimator(wtc, are, num_passengers)
 
     if plot:
-        wme.MakePlot()
+        wme.make_plot()
 
     return wme
 
 
-def RunLoop(gap_times, nums, lam=0.0333):
+def run_loop(gap_times, nums, lam=0.0333):
     """Runs the basic analysis for a range of num_passengers.
 
     gap_times: sequence of float
@@ -814,7 +814,7 @@ def RunLoop(gap_times, nums, lam=0.0333):
 
     thinkplot.clear_figure()
 
-    RandomSeed(18)
+    random_seed(18)
 
     # resample gap_times
     n = 220
@@ -823,16 +823,16 @@ def RunLoop(gap_times, nums, lam=0.0333):
     pmf_z = thinkbayes.Pmf(sample_z)
 
     # compute the biased pmf and add some long delays
-    cdf_zp = BiasPmf(pmf_z).make_cdf()
+    cdf_zp = bias_pmf(pmf_z).make_cdf()
     sample_zb = numpy.append(cdf_zp.Sample(n), [1800, 2400, 3000])
 
     # smooth the distribution of zb
     pdf_zb = thinkbayes.EstimatedPdf(sample_zb)
-    xs = MakeRange(low=60)
+    xs = make_range(low=60)
     pmf_zb = pdf_zb.MakePmf(xs=xs)
 
     # unbias the distribution of zb and make wtc
-    pmf_z = UnbiasPmf(pmf_zb)
+    pmf_z = unbias_pmf(pmf_zb)
     wtc = WaitTimeCalculator(pmf_z)
 
     probs = []
@@ -857,8 +857,8 @@ def RunLoop(gap_times, nums, lam=0.0333):
 
 def main(script):
     logging.debug("%r", f"script={script}")
-    RunLoop(OBSERVED_GAP_TIMES, nums=[0, 5, 10, 15, 20, 25, 30, 35])
-    RunMixProcess(OBSERVED_GAP_TIMES)
+    run_loop(OBSERVED_GAP_TIMES, nums=[0, 5, 10, 15, 20, 25, 30, 35])
+    run_mix_process(OBSERVED_GAP_TIMES)
 
 
 if __name__ == "__main__":

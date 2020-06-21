@@ -25,7 +25,7 @@ class Soccer(thinkbayes.Suite):
         like = thinkbayes.EvalExponentialPdf(x, lam)
         return like
 
-    def PredRemaining(self, rem_time, score):
+    def pred_remaining(self, rem_time, score):
         """Plots the predictive distribution for final number of goals.
 
         rem_time: remaining time in the game in minutes
@@ -68,7 +68,7 @@ def main():
     thinkplot.show_plot()
 
     # plot the predictive distribution
-    suite.PredRemaining(90 - 23, 2)
+    suite.pred_remaining(90 - 23, 2)
 
 
 if __name__ == "__main__":

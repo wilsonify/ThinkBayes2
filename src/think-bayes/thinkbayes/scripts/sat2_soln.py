@@ -22,12 +22,12 @@ class Sat(thinkbayes.Suite, thinkbayes.Joint):
         """
         correct = data
         e, d = hypo
-        p = ProbCorrect(e, d)
+        p = prob_correct(e, d)
         like = p if correct else 1 - p
         return like
 
 
-def ProbCorrect(efficacy, difficulty, a=1):
+def prob_correct(efficacy, difficulty, a=1):
     """Returns the probability that a person gets a question right.
 
     efficacy: personal ability to answer questions
@@ -39,7 +39,7 @@ def ProbCorrect(efficacy, difficulty, a=1):
     return 1 / (1 + math.exp(-a * (efficacy - difficulty)))
 
 
-def Update(p, q, correct):
+def update_p_q(p, q, correct):
     """Updates p and q according to correct.
 
     p: prior distribution of efficacy for the test-taker
@@ -63,10 +63,10 @@ def main():
     q1.label = "q1"
     q2 = q1.Copy(label="q2")
 
-    p1, q1 = Update(p1, q1, True)
-    p1, q2 = Update(p1, q2, True)
-    p2, q1 = Update(p2, q1, True)
-    p2, q2 = Update(p2, q2, False)
+    p1, q1 = update_p_q(p1, q1, True)
+    p1, q2 = update_p_q(p1, q2, True)
+    p2, q1 = update_p_q(p2, q1, True)
+    p2, q2 = update_p_q(p2, q2, False)
 
     thinkplot.pre_plot(num=4, rows=2)
     thinkplot.plot_pmfs([p1, p2])

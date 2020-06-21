@@ -25,7 +25,7 @@ class Soccer(thinkbayes.Suite):
         like = thinkbayes.EvalPoissonPmf(goals, lam)
         return like
 
-    def PredictiveDist(self, label="pred"):
+    def predictive_dist(self, label="pred"):
         """Computes the distribution of goals scored in a game.
 
         returns: new Pmf (mixture of Poissons)
@@ -70,8 +70,8 @@ def main():
     print("Bayes factor", k)
 
     # compute predictive distributions for goals scored in a rematch
-    pred1 = suite1.PredictiveDist(label="Germany")
-    pred2 = suite2.PredictiveDist(label="Argentina")
+    pred1 = suite1.predictive_dist(label="Germany")
+    pred2 = suite2.predictive_dist(label="Argentina")
 
     # plot the predictive distributions
     thinkplot.pre_plot(2)

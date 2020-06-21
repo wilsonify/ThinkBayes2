@@ -15,7 +15,7 @@ import thinkbayes
 from thinkbayes import thinkplot
 
 
-def ReadScale(filename="sat_scale.csv", col=2):
+def read_scale(filename="sat_scale.csv", col=2):
     """Reads a CSV file of SAT scales (maps from raw score to standard score).
 
     Args:
@@ -25,7 +25,7 @@ def ReadScale(filename="sat_scale.csv", col=2):
     Returns: thinkbayes.Interpolator object
     """
 
-    def ParseRange(s):
+    def parse_range(s):
         """Parse a range of values in the form 123-456
 
         s: string
@@ -42,7 +42,7 @@ def ReadScale(filename="sat_scale.csv", col=2):
         try:
             raw = int(t[col])
             raws.append(raw)
-            score = ParseRange(t[col + 1])
+            score = parse_range(t[col + 1])
             scores.append(score)
         except ValueError:
             pass
@@ -52,7 +52,7 @@ def ReadScale(filename="sat_scale.csv", col=2):
     return thinkbayes.Interpolator(raws, scores)
 
 
-def ReadRanks(filename="sat_ranks.csv"):
+def read_ranks(filename="sat_ranks.csv"):
     """Reads a CSV file of SAT scores.
 
     Args:
@@ -76,7 +76,7 @@ def ReadRanks(filename="sat_ranks.csv"):
     return res
 
 
-def DivideValues(pmf, denom):
+def divide_values(pmf, denom):
     """Divides the values in a Pmf by denom.
 
     Returns a new Pmf.
@@ -97,20 +97,20 @@ class Exam(object):
     """
 
     def __init__(self):
-        self.scale = ReadScale()
+        self.scale = read_scale()
 
-        scores = ReadRanks()
+        scores = read_ranks()
         score_pmf = thinkbayes.Pmf(dict(scores))
 
-        self.raw = self.ReverseScale(score_pmf)
+        self.raw = self.reverse_scale(score_pmf)
         self.max_score = max(self.raw.Values())
-        self.prior = DivideValues(self.raw, denom=self.max_score)
+        self.prior = divide_values(self.raw, denom=self.max_score)
 
         center = -0.05
         width = 1.8
-        self.difficulties = MakeDifficulties(center, width, self.max_score)
+        self.difficulties = make_difficulties(center, width, self.max_score)
 
-    def CompareScores(self, a_score, b_score, constructor):
+    def compare_scores(self, a_score, b_score, constructor):
         """Computes posteriors for two test scores and the likelihood ratio.
 
         a_score, b_score: scales SAT scores
@@ -119,10 +119,10 @@ class Exam(object):
         a_sat = constructor(self, a_score)
         b_sat = constructor(self, b_score)
 
-        a_sat.PlotPosteriors(b_sat)
+        a_sat.plot_posteriors(b_sat)
 
         if constructor is Sat:
-            PlotJointDist(a_sat, b_sat)
+            plot_joint_dist(a_sat, b_sat)
 
         top = TopLevel("AB")
         top.update((a_sat, b_sat))
@@ -136,22 +136,22 @@ class Exam(object):
         print("Posterior", posterior)
 
         if constructor is Sat2:
-            ComparePosteriorPredictive(a_sat, b_sat)
+            compare_posterior_predictive(a_sat, b_sat)
 
-    def MakeRawScoreDist(self, efficacies):
+    def make_raw_score_dist(self, efficacies):
         """Makes the distribution of raw scores for given difficulty.
 
         efficacies: Pmf of efficacy
         """
         pmfs = thinkbayes.Pmf()
         for efficacy, prob in efficacies.Items():
-            scores = self.PmfCorrect(efficacy)
+            scores = self.pmf_correct(efficacy)
             pmfs.Set(scores, prob)
 
         mix = thinkbayes.MakeMixture(pmfs)
         return mix
 
-    def CalibrateDifficulty(self):
+    def calibrate_difficulty(self):
         """Make a plot showing the model distribution of raw scores."""
         thinkplot.clear_figure()
         thinkplot.pre_plot(num=2)
@@ -160,7 +160,7 @@ class Exam(object):
         thinkplot.plot_cdf_line(cdf)
 
         efficacies = thinkbayes.MakeNormalPmf(0, 1.5, 3)
-        pmf = self.MakeRawScoreDist(efficacies)
+        pmf = self.make_raw_score_dist(efficacies)
         cdf = thinkbayes.Cdf(pmf, label="model")
         thinkplot.plot_cdf_line(cdf)
 
@@ -171,19 +171,19 @@ class Exam(object):
             formats=["pdf", "eps"],
         )
 
-    def PmfCorrect(self, efficacy):
+    def pmf_correct(self, efficacy):
         """Returns the PMF of number of correct responses.
 
         efficacy: float
         """
-        pmf = PmfCorrect(efficacy, self.difficulties)
+        pmf = pmf_correct(efficacy, self.difficulties)
         return pmf
 
-    def Lookup(self, raw):
+    def lookup(self, raw):
         """Looks up a raw score and returns a scaled score."""
         return self.scale.Lookup(raw)
 
-    def Reverse(self, score):
+    def reverse(self, score):
         """Looks up a scaled score and returns a raw score.
 
         Since we ignore the penalty, negative scores round up to zero.
@@ -191,7 +191,7 @@ class Exam(object):
         raw = self.scale.Reverse(score)
         return raw if raw > 0 else 0
 
-    def ReverseScale(self, pmf):
+    def reverse_scale(self, pmf):
         """Applies the reverse scale to the values of a PMF.
 
         Args:
@@ -202,7 +202,7 @@ class Exam(object):
         """
         new = thinkbayes.Pmf()
         for val, prob in pmf.Items():
-            raw = self.Reverse(val)
+            raw = self.reverse(val)
             new.Incr(raw, prob)
         return new
 
@@ -225,12 +225,12 @@ class Sat(thinkbayes.Suite):
         p_correct = hypo
         score = data
 
-        k = self.exam.Reverse(score)
+        k = self.exam.reverse(score)
         n = self.exam.max_score
         like = thinkbayes.EvalBinomialPmf(k, n, p_correct)
         return like
 
-    def PlotPosteriors(self, other):
+    def plot_posteriors(self, other):
         """Plots posterior distributions of efficacy.
 
         self, other: Sat objects.
@@ -269,18 +269,18 @@ class Sat2(thinkbayes.Suite):
         """Computes the likelihood of a test score, given efficacy."""
         efficacy = hypo
         score = data
-        raw = self.exam.Reverse(score)
+        raw = self.exam.reverse(score)
 
-        pmf = self.exam.PmfCorrect(efficacy)
+        pmf = self.exam.pmf_correct(efficacy)
         like = pmf.Prob(raw)
         return like
 
-    def MakePredictiveDist(self):
+    def make_predictive_dist(self):
         """Returns the distribution of raw scores expected on a re-test."""
-        raw_pmf = self.exam.MakeRawScoreDist(self)
+        raw_pmf = self.exam.make_raw_score_dist(self)
         return raw_pmf
 
-    def PlotPosteriors(self, other):
+    def plot_posteriors(self, other):
         """Plots posterior distributions of efficacy.
 
         self, other: Sat objects.
@@ -301,20 +301,20 @@ class Sat2(thinkbayes.Suite):
         )
 
 
-def PlotJointDist(pmf1, pmf2, thresh=0.8):
+def plot_joint_dist(pmf1, pmf2, thresh=0.8):
     """Plot the joint distribution of p_correct.
 
     pmf1, pmf2: posterior distributions
     thresh: lower bound of the range to be plotted
     """
 
-    def Clean(probability_mass_function):
+    def clean(probability_mass_function):
         """Removes values below thresh."""
         vals = [val for val in probability_mass_function.Values() if val < thresh]
         [probability_mass_function.Remove(val) for val in vals]
 
-    Clean(pmf1)
-    Clean(pmf2)
+    clean(pmf1)
+    clean(pmf2)
     pmf = thinkbayes.MakeJoint(pmf1, pmf2)
 
     thinkplot.underride_figure(figsize=(6, 6))
@@ -331,14 +331,14 @@ def PlotJointDist(pmf1, pmf2, thresh=0.8):
     )
 
 
-def ComparePosteriorPredictive(a_sat, b_sat):
+def compare_posterior_predictive(a_sat, b_sat):
     """Compares the predictive distributions of raw scores.
 
     a_sat: posterior distribution
     b_sat:
     """
-    a_pred = a_sat.MakePredictiveDist()
-    b_pred = b_sat.MakePredictiveDist()
+    a_pred = a_sat.make_predictive_dist()
+    b_pred = b_sat.make_predictive_dist()
 
     # thinkplot.Clf()
     # thinkplot.Pmfs([a_pred, b_pred])
@@ -354,7 +354,7 @@ def ComparePosteriorPredictive(a_sat, b_sat):
     print("C", c_like)
 
 
-def PlotPriorDist(pmf):
+def plot_prior_dist(pmf):
     """Plot the prior distribution of p_correct.
 
     pmf: prior
@@ -393,7 +393,7 @@ class TopLevel(thinkbayes.Suite):
         self.Normalize()
 
 
-def ProbCorrect(efficacy, difficulty, a=1):
+def prob_correct(efficacy, difficulty, a=1):
     """Returns the probability that a person gets a question right.
 
     efficacy: personal ability to answer questions
@@ -404,7 +404,7 @@ def ProbCorrect(efficacy, difficulty, a=1):
     return 1 / (1 + math.exp(-a * (efficacy - difficulty)))
 
 
-def BinaryPmf(p):
+def binary_pmf(p):
     """Makes a Pmf with values 1 and 0.
     
     p: probability given to 1
@@ -417,7 +417,7 @@ def BinaryPmf(p):
     return pmf
 
 
-def PmfCorrect(efficacy, difficulties):
+def pmf_correct(efficacy, difficulties):
     """Computes the distribution of correct responses.
 
     efficacy: personal ability to answer questions
@@ -427,13 +427,13 @@ def PmfCorrect(efficacy, difficulties):
     """
     pmf0 = thinkbayes.Pmf([0])
 
-    ps = [ProbCorrect(efficacy, difficulty) for difficulty in difficulties]
-    pmfs = [BinaryPmf(p) for p in ps]
+    ps = [prob_correct(efficacy, difficulty) for difficulty in difficulties]
+    pmfs = [binary_pmf(p) for p in ps]
     dist = sum(pmfs, pmf0)
     return dist
 
 
-def MakeDifficulties(center, width, n):
+def make_difficulties(center, width, n):
     """Makes a list of n difficulties with a given center and width.
 
     Returns: list of n floats between center-width and center+width
@@ -442,7 +442,7 @@ def MakeDifficulties(center, width, n):
     return numpy.linspace(low, high, n)
 
 
-def ProbCorrectTable():
+def prob_correct_table():
     """Makes a table of p_correct for a range of efficacy and difficulty."""
     efficacies = [3, 1.5, 0, -1.5, -3]
     difficulties = [-1.85, -0.05, 1.75]
@@ -450,23 +450,23 @@ def ProbCorrectTable():
     for eff in efficacies:
         print("%0.2f & " % eff, end=" ")
         for diff in difficulties:
-            p = ProbCorrect(eff, diff)
+            p = prob_correct(eff, diff)
             print("%0.2f & " % p, end=" ")
         print(r"\\")
 
 
 def main(script):
     logging.debug("%r", f"script={script}")
-    ProbCorrectTable()
+    prob_correct_table()
 
     exam = Exam()
 
-    PlotPriorDist(exam.prior)
-    exam.CalibrateDifficulty()
+    plot_prior_dist(exam.prior)
+    exam.calibrate_difficulty()
 
-    exam.CompareScores(780, 740, constructor=Sat)
+    exam.compare_scores(780, 740, constructor=Sat)
 
-    exam.CompareScores(780, 740, constructor=Sat2)
+    exam.compare_scores(780, 740, constructor=Sat2)
 
 
 if __name__ == "__main__":

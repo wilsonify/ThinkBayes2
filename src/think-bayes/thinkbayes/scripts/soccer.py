@@ -23,7 +23,7 @@ class Soccer(thinkbayes.Suite):
         like = 1
         return like
 
-    def PredRemaining(self, rem_time, score):
+    def pred_remaining(self, rem_time, score):
         """Plots the predictive distribution for final number of goals.
 
         rem_time: remaining time in the game in minutes

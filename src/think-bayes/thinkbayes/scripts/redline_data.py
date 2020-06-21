@@ -37,7 +37,7 @@ class Redis(object):
             host=self.host, port=self.port, password=password, db=0
         )
 
-    def WriteTrainSpotting(self, timestamp, tripid, seconds, live=True):
+    def write_train_spotting(self, timestamp, tripid, seconds, live=True):
         """Writes a trainspotting event to the database.
 
         timestamp: int seconds since epoch
@@ -55,7 +55,7 @@ class Redis(object):
             self.r.sadd(day, tripid)
             self.r.zadd(tripid, seconds, timestamp)
 
-    def FindArrivals(self, start_hour=16, end_hour=18):
+    def find_arrivals(self, start_hour=16, end_hour=18):
         """For each trip, find the best estimate of the arrival time.
 
         start_hour: int 0-24, beginning of observation window
@@ -75,7 +75,7 @@ class Redis(object):
             tripids = self.r.smembers(day)
 
             for tripid in tripids:
-                pred_dt = self.GetPredictedArrival(tripid)
+                pred_dt = self.get_predicted_arrival(tripid)
                 pred_time = pred_dt.time()
 
                 if start_time < pred_time < end_time:
@@ -83,7 +83,7 @@ class Redis(object):
 
         return arrival_map
 
-    def GetPredictedArrival(self, tripid):
+    def get_predicted_arrival(self, tripid):
         """Gets the best predicted arrival time for a given trip.
 
         tripid: string TripID like R98313D88
@@ -104,7 +104,7 @@ class TrainSpotting(object):
         self.seconds = int(t[6])
 
 
-def ReadCsv(url="https://developer.mbta.com/lib/rthr/red.csv"):
+def read_csv(url="https://developer.mbta.com/lib/rthr/red.csv"):
     """Reads data from the red line.
 
     Returns: list of TrainSpotting objects
@@ -126,24 +126,24 @@ def ReadCsv(url="https://developer.mbta.com/lib/rthr/red.csv"):
     return tss
 
 
-def ReadJson():
+def read_json():
     url = "https://developer.mbta.com/lib/rthr/red.json"
     json_text = urlopen(url).read()
     json_obj = json.loads(json_text)
     print(json_obj)
 
 
-def ReadAndStore(red):
+def read_and_store(red):
     """Read data from the MBTA and put it in the database.
 
     red: Redis object
     """
-    tss = ReadCsv()
+    tss = read_csv()
     for ts in tss:
-        red.WriteTrainSpotting(ts.timestamp, ts.tripid, ts.seconds)
+        red.write_train_spotting(ts.timestamp, ts.tripid, ts.seconds)
 
 
-def Loop(red, start_time, end_time, delay=60):
+def loop(red, start_time, end_time, delay=60):
     """Collects data from start_time until end_time.
 
     red: Redis object to store data
@@ -158,11 +158,11 @@ def Loop(red, start_time, end_time, delay=60):
 
     while datetime.now() < end_time:
         print("Collecting")
-        ReadAndStore(red)
+        read_and_store(red)
         sleep(delay)
 
 
-def TodayAt(hour):
+def today_at(hour):
     """Makes a datetime object with today's date and the given time.
 
     hour: int 0-24
@@ -171,7 +171,7 @@ def TodayAt(hour):
     return datetime.combine(now, time(hour=hour))
 
 
-def GetInterarrivals(arrival_map):
+def get_interarrivals(arrival_map):
     """Finds all interarrival times in the arrival map.
 
     arrival_map: map from string day to unsorted list of arrival datetimes
@@ -194,15 +194,15 @@ def main(script, command="collect"):
     red = Redis()
 
     if command == "collect":
-        start = TodayAt(16)
-        end = TodayAt(18)
+        start = today_at(16)
+        end = today_at(18)
 
         print(start, end)
-        Loop(red, start, end)
+        loop(red, start, end)
 
     elif command == "report":
-        arrival_map = red.FindArrivals()
-        interarrivals = GetInterarrivals(arrival_map)
+        arrival_map = red.find_arrivals()
+        interarrivals = get_interarrivals(arrival_map)
         print(repr(interarrivals))
 
 
