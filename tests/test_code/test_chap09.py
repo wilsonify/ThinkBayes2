@@ -202,7 +202,7 @@ def test_reading(drp_scores_df):
     control.Update(data)
 
     thinkplot.Contour(
-        control, pcolor=True
+        control, pcolor_bool=True
     )  # plot the probability of each `mu`-`sigma` pair as a contour plot.
     thinkplot.Config(xlabel="mu", ylabel="sigma")
 
@@ -277,7 +277,7 @@ def test_paintball():
     thinkplot.Config(xlabel="Distance", ylabel="Prob")
 
     thinkplot.Contour(
-        suite.GetDict(), contour=False, pcolor=True
+        suite.GetDict(), contour_bool=False, pcolor_bool=True
     )  # Another way to visualize the posterior distribution
 
     thinkplot.Config(xlabel="alpha", ylabel="beta", axis=[0, 30, 0, 20])
@@ -290,7 +290,7 @@ def test_paintball():
         for pair in interval:
             d[pair] += 1
 
-    thinkplot.Contour(d, contour=False, pcolor=True)
+    thinkplot.Contour(d, contour_bool=False, pcolor_bool=True)
     thinkplot.Text(17, 4, "25", color="white")
     thinkplot.Text(17, 15, "50", color="white")
     thinkplot.Text(17, 30, "75")

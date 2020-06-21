@@ -371,7 +371,7 @@ def Pdfs(pdfs, **options):
         Pdf(pdf, **options)
 
 
-def Hist(hist, **options):
+def Hist(histogram, **options):
     """Plots a Pmf or Hist with a bar plot.
 
     The default width of the bars is based on the minimum difference
@@ -380,11 +380,11 @@ def Hist(hist, **options):
     as the values.
 
     Args:
-      hist: Hist or Pmf object
+      histogram: Hist or Pmf object
       options: keyword args passed to plt.bar
     """
     # find the minimum distance between adjacent values
-    xs, ys = hist.Render()
+    xs, ys = histogram.Render()
 
     # see if the values support arithmetic
     try:
@@ -405,7 +405,7 @@ def Hist(hist, **options):
                 "Or try providing width option."
             )
 
-    options = _Underride(options, label=hist.label)
+    options = _Underride(options, label=histogram.label)
     options = _Underride(options, align="center")
     if options["align"] == "left":
         options["align"] = "edge"
@@ -416,28 +416,28 @@ def Hist(hist, **options):
     Bar(xs, ys, **options)
 
 
-def Hists(hists, **options):
+def Hists(histograms, **options):
     """Plots two histograms as interleaved bar plots.
 
     Options are passed along for all PMFs.  If you want different
     options for each pmf, make multiple calls to Pmf.
 
     Args:
-      hists: list of two Hist or Pmf objects
+      histograms: list of two Hist or Pmf objects
       options: keyword args passed to plt.plot
     """
-    for hist in hists:
-        Hist(hist, **options)
+    for histogram in histograms:
+        Hist(histogram, **options)
 
 
-def Pmf(pmf, **options):
+def Pmf(probability_mass_function, **options):
     """Plots a Pmf or Hist as a line.
 
     Args:
-      pmf: Hist or Pmf object
+      probability_mass_function: Hist or Pmf object
       options: keyword args passed to plt.plot
     """
-    xs, ys = pmf.Render()
+    xs, ys = probability_mass_function.Render()
     low, high = min(xs), max(xs)
     logging.debug("%r", f"low={low}")
     logging.debug("%r", f"high={high}")
@@ -476,22 +476,22 @@ def Pmf(pmf, **options):
     if align == "right":
         pxs = np.array(pxs) - width
 
-    options = _Underride(options, label=pmf.label)
+    options = _Underride(options, label=probability_mass_function.label)
     Plot(pxs, pys, **options)
 
 
-def Pmfs(pmfs, **options):
+def Pmfs(probability_mass_functions, **options):
     """Plots a sequence of PMFs.
 
     Options are passed along for all PMFs.  If you want different
     options for each pmf, make multiple calls to Pmf.
 
     Args:
-      pmfs: sequence of PMF objects
+      probability_mass_functions: sequence of PMF objects
       options: keyword args passed to plt.plot
     """
-    for pmf in pmfs:
-        Pmf(pmf, **options)
+    for probability_mass_function in probability_mass_functions:
+        Pmf(probability_mass_function, **options)
 
 
 def Diff(t):
@@ -507,11 +507,11 @@ def Diff(t):
     return diffs
 
 
-def Cdf(cdf, complement=False, transform=None, **options):
+def Cdf(cumulative_density_function, complement=False, transform=None, **options):
     """Plots a CDF as a line.
 
     Args:
-      cdf: Cdf object
+      cumulative_density_function: Cdf object
       complement: boolean, whether to plot the complementary CDF
       transform: string, one of 'exponential', 'pareto', 'weibull', 'gumbel'
       options: keyword args passed to plt.plot
@@ -520,7 +520,7 @@ def Cdf(cdf, complement=False, transform=None, **options):
       dictionary with the scale options that should be passed to
       Config, Show or Save.
     """
-    xs, ps = cdf.Render()
+    xs, ps = cumulative_density_function.Render()
     xs = np.asarray(xs)
     ps = np.asarray(ps)
 
@@ -555,12 +555,12 @@ def Cdf(cdf, complement=False, transform=None, **options):
         ps = [-math.log(p) for p in ps]
         scale["yscale"] = "log"
 
-    options = _Underride(options, label=cdf.label)
+    options = _Underride(options, label=cumulative_density_function.label)
     Plot(xs, ps, **options)
     return scale
 
 
-def Cdfs(cdfs, complement=False, transform=None, **options):
+def Cdfs(cumulative_density_functions, complement=False, transform=None, **options):
     """Plots a sequence of CDFs.
 
     cdfs: sequence of CDF objects
@@ -568,23 +568,24 @@ def Cdfs(cdfs, complement=False, transform=None, **options):
     transform: string, one of 'exponential', 'pareto', 'weibull', 'gumbel'
     options: keyword args passed to plt.plot
     """
-    for cdf in cdfs:
-        Cdf(cdf, complement, transform, **options)
+    for cumulative_density_function in cumulative_density_functions:
+        Cdf(cumulative_density_function, complement, transform, **options)
 
 
-def PlotCdf(cdf):
-    """Draws a Cdf with vertical lines at the observed test stat.
+def PlotCdf(cumulative_density_function):
+    """
+    Draws a Cdf with vertical lines at the observed test stat.
     """
 
     def VertLine(x):
         """Draws a vertical line at x."""
         plt.plot([x, x], [0, 1], color="0.8")
 
-    VertLine(cdf.actual)
-    Cdf(cdf, complement=False, transform=None)
+    VertLine(cumulative_density_function.actual)
+    Cdf(cumulative_density_function, complement=False, transform=None)
 
 
-def Contour(obj, pcolor=False, contour=True, imshow=False, **options):
+def Contour(obj, pcolor_bool=False, contour_bool=True, imshow=False, **options):
     """Makes a contour plot.
 
     d: map from (x, y) to z, or object that provides GetDict
@@ -613,9 +614,9 @@ def Contour(obj, pcolor=False, contour=True, imshow=False, **options):
     axes = plt.gca()
     axes.xaxis.set_major_formatter(x_formatter)
 
-    if pcolor:
+    if pcolor_bool:
         plt.pcolormesh(X, Y, Z, **options)
-    if contour:
+    if contour_bool:
         cs = plt.contour(X, Y, Z, **options)
         plt.clabel(cs, inline=1, fontsize=10)
     if imshow:
@@ -623,7 +624,7 @@ def Contour(obj, pcolor=False, contour=True, imshow=False, **options):
         plt.imshow(Z, extent=extent, **options)
 
 
-def Pcolor(xs, ys, zs, pcolor=True, contour=False, **options):
+def Pcolor(xs, ys, zs, pcolor_bool=True, contour_bool=False, **options):
     """Makes a pseudocolor plot.
 
     xs:
@@ -642,10 +643,10 @@ def Pcolor(xs, ys, zs, pcolor=True, contour=False, **options):
     axes = plt.gca()
     axes.xaxis.set_major_formatter(x_formatter)
 
-    if pcolor:
+    if pcolor_bool:
         plt.pcolormesh(X, Y, Z, **options)
 
-    if contour:
+    if contour_bool:
         cs = plt.contour(X, Y, Z, **options)
         plt.clabel(cs, inline=1, fontsize=10)
 
@@ -770,10 +771,10 @@ def Show(**options):
 
     options: keyword args used to invoke various plt functions
     """
-    clf = options.pop("clf", True)
+    clf_bool = options.pop("clf", True)
     Config(**options)
     plt.show()
-    if clf:
+    if clf_bool:
         Clf()
 
 
@@ -784,11 +785,11 @@ def Plotly(**options):
 
     options: keyword args used to invoke various plt functions
     """
-    clf = options.pop("clf", True)
+    clf_bool = options.pop("clf", True)
     Config(**options)
 
     url = plotly.plot_mpl(plt.gcf())
-    if clf:
+    if clf_bool:
         Clf()
     return url
 
@@ -803,7 +804,7 @@ def Save(root=None, formats=None, **options):
       formats: list of string formats
       options: keyword args used to invoke various plt functions
     """
-    clf = options.pop("clf", True)
+    clf_bool = options.pop("clf", True)
 
     save_options = {}
     for option in ["bbox_inches", "pad_inches"]:
@@ -824,7 +825,7 @@ def Save(root=None, formats=None, **options):
     if root:
         for fmt in formats:
             SaveFormat(root, fmt, **save_options)
-    if clf:
+    if clf_bool:
         Clf()
 
 

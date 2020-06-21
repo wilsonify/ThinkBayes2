@@ -318,7 +318,7 @@ def PlotJointDist(pmf1, pmf2, thresh=0.8):
     pmf = thinkbayes.MakeJoint(pmf1, pmf2)
 
     thinkplot.Figure(figsize=(6, 6))
-    thinkplot.Contour(pmf, contour=False, pcolor=True)
+    thinkplot.Contour(pmf, contour_bool=False, pcolor_bool=True)
 
     thinkplot.Plot([thresh, 1.0], [thresh, 1.0], color="gray", alpha=0.2, linewidth=4)
 

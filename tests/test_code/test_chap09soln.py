@@ -68,7 +68,7 @@ def test_improving_reading_ability():
 
     # After the update, we can plot the probability of each `mu`-`sigma` pair as a contour plot.
 
-    thinkplot.Contour(control, pcolor=True)
+    thinkplot.Contour(control, pcolor_bool=True)
     thinkplot.Config(xlabel="mu", ylabel="sigma")
 
     # And then we can extract the marginal distribution of `mu`
@@ -95,7 +95,7 @@ def test_improving_reading_ability():
 
     # Here's the posterior joint distribution for the treated group
 
-    thinkplot.Contour(treated, pcolor=True)
+    thinkplot.Contour(treated, pcolor_bool=True)
     thinkplot.Config(xlabel="mu", ylabel="Pmf")
 
     # Solution
@@ -283,7 +283,7 @@ def test_improving_reading_ability():
 
     # Another way to visualize the posterio distribution: a pseudocolor plot of probability as a function of `alpha` and `beta`.
 
-    thinkplot.Contour(suite.GetDict(), contour=False, pcolor=True)
+    thinkplot.Contour(suite.GetDict(), contour_bool=False, pcolor_bool=True)
 
     thinkplot.Config(xlabel="alpha", ylabel="beta", axis=[0, 30, 0, 20])
 
@@ -297,7 +297,7 @@ def test_improving_reading_ability():
         for pair in interval:
             d[pair] += 1
 
-    thinkplot.Contour(d, contour=False, pcolor=True)
+    thinkplot.Contour(d, contour_bool=False, pcolor_bool=True)
     thinkplot.Text(17, 4, "25", color="white")
     thinkplot.Text(17, 15, "50", color="white")
     thinkplot.Text(17, 30, "75")

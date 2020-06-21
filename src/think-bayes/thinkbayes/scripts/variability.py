@@ -240,7 +240,7 @@ def PlotPosterior(suite, pcolor=False, contour=True):
     suite: Suite that maps (mu, sigma) to probability
     """
     thinkplot.Clf()
-    thinkplot.Contour(suite.GetDict(), pcolor=pcolor, contour=contour)
+    thinkplot.Contour(suite.GetDict(), pcolor_bool=pcolor, contour_bool=contour)
 
     thinkplot.Save(
         root="variability_posterior_%s" % suite.label,

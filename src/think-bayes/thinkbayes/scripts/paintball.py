@@ -143,7 +143,7 @@ def MakeContourPlot(suite):
 
     suite: posterior joint distribution of location
     """
-    thinkplot.Contour(suite.GetDict(), contour=False, pcolor=True)
+    thinkplot.Contour(suite.GetDict(), contour_bool=False, pcolor_bool=True)
 
     thinkplot.Save(
         "paintball4",
@@ -167,7 +167,7 @@ def MakeCrediblePlot(suite):
         for pair in interval:
             d[pair] += 1
 
-    thinkplot.Contour(d, contour=False, pcolor=True)
+    thinkplot.Contour(d, contour_bool=False, pcolor_bool=True)
     thinkplot.Text(17, 4, "25", color="white")
     thinkplot.Text(17, 15, "50", color="white")
     thinkplot.Text(17, 30, "75")

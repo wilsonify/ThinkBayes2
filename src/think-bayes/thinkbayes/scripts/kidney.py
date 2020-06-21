@@ -509,7 +509,7 @@ class Calculator(object):
         thinkplot.Clf()
 
         joint = self.cache.GetDistAgeSize()
-        thinkplot.Contour(joint, contour=False, pcolor=True)
+        thinkplot.Contour(joint, contour_bool=False, pcolor_bool=True)
 
         thinkplot.Save(
             root="kidney8",
