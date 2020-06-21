@@ -90,10 +90,9 @@ def test_comparing_distributions():
     #
     # I'll do it by sampling first.
 
-    import random
-
+    
     def flip(p):
-        return random.random() < p
+        return np.random.random() < p
 
     # `flip` returns True with probability `p` and False with probability `1-p`
     #
