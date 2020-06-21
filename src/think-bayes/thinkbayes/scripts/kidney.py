@@ -18,7 +18,9 @@ FORMATS = ["pdf", "eps"]
 MINSIZE = 0.2
 MAXSIZE = 20
 BUCKET_FACTOR = 10
-DEFAULT_Y_LABEL = "diameter (cm, log scale)"
+DIAMETER_LABEL = "diameter (cm, log scale)"
+TUMOR_LABEL = "tumor age (years)"
+
 
 def log2(x, denom=math.log(2)):
     """Computes log base 2."""
@@ -492,14 +494,13 @@ class Calculator(object):
         for bucket, color in zip(buckets, colors):
             self.PlotBucket(bucket, color)
 
-
         thinkplot.Save(
             root="kidney5",
             formats=FORMATS,
             title="History of simulated tumors",
             axis=[-40, 1, MINSIZE, 12],
             xlabel="years",
-            ylabel=DEFAULT_Y_LABEL,
+            ylabel=DIAMETER_LABEL,
             yscale="log",
         )
 
@@ -516,7 +517,7 @@ class Calculator(object):
             axis=[0, 41, -0.7, 1.31],
             yticks=MakeLogTicks([0.2, 0.5, 1, 2, 5, 10, 20]),
             xlabel="ages",
-            ylabel=DEFAULT_Y_LABEL,
+            ylabel=DIAMETER_LABEL,
         )
 
     def PlotConditionalCdfs(self):
@@ -533,11 +534,12 @@ class Calculator(object):
         thinkplot.Clf()
         thinkplot.PrePlot(num=len(cdfs))
         thinkplot.Cdfs(cdfs)
+
         thinkplot.Save(
             root="kidney6",
             title="Distribution of age for several diameters",
             formats=FORMATS,
-            xlabel="tumor age (years)",
+            xlabel=TUMOR_LABEL,
             ylabel="CDF",
             loc=4,
         )
@@ -609,7 +611,7 @@ class Calculator(object):
             root="kidney7",
             formats=FORMATS,
             title="Credible interval for age vs diameter",
-            xlabel=DEFAULT_Y_LABEL,
+            xlabel=DIAMETER_LABEL,
             ylabel="tumor age (years)",
             xscale=xscale,
             xticks=MakeTicks([0.5, 1, 2, 5, 10, 20]),
@@ -641,7 +643,7 @@ def PlotSequences(sequences):
         title="Simulations of tumor growth",
         xlabel="tumor age (years)",
         yticks=MakeTicks([0.2, 0.5, 1, 2, 5, 10, 20]),
-        ylabel=DEFAULT_Y_LABEL,
+        ylabel=DIAMETER_LABEL,
         yscale="log",
     )
 
@@ -680,17 +682,18 @@ def PrintTable(fp, xs, ts):
     ts: sequence of tuples of percentiles
     """
     fp.write(r"\begin{tabular}{|r||r|r|r|r|r|}" "\n")
-    fp.write(r"\hline" "\n")
+    hline_str = r"\hline" "\n"
+    fp.write(hline_str)
     fp.write(r"Diameter   & \multicolumn{5}{c|}{Percentiles of age} \\" "\n")
     fp.write(r"(cm)   & 5th & 25th & 50th & 75th & 95th \\" "\n")
-    fp.write(r"\hline" "\n")
+    fp.write(hline_str)
 
     for i, (cm, ps) in enumerate(zip(xs, ts)):
         # print cm, ps
         if i % 3 == 0:
             PrintCI(fp, cm, ps)
 
-    fp.write(r"\hline" "\n")
+    fp.write(hline_str)
     fp.write(r"\end{tabular}" "\n")
 
 

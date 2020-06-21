@@ -10,7 +10,6 @@ import random
 import sys
 
 import numpy
-
 import thinkbayes
 from thinkbayes import thinkplot
 
@@ -107,6 +106,8 @@ OBSERVED_GAP_TIMES = [
     636.0,
     758.0,
 ]
+WAIT_TIME_LABEL = "Wait time (min)"
+TIME_LABEL = "Time (min)"
 
 
 def BiasPmf(pmf, label=None, invert=False):
@@ -262,7 +263,8 @@ class WaitTimeCalculator(object):
         thinkplot.Clf()
         thinkplot.PrePlot(2)
         thinkplot.Pmfs(pmfs)
-        thinkplot.Save(root=root, xlabel="Time (min)", ylabel="CDF", formats=FORMATS)
+
+        thinkplot.Save(root=root, xlabel=TIME_LABEL, ylabel="CDF", formats=FORMATS)
 
     def MakePlot(self, root="redline2"):
         """Plots the computed CDFs.
@@ -282,7 +284,7 @@ class WaitTimeCalculator(object):
         thinkplot.Clf()
         thinkplot.PrePlot(3)
         thinkplot.Cdfs(cdfs)
-        thinkplot.Save(root=root, xlabel="Time (min)", ylabel="CDF", formats=FORMATS)
+        thinkplot.Save(root=root, xlabel=TIME_LABEL, ylabel="CDF", formats=FORMATS)
 
 
 def SplitGaps(zs):
@@ -357,7 +359,7 @@ class ElapsedTimeEstimator(object):
         thinkplot.Clf()
         thinkplot.PrePlot(3)
         thinkplot.Cdfs(cdfs)
-        thinkplot.Save(root=root, xlabel="Time (min)", ylabel="CDF", formats=FORMATS)
+        thinkplot.Save(root=root, xlabel=TIME_LABEL, ylabel="CDF", formats=FORMATS)
 
 
 class ArrivalRate(thinkbayes.Suite):
@@ -691,7 +693,7 @@ class WaitMixtureEstimator(object):
 
         thinkplot.Save(
             root=root,
-            xlabel="Wait time (min)",
+            xlabel=WAIT_TIME_LABEL,
             ylabel="CDF",
             formats=FORMATS,
             axis=[0, 10, 0, 1],
