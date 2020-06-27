@@ -6,13 +6,98 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 import csv
-import logging
 import math
-import sys
 
 import numpy
 import thinkbayes
 from thinkbayes import thinkplot
+
+
+def prob_correct(efficacy, difficulty, a=1):
+    """Returns the probability that a person gets a question right.
+
+    efficacy: personal ability to answer questions
+    difficulty: how hard the question is
+    a: parameter that controls the shape of the curve
+
+    Returns: float prob
+    """
+    return 1 / (1 + math.exp(-a * (efficacy - difficulty)))
+
+
+class Sat(thinkbayes.Suite, thinkbayes.Joint):
+    """Represents the distribution of p_correct for a test-taker."""
+
+    def likelihood(self, data, hypo):
+        """Computes the likelihood of data under hypo.
+
+        data: boolean, whether the answer is correct
+        hypo: pair of (efficacy, difficulty)
+        """
+        correct = data
+        e, d = hypo
+        p = prob_correct(e, d)
+        like = p if correct else 1 - p
+        return like
+
+
+class Sat3(thinkbayes.Suite):
+    """Represents the distribution of p_correct for a test-taker."""
+
+    def __init__(self, exam, score):
+        self.exam = exam
+        self.score = score
+
+        # start with the prior distribution
+        thinkbayes.Suite.__init__(self, exam.prior)
+
+        # update based on an exam score
+        self.update(score)
+
+    def likelihood(self, data, hypo):
+        """Computes the likelihood of a test score, given efficacy."""
+        p_correct = hypo
+        score = data
+
+        k = self.exam.reverse(score)
+        n = self.exam.max_score
+        like = thinkbayes.eval_binomial_pmf(k, n, p_correct)
+        return like
+
+    def plot_posteriors(self, other):
+        """Plots posterior distributions of efficacy.
+
+        self, other: Sat objects.
+        """
+        thinkplot.clear_figure()
+        thinkplot.pre_plot(num=2)
+
+        cdf1 = thinkbayes.Cdf(self, label=f"posterior {self.score}")
+        cdf2 = thinkbayes.Cdf(other, label=f"posterior {other.score}")
+
+        thinkplot.plot_cdfs([cdf1, cdf2])
+        thinkplot.save_plot(
+            xlabel="p_correct",
+            ylabel="CDF",
+            axis=[0.7, 1.0, 0.0, 1.0],
+            root="sat_posteriors_p_corr",
+            formats=["pdf", "eps"],
+        )
+
+
+def update_p_q(p, q, correct):
+    """Updates p and q according to correct.
+
+    p: prior distribution of efficacy for the test-taker
+    q: prior distribution of difficulty for the question
+
+    returns: pair of new Pmfs
+    """
+    joint = thinkbayes.make_joint(p, q)
+    suite = Sat(joint)
+    suite.update(correct)
+    p, q = suite.marginal(0, label=p.label), suite.marginal(1, label=q.label)
+    return p, q
 
 
 def read_scale(filename="sat_scale.csv", col=2):
@@ -207,50 +292,6 @@ class Exam(object):
         return new
 
 
-class Sat(thinkbayes.Suite):
-    """Represents the distribution of p_correct for a test-taker."""
-
-    def __init__(self, exam, score):
-        self.exam = exam
-        self.score = score
-
-        # start with the prior distribution
-        thinkbayes.Suite.__init__(self, exam.prior)
-
-        # update based on an exam score
-        self.update(score)
-
-    def likelihood(self, data, hypo):
-        """Computes the likelihood of a test score, given efficacy."""
-        p_correct = hypo
-        score = data
-
-        k = self.exam.reverse(score)
-        n = self.exam.max_score
-        like = thinkbayes.eval_binomial_pmf(k, n, p_correct)
-        return like
-
-    def plot_posteriors(self, other):
-        """Plots posterior distributions of efficacy.
-
-        self, other: Sat objects.
-        """
-        thinkplot.clear_figure()
-        thinkplot.pre_plot(num=2)
-
-        cdf1 = thinkbayes.Cdf(self, label=f"posterior {self.score}")
-        cdf2 = thinkbayes.Cdf(other, label=f"posterior {other.score}")
-
-        thinkplot.plot_cdfs([cdf1, cdf2])
-        thinkplot.save_plot(
-            xlabel="p_correct",
-            ylabel="CDF",
-            axis=[0.7, 1.0, 0.0, 1.0],
-            root="sat_posteriors_p_corr",
-            formats=["pdf", "eps"],
-        )
-
-
 class Sat2(thinkbayes.Suite):
     """Represents the distribution of efficacy for a test-taker."""
 
@@ -311,7 +352,8 @@ def plot_joint_dist(pmf1, pmf2, thresh=0.8):
     def clean(probability_mass_function):
         """Removes values below thresh."""
         vals = [val for val in probability_mass_function.values() if val < thresh]
-        [probability_mass_function.remove(val) for val in vals]
+        for val in vals:
+            probability_mass_function.remove(val)
 
     clean(pmf1)
     clean(pmf2)
@@ -393,22 +435,11 @@ class TopLevel(thinkbayes.Suite):
         self.normalize()
 
 
-def prob_correct(efficacy, difficulty, a=1):
-    """Returns the probability that a person gets a question right.
-
-    efficacy: personal ability to answer questions
-    difficulty: how hard the question is
-
-    Returns: float prob
-    """
-    return 1 / (1 + math.exp(-a * (efficacy - difficulty)))
-
-
 def binary_pmf(p):
     """Makes a Pmf with values 1 and 0.
-    
+
     p: probability given to 1
-    
+
     Returns: Pmf object
     """
     pmf = thinkbayes.Pmf()
@@ -455,8 +486,55 @@ def prob_correct_table():
         print(r"\\")
 
 
-def main(script):
-    logging.debug("%r", f"script={script}")
+def main():
+    p1 = thinkbayes.make_normal_pmf(0, 1, 3, n=101)
+    p1.label = "p1"
+    p2 = p1.copy(label="p2")
+
+    q1 = thinkbayes.make_normal_pmf(-1, 1, 3, n=101)
+    q1.label = "q1"
+    q2 = q1.copy(label="q2")
+
+    p1, q1 = update_p_q(p1, q1, True)
+    p1, q2 = update_p_q(p1, q2, True)
+    p2, q1 = update_p_q(p2, q1, True)
+    p2, q2 = update_p_q(p2, q2, False)
+
+    thinkplot.pre_plot(num=4, rows=2)
+    thinkplot.plot_pmfs([p1, p2])
+    thinkplot.config_plot(legend=True)
+
+    thinkplot.sub_plot(2)
+    thinkplot.plot_pmfs([q1, q2])
+    thinkplot.show_plot()
+
+    print("Prob p1 > p2", p1 > p2)
+    print("Prob q1 > q2", q1 > q2)
+
+    p1 = thinkbayes.make_normal_pmf(0, 1, 3, n=101)
+    p1.label = "p1"
+    p2 = p1.copy(label="p2")
+
+    q1 = thinkbayes.make_normal_pmf(0, 1, 3, n=101)
+    q1.label = "q1"
+    q2 = q1.copy(label="q2")
+
+    p1, q1 = update_p_q(p1, q1, True)
+    p1, q2 = update_p_q(p1, q2, True)
+    p2, q1 = update_p_q(p2, q1, True)
+    p2, q2 = update_p_q(p2, q2, False)
+
+    thinkplot.pre_plot(num=4, rows=2)
+    thinkplot.plot_pmfs([p1, p2])
+    thinkplot.config_plot(legend=True)
+
+    thinkplot.sub_plot(2)
+    thinkplot.plot_pmfs([q1, q2])
+    thinkplot.show_plot()
+
+    print("Prob p1 > p2", p1 > p2)
+    print("Prob q1 > q2", q1 > q2)
+
     prob_correct_table()
 
     exam = Exam()
@@ -470,4 +548,4 @@ def main(script):
 
 
 if __name__ == "__main__":
-    main(*sys.argv)
+    main()
