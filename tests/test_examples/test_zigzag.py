@@ -408,7 +408,7 @@ def test_hockey():
 
     prior = make_gamma_suite(hypo_mu, alpha, beta)
 
-    prior.plot(label="gamma prior")
+    prior.plot(label="GammaPrior")
     pdf_rate()
 
     # And we can update this prior using the observed data.

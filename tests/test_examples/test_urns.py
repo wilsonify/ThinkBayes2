@@ -53,7 +53,7 @@ def test_urns():
 
     prior = Urns([0, 1, 2, 3])
     tplt.plot_hist_bar(prior)
-    tplt.decorate(xlabel="Urn index (i)", ylabel="PMF")
+    tplt.decorate(xlabel="Urn_index", ylabel="PMF")
 
     # Here's Jacob's update after 5 blue marbles.
 
@@ -67,7 +67,7 @@ def test_urns():
 
     tplt.plot_hist_bar(prior, color="gray")
     tplt.plot_hist_bar(jacob)
-    tplt.decorate(xlabel="Urn index (i)", ylabel="PMF")
+    tplt.decorate(xlabel="Urn_index", ylabel="PMF")
 
     # Here's Emily's update after an additional 12 blue and 3 green.
 
@@ -81,11 +81,11 @@ def test_urns():
 
     tplt.preplot(cols=2)
     tplt.plot_hist_bar(jacob, label="Jacob")
-    tplt.decorate(xlabel="Urn index (i)", ylabel="PMF")
+    tplt.decorate(xlabel="Urn_index", ylabel="PMF")
 
     tplt.subplot(2)
     tplt.plot_hist_bar(emily, label="Emily")
-    tplt.decorate(xlabel="Urn index (i)", ylabel="PMF")
+    tplt.decorate(xlabel="Urn_index", ylabel="PMF")
 
     # What should Jacob believe about Bnext?
 

@@ -48,14 +48,14 @@ def test_socks():
     prior_n_pairs = thinkbayes.make_poisson_pmf(12, 30)
     suite = Socks(prior_n_pairs)
     thinkplot.plot_hist_bar(suite)
-    thinkplot.config_plot(xlabel="# pairs", ylabel="PMF", xlim=[0, 30])
+    thinkplot.config_plot(xlabel="#pairs", ylabel="PMF", xlim=[0, 30])
 
     hypos = range(1, 1001)
     suite = Socks(hypos)
     for datum in "u" * 11:
         suite.update("u")
     thinkplot.plot_hist_bar(suite)
-    thinkplot.config_plot(xlabel="# pairs", ylabel="PMF", xlim=[0, 30])
+    thinkplot.config_plot(xlabel="#pairs", ylabel="PMF", xlim=[0, 30])
 
     class Socks2(Socks, thinkbayes.Joint):
         def likelihood(self, data, hypo):
@@ -86,7 +86,7 @@ def test_socks():
 
     post_n_pairs = suite.marginal(0)
     thinkplot.plot_hist_bar(post_n_pairs)
-    thinkplot.config_plot(xlabel="# pairs", ylabel="PMF", xlim=[0, 30])
+    thinkplot.config_plot(xlabel="#pairs", ylabel="PMF", xlim=[0, 30])
 
     post_n_odds = suite.marginal(1)
     thinkplot.plot_hist_bar(post_n_odds)

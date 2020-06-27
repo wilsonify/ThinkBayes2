@@ -17,6 +17,8 @@ from thinkbayes import make_poisson_pmf
 from thinkbayes import thinkplot
 from thinkbayes.scripts.hockey import GOALS_PER_GAME_LABEL
 
+POSTERIOR_LABEL = "Posterior after 1 goal"
+
 
 class Soccer(Suite):
     """
@@ -104,7 +106,7 @@ def test_wc3():
     xs = np.linspace(0, 8, 101)
     pmf = make_gamma_pmf(xs, 1.3)
     thinkplot.plot_pdf_line(pmf)
-    thinkplot.decorate(title="Gamma PDF", xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF")
+    thinkplot.decorate(title="GammaPDF", xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF")
     pmf.mean()
 
     # **Exercise:**  Write a class called `Soccer` that extends `Suite` and defines `Likelihood`, which should compute the probability of the data (the time between goals in minutes) for a hypothetical goal-scoring rate, `lam`, in goals per game.
@@ -119,7 +121,7 @@ def test_wc3():
 
     soccer = Soccer(pmf)
     thinkplot.plot_pdf_line(soccer)
-    thinkplot.decorate(title="Gamma prior", xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF")
+    thinkplot.decorate(title="GammaPrior", xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF")
     soccer.mean()
 
     # Here's the update after first goal at 11 minutes.
@@ -127,8 +129,9 @@ def test_wc3():
     thinkplot.plot_pdf_line(soccer, color="0.7")
     soccer.update(11)
     thinkplot.plot_pdf_line(soccer)
+
     thinkplot.decorate(
-        title="Posterior after 1 goal", xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF"
+        title=POSTERIOR_LABEL, xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF"
     )
     soccer.mean()
 
@@ -413,14 +416,14 @@ def test_wc():
     xs = np.linspace(0, 12, 101)
     pmf_gamma = thinkbayes.make_gamma_pmf(xs, 1.3)
     thinkplot.plot_pdf_line(pmf_gamma)
-    thinkplot.decorate(title="Gamma PDF", xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF")
+    thinkplot.decorate(title="GammaPDF", xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF")
     pmf_gamma.mean()
 
     # Now we can create a `Soccer` object and initialize it with the prior Pmf:
 
     prior = Soccer(pmf_gamma)
     thinkplot.plot_pdf_line(prior)
-    thinkplot.decorate(title="Gamma prior", xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF")
+    thinkplot.decorate(title="GammaPrior", xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF")
     prior.mean()
 
     # Here's the update after the first goal at 11 minutes.
@@ -631,14 +634,14 @@ def test_world_cup():
     xs = np.linspace(0, 12, 101)
     pmf_gamma = make_gamma_pmf(xs, 1.3)
     thinkplot.plot_pdf_line(pmf_gamma)
-    thinkplot.decorate(title="Gamma PDF", xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF")
+    thinkplot.decorate(title="GammaPDF", xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF")
     pmf_gamma.mean()
 
     # Now we can create a `Soccer` object and initialize it with the prior Pmf:
 
     prior = Soccer(pmf_gamma)
     thinkplot.plot_pdf_line(prior)
-    thinkplot.decorate(title="Gamma prior", xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF")
+    thinkplot.decorate(title="GammaPrior", xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF")
     prior.mean()
 
     # Here's the update after the first goal at 11 minutes.
