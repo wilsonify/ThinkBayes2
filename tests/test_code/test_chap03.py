@@ -3,38 +3,10 @@ This is based on a notebook of example code from Think Bayes.
 """
 import logging
 
-from thinkbayes import Pmf, Suite, Cdf
+from thinkbayes import Pmf, Cdf
 from thinkbayes import thinkplot
-
-
-class Dice(Suite):
-    """
-    The Dice problem
-    Suppose I have a box of dice that contains a 4-sided die, a 6-sided
-    die, an 8-sided die, a 12-sided die, and a 20-sided die.
-    I select a die from the box at random, roll it, and get a 6.
-    What is the probability that I rolled each die?
-    The `Dice` class inherits `Update` and provides `Likelihood`
-    """
-
-    def likelihood(self, data, hypo):
-        if hypo < data:
-            return 0
-        else:
-            return 1 / hypo
-
-
-class Train(Suite):
-    """
-    The train problem
-    The Train problem has the same likelihood as the Dice problem.
-    """
-
-    def likelihood(self, data, hypo):
-        if hypo < data:
-            return 0
-        else:
-            return 1 / hypo
+from thinkbayes.scripts.dice import Dice
+from thinkbayes.scripts.train import Train
 
 
 def Mean(suite):
