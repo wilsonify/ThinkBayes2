@@ -8,8 +8,8 @@ MIT License: https://opensource.org/licenses/MIT
 from itertools import product
 
 import numpy
-
 import thinkbayes
+from thinkbayes import thinkplot
 
 
 class Gps(thinkbayes.Suite, thinkbayes.Joint):
@@ -18,11 +18,14 @@ class Gps(thinkbayes.Suite, thinkbayes.Joint):
     def likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
-        hypo: 
-        data: 
+        hypo:
+        data:
         """
-        # TODO: fill this in
-        like = 1
+        std = 30
+        meanx, meany = hypo
+        x, y = data
+        like = thinkbayes.eval_normal_pdf(x, meanx, std)
+        like *= thinkbayes.eval_normal_pdf(y, meany, std)
         return like
 
 
@@ -46,7 +49,15 @@ def main():
 
     joint.update_set(pairs)
 
-    # TODO: plot the marginals and print the posterior means
+    thinkplot.pre_plot(2)
+    pdfx = joint.marginal(0)
+    pdfy = joint.marginal(1)
+    thinkplot.plot_pdf_line(pdfx, label="posterior x")
+    thinkplot.plot_pdf_line(pdfy, label="posterior y")
+    thinkplot.show_plot()
+
+    print(pdfx.mean(), pdfx.std())
+    print(pdfy.mean(), pdfy.std())
 
 
 if __name__ == "__main__":
