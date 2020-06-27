@@ -6,6 +6,7 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 import numpy as np
+from tests.test_examples.test_social_soln import POP_FRAC_LABEL
 from thinkbayes import Suite, Beta
 from thinkbayes import thinkplot
 
@@ -53,7 +54,7 @@ def test_social_desirability_problem():
     suite = Social(prior)
 
     thinkplot.plot_pdf_line(suite, label="Prior")
-    thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
+    thinkplot.decorate(xlabel=POP_FRAC_LABEL, ylabel="PDF")
 
     # Solution
 
@@ -66,7 +67,7 @@ def test_social_desirability_problem():
     # Solution
 
     thinkplot.plot_pdf_line(suite, label="Posterior")
-    thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
+    thinkplot.decorate(xlabel=POP_FRAC_LABEL, ylabel="PDF")
 
     # Solution
 
@@ -82,7 +83,7 @@ def test_social_desirability_problem():
     thinkplot.plot_pdf_line(beta.make_pmf(), label="Direct", color="gray")
 
     thinkplot.plot_pdf_line(suite, label="Randomized")
-    thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
+    thinkplot.decorate(xlabel=POP_FRAC_LABEL, ylabel="PDF")
 
     # Solution
 
@@ -95,7 +96,7 @@ def test_social_desirability_problem():
     thinkplot.plot_pdf_line(beta.make_pmf(), label="Direct", color="gray")
 
     thinkplot.plot_pdf_line(suite, label="Randomized")
-    thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
+    thinkplot.decorate(xlabel=POP_FRAC_LABEL, ylabel="PDF")
 
     # Solution
 

@@ -10,7 +10,7 @@ import logging
 import numpy as np
 from thinkbayes import Suite, Beta
 from thinkbayes import thinkplot
-
+POP_FRAC_LABEL = "Fraction of the population"
 
 def test_social():
     # ## The social desirability problem
@@ -54,7 +54,8 @@ def test_social():
     suite = Social(prior)
 
     thinkplot.plot_pdf_line(suite, label="Prior")
-    thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
+
+    thinkplot.decorate(xlabel=POP_FRAC_LABEL, ylabel="PDF")
 
     # Solution
 
@@ -67,7 +68,7 @@ def test_social():
     # Solution
 
     thinkplot.plot_pdf_line(suite, label="Posterior")
-    thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
+    thinkplot.decorate(xlabel=POP_FRAC_LABEL, ylabel="PDF")
 
     # Solution
 
@@ -83,7 +84,7 @@ def test_social():
     thinkplot.plot_pdf_line(beta.make_pmf(), label="Direct", color="gray")
 
     thinkplot.plot_pdf_line(suite, label="Randomized")
-    thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
+    thinkplot.decorate(xlabel=POP_FRAC_LABEL, ylabel="PDF")
 
     # Solution
 
@@ -96,7 +97,7 @@ def test_social():
     thinkplot.plot_pdf_line(beta.make_pmf(), label="Direct", color="gray")
 
     thinkplot.plot_pdf_line(suite, label="Randomized")
-    thinkplot.decorate(xlabel="Fraction of the population", ylabel="PDF")
+    thinkplot.decorate(xlabel=POP_FRAC_LABEL, ylabel="PDF")
 
     # Solution
 

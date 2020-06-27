@@ -63,7 +63,7 @@ def test_interpreting_medical_tests():
     # Now we can use a Bayes table to compute the probability we are interested in, `P(cancer | positive test)`
 
     base_rate = 2.65 / 1000
-    hypo = ["cancer", "no cancer"]
+    hypo = ["cancer", "no_cancer"]
     prior = [base_rate, 1 - base_rate]
     table = BayesTable(hypo, prior)
 
@@ -72,7 +72,7 @@ def test_interpreting_medical_tests():
     table.likelihood = [sensitivity, 1 - specificity]
     logging.info("%r", f"table = {table}")
 
-    likelihood_ratio = table.likelihood["cancer"] / table.likelihood["no cancer"]
+    likelihood_ratio = table.likelihood["cancer"] / table.likelihood["no_cancer"]
 
     table.update()
     logging.info("%r", f"table = {table}")
@@ -88,7 +88,7 @@ def test_interpreting_medical_tests():
     def compute_ppv(base_rate, sensitivity, specificity):
         pmf = Pmf()
         pmf["cancer"] = base_rate * sensitivity
-        pmf["no cancer"] = (1 - base_rate) * (1 - specificity)
+        pmf["no_cancer"] = (1 - base_rate) * (1 - specificity)
         pmf.normalize()
         return pmf
 
