@@ -12,7 +12,7 @@ from thinkbayes import thinkplot
 from thinkbayes.scripts import columns
 
 USE_SUMMARY_DATA = True
-
+GOALS_PER_GAME_LABEL = "Goals per game"
 
 class Hockey(thinkbayes.Suite):
     """Represents hypotheses about the scoring rate for a team."""
@@ -201,8 +201,9 @@ def main():
     thinkplot.pre_plot(num=2)
     thinkplot.plot_pmf_line(suite1)
     thinkplot.plot_pmf_line(suite2)
+
     thinkplot.save_plot(
-        root="hockey0", xlabel="Goals per game", ylabel="Probability", formats=formats
+        root="hockey0", xlabel=GOALS_PER_GAME_LABEL, ylabel="Probability", formats=formats
     )
 
     suite1.update_set([0, 2, 8, 4])
@@ -213,7 +214,7 @@ def main():
     thinkplot.plot_pmf_line(suite1)
     thinkplot.plot_pmf_line(suite2)
     thinkplot.save_plot(
-        root="hockey1", xlabel="Goals per game", ylabel="Probability", formats=formats
+        root="hockey1", xlabel=GOALS_PER_GAME_LABEL, ylabel="Probability", formats=formats
     )
 
     goal_dist1 = make_goal_pmf(suite1)

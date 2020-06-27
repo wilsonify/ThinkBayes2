@@ -22,6 +22,7 @@ from thinkbayes import thinkplot
 # that the Bruins score exactly 3 goals?  Plot the PMF of `k`, the number
 # of goals they score in a game.
 # Solution
+from thinkbayes.scripts.hockey import GOALS_PER_GAME_LABEL
 
 
 def test_chapt7():
@@ -140,7 +141,7 @@ def test_chapt7():
     thinkplot.pre_plot(num=2)
     thinkplot.plot_pdf_line(suite1)
     thinkplot.plot_pdf_line(suite2)
-    thinkplot.config_plot(xlabel="Goals per game", ylabel="Probability")
+    thinkplot.config_plot(xlabel=GOALS_PER_GAME_LABEL, ylabel="Probability")
 
     # And we can update each suite with the scores from the first 4 games.
 
@@ -150,7 +151,7 @@ def test_chapt7():
     thinkplot.pre_plot(num=2)
     thinkplot.plot_pdf_line(suite1)
     thinkplot.plot_pdf_line(suite2)
-    thinkplot.config_plot(xlabel="Goals per game", ylabel="Probability")
+    thinkplot.config_plot(xlabel=GOALS_PER_GAME_LABEL, ylabel="Probability")
 
     logging.info("%r", f"suite1.Mean() = {suite1.mean()}")
     logging.info("%r", f"suite2.Mean() = {suite2.mean()}")
@@ -265,7 +266,7 @@ def test_chapt7():
     xs = np.linspace(0, 8, 101)
     pmf = make_gamma_pmf(xs, 1.3)
     thinkplot.plot_pdf_line(pmf)
-    thinkplot.config_plot(xlabel="Goals per game")
+    thinkplot.config_plot(xlabel=GOALS_PER_GAME_LABEL)
     pmf.mean()
 
     # **Exercise:** In the 2014 FIFA World Cup, Germany played Brazil in a semifinal match. Germany scored after 11 minutes and again at the 23 minute mark. At that point in the match, how many goals would you expect Germany to score after 90 minutes? What was the probability that they would score 5 more goals (as, in fact, they did)?

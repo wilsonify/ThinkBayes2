@@ -11,6 +11,7 @@ from thinkbayes import make_normal_pmf
 from thinkbayes import make_poisson_pmf
 from thinkbayes import Pmf, Suite
 from thinkbayes import thinkplot
+from thinkbayes.scripts.hockey import GOALS_PER_GAME_LABEL
 
 
 class Hockey(Suite):
@@ -89,7 +90,7 @@ def test_Hockey():
     thinkplot.pre_plot(num=2)
     thinkplot.plot_pdf_line(suite1)
     thinkplot.plot_pdf_line(suite2)
-    thinkplot.config_plot(xlabel="Goals per game", ylabel="Probability")
+    thinkplot.config_plot(xlabel=GOALS_PER_GAME_LABEL, ylabel="Probability")
 
     # And we can update each suite with the scores from the first 4 games.
 
@@ -100,7 +101,7 @@ def test_Hockey():
     thinkplot.pre_plot(num=2)
     thinkplot.plot_pdf_line(suite1)
     thinkplot.plot_pdf_line(suite2)
-    thinkplot.config_plot(xlabel="Goals per game", ylabel="Probability")
+    thinkplot.config_plot(xlabel=GOALS_PER_GAME_LABEL, ylabel="Probability")
 
     suite1.mean(), suite2.mean()
     # -
@@ -185,7 +186,7 @@ def test_Hockey():
     xs = np.linspace(0, 8, 101)
     pmf = make_gamma_pmf(xs, 1.3)
     thinkplot.plot_pdf_line(pmf)
-    thinkplot.config_plot(xlabel="Goals per game")
+    thinkplot.config_plot(xlabel=GOALS_PER_GAME_LABEL)
     pmf.mean()
 
     # -
