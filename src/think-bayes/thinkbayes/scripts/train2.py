@@ -8,7 +8,7 @@ MIT License: https://opensource.org/licenses/MIT
 from thinkbayes.scripts.dice import Dice
 
 from thinkbayes import thinkplot
-
+NTRAINS_LABEL = "Number of trains"
 
 class Train(Dice):
     """The likelihood function for the train problem is the same as
@@ -41,7 +41,7 @@ def main():
         suite = make_posterior(high, dataset)
         print(high, suite.mean())
 
-    thinkplot.save_plot(root="train2", xlabel="Number of trains", ylabel="Probability")
+    thinkplot.save_plot(root="train2", xlabel=NTRAINS_LABEL, ylabel="Probability")
 
 
 if __name__ == "__main__":

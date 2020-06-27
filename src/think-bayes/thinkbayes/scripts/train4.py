@@ -7,7 +7,7 @@ MIT License: https://opensource.org/licenses/MIT
 
 from thinkbayes import thinkplot
 from thinkbayes.scripts.dice import Dice
-
+NTRAINS_LABEL = "Number of trains"
 
 class Train(Dice):
     """Represents hypotheses about how many trains the company has.
@@ -25,7 +25,7 @@ def main():
         suite.update(data)
         thinkplot.plot_pmf_line(suite, label=f"after {data}")
 
-    thinkplot.show_plot(xlabel="Number of trains", ylabel="PMF")
+    thinkplot.show_plot(xlabel=NTRAINS_LABEL, ylabel="PMF")
 
     print("posterior mean", suite.mean())
 

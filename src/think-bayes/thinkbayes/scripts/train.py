@@ -9,6 +9,7 @@ from thinkbayes.scripts.dice import Dice
 
 from thinkbayes import thinkplot
 
+NTRAINS_LABEL = "Number of trains"
 
 class Train(Dice):
     """Represents hypotheses about how many trains the company has.
@@ -27,9 +28,10 @@ def main():
 
     thinkplot.pre_plot(1)
     thinkplot.plot_pmf_line(suite)
+
     thinkplot.save_plot(
         root="train1",
-        xlabel="Number of trains",
+        xlabel=NTRAINS_LABEL,
         ylabel="Probability",
         formats=["pdf", "eps"],
     )

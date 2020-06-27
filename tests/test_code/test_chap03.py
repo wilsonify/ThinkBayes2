@@ -6,7 +6,7 @@ import logging
 from thinkbayes import Pmf, Cdf
 from thinkbayes import thinkplot
 from thinkbayes.scripts.dice import Dice
-from thinkbayes.scripts.train import Train
+from thinkbayes.scripts.train import Train, NTRAINS_LABEL
 
 
 def Mean(suite):
@@ -118,7 +118,7 @@ def test_Train2():
         suite.label = label
         thinkplot.plot_pmf_line(suite)
 
-    thinkplot.config_plot(xlabel="Number of trains", ylabel="Probability")
+    thinkplot.config_plot(xlabel=NTRAINS_LABEL, ylabel="Probability")
     # -
 
     # The power law gives less prior probability to high values, which yields lower posterior means, and less sensitivity to the upper bound.
@@ -151,7 +151,7 @@ def test_Train2():
     cdf = Cdf(suite)
     thinkplot.plot_cdf_line(cdf)
     thinkplot.config_plot(
-        xlabel="Number of trains", ylabel="Cumulative Probability", legend=False
+        xlabel=NTRAINS_LABEL, ylabel="Cumulative Probability", legend=False
     )
 
     # `Cdf` also provides `Percentile`
@@ -271,7 +271,7 @@ def test_dice_problem():
         suite.label = label
         thinkplot.plot_pmf_line(suite)
 
-    thinkplot.config_plot(xlabel="Number of trains", ylabel="Probability")
+    thinkplot.config_plot(xlabel=NTRAINS_LABEL, ylabel="Probability")
 
     # The power law gives less prior probability to high values, which yields lower posterior means, and less sensitivity to the upper bound.
 
@@ -299,7 +299,7 @@ def test_dice_problem():
     cdf = Cdf(suite)
     thinkplot.plot_cdf_line(cdf)
     thinkplot.config_plot(
-        xlabel="Number of trains", ylabel="Cumulative Probability", legend=False
+        xlabel=NTRAINS_LABEL, ylabel="Cumulative Probability", legend=False
     )
 
     # `Cdf` also provides `Percentile`

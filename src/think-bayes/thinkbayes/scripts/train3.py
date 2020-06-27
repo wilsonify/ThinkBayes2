@@ -9,7 +9,7 @@ from thinkbayes.scripts.dice import Dice
 
 import thinkbayes
 from thinkbayes import thinkplot
-
+NTRAINS_LABEL = "Number of trains"
 
 class Train(Dice):
     """Represents hypotheses about how many trains the company has."""
@@ -65,7 +65,7 @@ def compare_priors():
         suite.name = label
         thinkplot.plot_pmf_line(suite)
 
-    thinkplot.save_plot(root="train4", xlabel="Number of trains", ylabel="Probability")
+    thinkplot.save_plot(root="train4", xlabel=NTRAINS_LABEL, ylabel="Probability")
 
 
 def main():
@@ -80,7 +80,7 @@ def main():
         suite = make_posterior(high, dataset, Train2)
         print(high, suite.mean())
 
-    thinkplot.save_plot(root="train3", xlabel="Number of trains", ylabel="Probability")
+    thinkplot.save_plot(root="train3", xlabel=NTRAINS_LABEL, ylabel="Probability")
 
     interval = suite.percentile(5), suite.percentile(95)
     print(interval)
