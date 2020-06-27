@@ -13,6 +13,7 @@ from thinkbayes import Pmf, Suite, Joint, make_mixture, make_joint
 from thinkbayes import thinkplot
 
 dist_height = dict(male=norm(178, 7.7), female=norm(163, 7.3))
+HEIGHT_LABEL = "Height (cm)"
 
 
 class Height(Suite):
@@ -112,7 +113,8 @@ def test_one():
         series[height] = prob_male(height)
 
     thinkplot.plot(series)
-    thinkplot.decorate(xlabel="Height (cm)", ylabel="Probability of being male")
+
+    thinkplot.decorate(xlabel=HEIGHT_LABEL, ylabel="Probability of being male")
 
 
 def test_two():
@@ -265,7 +267,6 @@ def test_eight():
     for h, p in A.items():
         total += p * prob_male(h)
     logging.info("%r", f"total = {total}")
-
 
     annotated_mix = Suite()
     for h, p in male_height_pmf.items():
