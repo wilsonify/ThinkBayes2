@@ -3,15 +3,35 @@ This notebook presents code and exercises from Think Bayes: Chapter 9
 Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
-
+import itertools
+import logging
 import math
 from itertools import product
 
 import numpy as np
+import pytest
+from scipy import stats
 from scipy.stats import norm
-from thinkbayes import eval_normal_pdf
 from thinkbayes import Pmf, Cdf, Suite, Joint
+from thinkbayes import eval_normal_pdf
 from thinkbayes import thinkplot
+from thinkbayes.scripts.lincoln import choose, binom
+
+
+def plot_cdfs(df, col):
+    for name, group in df.groupby("Species"):
+        cdf = Cdf(group[col], label=name)
+        thinkplot.plot_cdf_line(cdf)
+
+    thinkplot.config_plot(xlabel=col, legend=True, loc="lower right")
+
+
+def MakeAngleSuite(data):
+    mus = np.linspace(8, 16, 10)
+    sigmas = np.linspace(0.1, 2, 10)
+    suite = Beetle(product(mus, sigmas))
+    suite.update(data)
+    return suite
 
 
 class Normal(Suite, Joint):
@@ -136,8 +156,8 @@ class Beetle(Suite, Joint):
 
 
 def MakeWidthSuite(data):
-    mus = np.linspace(115, 160, 51)
-    sigmas = np.linspace(1, 10, 51)
+    mus = np.linspace(115, 160, 10)
+    sigmas = np.linspace(1, 10, 10)
     suite = Beetle(product(mus, sigmas))
     suite.update(data)
     return suite
@@ -157,6 +177,46 @@ class Species:
         like1 = self.suite_width.PredictiveProb(width)
         like2 = self.suite_angle.PredictiveProb(angle)
         return like1 * like2
+
+
+class Classifier(Suite):
+    def likelihood(self, data, hypo):
+        return hypo.likelihood(data)
+
+
+class Lincoln(Suite, Joint):
+    """Represents hypotheses about the number of errors."""
+
+    def likelihood(self, data, hypo):
+        """Computes the likelihood of the data under the hypothesis.
+
+        hypo: n, p1, p2
+        data: k1, k2, c
+        """
+        n, p1, p2 = hypo
+        k1, k2, c = data
+
+        part1 = choose(n, k1) * binom(k1, n, p1)
+        part2 = choose(k1, c) * choose(n - k1, k2 - c) * binom(k2, n, p2)
+        return part1 * part2
+
+
+class Gps(Suite, Joint):
+    """Represents hypotheses about your location in the field."""
+
+    def likelihood(self, data, hypo):
+        """Computes the likelihood of the data under the hypothesis.
+
+        hypo:
+        data:
+        """
+        std = 30
+        meanx, meany = hypo
+        x, y = data
+
+        like = stats.norm.pdf(x, meanx, std)
+        like *= stats.norm.pdf(y, meany, std)
+        return like
 
 
 def test_reading(drp_scores_df):
@@ -299,12 +359,30 @@ def test_paintball():
 
 
 def test_flea_beetles(flea_beetles_df):
-    def plot_cdfs(df, col):
-        for name, group in df.groupby("Species"):
-            cdf = Cdf(group[col], label=name)
-            thinkplot.plot_cdf_line(cdf)
+    # **Exercise:** [The Flea Beetle problem from DASL](http://lib.stat.cmu.edu/DASL/Datafiles/FleaBeetles.html)
+    # Datafile Name: Flea Beetles
+    # Datafile Subjects: Biology
+    # Story Names: Flea Beetles
+    # Reference: Lubischew, A.A. (1962) On the use of discriminant functions in taxonomy. Biometrics, 18, 455-477.
+    # Also found in: Hand, D.J., et al. (1994) A Handbook of Small Data Sets, London: Chapman & Hall, 254-255.
+    # Authorization: Contact Authors
+    # Description: Data were collected on the genus of flea beetle Chaetocnema,
+    # which contains three species: concinna (Con), heikertingeri (Hei), and heptapotamica (Hep).
+    # Measurements were made on the width and angle of the aedeagus of each beetle.
+    # The goal of the original study was to form a classification rule to distinguish the three species.
+    # Number of cases: 74
+    # Variable Names:
+    # Width: The maximal width of aedeagus in the forpart (in microns)
+    # Angle: The front angle of the aedeagus (1 unit = 7.5 degrees)
+    # Species: Species of flea beetle from the genus Chaetocnema
 
-        thinkplot.config_plot(xlabel=col, legend=True, loc="lower right")
+    # Suggestions:
+    # 1. Plot CDFs for the width and angle data, broken down by species,
+    # to get a visual sense of whether the normal distribution is a good model.
+    # 2. Use the data to estimate the mean and standard deviation for each variable, broken down by species.
+    # 3. Given a joint posterior distribution for `mu` and `sigma`, what is the likelihood of a given datum?
+    # 4. Write a function that takes a measured width and angle and returns a posterior PMF of species.
+    # 5. Use the function to classify each of the specimens in the table and see how many you get right.
 
     df = flea_beetles_df
     plot_cdfs(df, "Width")
@@ -316,13 +394,6 @@ def test_flea_beetles(flea_beetles_df):
         suite = MakeWidthSuite(group.Width)
         thinkplot.contour_plot(suite)
         print(name, suite.PredictiveProb(137))
-
-    def MakeAngleSuite(data):
-        mus = np.linspace(8, 16, 10)
-        sigmas = np.linspace(0.1, 2, 10)
-        suite = Beetle(product(mus, sigmas))
-        suite.update(data)
-        return suite
 
     for name, group in groups:
         suite = MakeAngleSuite(group.Angle)
@@ -338,10 +409,6 @@ def test_flea_beetles(flea_beetles_df):
 
     species["Con"].likelihood((145, 14))
 
-    class Classifier(Suite):
-        def likelihood(self, data, hypo):
-            return hypo.likelihood(data)
-
     suite = Classifier(species.values())
     for hypo, prob in suite.items():
         print(hypo, prob)
@@ -350,143 +417,346 @@ def test_flea_beetles(flea_beetles_df):
     for hypo, prob in suite.items():
         print(hypo, prob)
 
-# **Exercise:** Run this analysis again for the control group.
-# What is the distribution of the difference between the groups?
-# What is the probability that the average "reading power" for the treatment group is higher?
-# What is the probability that the variance of the treatment group is higher?
 
-# +
-# Solution goes here
+def test_improving_reading_ability(drp_scores_df):
+    # ## Improving Reading Ability
+    # From DASL(http://lib.stat.cmu.edu/DASL/Stories/ImprovingReadingAbility.html)
+    # > An educator conducted an experiment to test whether new directed reading activities in the classroom
+    # will help elementary school pupils improve some aspects of their reading ability.
+    # She arranged for a third grade class of 21 students to follow these activities for an 8-week period.
+    # A control classroom of 23 third graders followed the same curriculum without the activities.
+    # At the end of the 8 weeks, all students took a Degree of Reading Power (DRP) test,
+    # which measures the aspects of reading ability that the treatment is designed to improve.
+    # > Summary statistics on the two groups of children show that the average score of the treatment class
+    # was almost ten points higher than the average of the control class.
+    # A two-sample t-test is appropriate for testing whether this difference is statistically significant.
+    # The t-statistic is 2.31, which is significant at the .05 level.
 
-# +
-# Solution goes here
+    df = drp_scores_df
+    grouped = df.groupby("Treatment")
+    for name, group in grouped:
+        print(name, group.Response.mean())
 
-# +
-# Solution goes here
+    # The `Normal` class provides a `Likelihood` function that
+    # computes the likelihood of a sample from a normal distribution.
+    # The prior distributions for `mu` and `sigma` are uniform.
 
-# +
-# Solution goes here
+    mus = np.linspace(20, 80, 10)
+    sigmas = np.linspace(5, 30, 10)
 
-# +
-# Solution goes here
+    # I use `itertools.product` to enumerate all pairs of `mu` and `sigma`.
 
-# +
-# Solution goes here
+    control = Normal(itertools.product(mus, sigmas))
+    data = df[df.Treatment == "Control"].Response
+    control.update(data)
 
-# +
-# Solution goes here
+    # After the update, we can plot the probability of each `mu`-`sigma` pair as a contour plot.
 
-# +
-# Solution goes here
+    thinkplot.contour_plot(control, pcolor_bool=True)
+    thinkplot.config_plot(xlabel="mu", ylabel="sigma")
+
+    # And then we can extract the marginal distribution of `mu`
+
+    pmf_mu0 = control.marginal(0)
+    thinkplot.plot_pdf_line(pmf_mu0)
+    thinkplot.config_plot(xlabel="mu", ylabel="Pmf")
+
+    # And the marginal distribution of `sigma`
+
+    pmf_sigma0 = control.marginal(1)
+    thinkplot.plot_pdf_line(pmf_sigma0)
+    thinkplot.config_plot(xlabel="sigma", ylabel="Pmf")
+
+    # **Exercise:** Run this analysis again for the control group.
+    # What is the distribution of the difference between the groups?
+    # What is the probability that the average "reading power" for the treatment group is higher?
+    # What is the probability that the variance of the treatment group is higher?
+
+    # Solution
+
+    treated = Normal(itertools.product(mus, sigmas))
+    data = df[df.Treatment == "Treated"].Response
+    treated.update(data)
+
+    # Solution
+
+    # Here's the posterior joint distribution for the treated group
+
+    thinkplot.contour_plot(treated, pcolor_bool=True)
+    thinkplot.config_plot(xlabel="mu", ylabel="Pmf")
+
+    # Solution
+
+    # The marginal distribution of mu
+
+    pmf_mu1 = treated.marginal(0)
+    thinkplot.plot_pdf_line(pmf_mu1)
+    thinkplot.config_plot(xlabel="mu", ylabel="Pmf")
+
+    # Solution
+
+    # The marginal distribution of sigma
+
+    pmf_sigma1 = treated.marginal(1)
+    thinkplot.plot_pdf_line(pmf_sigma1)
+    thinkplot.config_plot(xlabel="sigma", ylabel="Pmf")
+
+    # Solution
+
+    # Now we can compute the distribution of the difference between groups
+
+    pmf_diff = pmf_mu1 - pmf_mu0
+    logging.info("%r", f"pmf_diff.mean() = {pmf_diff.mean()}")
+    logging.info("%r", f"pmf_diff.map() = {pmf_diff.map()}")
+
+    # Solution
+
+    # And CDF_diff(0), which is the probability that the difference is <= 0
+
+    pmf_diff = pmf_mu1 - pmf_mu0
+    cdf_diff = pmf_diff.make_cdf()
+    thinkplot.plot_cdf_line(cdf_diff)
+    logging.info("%r", f"cdf_diff[0] = {cdf_diff[0]}")
+
+    # Solution
+
+    # Or we could directly compute the probability that mu is
+    # greater than mu2
+
+    pmf_mu1.prob_greater(pmf_mu0)
+
+    # Solution
+
+    # Finally, here's the probability that the standard deviation
+    # in the treatment group is higher.
+
+    pmf_sigma1.prob_greater(pmf_sigma0)
+
+    # It looks like there is a high probability that the mean of
+    # the treatment group is higher, and the most likely size of
+    # the effect is 9-10 points.
+
+    # It looks like the variance of the treated group is substantially
+    # smaller, which suggests that the treatment might be helping
+    # low scorers more than high scorers.
 
 
-# **Exercise:** From [John D. Cook](http://www.johndcook.com/blog/2010/07/13/lincoln-index/)
-#
-# "Suppose you have a tester who finds 20 bugs in your program. You want to estimate how many bugs are really in the program. You know there are at least 20 bugs, and if you have supreme confidence in your tester, you may suppose there are around 20 bugs. But maybe your tester isn't very good. Maybe there are hundreds of bugs. How can you have any idea how many bugs there are? There’s no way to know with one tester. But if you have two testers, you can get a good idea, even if you don’t know how skilled the testers are.
-#
-# Suppose two testers independently search for bugs. Let k1 be the number of errors the first tester finds and k2 the number of errors the second tester finds. Let c be the number of errors both testers find.  The Lincoln Index estimates the total number of errors as k1 k2 / c [I changed his notation to be consistent with mine]."
-#
-# So if the first tester finds 20 bugs, the second finds 15, and they find 3 in common, we estimate that there are about 100 bugs.  What is the Bayesian estimate of the number of errors based on this data?
+def test_paintballing():
+    # ## Paintball
 
-# +
-# Solution goes here
+    # Suppose you are playing paintball in an indoor arena 30 feet
+    # wide and 50 feet long.  You are standing near one of the 30 foot
+    # walls, and you suspect that one of your opponents has taken cover
+    # nearby.  Along the wall, you see several paint spatters, all the same
+    # color, that you think your opponent fired recently.
+    #
+    # The spatters are at 15, 16, 18, and 21 feet, measured from the
+    # lower-left corner of the room.  Based on these data, where do you
+    # think your opponent is hiding?
+    #
+    # Here's the Suite that does the update.  It uses `MakeLocationPmf`,
+    # defined below.
 
-# +
-# Solution goes here
+    # The prior probabilities for `alpha` and `beta` are uniform.
 
-# +
-# Solution goes here
+    alphas = range(0, 31)
+    betas = range(1, 51)
+    locations = range(0, 31)
 
-# +
-# Solution goes here
-# -
+    suite = Paintball(alphas, betas, locations)
+    suite.update_set([15, 16, 18, 21])
+
+    # To visualize the joint posterior,
+    # I take slices for a few values of `beta` and plot the conditional distributions of `alpha`.
+    # If the shooter is close to the wall, we can be somewhat confident of his position.
+    # The farther away he is, the less certain we are.
+
+    locations = range(0, 31)
+    alpha = 10
+    betas = [10, 20, 40]
+    thinkplot.pre_plot(num=len(betas))
+
+    for beta in betas:
+        pmf = MakeLocationPmf(alpha, beta, locations)
+        pmf.label = f"beta = {beta}"
+        thinkplot.plot_pdf_line(pmf)
+
+    thinkplot.config_plot(xlabel="Distance", ylabel="Prob")
+
+    # Here are the marginal posterior distributions for `alpha` and `beta`.
+
+    marginal_alpha = suite.marginal(0, label="alpha")
+    marginal_beta = suite.marginal(1, label="beta")
+
+    print("alpha CI", marginal_alpha.credible_interval(50))
+    print("beta CI", marginal_beta.credible_interval(50))
+
+    thinkplot.pre_plot(num=2)
+
+    thinkplot.plot_cdf_line(Cdf(marginal_alpha))
+    thinkplot.plot_cdf_line(Cdf(marginal_beta))
+
+    thinkplot.config_plot(xlabel="Distance", ylabel="Prob")
+
+    # To visualize the joint posterior, I take slices for a few values of `beta` and
+    # plot the conditional distributions of `alpha`.
+    # If the shooter is close to the wall, we can be somewhat confident of his position.
+    # The farther away he is, the less certain we are.
+
+    betas = [10, 20, 40]
+    thinkplot.pre_plot(num=len(betas))
+
+    for beta in betas:
+        cond = suite.conditional(0, 1, beta)
+        cond.label = f"beta = {beta}"
+        thinkplot.plot_pdf_line(cond)
+
+    thinkplot.config_plot(xlabel="Distance", ylabel="Prob")
+
+    # Another way to visualize the posterio distribution:
+    # a pseudocolor plot of probability as a function of `alpha` and `beta`.
+
+    thinkplot.contour_plot(suite.d, contour_bool=False, pcolor_bool=True)
+
+    thinkplot.config_plot(xlabel="alpha", ylabel="beta", axis=[0, 30, 0, 20])
+
+    # Here's another visualization that shows posterior credible regions.
+
+    d = dict((pair, 0) for pair in suite.values())
+
+    percentages = [75, 50, 25]
+    for p in percentages:
+        interval = suite.max_like_interval(p)
+        for pair in interval:
+            d[pair] += 1
+
+    thinkplot.contour_plot(d, contour_bool=False, pcolor_bool=True)
+    thinkplot.annotate_figure(17, 4, "25", color="white")
+    thinkplot.annotate_figure(17, 15, "50", color="white")
+    thinkplot.annotate_figure(17, 30, "75")
+
+    thinkplot.config_plot(xlabel="alpha", ylabel="beta", legend=False)
 
 
-# **Exercise:** The GPS problem.  According to [Wikipedia]()
-#
-# ￼
-# > GPS included a (currently disabled) feature called Selective Availability (SA) that adds intentional, time varying errors of up to 100 meters (328 ft) to the publicly available navigation signals. This was intended to deny an enemy the use of civilian GPS receivers for precision weapon guidance.
-# > [...]
-# > Before it was turned off on May 2, 2000, typical SA errors were about 50 m (164 ft) horizontally and about 100 m (328 ft) vertically.[10] Because SA affects every GPS receiver in a given area almost equally, a fixed station with an accurately known position can measure the SA error values and transmit them to the local GPS receivers so they may correct their position fixes. This is called Differential GPS or DGPS. DGPS also corrects for several other important sources of GPS errors, particularly ionospheric delay, so it continues to be widely used even though SA has been turned off. The ineffectiveness of SA in the face of widely available DGPS was a common argument for turning off SA, and this was finally done by order of President Clinton in 2000.
-#
-# Suppose it is 1 May 2000, and you are standing in a field that is 200m square.  You are holding a GPS unit that indicates that your location is 51m north and 15m west of a known reference point in the middle of the field.
-#
-# However, you know that each of these coordinates has been perturbed by a "feature" that adds random errors with mean 0 and standard deviation 30m.
-#
-# 1) After taking one measurement, what should you believe about your position?
-#
-# Note: Since the intentional errors are independent, you could solve this problem independently for X and Y.  But we'll treat it as a two-dimensional problem, partly for practice and partly to see how we could extend the solution to handle dependent errors.
-#
-# You can start with the code in gps.py.
-#
-# 2) Suppose that after one second the GPS updates your position and reports coordinates (48, 90).  What should you believe now?
-#
-# 3) Suppose you take 8 more measurements and get:
-#
-#     (11.903060613102866, 19.79168669735705)
-#     (77.10743601503178, 39.87062906535289)
-#     (80.16596823095534, -12.797927542984425)
-#     (67.38157493119053, 83.52841028148538)
-#     (89.43965206875271, 20.52141889230797)
-#     (58.794021026248245, 30.23054016065644)
-#     (2.5844401241265302, 51.012041625783766)
-#     (45.58108994142448, 3.5718287379754585)
-#
-# At this point, how certain are you about your location?
+@pytest.mark.skip(reason="long running")
+def test_bugs():
+    # **Exercise:** From [John D. Cook](http://www.johndcook.com/blog/2010/07/13/lincoln-index/)
+    # "Suppose you have a tester who finds 20 bugs in your program.
+    # You want to estimate how many bugs are really in the program.
+    # You know there are at least 20 bugs, and if you have supreme confidence in your tester,
+    # you may suppose there are around 20 bugs.
+    # But maybe your tester isn't very good.
+    # Maybe there are hundreds of bugs.
+    # How can you have any idea how many bugs there are?
+    # There’s no way to know with one tester.
+    # But if you have two testers, you can get a good idea, even if you don’t know how skilled the testers are.
+    #
+    # Suppose two testers independently search for bugs.
+    # Let k1 be the number of errors the first tester finds and k2 the number of errors the second tester finds.
+    # Let c be the number of errors both testers find.
+    # The Lincoln Index estimates the
+    # total number of errors as k1 k2 / c [I changed his notation to be consistent with mine]."
+    # So if the first tester finds 20 bugs, the second finds 15, and they find 3 in common,
+    # we estimate that there are about 100 bugs.
+    # What is the Bayesian estimate of the number of errors based on this data?
 
-# +
-# Solution goes here
+    # Solution
 
-# +
-# Solution goes here
+    # Solution
 
-# +
-# Solution goes here
+    data = 20, 15, 3
+    probs = np.linspace(0, 1, 3)
+    hypos = []
+    for n in np.linspace(75, 150, 5):
+        for p1 in probs:
+            for p2 in probs:
+                hypos.append((n, p1, p2))
 
-# +
-# Solution goes here
+    suite = Lincoln(hypos)
+    suite.update(data)
 
-# +
-# Solution goes here
+    # Solution
 
-# +
-# Solution goes here
-# -
+    n_marginal = suite.marginal(0)
+    thinkplot.plot_pmf_line(n_marginal, label="n")
+    thinkplot.config_plot(xlabel="number of bugs", ylabel="PMF")
 
-# **Exercise:** [The Flea Beetle problem from DASL](http://lib.stat.cmu.edu/DASL/Datafiles/FleaBeetles.html)
-#
-# Datafile Name: Flea Beetles
-#
-# Datafile Subjects: Biology
-#
-# Story Names: Flea Beetles
-#
-# Reference: Lubischew, A.A. (1962) On the use of discriminant functions in taxonomy. Biometrics, 18, 455-477. Also found in: Hand, D.J., et al. (1994) A Handbook of Small Data Sets, London: Chapman & Hall, 254-255.
-#
-# Authorization: Contact Authors
-#
-# Description: Data were collected on the genus of flea beetle Chaetocnema, which contains three species: concinna (Con), heikertingeri (Hei), and heptapotamica (Hep). Measurements were made on the width and angle of the aedeagus of each beetle. The goal of the original study was to form a classification rule to distinguish the three species.
-#
-# Number of cases: 74
-#
-# Variable Names:
-#
-# Width: The maximal width of aedeagus in the forpart (in microns)
-#
-# Angle: The front angle of the aedeagus (1 unit = 7.5 degrees)
-#
-# Species: Species of flea beetle from the genus Chaetocnema
-#
+    # Solution
 
-# Suggestions:
-#
-# 1. Plot CDFs for the width and angle data, broken down by species, to get a visual sense of whether the normal distribution is a good model.
-#
-# 2. Use the data to estimate the mean and standard deviation for each variable, broken down by species.
-#
-# 3. Given a joint posterior distribution for `mu` and `sigma`, what is the likelihood of a given datum?
-#
-# 4. Write a function that takes a measured width and angle and returns a posterior PMF of species.
-#
-# 5. Use the function to classify each of the specimens in the table and see how many you get right.
-#
+    print("post mean n", n_marginal.mean())
+    print("MAP n", n_marginal.map())
+
+
+def test_gps():
+    # **Exercise:** The GPS problem.  According to [Wikipedia]()
+    # > GPS included a (currently disabled) feature called Selective Availability (SA) that adds intentional,
+    # time varying errors of up to 100 meters (328 ft) to the publicly available navigation signals.
+    # This was intended to deny an enemy the use of civilian GPS receivers for precision weapon guidance.
+    # > Before it was turned off on May 2, 2000, typical SA errors were
+    # about 50 m (164 ft) horizontally and about 100 m (328 ft) vertically.[10]
+    # Because SA affects every GPS receiver in a given area almost equally,
+    # a fixed station with an accurately known position can measure the SA error values and
+    # transmit them to the local GPS receivers so they may correct their position fixes.
+    # This is called Differential GPS or DGPS. DGPS also corrects for several other important sources of GPS errors,
+    # particularly ionospheric delay, so it continues to be widely used even though SA has been turned off.
+    # The ineffectiveness of SA in the face of widely available DGPS was a common argument for turning off SA,
+    # and this was finally done by order of President Clinton in 2000.
+    # Suppose it is 1 May 2000, and you are standing in a field that is 200m square.
+    # You are holding a GPS unit that indicates that your location
+    # is 51m north and 15m west of a known reference point in the middle of the field.
+    # However, you know that each of these coordinates has been perturbed by a "feature"
+    # that adds random errors with mean 0 and standard deviation 30m.
+
+    # 1) After taking one measurement, what should you believe about your position?
+    # Note: Since the intentional errors are independent, you could solve this problem independently for X and Y.
+    # But we'll treat it as a two-dimensional problem, partly for practice
+    # and partly to see how we could extend the solution to handle dependent errors.
+    # You can start with the code in gps.py.
+    # 2) Suppose that after one second the GPS updates your position and reports coordinates (48, 90).
+    # What should you believe now?
+    # 3) Suppose you take 8 more measurements and get:
+    #     (11.903060613102866, 19.79168669735705)
+    #     (77.10743601503178, 39.87062906535289)
+    #     (80.16596823095534, -12.797927542984425)
+    #     (67.38157493119053, 83.52841028148538)
+    #     (89.43965206875271, 20.52141889230797)
+    #     (58.794021026248245, 30.23054016065644)
+    #     (2.5844401241265302, 51.012041625783766)
+    #     (45.58108994142448, 3.5718287379754585)
+    # At this point, how certain are you about your location?
+
+    coords = np.linspace(-100, 100, 10)
+    joint = Gps(itertools.product(coords, coords))
+    joint.update((51, -15))
+
+    # Solution
+
+    joint.update((48, 90))
+
+    # Solution
+
+    pairs = [
+        (11.903060613102866, 19.79168669735705),
+        (77.10743601503178, 39.87062906535289),
+        (80.16596823095534, -12.797927542984425),
+        (67.38157493119053, 83.52841028148538),
+        (89.43965206875271, 20.52141889230797),
+        (58.794021026248245, 30.23054016065644),
+        (2.5844401241265302, 51.012041625783766),
+        (45.58108994142448, 3.5718287379754585),
+    ]
+
+    joint.update_set(pairs)
+
+    # Solution
+
+    thinkplot.pre_plot(2)
+    pdfx = joint.marginal(0)
+    pdfy = joint.marginal(1)
+    thinkplot.plot_pdf_line(pdfx, label="posterior x")
+    thinkplot.plot_pdf_line(pdfy, label="posterior y")
+
+    # Solution
+
+    print(pdfx.mean(), pdfx.std())
+    print(pdfy.mean(), pdfy.std())
