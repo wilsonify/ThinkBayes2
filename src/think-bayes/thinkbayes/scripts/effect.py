@@ -4,10 +4,10 @@ by Allen B. Downey, available from greenteapress.com
 Copyright 2014 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
-import logging
 from random import random
 
 import thinkbayes
+from thinkbayes import thinkplot
 from thinkbayes.scripts.variability import update_suite5, Height, find_prior_ranges, summarize, read_heights
 
 
@@ -34,12 +34,22 @@ def run_estimate(update_func, num_points=31, median_flag=False):
         update_func(suite, xs)
         print("MAP", suite.MaximumLikelihood())
 
-    # joint distributions of mu and sigma for men and women
     suite1 = suites["male"]
     suite2 = suites["female"]
-    logging.debug("%r", f"suite1={suite1}")
-    logging.debug("%r", f"suite2={suite2}")
-    # TODO: compute and plot the distribution of d
+
+    mu1 = suite1.marginal(0)
+    sigma1 = suite1.marginal(1)
+
+    mu2 = suite2.marginal(0)
+    sigma2 = suite2.marginal(1)
+
+    diff = mu1 - mu2
+    sigma = (sigma1 + sigma2) / 2
+
+    pmf_d = diff / sigma
+
+    thinkplot.plot_cdf_line(pmf_d.MakeCdf())
+    thinkplot.show_plot(xlabel="# stddev between means", ylabel="PMF")
 
 
 def main():
