@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 from thinkbayes import Suite, Joint
 from thinkbayes import thinkplot
+from thinkbayes.thinkplot import POSTERIOR_MARGINAL_LABEL
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
 DATADIR = os.path.join(TESTDIR, "data")
@@ -39,10 +40,8 @@ def test_shuttle():
     df.drop(labels=[3, 24], inplace=True)
     logging.info("%r", f"df.shape = {df.shape}")
 
-
     df["Incident"] = df["Damage Incident"].astype(float)
     logging.info("%r", f"df.shape = {df.shape}")
-
 
     import matplotlib.pyplot as plt
 
@@ -111,12 +110,12 @@ def test_shuttle():
 
     thinkplot.plot_pdf_line(suite.marginal(0))
     thinkplot.decorate(
-        xlabel="Intercept", ylabel="PMF", title="Posterior marginal distribution"
+        xlabel="Intercept", ylabel="PMF", title=POSTERIOR_MARGINAL_LABEL
     )
 
     thinkplot.plot_pdf_line(suite.marginal(1))
     thinkplot.decorate(
-        xlabel="Log odds ratio", ylabel="PMF", title="Posterior marginal distribution"
+        xlabel="Log odds ratio", ylabel="PMF", title=POSTERIOR_MARGINAL_LABEL
     )
 
     # According to the posterior distribution, what was the probability of damage when the shuttle launched at 31 degF?
@@ -133,7 +132,6 @@ def test_shuttle():
         total += p * p_fail
 
     logging.info("%r", f"total = {total}")
-
 
     # Solution
 

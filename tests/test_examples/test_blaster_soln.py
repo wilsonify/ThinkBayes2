@@ -11,6 +11,9 @@ import pytest
 from thinkbayes import Hist, Pmf, Suite, Beta
 from thinkbayes import thinkplot
 
+P_HIT_LABEL = "Probability of hit"
+N_HITS_LABEL = "Number of hits"
+
 
 def test_alien_blaster_problem():
     # ### The Alien Blaster problem
@@ -29,7 +32,8 @@ def test_alien_blaster_problem():
 
     prior = Beta(5, 10)
     thinkplot.plot_pdf_line(prior.make_pmf())
-    thinkplot.decorate(xlabel="Probability of hit", ylabel="PMF")
+
+    thinkplot.decorate(xlabel=P_HIT_LABEL, ylabel="PMF")
     prior.mean()
 
     # Solution
@@ -65,7 +69,7 @@ def test_alien_blaster_problem():
     blaster = AlienBlaster(pmf)
     blaster.update(2)
     thinkplot.plot_pdf_line(blaster)
-    thinkplot.decorate(xlabel="Probability of hit", ylabel="PMF")
+    thinkplot.decorate(xlabel=P_HIT_LABEL, ylabel="PMF")
 
     # Solution
 
@@ -78,7 +82,7 @@ def test_alien_blaster_problem():
     thinkplot.plot_pdf_line(blaster, color="gray")
     blaster.update(2)
     thinkplot.plot_pdf_line(blaster)
-    thinkplot.decorate(xlabel="Probability of hit", ylabel="PMF")
+    thinkplot.decorate(xlabel=P_HIT_LABEL, ylabel="PMF")
 
     # Solution
 
@@ -145,7 +149,8 @@ def test_alien_blaster_problem():
 
     pmf = Pmf(ks)
     thinkplot.plot_hist_bar(pmf)
-    thinkplot.decorate(xlabel="Number of hits", ylabel="PMF")
+
+    thinkplot.decorate(xlabel=N_HITS_LABEL, ylabel="PMF")
 
     logging.info("%r", f"len(ks) = {len(ks)}")
     logging.info("%r", f"np.mean(ks) = {np.mean(ks)}")
@@ -163,7 +168,7 @@ def test_alien_blaster_problem():
 
     pmf = Pmf(ks)
     thinkplot.plot_hist_bar(pmf)
-    thinkplot.decorate(xlabel="Number of hits", ylabel="PMF")
+    thinkplot.decorate(xlabel=N_HITS_LABEL, ylabel="PMF")
     np.mean(ks)
 
     # One more way to do the same thing is to make a meta-Pmf, which contains the two binomial `Pmf` objects:
@@ -184,7 +189,7 @@ def test_alien_blaster_problem():
 
     pmf = Pmf(ks)
     thinkplot.plot_hist_bar(pmf)
-    thinkplot.decorate(xlabel="Number of hits", ylabel="PMF")
+    thinkplot.decorate(xlabel=N_HITS_LABEL, ylabel="PMF")
     np.mean(ks)
 
     # This result, which we have estimated three ways, is a predictive distribution, based on our uncertainty about `x`.

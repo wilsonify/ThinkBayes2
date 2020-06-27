@@ -10,6 +10,7 @@ import pandas as pd
 from thinkbayes import make_poisson_pmf, eval_binomial_pmf, make_mixture
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import thinkplot
+from thinkbayes.thinkplot import POSTERIOR_MARGINAL_LABEL
 
 
 def test_geiger_counter_problem():
@@ -93,7 +94,7 @@ def test_geiger_counter_problem():
     thinkplot.decorate(
         xlabel="Emission rate (particles/second)",
         ylabel="PMF",
-        title="Posterior marginal distribution",
+        title=POSTERIOR_MARGINAL_LABEL,
     )
 
     # ### MCMC
@@ -170,7 +171,7 @@ def test_geiger_counter_problem():
     thinkplot.decorate(
         xlabel="Emission rate (particles/second)",
         ylabel="PMF",
-        title="Posterior marginal distribution",
+        title=POSTERIOR_MARGINAL_LABEL,
     )
 
     pmf_n = suite.marginal(1)
@@ -178,7 +179,7 @@ def test_geiger_counter_problem():
     thinkplot.decorate(
         xlabel="Number of particles (n)",
         ylabel="PMF",
-        title="Posterior marginal distribution",
+        title=POSTERIOR_MARGINAL_LABEL,
     )
 
     # ### Hierarchical version, as in the book

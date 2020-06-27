@@ -5,11 +5,13 @@ Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-import pytest
 import numpy as np
+import pytest
 import thinkbayes
 from thinkbayes import Pmf, Suite
 from thinkbayes import thinkplot
+
+N_PLAYERS_LABEL = "Number of players"
 
 
 class Dungeons(Suite):
@@ -169,7 +171,8 @@ def test_compare():
     prior = sum([player] * 10)
 
     thinkplot.plot_pmf_line(prior, color="C1")
-    thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
+
+    thinkplot.decorate(xlabel=N_PLAYERS_LABEL, ylabel="PMF")
 
 
 def test_analytic(prior):

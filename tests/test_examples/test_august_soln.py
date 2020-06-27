@@ -10,6 +10,10 @@ import numpy as np
 from scipy.special import expit, logit  # pylint: disable=no-name-in-module
 from thinkbayes import Pmf, Suite, Joint
 from thinkbayes import thinkplot
+from thinkbayes.thinkplot import POSTERIOR_MARGINAL_LABEL
+
+MONTHS_AFTER_CUTOFF_LABEL = "Months after cutoff"
+DIAGNOSIS_RATE_LABEL = "Diagnosis rate per 10,000"
 
 
 def test_birthday_problem():
@@ -71,7 +75,8 @@ def test_birthday_problem():
 
     xs = np.arange(12)
     thinkplot.plot(xs, rates)
-    thinkplot.decorate(xlabel="Months after cutoff", ylabel="Diagnosis rate per 10,000")
+
+    thinkplot.decorate(xlabel=MONTHS_AFTER_CUTOFF_LABEL, ylabel=DIAGNOSIS_RATE_LABEL)
 
     # For the first 9 months, from September to May, we see what we would expect if at least some of the excess diagnoses are due to behavioral differences due to age.  For each month of difference in age, we see an increase in the number of diagnoses.
     #
@@ -109,7 +114,7 @@ def test_birthday_problem():
 
     errorbar(xs, low, high, color="gray", alpha=0.7)
     thinkplot.plot(xs, rates)
-    thinkplot.decorate(xlabel="Months after cutoff", ylabel="Diagnosis rate per 10,000")
+    thinkplot.decorate(xlabel=MONTHS_AFTER_CUTOFF_LABEL, ylabel=DIAGNOSIS_RATE_LABEL)
 
     # It seems like the lower rates in the last 3 months are unlikely to be due to random variation, so it might be good to investigate the effect of "red shirting".
     #
@@ -153,7 +158,7 @@ def test_birthday_problem():
     thinkplot.plot_pdf_line(pmf0)
 
     thinkplot.decorate(
-        title="Posterior marginal distribution",
+        title=POSTERIOR_MARGINAL_LABEL,
         xlabel="Intercept log odds (b0)",
         ylabel="Pdf",
     )
@@ -166,7 +171,7 @@ def test_birthday_problem():
     thinkplot.plot_pdf_line(pmf1)
 
     thinkplot.decorate(
-        title="Posterior marginal distribution",
+        title=POSTERIOR_MARGINAL_LABEL,
         xlabel="Slope log odds (b0)",
         ylabel="Pdf",
     )
@@ -181,7 +186,7 @@ def test_birthday_problem():
     errorbar(xs, low, high, color="gray", alpha=0.7)
     thinkplot.plot(xs, rates)
 
-    thinkplot.decorate(xlabel="Months after cutoff", ylabel="Diagnosis rate per 10,000")
+    thinkplot.decorate(xlabel=MONTHS_AFTER_CUTOFF_LABEL, ylabel=DIAGNOSIS_RATE_LABEL)
 
     # Most of these regression lines fall within the credible intervals of the observed rates, so in that sense it seems like this model is not ruled out by the data.
     #
@@ -208,7 +213,7 @@ def test_birthday_problem():
 
     thinkplot.decorate(
         title="Posterior predictive distribution",
-        xlabel="Diagnosis rate per 10,000",
+        xlabel=DIAGNOSIS_RATE_LABEL,
         ylabel="CDF",
     )
 

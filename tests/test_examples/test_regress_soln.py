@@ -10,6 +10,7 @@ import numpy as np
 from thinkbayes import Suite, Joint
 
 from thinkbayes import thinkplot
+from thinkbayes.thinkplot import POSTERIOR_MARGINAL_LABEL
 
 
 def test_bayes_reg():
@@ -83,17 +84,17 @@ def test_bayes_reg():
 
     thinkplot.plot_pdf_line(suite.marginal(0))
     thinkplot.decorate(
-        xlabel="Slope", ylabel="PMF", title="Posterior marginal distribution"
+        xlabel="Slope", ylabel="PMF", title=POSTERIOR_MARGINAL_LABEL
     )
 
     thinkplot.plot_pdf_line(suite.marginal(1))
     thinkplot.decorate(
-        xlabel="Intercept", ylabel="PMF", title="Posterior marginal distribution"
+        xlabel="Intercept", ylabel="PMF", title=POSTERIOR_MARGINAL_LABEL
     )
 
     thinkplot.plot_pdf_line(suite.marginal(2))
     thinkplot.decorate(
-        xlabel="Sigma", ylabel="PMF", title="Posterior marginal distribution"
+        xlabel="Sigma", ylabel="PMF", title=POSTERIOR_MARGINAL_LABEL
     )
 
     # ### MCMC

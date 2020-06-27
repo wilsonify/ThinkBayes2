@@ -28,7 +28,7 @@ from chart_studio import plotly
 
 # matplotlib.rc('ytick.major', size=6.0)
 # matplotlib.rc('ytick.minor', size=3.0)
-
+POSTERIOR_MARGINAL_LABEL = "Posterior marginal distribution"
 
 class _Brewer(object):
     """Encapsulates a nice sequence of colors.
