@@ -336,32 +336,32 @@ def test_robot4():
 
 
 def test_red_dice():
-    d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1(bluish)")
+    d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1_bluish")
     d1.print()
 
 
 def test_red_dice2():
-    d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2(reddish)")
+    d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2_reddish")
     d2.print()
 
 
 def test_red_dice3():
-    d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1(bluish)")
-    d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2(reddish)")
+    d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1_bluish")
+    d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2_reddish")
     dice = Pmf({d1: Fraction(1), d2: Fraction(1)})
     dice.print()
 
 
 def test_red_dice4():
-    d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1(bluish)")
-    d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2(reddish)")
+    d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1_bluish")
+    d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2_reddish")
     prior = Dice({d1: Fraction(1), d2: Fraction(1)})
     print(prior)
 
 
 def test_red_dice5():
-    d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1(bluish)")
-    d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2(reddish)")
+    d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1_bluish")
+    d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2_reddish")
     prior = Dice({d1: Fraction(1), d2: Fraction(1)})
     posterior = prior.copy()
     posterior.update("Red")
@@ -377,8 +377,8 @@ def test_red_dice6():
     :return:
     """
 
-    d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1(bluish)")
-    d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2(reddish)")
+    d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1_bluish")
+    d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2_reddish")
     prior = Dice({d1: Fraction(1), d2: Fraction(1)})
     posterior = prior.copy()
     posterior.update("Red")
@@ -394,8 +394,8 @@ def test_red_dice7():
 
     :return:
     """
-    d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1(bluish)")
-    d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2(reddish)")
+    d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1_bluish")
+    d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2_reddish")
     prior = Dice({d1: Fraction(1), d2: Fraction(1)})
     posterior = prior.copy()
     posterior.update("Red")
@@ -427,8 +427,8 @@ def test_red_dice8():
 
     :return:
     """
-    d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1(bluish)")
-    d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2(reddish)")
+    d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1_bluish")
+    d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2_reddish")
     prior = Dice({d1: Fraction(1), d2: Fraction(1)})
     posterior = prior.copy()
     posterior.update("Red")
@@ -460,8 +460,8 @@ def test_red_dice9():
 
     :return:
     """
-    d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1(bluish)")
-    d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2(reddish)")
+    d1 = Pmf({"Red": Fraction(2), "Blue": Fraction(4)}, label="d1_bluish")
+    d2 = Pmf({"Red": Fraction(4), "Blue": Fraction(2)}, label="d2_reddish")
     prior = Dice({d1: Fraction(1), d2: Fraction(1)})
     posterior = prior.copy()
     print(posterior)
