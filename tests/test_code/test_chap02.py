@@ -2,6 +2,7 @@
 This is based on a notebook of example code from Think Bayes.
 """
 from thinkbayes import Pmf, Suite
+from thinkbayes.scripts.mandm import MAndM
 
 
 class Cookie(Pmf):
@@ -143,49 +144,6 @@ class Monty(Suite):
             return 1
 
 
-class M_and_M(Suite):
-    """
-    # ## The M&M problem
-    #
-    # M&Ms are small candy-coated chocolates that come in a variety of
-    # colors.  Mars, Inc., which makes M&Ms, changes the mixture of
-    # colors from time to time.
-    #
-    # In 1995, they introduced blue M&Ms.  Before then, the color mix in
-    # a bag of plain M&Ms was 30% Brown, 20% Yellow, 20% Red, 10%
-    # Green, 10% Orange, 10% Tan.  Afterward it was 24% Blue , 20%
-    # Green, 16% Orange, 14% Yellow, 13% Red, 13% Brown.
-    #
-    # Suppose a friend of mine has two bags of M&Ms, and he tells me
-    # that one is from 1994 and one from 1996.  He won't tell me which is
-    # which, but he gives me one M&M from each bag.  One is yellow and
-    # one is green.  What is the probability that the yellow one came
-    # from the 1994 bag?
-
-    Map from hypothesis (A or B) to probability.
-    """
-
-    mix94 = dict(brown=30, yellow=20, red=20, green=10, orange=10, tan=10, blue=0)
-
-    mix96 = dict(blue=24, green=20, orange=16, yellow=14, red=13, brown=13, tan=0)
-
-    hypoA = dict(bag1=mix94, bag2=mix96)
-    hypoB = dict(bag1=mix96, bag2=mix94)
-
-    hypotheses = dict(A=hypoA, B=hypoB)
-
-    def likelihood(self, data, hypo):
-        """Computes the likelihood of the data under the hypothesis.
-
-        hypo: string hypothesis (A or B)
-        data: tuple of string bag, string color
-        """
-        bag, color = data
-        mix = self.hypotheses[hypo][bag]
-        like = mix[color]
-        return like
-
-
 # A faster way to make a Pmf is to provide a sequence of values.  The constructor adds the values to the Pmf and then normalizes:
 def test_pmf(six_sided_die_pmf):
     pmf = Pmf([1, 2, 3, 4, 5, 6])
@@ -263,7 +221,7 @@ def test_monty_hall():
 
 
 def test_m_and_m():
-    suite = M_and_M("AB")
+    suite = MAndM("AB")
     suite.update(("bag1", "yellow"))
     suite.update(("bag2", "green"))
     suite.print()

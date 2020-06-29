@@ -129,7 +129,7 @@ def test_two():
     thinkplot.plot_pdf_line(female_height_pmf, label="Female")
 
     thinkplot.decorate(
-        xlabel="Height (cm)", ylabel="PMF", title="Adult residents of the U.S."
+        xlabel=HEIGHT_LABEL, ylabel="PMF", title="Adult residents of the U.S."
     )
 
 
@@ -147,7 +147,7 @@ def test_three():
 
     thinkplot.plot_pdf_line(mix)
     thinkplot.decorate(
-        xlabel="Height (cm)", ylabel="PMF", title="Adult residents of the U.S."
+        xlabel=HEIGHT_LABEL, ylabel="PMF", title="Adult residents of the U.S."
     )
 
 
@@ -220,7 +220,7 @@ def test_six():
     thinkplot.plot_pdf_line(posterior_a, label="A")
     thinkplot.plot_pdf_line(posterior_b, label="B")
     thinkplot.decorate(
-        xlabel="Height (cm)", ylabel="PMF", title="Posterior marginal distributions"
+        xlabel=HEIGHT_LABEL, ylabel="PMF", title="Posterior marginal distributions"
     )
 
     posterior_a.mean(), posterior_b.mean()

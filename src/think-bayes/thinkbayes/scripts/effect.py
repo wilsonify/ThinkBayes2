@@ -11,7 +11,7 @@ from thinkbayes import thinkplot
 from thinkbayes.scripts.variability import update_suite5, Height, find_prior_ranges, summarize, read_heights
 
 
-def run_estimate(update_func, num_points=31, median_flag=False):
+def run_effect_estimate(update_func, num_points=31, median_flag=False):
     """Runs the whole analysis.
 
     update_func: which of the update functions to use
@@ -57,7 +57,7 @@ def main():
 
     func = update_suite5
     median_flag = func == update_suite5
-    run_estimate(func, median_flag=median_flag)
+    run_effect_estimate(func, median_flag=median_flag)
 
 
 if __name__ == "__main__":

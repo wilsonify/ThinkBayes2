@@ -441,7 +441,7 @@ def summarize(xs):
     print(cdf.percentile(25), cdf.percentile(50), cdf.percentile(75))
 
 
-def run_estimate(update_func, num_points=31, median_flag=False):
+def run_variability_estimate(update_func, num_points=31, median_flag=False):
     """Runs the whole analysis.
 
     update_func: which of the update functions to use
@@ -483,7 +483,7 @@ def main():
 
     func = update_suite5
     median_flag = func == update_suite5
-    run_estimate(func, median_flag=median_flag)
+    run_variability_estimate(func, median_flag=median_flag)
 
 
 if __name__ == "__main__":
