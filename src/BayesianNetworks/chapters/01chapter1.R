@@ -1,5 +1,5 @@
 
-install.packages("bnlearn")
+
 library(bnlearn)
 data(lizards)
 lizards = read.table("lizards.txt", header = TRUE)
@@ -48,6 +48,6 @@ var(new.data[!is.sagrei, "Sim.Diameter"])
 
 #-----------------------------------------------------------------------------#
 
-boxplot(Sim.Diameter  ̃ Species, data = new.data, ylab = "Diameter (inches)")
+boxplot(Sim.Diameter ~ Species, data = new.data, ylab = "Diameter (inches)")
 abline(h = 4, lty = "dashed")
 

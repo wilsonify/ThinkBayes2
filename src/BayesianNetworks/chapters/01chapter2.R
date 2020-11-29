@@ -228,8 +228,7 @@ INT = sapply(1:11, function(x) { which(isachs$INT == x) })
 nodes = names(isachs)[1:11]
 names(INT) = nodes
 
-start = random.graph(nodes = nodes, method = "melancon", num = 500,
-          burn.in = 10ˆ5, every = 100)
+start = random.graph(nodes = nodes, method = "melancon", num = 500, burn.in = 10^5, every = 100)
 netlist = lapply(start, function(net) {
   tabu(isachs[, 1:11], score = "mbde", exp = INT,
   iss = 10, start = net, tabu = 50)
