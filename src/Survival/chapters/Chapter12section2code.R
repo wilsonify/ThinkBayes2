@@ -24,10 +24,12 @@ Baboons <- within(Baboons, {
 Baboons[c(1,39,71,101, 150),]
 
 # install.packages("Icens")      # this package is now in Bioconductor
-source("https://bioconductor.org/biocLite.R")
-biocLite("Icens")
-
-install.packages("interval")   # must be done once
+# install.packages("BiocManager") # R>=3.5
+# BiocManager::install("Icens")
+# BiocManager::install("interval")
+# source("https://bioconductor.org/biocLite.R") # R <3.5
+# biocLite("Icens")
+# install.packages("interval")   # must be done once
 
 library(Icens)
 library(interval)       

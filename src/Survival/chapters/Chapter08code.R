@@ -6,8 +6,6 @@
 
 # Chapter 8
 
-# install.packages("asaur")    # this must be done once
-
 # Section 8.1 Stanford heart transplant data
 library(survival)
 coxph(Surv(futime, fustat) ~ transplant + age + surgery, data=jasa) # naive analysis

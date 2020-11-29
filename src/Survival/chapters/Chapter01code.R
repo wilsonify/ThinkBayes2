@@ -5,7 +5,7 @@
 # # # # # # # # # # # # # # # # # # #
 
 # code for Chapter 1
-install.packages("asaur")  # this must be done once
+
 library(asaur)
 
 gastricXelox[23:27,]

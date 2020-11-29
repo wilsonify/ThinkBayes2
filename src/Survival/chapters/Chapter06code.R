@@ -6,8 +6,6 @@
 
 # Chapter 6
 
-# install.packages("asaur")    # must be done once
-
 # # # # # # # # # # # #
 # repeat generation of genotype simulation
 # genotype confounding simulation, Section 4.2, Example 4.3
@@ -120,7 +118,7 @@ label.factors <- c("Treatment Group", "   triple therapy", "   patch", "",
    "Employment", "   full time", "   other", "   part time",
    "", "Age group", "   21-34", "   35-49", "   50-64", "   65+")
    
-install.packages("forestplot")  # must do this once
+
 library(forestplot)
 
 forestplot(label.factors,

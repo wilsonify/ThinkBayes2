@@ -6,8 +6,6 @@
 
 # Chapter 7
 
-# install.packages("asaur") # must be run once
-
 # # # # # # # # # # # # # #
 # Section 7.1.1 martingale and deviance residuals
 # # # # # # # # # # # # # #
@@ -112,14 +110,14 @@ for (i in 1:n.obs) {
   }
 
 # Fig. 7.3  
-windows()
+
 index.obs <- 1:n.obs 
 plot(jkbeta.vec ~ index.obs, type="h",
     xlab="Observation", ylab="Change in coefficient for age",
    cex.axis=1.3, cex.lab=1.3) 
 abline(h=0)
 
-identify(jkbeta.vec ~ index.obs)  # click on points to get their identifying label.
+# identify(jkbeta.vec ~ index.obs)  # click on points to get their identifying label.
 #   Press the "Esc" button to quit the "identify" mode.
 
 # # # # # # # # # # # # # #
@@ -141,7 +139,7 @@ cloglog.M <- log(-log(surv.M))
 logtime.M <- log(time.M)
 
 # Fig 7.4
-windows()
+
 plot(cloglog.LA ~ logtime.LA, type="s", col="blue", 
    lwd=2, xlab="Log time", ylab="Complementary log-log survival")
 lines(cloglog.M ~ logtime.M, col="red", lwd=2, type="s")

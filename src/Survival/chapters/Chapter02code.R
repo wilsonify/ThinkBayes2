@@ -7,20 +7,23 @@
 # code for Chapter 2
 
 library(survival)
-tm <- c(0, # birth
-   1/365, # first day of life
-   7/365, # seventh day of life
+tm <- c(
+   #0, # birth
+   #1/365, # first day of life
+   #7/365, # seventh day of life
    28/365, # fourth week of life
    1:110) # subsequent years
 hazMale <- as.numeric(survexp.us[,"male","2004"]) # 2004 males
 hazFemale <- as.numeric(survexp.us[,"female","2004"]) # 2004 females
 tm.diff <- diff(tm)
+length(tm.diff)
+
 survMale <- exp(-cumsum(hazMale*tm.diff)*365.24)
 survFemale <- exp(-cumsum(hazFemale*tm.diff)*365.24)
 
 # Figure 2.1.2 log hazard and survival for US males and females in 2004
 par(mfrow=c(2,1),    # two rows and one column of plots
-    mar=c(4.2,5,2,2))  # set margins for the lower, left, top, and righ of each plot
+    mar=c(4.2,5,2,2))  # set margins for the lower, left, top, and right of each plot
 
 logHazMale <- log(hazMale)
 logHazFemale <- log(hazFemale)    
@@ -69,7 +72,7 @@ sum(survFemale*tm.diff) # mean age of female death in 2004
 # Figure 2.4.2 Weibull hazard functions
 # # # # #
 
-windows()
+
 weibHaz <- {function(x, shape, scale) dweibull(x, shape=shape,
      scale=scale)/pweibull(x, shape=shape, scale=scale, lower.tail=F)}
 curve(weibHaz(x, shape=1.5, scale=1/0.03), from=0, to=80, 
@@ -104,3 +107,4 @@ text(12, 0.05, expression(beta == 0.75), col="blue", cex=1.3)
 text(25, 0.05, expression(lambda==0.03), col="blue", cex=1.3)
 text(12, 0.027, expression(beta == 1.00), col="black", cex=1.3)
 text(25, 0.027, expression(lambda==0.03), col="black", cex=1.3)
+

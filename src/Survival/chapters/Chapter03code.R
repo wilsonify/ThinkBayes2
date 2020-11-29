@@ -9,7 +9,6 @@
 # Kaplan-Meier estimate of the survival function using the data
 #   in Example 1.1
 
-# install.packages("asaur")  # must do this once
 library(survival)
 tt <- c(7,6,6,2,4)
 cens <- c(0,1,0,1,1)
@@ -51,7 +50,7 @@ survfit(Surv(timeMonths, delta.followup) ~ 1)
 # Figure 3.4.1 smooth hazard estimate
 # # # # # #
 
-install.packages("muhaz")    # this must be done once
+
 library(muhaz)
 t.vec <- c(7,6,6,5,2,4)
 cens.vec <- c(0,1,0,0,1,1)

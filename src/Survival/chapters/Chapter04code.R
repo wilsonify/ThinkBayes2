@@ -6,7 +6,6 @@
 
 # Chapter 4
 
-# install.packages("asaur")   # must do this once
 library(survival)
 
 # # # # # # # # # #
@@ -23,7 +22,6 @@ survdiff(Surv(tt, delta) ~ trt)
 # Section 4.1, pancreatic data
 # # # # # # # # # #
 
-install.packages("date")  # must be done once
 library(date)     # load the "date" library
 library(survival) # load the "survival" library
 library(asaur)

@@ -6,7 +6,6 @@
 
 # Chapter 5
 
-# install.packages("asaur")  # this must be done once
 library(survival)
 
 # # # # # # # # # #
@@ -54,7 +53,7 @@ grp <- trt
 result.cox <- coxph(Surv(tt, status) ~ grp)
 summary(result.cox)
 
-install.packages("numDeriv")    # must be done once
+
 library(numDeriv)   # must be downloaded from CRAN and installed
 grad(func=plsimple, x=0)
 hessian(func=plsimple, x=result$par)
