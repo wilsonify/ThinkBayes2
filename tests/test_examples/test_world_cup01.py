@@ -9,6 +9,7 @@ import logging
 
 import numpy as np
 import pymc3 as pm
+import pytest
 import thinkbayes
 from scipy.stats import poisson
 from thinkbayes import Pmf, Cdf, Suite
@@ -18,6 +19,23 @@ from thinkbayes import thinkplot
 from thinkbayes.scripts.hockey import GOALS_PER_GAME_LABEL
 
 POSTERIOR_LABEL = "Posterior after 1 goal"
+
+mean_rate = 1.3
+rem_time = 90 - 23
+
+
+@pytest.fixture(name="mix")
+def mix_fix():
+    xs = np.linspace(0, 12, 101)
+    pmf_gamma = thinkbayes.make_gamma_pmf(xs, 1.3)
+    prior = Soccer(pmf_gamma)
+    metapmf = Pmf()
+    for lam, prob in prior.items():
+        lt = lam * rem_time / 90
+        pred = make_poisson_pmf(lt, 15)
+        metapmf[pred] = prob
+    mix = MakeMixture(metapmf)
+    return mix
 
 
 class Soccer(Suite):
@@ -92,34 +110,37 @@ def PredictiveDist(suite, duration=1, label="pred"):
     return mix
 
 
-def test_wc3():
-    # ## The World Cup Problem, Part One
-    #
-    # >In the 2014 FIFA World Cup, Germany played Brazil in a semifinal match. Germany scored after 11 minutes and again at the 23 minute mark. At that point in the match, how many goals would you expect Germany to score after 90 minutes? What was the probability that they would score 5 more goals (as, in fact, they did)?
+@pytest.fixture(name="gamma_pmf")
+def gamma_pmf_fixture():
+    """
+    The World Cup Problem, Part One
+    In the 2014 FIFA World Cup, Germany played Brazil in a semifinal match.
+    Germany scored after 11 minutes and again at the 23 minute mark.
+    At that point in the match, how many goals would you expect Germany to score after 90 minutes?
+    What was the probability that they would score 5 more goals (as, in fact, they did)?
 
-    # Let's assume that Germany has some hypothetical goal-scoring rate, λ, in goals per game.
-    #
-    # To represent the prior distribution of λ, I'll use a Gamma distribution with mean 1.3, which is the average number of goals per team per game in World Cup play.
-    #
-    # Here's what the prior looks like.
+    Let's assume that Germany has some hypothetical goal-scoring rate, λ, in goals per game.
+    To represent the prior distribution of λ, I'll use a Gamma distribution with mean 1.3,
+    which is the average number of goals per team per game in World Cup play.
+    Here's what the prior looks like.
+    """
 
     xs = np.linspace(0, 8, 101)
     pmf = make_gamma_pmf(xs, 1.3)
-    thinkplot.plot_pdf_line(pmf)
-    thinkplot.decorate(title="GammaPDF", xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF")
-    pmf.mean()
+    return pmf
 
-    # **Exercise:**  Write a class called `Soccer` that extends `Suite` and defines `Likelihood`, which should compute the probability of the data (the time between goals in minutes) for a hypothetical goal-scoring rate, `lam`, in goals per game.
-    #
-    # Hint: For a given value of `lam`, the time between goals is distributed exponentially.
-    #
-    # Here's an outline to get you started:
 
-    # Solution goes here
+def test_soccer(gamma_pmf):
+    """
+    **Exercise:**
+    Write a class called `Soccer` that extends `Suite` and defines `Likelihood`,
+    which should compute the probability of the data (the time between goals in minutes)
+     for a hypothetical goal-scoring rate, `lam`, in goals per game.
 
-    # Now we can create a `Soccer` object and initialize it with the prior Pmf:
+    For a given value of `lam`, the time between goals is distributed exponentially.
+    """
 
-    soccer = Soccer(pmf)
+    soccer = Soccer(gamma_pmf)
     thinkplot.plot_pdf_line(soccer)
     thinkplot.decorate(title="GammaPrior", xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF")
     soccer.mean()
@@ -169,8 +190,8 @@ def test_wc3():
     lam = soccer.random()
     logging.info("%r", f"lam = {lam}")
 
-    # Given `lam`, the number of goals scored in the remaining 67 minutes comes from the Poisson distribution with parameter `lam * t`, with `t` in units of goals.
-    #
+    # Given `lam`, the number of goals scored in the remaining 67 minutes
+    # comes from the Poisson distribution with parameter `lam * t`, with `t` in units of goals.
     # So we can generate a random value like this:
 
     t = 67 / 90
@@ -185,31 +206,32 @@ def test_wc3():
         title="Distribution of goals, known lambda", xlabel="Goals scored", ylabel="PMF"
     )
     pmf.mean()
+    soccer
 
-    # But that's based on a single value of `lam`, so it doesn't take into account both sources of uncertainty.  Instead, we should sample values from the posterior distribution and generate one prediction for each.
-    #
+    # But that's based on a single value of `lam`, so it doesn't take into account both sources of uncertainty.
+    # Instead, we should sample values from the posterior distribution and generate one prediction for each.
+
+
+def test_posterior_distribution(gamma_pmf):
     # **Exercise:** Write a few lines of code to
     #
     # 1. Use `Pmf.Sample` to generate a sample with `n=10000` from the posterior distribution `soccer`.
     #
-    # 2. Use `np.random.poisson` to generate a random number of goals from the Poisson distribution with parameter $\lambda t$, where `t` is the remaining time in the game (in units of games).
+    # 2. Use `np.random.poisson` to generate a random number of goals from the Poisson distribution
+    # with parameter $\lambda t$, where `t` is the remaining time in the game (in units of games).
     #
     # 3. Plot the distribution of the predicted number of goals, and print its mean.
     #
     # 4. What is the probability of scoring 5 or more goals in the remainder of the game?
-
-    # Solution goes here
-
-    # Solution goes here
 
     # ## Computing the predictive distribution
     #
     # Alternatively, we can compute the predictive distribution by making a mixture of Poisson distributions.
     #
     # `MakePoissonPmf` makes a Pmf that represents a Poisson distribution.
-
-    # If we assume that `lam` is the mean of the posterior, we can generate a predictive distribution for the number of goals in the remainder of the game.
-
+    # If we assume that `lam` is the mean of the posterior,
+    # we can generate a predictive distribution for the number of goals in the remainder of the game.
+    soccer = Soccer(gamma_pmf)
     lam = soccer.mean()
     rem_time = 90 - 23
     lt = lam * rem_time / 90
@@ -229,7 +251,8 @@ def test_wc3():
 
     # But that answer is only approximate because it does not take into account our uncertainty about `lam`.
     #
-    # The correct method is to compute a weighted mixture of Poisson distributions, one for each possible value of `lam`.
+    # The correct method is to compute a weighted
+    # mixture of Poisson distributions, one for each possible value of `lam`.
     #
     # The following figure shows the different predictive distributions for the different values of `lam`.
 
@@ -242,7 +265,8 @@ def test_wc3():
         title="Distribution of goals, all lambda", xlabel="Goals scored", ylabel="PMF"
     )
 
-    # We can compute the mixture of these distributions by making a Meta-Pmf that maps from each Poisson Pmf to its probability.
+    # We can compute the mixture of these distributions by
+    # making a Meta-Pmf that maps from each Poisson Pmf to its probability.
 
     metapmf = Pmf()
 
@@ -251,7 +275,8 @@ def test_wc3():
         pred = make_poisson_pmf(lt, 15)
         metapmf[pred] = prob
 
-    # `MakeMixture` takes a Meta-Pmf (a Pmf that contains Pmfs) and returns a single Pmf that represents the weighted mixture of distributions:
+    # `MakeMixture` takes a Meta-Pmf (a Pmf that contains Pmfs) and
+    # returns a single Pmf that represents the weighted mixture of distributions:
 
     # Here's the result for the World Cup problem.
 
@@ -388,7 +413,9 @@ def test_wc2():
     #
     # Write a function called `PredictiveDist` that takes the posterior distribution of $\lambda$ and a duration (in units of games).
     #
-    # It should loop through the hypotheses in `suite`, compute the predictive distribution of goals for each hypothesis, and assemble a "meta-Pmf" which is a Pmf that maps from each predictive distribution to its probability.
+    # It should loop through the hypotheses in `suite`, compute the predictive distribution
+    # of goals for each hypothesis, and assemble a "meta-Pmf" which is a
+    # Pmf that maps from each predictive distribution to its probability.
     #
     # Finally, it should use `MakeMixture` to compute the mixture of the predictive distributions.
 
@@ -434,7 +461,7 @@ def test_wc():
     thinkplot.plot_pdf_line(prior, color="0.7")
     thinkplot.plot_pdf_line(posterior1)
     thinkplot.decorate(
-        title="Posterior after 1 goal", xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF"
+        title=POSTERIOR_LABEL, xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF"
     )
     posterior1.mean()
 
@@ -652,7 +679,7 @@ def test_world_cup():
     thinkplot.plot_pdf_line(prior, color="0.7")
     thinkplot.plot_pdf_line(posterior1)
     thinkplot.decorate(
-        title="Posterior after 1 goal", xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF"
+        title=POSTERIOR_LABEL, xlabel=GOALS_PER_GAME_LABEL, ylabel="PDF"
     )
     posterior1.mean()
 
@@ -695,10 +722,13 @@ def test_world_cup():
         title="Posterior predictive distribution", xlabel="Goals scored", ylabel="PMF"
     )
 
+    metapmf
+
+
+def test_score5(mix):
     # **Exercise:** Compute the predictive mean and the probability of scoring 5 or more additional goals.
 
     # Solution
-
     logging.info("%r", f"mix.mean() = {mix.mean()}")
     logging.info("%r", f"mix.prob_greater(4) = {mix.prob_greater(4)}")
 
@@ -707,8 +737,6 @@ def test_world_cup():
     # Building the MCMC model incrementally, start with just the prior distribution for `lam`.
 
     cdf_gamma = pmf_gamma.make_cdf()
-
-    mean_rate = 1.3
 
     with pm.Model() as model:
         lam = pm.Gamma("lam", alpha=mean_rate, beta=1)
@@ -789,6 +817,8 @@ def test_world_cup():
     thinkplot.plot_cdf_line(cdf_gap)
     thinkplot.decorate(xlabel="Time between goals (games)", ylabel="Cdf")
 
+
+def test_PyMC_wc():
     # **Exercise:** Use PyMC to write a solution to the second World Cup problem:
     #
     # >In the final match of the 2014 FIFA World Cup, Germany defeated Argentina 1-0. How much evidence does this victory provide that Germany had the better team? What is the probability that Germany would win a rematch?
