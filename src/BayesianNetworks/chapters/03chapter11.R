@@ -1,5 +1,5 @@
 
-
+library(R2WinBUGS)
 model <- function() {
   y ~ dbin(p, n)
   p ~ dbeta(alpha, beta)
@@ -9,7 +9,7 @@ data <- list(y = 7, n = 50, alpha = 0.5, beta = 0.5)
 
 inits <- list(p = 0.1)
 
-# model.sim <- bugs (data, inits, parameters, "model.bug")
+model.sim <- bugs(data, inits, parameters, model)
 
 N=112
 D=c(4,5,4,1,0,4,3,4,0,6, 
