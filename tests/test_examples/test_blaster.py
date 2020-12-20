@@ -149,7 +149,7 @@ def test_blaster35(prior):
     thinkplot.plot_pdf_line(blaster)
 
     assert (
-            prior.map() > blaster.MAP()
+            prior.map() > blaster.map()
     )  # The posterior mean and MAP are lower than in the prior.
 
 

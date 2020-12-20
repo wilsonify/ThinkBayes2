@@ -5,12 +5,16 @@ Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 import logging
+import os
 
 import numpy as np
 
 from thinkbayes import Cdf, Suite, Joint
 from thinkbayes import thinkplot
 
+CURTESTDIR = os.path.abspath(os.path.dirname(__file__))
+TESTDIR = os.path.abspath(os.path.join(CURTESTDIR, os.pardir))
+DATADIR = os.path.join(TESTDIR, "data")
 
 def test_flea_beetle_problem():
     # ### The flea beetle problem
@@ -52,7 +56,7 @@ def test_flea_beetle_problem():
 
     import pandas as pd
 
-    df = pd.read_csv("../data/flea_beetles.csv", delimiter="\t")
+    df = pd.read_csv(f"{DATADIR}/flea_beetles.csv", delimiter="\t")
     df.head()
 
     def plot_cdfs(df, col):

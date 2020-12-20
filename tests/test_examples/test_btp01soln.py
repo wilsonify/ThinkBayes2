@@ -383,7 +383,7 @@ def test_red_dice6():
     posterior = prior.copy()
     posterior.update("Red")
     predictive = make_mixture(posterior)
-    predictive.print_size()
+    print(predictive)
 
 
 def test_red_dice7():
@@ -400,7 +400,7 @@ def test_red_dice7():
     posterior = prior.copy()
     posterior.update("Red")
     predictive = make_mixture(prior)
-    predictive.print_size()
+    print(predictive)
 
 
 def test_red_dice8():

@@ -34,7 +34,8 @@ first a little house-keeping
 """
 
 import thinkbayes
-
+import numpy as np
+import pandas as pd
 
 class Soccer(thinkbayes.Suite):
     """Represents hypotheses about goal-scoring rates."""
@@ -65,11 +66,10 @@ def test_soccer():
     import numpy
     from thinkbayes import thinkplot
 
-    hypos = numpy.linspace(0, 12, 201)
+    hypos = numpy.linspace(start=0, stop=12, num=201)
+    hypos = list(hypos)
     suite = Soccer(hypos)
-    suite.update(
-        0.33
-    )  # fake data chosen by trial and error to yield the observed prior mean
+    suite.update(0.33)  # fake data chosen by trial and error to yield the observed prior mean
 
     thinkplot.plot_pdf_line(suite)
     suite.mean()

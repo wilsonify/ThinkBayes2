@@ -4,10 +4,15 @@ This notebook presents code and exercises from Think Bayes, second edition.
 Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import os
 
 import pandas as pd
 from thinkbayes import Cdf, Suite
 from thinkbayes import thinkplot
+
+CURTESTDIR = os.path.abspath(os.path.dirname(__file__))
+TESTDIR = os.path.abspath(os.path.join(CURTESTDIR, os.pardir))
+DATADIR = os.path.join(TESTDIR, "data")
 
 
 # ### The flea beetle problem
@@ -45,7 +50,7 @@ from thinkbayes import thinkplot
 
 
 def test_flea_beetles():
-    df = pd.read_csv("../data/flea_beetles.csv", delimiter="\t")
+    df = pd.read_csv(f"{DATADIR}/flea_beetles.csv", delimiter="\t")
     df.head()
 
     # Here's what the distributions of width look like.

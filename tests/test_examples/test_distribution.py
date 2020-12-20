@@ -171,7 +171,14 @@ def test_print(d6):
     so the total probability in the `Pmf` is 6,
     which doesn't make a lot of sense.
     """
-    d6.print_size()
+    assert d6.d == {
+        1: 0.16666666666666666,
+        2: 0.16666666666666666,
+        3: 0.16666666666666666,
+        4: 0.16666666666666666,
+        5: 0.16666666666666666,
+        6: 0.16666666666666666
+    }
 
 
 def test_norm(d6):
@@ -185,7 +192,15 @@ def test_norm(d6):
     The result is a `Pmf` with probabilities that add to 1.
     """
 
-    d6.print_size()
+    d6.normalize()
+    assert d6.d == {
+        1: 0.16666666666666669,
+        2: 0.16666666666666669,
+        3: 0.16666666666666669,
+        4: 0.16666666666666669,
+        5: 0.16666666666666669,
+        6: 0.16666666666666669
+    }
 
 
 def test_3(d6):
@@ -334,7 +349,12 @@ def test_ex(d6):
     """
     die = Pmf(dict(red=2, blue=4))
     dice = die + die
-    dice.print_size()
+    assert dice.d == {
+        'blueblue': 0.4444444444444444,
+        'bluered': 0.2222222222222222,
+        'redblue': 0.2222222222222222,
+        'redred': 0.1111111111111111
+    }
 
 
 def test_cumulative_probabilities(d6):

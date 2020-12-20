@@ -95,8 +95,8 @@ def test_alien_blaster_problem():
 
     # So is the MAP
 
-    logging.info("%r", f"prior.MAP() = {prior.map()}")
-    logging.info("%r", f"blaster.MAP() = {blaster.MAP()}")
+    logging.info("%r", f"prior.map() = {prior.map()}")
+    logging.info("%r", f"blaster.map() = {blaster.map()}")
 
     # So if we learn that the new design is "consistent",
     # it is more likely to be consistently bad (in this case).

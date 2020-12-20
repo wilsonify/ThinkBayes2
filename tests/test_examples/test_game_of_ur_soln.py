@@ -93,7 +93,7 @@ def test_ur_problem():
 
     posterior = pmf_13.copy()
     posterior.normalize()
-    posterior.print_size()
+    assert posterior.d == {}
 
     # That sure looks similar to what we got by simulation.  Let's compare them.
 
