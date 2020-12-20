@@ -6,9 +6,10 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 import numpy as np
-from tests.test_examples.test_social_soln import POP_FRAC_LABEL
 from thinkbayes import Suite, Beta
 from thinkbayes import thinkplot
+
+POP_FRAC_LABEL = "Fraction of the population"
 
 
 def test_social_desirability_problem():
