@@ -206,7 +206,6 @@ def test_soccer(gamma_pmf):
         title="Distribution of goals, known lambda", xlabel="Goals scored", ylabel="PMF"
     )
     pmf.mean()
-    soccer
 
     # But that's based on a single value of `lam`, so it doesn't take into account both sources of uncertainty.
     # Instead, we should sample values from the posterior distribution and generate one prediction for each.
@@ -721,8 +720,6 @@ def test_world_cup():
     thinkplot.decorate(
         title="Posterior predictive distribution", xlabel="Goals scored", ylabel="PMF"
     )
-
-    metapmf
 
 
 def test_score5(mix):
