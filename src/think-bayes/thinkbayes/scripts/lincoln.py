@@ -104,8 +104,6 @@ class Lincoln(thinkbayes.Suite, thinkbayes.Joint):
         return part1 * part2
 
 
-
-
 def main():
     data = 20, 15, 3
     probs = numpy.linspace(0, 1, 31)
@@ -143,14 +141,6 @@ def main():
 
     print("p1 > p2", p1_marginal > p2_marginal)
     print("p1 < p2", p1_marginal < p2_marginal)
-
-    data = 20, 15, 3
-    probs = numpy.linspace(0, 1, 31)
-    hypos = []
-    for n in range(32, 350):
-        for p1 in probs:
-            for p2 in probs:
-                hypos.append((n, p1, p2))
 
     suite = Lincoln(hypos)
     suite.update(data)
