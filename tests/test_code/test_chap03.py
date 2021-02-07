@@ -3,7 +3,7 @@ This is based on a notebook of example code from Think Bayes.
 """
 import logging
 
-from thinkbayes import Pmf, Cdf
+from thinkbayes import Cdf
 from thinkbayes import thinkplot
 from thinkbayes.scripts.dice import Dice
 from thinkbayes.scripts.train import Train, NTRAINS_LABEL
@@ -44,7 +44,7 @@ class Train2(Train):
     # Now let's try it with a power law prior.
 
     def __init__(self, hypos, alpha=1.0):
-        Pmf.__init__(self)
+        super().__init__(self)
         for hypo in hypos:
             self[hypo] = hypo ** (-alpha)
         self.normalize()
@@ -63,30 +63,17 @@ def test_dice():
 
 
 def test_hypos():
-    # But there are many more hypotheses
-
-    hypos = range(1, 1001)
+    hypos = range(1, 1001)  # But there are many more hypotheses
     suite = Train(hypos)
     suite.update(60)
-
-    # Here's what the posterior looks like
-
-    thinkplot.plot_pdf_line(suite)
-
-    # And here's how we can compute the posterior mean
-
-    Mean(suite)
-
-    # Or we can just use the method
-
-    suite.mean()
+    thinkplot.plot_pdf_line(suite)  # Here's what the posterior looks like
+    Mean(suite)  # And here's how we can compute the posterior mean
+    suite.mean()  # Or we can just use the method
 
 
 def test_MakePosterior():
     # Let's run it with the same dataset and several uniform priors
-
     dataset = [30, 60, 90]
-
     for high in [500, 1000, 2000]:
         suite = MakePosterior(high, dataset)
         print(high, suite.mean())
@@ -94,7 +81,6 @@ def test_MakePosterior():
 
 def test_Train2():
     # Here's what a power law prior looks like, compared to a uniform prior
-
     high = 100
     hypos = range(1, high + 1)
     suite1 = Train(hypos)
@@ -249,21 +235,12 @@ def test_dice_problem():
 
     # Here's what a power law prior looks like, compared to a uniform prior
 
-    high = 100
-    hypos = range(1, high + 1)
-    suite1 = Train(hypos)
-    suite2 = Train2(hypos)
-    thinkplot.plot_pdf_line(suite1)
-    thinkplot.plot_pdf_line(suite2)
-
-    # Now let's see what the posteriors look like after observing one train.
-
     dataset = [60]
     high = 1000
 
     thinkplot.pre_plot(num=2)
 
-    constructors = [Train, Train2]
+    constructors = [Train, Train2]  # Now let's see what the posteriors look like after observing one train.
     labels = ["uniform", "power law"]
 
     for constructor, label in zip(constructors, labels):
