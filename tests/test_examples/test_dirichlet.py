@@ -249,7 +249,8 @@ def test_ltb3():
         step = pm.Metropolis()
         trace = pm.sample(1000, start=start, step=step, tune=100)
 
-    pm.traceplot(trace)
+    az.plot_trace(trace)
+
     logging.debug(f"trace={trace}")
     plot_trace_cdfs(trace)
 
@@ -349,7 +350,7 @@ def test_ltb2():
         step = pm.Metropolis()
         trace = pm.sample(1000, start=start, step=step, tune=100)
 
-    pm.traceplot(trace)
+    az.plot_trace(trace)
 
     plot_trace_cdfs(trace)
 
