@@ -9,6 +9,7 @@ import logging
 
 import numpy as np
 import pymc3 as pm
+import arviz as az
 import pytest
 import thinkbayes
 from scipy.stats import poisson
@@ -551,7 +552,7 @@ def test_wc():
         gap = pm.Exponential("gap", lam, observed=first_gap)
         trace = pm.sample(1000, tune=3000)
 
-    pm.traceplot(trace)
+    az.plot_trace(trace)
 
     lam_sample = trace["lam"]
     print(lam_sample.mean())
@@ -571,7 +572,7 @@ def test_wc():
         gap = pm.Exponential("gap", lam, observed=[first_gap, second_gap])
         trace = pm.sample(1000, tune=2000)
 
-    pm.traceplot(trace)
+    az.plot_trace(trace)
 
     lam_sample = trace["lam"]
     print(lam_sample.mean())
@@ -585,7 +586,7 @@ def test_wc():
     # And we can generate a predictive distribution for the time until the next goal (in games).
 
     with model:
-        post_pred = pm.sample_ppc(trace, samples=1000)
+        post_pred = pm.sample_prior_predictive(samples=1000)
 
     gap_sample = post_pred["gap"].flatten()
     print(gap_sample.mean())
@@ -604,7 +605,7 @@ def test_wc():
         trace = pm.sample(3000, tune=3000)
     logging.info("%r", f"goals = {goals}")
     logging.info("%r", f"trace = {trace}")
-    pm.traceplot(trace)
+    az.plot_trace(trace)
 
     lam_sample = trace["lam"]
     print(lam_sample.mean())
@@ -616,7 +617,7 @@ def test_wc():
     # And we can generate a predictive distribution for the time until the next goal (in games).
 
     with model:
-        post_pred = pm.sample_ppc(trace, samples=3000)
+        post_pred = pm.sample_prior_predictive(samples=3000)
 
     goal_sample = post_pred["goals"].flatten()
     print(goal_sample.mean())
@@ -722,99 +723,6 @@ def test_world_cup():
     )
 
 
-def test_score5(mix):
-    # **Exercise:** Compute the predictive mean and the probability of scoring 5 or more additional goals.
-
-    # Solution
-    logging.info("%r", f"mix.mean() = {mix.mean()}")
-    logging.info("%r", f"mix.prob_greater(4) = {mix.prob_greater(4)}")
-
-    # ## MCMC
-    #
-    # Building the MCMC model incrementally, start with just the prior distribution for `lam`.
-
-    cdf_gamma = pmf_gamma.make_cdf()
-
-    with pm.Model() as model:
-        lam = pm.Gamma("lam", alpha=mean_rate, beta=1)
-        trace = pm.sample_prior_predictive(1000)
-
-    lam_sample = trace["lam"]
-    print(lam_sample.mean())
-
-    cdf_lam = Cdf(lam_sample)
-    thinkplot.plot_cdf_line(cdf_gamma, label="Prior grid")
-    thinkplot.plot_cdf_line(cdf_lam, label="Prior MCMC")
-    thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
-
-    # Let's look at the prior predictive distribution for the time between goals (in games).
-
-    with pm.Model() as model:
-        lam = pm.Gamma("lam", alpha=mean_rate, beta=1)
-        gap = pm.Exponential("gap", lam)
-        trace = pm.sample_prior_predictive(1000)
-    logging.info("%r", f"gap = {gap}")
-    logging.info("%r", f"trace = {trace}")
-    gap_sample = trace["gap"]
-    print(gap_sample.mean())
-    cdf_lam = Cdf(gap_sample)
-
-    thinkplot.plot_cdf_line(cdf_lam)
-    thinkplot.decorate(xlabel="Time between goals (games)", ylabel="Cdf")
-
-    # Now we're ready for the inverse problem, estimating `lam` based on the first observed gap.
-
-    first_gap = 11 / 90
-
-    with pm.Model() as model:
-        lam = pm.Gamma("lam", alpha=mean_rate, beta=1)
-        gap = pm.Exponential("gap", lam, observed=first_gap)
-        trace = pm.sample(1000, tune=3000)
-
-    pm.traceplot(trace)
-
-    lam_sample = trace["lam"]
-    print(lam_sample.mean())
-    print(posterior1.mean())
-    cdf_lam = Cdf(lam_sample)
-
-    thinkplot.plot_cdf_line(posterior1.make_cdf(), label="Posterior analytic")
-    thinkplot.plot_cdf_line(cdf_lam, label="Posterior MCMC")
-    thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
-
-    # And here's the inverse problem with both observed gaps.
-
-    second_gap = 12 / 90
-
-    with pm.Model() as model:
-        lam = pm.Gamma("lam", alpha=mean_rate, beta=1)
-        gap = pm.Exponential("gap", lam, observed=[first_gap, second_gap])
-        trace = pm.sample(1000, tune=2000)
-
-    pm.traceplot(trace)
-
-    lam_sample = trace["lam"]
-    print(lam_sample.mean())
-    print(posterior2.mean())
-    cdf_lam = Cdf(lam_sample)
-
-    thinkplot.plot_cdf_line(posterior2.make_cdf(), label="Posterior analytic")
-    thinkplot.plot_cdf_line(cdf_lam, label="Posterior MCMC")
-    thinkplot.decorate(xlabel="Goal scoring rate", ylabel="Cdf")
-
-    # And we can generate a predictive distribution for the time until the next goal (in games).
-
-    with model:
-        post_pred = pm.sample_ppc(trace, samples=1000)
-
-    gap_sample = post_pred["gap"].flatten()
-    print(gap_sample.mean())
-
-    cdf_gap = Cdf(gap_sample)
-    thinkplot.plot_cdf_line(cdf_gap)
-    thinkplot.decorate(xlabel="Time between goals (games)", ylabel="Cdf")
-
-
 def test_PyMC_wc():
     # **Exercise:** Use PyMC to write a solution to the second World Cup problem:
     #
@@ -826,7 +734,7 @@ def test_PyMC_wc():
         trace = pm.sample(1000, tune=3000)
     logging.info("%r", f"goals = {goals}")
     logging.info("%r", f"trace = {trace}")
-    pm.traceplot(trace)
+    az.plot_trace(trace)
 
     lam_sample = trace["lam"]
     print(lam_sample.mean())
@@ -838,7 +746,7 @@ def test_PyMC_wc():
     # And we can generate a predictive distribution for the time until the next goal (in games).
 
     with model:
-        post_pred = pm.sample_ppc(trace, samples=1000)
+        post_pred = pm.sample_prior_predictive(samples=1000)
 
     goal_sample = post_pred["goals"].flatten()
     print(goal_sample.mean())
