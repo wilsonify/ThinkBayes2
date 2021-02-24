@@ -80,17 +80,13 @@ def test_MakePosterior():
 
 
 def test_Train2():
-    # Here's what a power law prior looks like, compared to a uniform prior
     high = 100
     hypos = range(1, high + 1)
-    suite1 = Train(hypos)
-    suite2 = Train2(hypos)
+    suite1 = Train(hypos)  # uniform prior
+    suite2 = Train2(hypos)  # power law prior
     thinkplot.plot_pdf_line(suite1)
     thinkplot.plot_pdf_line(suite2)
 
-    # Now let's see what the posteriors look like after observing one train.
-
-    # +
     dataset = [60]
     high = 1000
 
@@ -105,34 +101,26 @@ def test_Train2():
         thinkplot.plot_pmf_line(suite)
 
     thinkplot.config_plot(xlabel=NTRAINS_LABEL, ylabel="Probability")
-    # -
 
-    # The power law gives less prior probability to high values, which yields lower posterior means, and less sensitivity to the upper bound.
+    # The power law gives less prior probability to high values,
+    # which yields lower posterior means, and less sensitivity to the upper bound.
 
-    # +
     dataset = [30, 60, 90]
 
     for high in [500, 1000, 2000]:
         suite = MakePosterior(high, dataset, Train2)
         print(high, suite.mean())
-    # -
 
     # ## Credible intervals
-    #
     # To compute credible intervals, we can use the `Percentile` method on the posterior.
+    # If you have to compute more than a few percentiles, it is more efficient to compute a CDF.
+    # Also, a CDF can be a better way to visualize distributions.
 
-    # +
     hypos = range(1, 1001)
     suite = Train(hypos)
     suite.update(60)
     logging.info("%r", f"suite.percentile(5) = {suite.percentile(5)}")
     logging.info("%r", f"suite.percentile(95) = {suite.percentile(95)}")
-
-    # -
-
-    # If you have to compute more than a few percentiles, it is more efficient to compute a CDF.
-    #
-    # Also, a CDF can be a better way to visualize distributions.
 
     cdf = Cdf(suite)
     thinkplot.plot_cdf_line(cdf)
@@ -140,100 +128,60 @@ def test_Train2():
         xlabel=NTRAINS_LABEL, ylabel="Cumulative Probability", legend=False
     )
 
-    # `Cdf` also provides `Percentile`
-
     logging.info("%r", f"cdf.percentile(5) = {cdf.percentile(5)}")
     logging.info("%r", f"cdf.percentile(95) = {cdf.percentile(95)}")
 
-    # ## Exercises
-
-    # **Exercise:** To write a likelihood function for the locomotive problem, we had
-    # to answer this question:  "If the railroad has `N` locomotives, what
-    # is the probability that we see number 60?"
-    #
-    # The answer depends on what sampling process we use when we observe the
-    # locomotive.  In the book, I resolved the ambiguity by specifying
-    # that there is only one train-operating company (or only one that we
-    # care about).
-    #
-    # But suppose instead that there are many companies with different
-    # numbers of trains.  And suppose that you are equally likely to see any
-    # train operated by any company.
-    # In that case, the likelihood function is different because you
-    # are more likely to see a train operated by a large company.
-    #
-    # As an exercise, implement the likelihood function for this variation
-    # of the locomotive problem, and compare the results.
-
-    # +
-    # Solution goes here
-
 
 def test_dice_problem():
-    # ## The Dice problem
-    #
-    # Suppose I have a box of dice that contains a 4-sided die, a 6-sided
-    # die, an 8-sided die, a 12-sided die, and a 20-sided die.
-    #
-    # I select a die from the box at random, roll it, and get a 6.
-    # What is the probability that I rolled each die?
-    #
-    # The `Dice` class inherits `Update` and provides `Likelihood`
+    """
+    ## The Dice problem
+    Suppose I have a box of dice that contains a 4-sided die, a 6-sided
+    die, an 8-sided die, a 12-sided die, and a 20-sided die.
 
-    # Here's what the update looks like:
+    I select a die from the box at random, roll it, and get a 6.
+    What is the probability that I rolled each die?
 
+    The `Dice` class inherits `Update` and provides `Likelihood`
+    """
     suite = Dice([4, 6, 8, 12, 20])
     suite.update(6)
     suite.print()
 
-    # And here's what it looks like after more data:
-
-    for roll in [6, 8, 7, 7, 5, 4]:
+    for roll in [6, 8, 7, 7, 5, 4]:  # after more data
         suite.update(roll)
 
     suite.print()
 
-    # ## The train problem
-    #
-    # The Train problem has the same likelihood as the Dice problem.
 
-    # But there are many more hypotheses
-
+def test_train_problem():
+    """
+    ## The train problem
+    The Train problem has the same likelihood as the Dice problem.
+    But there are many more hypotheses
+    """
     hypos = range(1, 1001)
     suite = Train(hypos)
     suite.update(60)
 
-    # Here's what the posterior looks like
+    thinkplot.plot_pdf_line(suite)  # posterior
+    Mean(suite)  # posterior mean
+    suite.mean()  # Or we can just use the method
 
-    thinkplot.plot_pdf_line(suite)
 
-    # And here's how we can compute the posterior mean
-
-    Mean(suite)
-
-    # Or we can just use the method
-
-    suite.mean()
-
-    # ## Sensitivity to the prior
-    #
-    # Here's a function that solves the train problem for different priors and data
-
-    # Let's run it with the same dataset and several uniform priors
-
+def test_sensitivity():
+    """
+    ## Sensitivity to the prior
+    Here's a function that solves the train problem for different priors and data
+    Let's run it with the same dataset and several uniform priors
+    The results are quite sensitive to the prior, even with several observations.
+    """
     dataset = [30, 60, 90]
 
     for high in [500, 1000, 2000]:
         suite = MakePosterior(high, dataset)
         print(high, suite.mean())
 
-    # The results are quite sensitive to the prior, even with several observations.
-
-    # ## Power law prior
-    #
-    # Now let's try it with a power law prior.
-
-    # Here's what a power law prior looks like, compared to a uniform prior
+    ## Power law prior
 
     dataset = [60]
     high = 1000
@@ -250,17 +198,11 @@ def test_dice_problem():
 
     thinkplot.config_plot(xlabel=NTRAINS_LABEL, ylabel="Probability")
 
-    # The power law gives less prior probability to high values, which yields lower posterior means, and less sensitivity to the upper bound.
-
     dataset = [30, 60, 90]
 
     for high in [500, 1000, 2000]:
         suite = MakePosterior(high, dataset, Train2)
         print(high, suite.mean())
-
-    # ## Credible intervals
-    #
-    # To compute credible intervals, we can use the `Percentile` method on the posterior.
 
     hypos = range(1, 1001)
     suite = Train(hypos)
@@ -269,60 +211,57 @@ def test_dice_problem():
     logging.info("%r", f"suite.percentile(5) = {suite.percentile(5)}")
     logging.info("%r", f"suite.percentile(95) = {suite.percentile(95)}")
 
-    # If you have to compute more than a few percentiles, it is more efficient to compute a CDF.
-    #
-    # Also, a CDF can be a better way to visualize distributions.
-
     cdf = Cdf(suite)
     thinkplot.plot_cdf_line(cdf)
     thinkplot.config_plot(
         xlabel=NTRAINS_LABEL, ylabel="Cumulative Probability", legend=False
     )
 
-    # `Cdf` also provides `Percentile`
-
     logging.info("%r", f"cdf.percentile(5) = {cdf.percentile(5)}")
     logging.info("%r", f"cdf.percentile(95) = {cdf.percentile(95)}")
 
-    # ## Exercises
 
-    # **Exercise:** To write a likelihood function for the locomotive problem, we had
-    # to answer this question:  "If the railroad has `N` locomotives, what
-    # is the probability that we see number 60?"
-    #
-    # The answer depends on what sampling process we use when we observe the
-    # locomotive.  In the book, I resolved the ambiguity by specifying
-    # that there is only one train-operating company (or only one that we
-    # care about).
-    #
-    # But suppose instead that there are many companies with different
-    # numbers of trains.  And suppose that you are equally likely to see any
-    # train operated by any company.
-    # In that case, the likelihood function is different because you
-    # are more likely to see a train operated by a large company.
-    #
-    # As an exercise, implement the likelihood function for this variation
-    # of the locomotive problem, and compare the results.
+def test_exercise():
+    """
+    To write a likelihood function for the locomotive problem, we had
+    to answer this question:  "If the railroad has `N` locomotives, what
+    is the probability that we see number 60?"
 
-    # Solution
+    The answer depends on what sampling process we use when we observe the
+    locomotive.  In the book, I resolved the ambiguity by specifying
+    that there is only one train-operating company (or only one that we
+    care about).
 
-    # Suppose Company A has N trains and all other companies have M.
-    # The chance that we would observe one of Company A's trains is $N/(N+M)$.
-    # Given that we observe one of Company A's trains, the chance that we
-    # observe number 60 is $1/N$ for $N \ge 60$.
+    But suppose instead that there are many companies with different
+    numbers of trains.  And suppose that you are equally likely to see any
+    train operated by any company.
+    In that case, the likelihood function is different because you
+    are more likely to see a train operated by a large company.
 
-    # The product of these probabilities is $1/(N+M)$, which is just the
-    # probability of observing any given train.
+    As an exercise, implement the likelihood function for this variation
+    of the locomotive problem, and compare the results.
 
-    # If N<<M, this converges to a constant, which means that all value of $N$
-    # have the same likelihood, so we learn nothing about how many trains
-    # Company A has.
+    Solution
 
-    # If N>>M, this converges to $1/N$, which is what we saw in the previous
-    # solution.
+    Suppose Company A has N trains and all other companies have M.
+    The chance that we would observe one of Company A's trains is $N/(N+M)$.
+    Given that we observe one of Company A's trains, the chance that we
+    observe number 60 is $1/N$ for $N \ge 60$.
 
-    # More generally, if M is unknown, we would need a prior distribution for
-    # M, then we can do a two-dimensional update, and then extract the posterior
-    # distribution for N.
+    The product of these probabilities is $1/(N+M)$, which is just the
+    probability of observing any given train.
 
-    # We'll see how to do that soon.
+    If N<<M, this converges to a constant, which means that all value of $N$
+    have the same likelihood, so we learn nothing about how many trains
+    Company A has.
+
+    If N>>M, this converges to $1/N$, which is what we saw in the previous
+    solution.
+
+    More generally, if M is unknown, we would need a prior distribution for
+    M, then we can do a two-dimensional update, and then extract the posterior
+    distribution for N.
+
+    We'll see how to do that soon.
+    """
+    pass
