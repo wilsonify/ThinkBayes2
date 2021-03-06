@@ -13,10 +13,10 @@ try:
     repo_with_forks = np.ones_like( forks_to_explore )
 
     URL = "https://github.com/search"
-    print "Scrapping data from Github. Sorry Github..."
-    print "The data is contained in variables `foo_to_explore` and `repo_with_foo`"
-    print
-    print "stars first..."
+    print("Scrapping data from Github. Sorry Github...")
+    print("The data is contained in variables `foo_to_explore` and `repo_with_foo`")
+    print()
+    print("stars first...")
     payload = {"q":""}
     for i, _star in enumerate(stars_to_explore):
         payload["q"] = "stars:>=%d"%_star
@@ -30,13 +30,13 @@ try:
             value  = len( soup.findAll(class_= "mega-icon-public-repo" ) )
         
         repo_with_stars[i] = value
-        print "number of repos with greater than or equal to %d stars: %d"%(_star, value )
+        print("number of repos with greater than or equal to %d stars: %d"%(_star, value ))
     
     #repo_with_stars = repo_with_stars.astype("float")/repo_with_stars[0]
 
 
-    print 
-    print "forks second..."
+    print() 
+    print("forks second...")
     payload = {"q":""}
     for i, _fork in enumerate(stars_to_explore):
         payload["q"] = "forks:>=%d"%_fork
@@ -50,7 +50,7 @@ try:
             value  = len( soup.findAll(class_= "mega-icon-public-repo" ) )
         
         repo_with_forks[i] = value
-        print "number of repos with greater than or equal to %d forks: %d"%(_fork, value )
+        print("number of repos with greater than or equal to %d forks: %d"%(_fork, value ))
     
     #repo_with_forks = repo_with_forks.astype("float")/repo_with_forks[0]
     
@@ -58,8 +58,8 @@ try:
     np.savetxt( "data/gh_stars.csv", np.concatenate( [stars_to_explore, repo_with_stars], axis=1) )
 
 except ImportError as e:
-    print e
-    print "requests / BeautifulSoup not found. Using data pulled on Feburary 11, 2013"
+    print(e)
+    print("requests / BeautifulSoup not found. Using data pulled on Feburary 11, 2013")
     _data = np.genfromtxt( "data/gh_forks.csv", delimiter = "," ) #cehck this.
     forks_to_explore = _data[:,0]
     repo_with_forks  = _data[:,1]    
