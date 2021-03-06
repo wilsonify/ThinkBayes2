@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 try:
     import daft
 except ImportError:
-    print "python library Daft required."
+    print("python library Daft required.")
     
 
 pgm = daft.PGM([9, 4], origin=[.5,.5])
