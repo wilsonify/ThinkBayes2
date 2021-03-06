@@ -32,7 +32,7 @@ language_mappings = {"Python": 0, "JavaScript": 1, "Ruby": 2, "Java":3, "Shell":
 #define data matrix: 
 X = np.zeros( (N , 12), dtype = int )
 
-for i in xrange(N):
+for i in range(N):
     is_fork = True
     is_valid_language = False
     
@@ -74,10 +74,10 @@ for i in xrange(N):
     #get dep. data
     X[i, 10] = repo_results["watchers_count"]
     X[i, 11] = repo_results["forks_count"]
-    print 
-    print " -------------- "
-    print i, ": ", results["full_name"], repo_results["language" ], repo_results["watchers_count"], repo_results["forks_count"]
-    print " -------------- "
-    print 
+    print() 
+    print(" -------------- ")
+    print(i, ": ", results["full_name"], repo_results["language" ], repo_results["watchers_count"], repo_results["forks_count"])
+    print(" -------------- ")
+    print() 
     
 np.savetxt("data/github_data.csv", X, delimiter=",", fmt="%d" )
