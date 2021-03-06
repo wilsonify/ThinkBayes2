@@ -828,8 +828,4 @@ main_score([1], x_true_all, y_true_all, \
 # 1.  [Tim Saliman's solution to the Dark World's Contest](http://www.timsalimans.com/observing-dark-worlds)
 # 2. Silver, Nate. The Signal and the Noise: Why So Many Predictions Fail — but Some Don't. 1. Penguin Press HC, The, 2012. Print.
 
-from IPython.core.display import HTML
-def css_styling():
-    styles = open("../styles/custom.css", "r").read()
-    return HTML(styles)
-css_styling()
+

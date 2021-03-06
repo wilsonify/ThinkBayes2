@@ -1036,8 +1036,4 @@ for i,N in enumerate([0,4,8, 32,64, 128, 500]):
 #
 # 10. Taleb, Nassim Nicholas (2007), The Black Swan: The Impact of the Highly Improbable, Random House, ISBN 978-1400063512
 
-from IPython.core.display import HTML
-def css_styling():
-    styles = open("../styles/custom.css", "r").read()
-    return HTML(styles)
-css_styling()
+

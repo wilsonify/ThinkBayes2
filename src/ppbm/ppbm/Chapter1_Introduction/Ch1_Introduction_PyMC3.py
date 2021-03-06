@@ -621,11 +621,7 @@ plt.legend(loc="upper left");
 # - [5] Cronin, Beau. "Why Probabilistic Programming Matters." 24 Mar 2013. Google, Online Posting to Google . Web. 24 Mar. 2013. <https://plus.google.com/u/0/107971134877020469960/posts/KpeRdJKR6Z1>.
 
 # + jupyter={"outputs_hidden": false}
-from IPython.core.display import HTML
-def css_styling():
-    styles = open("../styles/custom.css", "r").read()
-    return HTML(styles)
-css_styling()
+
 
 # + jupyter={"outputs_hidden": false}
 

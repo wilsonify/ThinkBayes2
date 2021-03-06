@@ -1,24 +1,25 @@
 import ppbm
 from ppbm import (
-    Chapter0_Prologue,
-    Chapter1_Introduction,
-    Chapter2_MorePyMC,
-    Chapter3_MCMC,
-    Chapter4_TheGreatestTheoremNeverTold,
-    Chapter5_LossFunctions,
-    Chapter6_Priorities,
-    Chapter7_BayesianMachineLearning
+    Chapter0_Prologue
 )
+
+from ppbm.Chapter1_Introduction import Ch1_Introduction_PyMC3
+from ppbm.Chapter2_MorePyMC import Ch2_MorePyMC_PyMC3
+from ppbm.Chapter3_MCMC import Ch3_IntroMCMC_PyMC3
+from ppbm.Chapter4_TheGreatestTheoremNeverTold import Ch4_LawOfLargeNumbers_PyMC3
+from ppbm.Chapter5_LossFunctions import Ch5_LossFunctions_PyMC3
+from ppbm.Chapter6_Priorities import Ch6_Priors_PyMC3
+from ppbm.Chapter7_BayesianMachineLearning import MachineLearning
 
 
 def test_smoke():
     print("is anything on fire?")
     print(dir(ppbm))
     print(dir(Chapter0_Prologue))
-    print(dir(Chapter1_Introduction))
-    print(dir(Chapter2_MorePyMC))
-    print(dir(Chapter3_MCMC))
-    print(dir(Chapter4_TheGreatestTheoremNeverTold))
-    print(dir(Chapter5_LossFunctions))
-    print(dir(Chapter6_Priorities))
-    print(dir(Chapter7_BayesianMachineLearning))
+    print(dir(Ch1_Introduction_PyMC3))
+    print(dir(Ch2_MorePyMC_PyMC3))
+    print(dir(Ch3_IntroMCMC_PyMC3))
+    print(dir(Ch4_LawOfLargeNumbers_PyMC3))
+    print(dir(Ch5_LossFunctions_PyMC3))
+    print(dir(Ch6_Priors_PyMC3))
+    print(dir(MachineLearning))
