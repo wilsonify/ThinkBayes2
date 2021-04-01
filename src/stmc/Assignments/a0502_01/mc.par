@@ -1,0 +1,17 @@
+c
+c mc.par: Definition of parameters for MC calculations 
+c         ============================================
+c
+c Output units and random generator seeds:
+      parameter(iuo=6,iud1=11,iud2=12,iseed1=1,iseed2=0)
+c      
+c Parameters for equlibrium and data production sweeps:
+c beta:   k/T for for canonical MC, or as MUCA start value, k=1. 
+c nequi:  Number of equilibrium sweeps.
+c nmeas:  Number of measurement sweeps per repitition.
+c nrpt:   >=1: Number of measurement repititions in one job. 
+c         =0: Only MUCA (if chosen) and equilibrium run(s) are done.
+C Heat bath and event driven MC simulation:
+c 2d 10-state potts:
+       parameter(beta=0.62d00,H0=ZERO, nhit=0)
+       parameter(nequi=10 000, nrpt=64, nmeas=5 000)

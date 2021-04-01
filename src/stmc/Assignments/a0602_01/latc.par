@@ -1,0 +1,2 @@
+      parameter (nd=3,ml=04,ms=ml**nd,msc=ms/2,mlinkc=nd*msc)
+C Adjust also lat.dat !!!      

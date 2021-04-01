@@ -1,0 +1,24 @@
+c
+c mc_pt_mpi.par: Parameters for parallel tempering (PT) MC using MPI.
+c
+c Output units, random generator seeds and MPI send-receive:
+      parameter(iuo=6,iud=10,iud1=11,iud2=12,iseed1=1,isd2_0=0)
+c MPM1: Maximum number of MPI processes - 1.
+C NSR:  Dimension for MPI integer arrays NSEND and NRECV.
+      parameter(MPM1=31,NSR=10) ! MPM1=31: Up to 32 MPI processes.
+c      
+c Parameters for equilibrium and data production sweeps:
+c beta_min and beta_max: Defines the extreme temperatures.
+c nequi:   Number of equilibrium sweeps before PT recursion.
+c NPT_REC: Number of PT recursion steps.
+c nequ2:   Number of equilibrium sweeps of the PT recursion loop.
+c nequ1:   Number of equilibrium sweeps inside the PT recursion loop.
+c nequ3:   Number of equilibrium sweeps after the PT recursion.
+c
+c nrpt:   >=1: Number of measurement repititions in one job. 
+c nmea2:  Measurement sweeps of the parallel tempering loop.
+c nmea1:  Measurement sweeps inside the parallel tempering loop.
+      parameter(beta_min=0.65d00,beta_max=0.75d00,H0=ZERO,nhit=0)
+C 
+      parameter(nequi=1000, NPT_REC=05, nequ2=08 000, nequ1=08)
+      parameter(nequ3=200, nrpt=32, nmea2=060, nmea1=0200)

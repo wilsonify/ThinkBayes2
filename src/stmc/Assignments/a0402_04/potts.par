@@ -1,0 +1,1 @@
+      parameter (nq=2, nqm1=nq-1,nqm2=nq-2)

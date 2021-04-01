@@ -1,0 +1,3 @@
+potts_init0.f -> potts_init.f
+potts_init1.f -> potts1_init.f
+potts_met1.f -> potts1_met.f
