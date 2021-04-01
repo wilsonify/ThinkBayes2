@@ -1,0 +1,20 @@
+
+ MPI: N_PROC =    4
+ mc_mpi_pt.par: Max. # processes:    32
+ lat.par: nd,nq,nla = 2 10     20  20
+ NPT_REC,nequi,nequ2,nequ1:       5    1000    8000       8
+ nrpt,nmea2,nmea1:               32      60     200
+ Product equi pt:              326040
+ Product meas:                 384000
+
+ Beta Exchanges (Recursion):
+ BA:    0.65000 0.68333 0.71667 0.75000
+ p_ptmpi0.f with recursion pt_rec0.f.
+   1.         1140      36     852
+   2.          190    2393      83
+   3.          114     402    1799
+   4.         2152    1827       0
+   5.          557       0    2667
+ BA:    0.65000 0.74932 0.74943 0.75000
+ Start of the production run ...
+ all done. Results on04* files.

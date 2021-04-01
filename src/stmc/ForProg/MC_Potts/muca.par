@@ -1,0 +1,17 @@
+c
+c muca.par:  Parameters for the MUCA recursion
+c            =================================
+c      
+c lmuca=.true.:   MUCA recursion with  ba(.)=beta initially.
+c lmuca=.false.:  NO MUCA recursion and beta used for canonical MC. 
+c namin<=iact<=namax is the action range of the recursion.
+c bet_min=beta [from ms.par] <= b(ia) <= bet_max temperature range. 
+c
+      parameter(lmuca=.true., namax=mlink,namin=mlink/nq)
+      parameter(namaxp1=namax+1)
+c
+c maximum number of recursions:          nrec_max.
+c update sweeps per recursion:           nmucasw.
+c maximum number of tunnelings allowed:  maxtun.
+c
+      parameter(nrec_max=10*nq*ms,nmucasw=10*nq,maxtun=10)

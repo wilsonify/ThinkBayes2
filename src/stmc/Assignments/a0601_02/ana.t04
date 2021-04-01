@@ -1,0 +1,22 @@
+
+ MPI Analysis: N_PROC =    4
+ mc_mpi_pt.par: Max. # processes:    32
+ nd,nq,ml,nla:   2  10    20       20    20
+ NPT_REC,nequi,nequ2,nequ1:     5  1000  8000     8
+ nrpt,nmea2,nmea1:             32    60   200
+
+ All DATA read.
+
+ HA_W:   0.1536000E+09   0.1536000E+09   0.1536000E+09   0.1536000E+09
+
+ NTUN:    0    0    0    0
+ NTUN_ALL =         0
+
+ ntime =      1920
+   
+ ACPT_B:     0.000000       0.5000000       0.9984375       0.4984375    
+   
+ ACPT_PT:    0.000000        0.000000        1.000000       0.9968750    
+
+ ASUM_B,ASUM_PT:    1.996875        1.996875    
+ All done.

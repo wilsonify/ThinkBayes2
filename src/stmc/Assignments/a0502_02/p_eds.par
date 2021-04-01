@@ -1,0 +1,3 @@
+C Additional parameters for event driven MC simulations.
+      parameter(n2dp1=n2d+1,nq2=nq**2,nconf0=nq**n2d,nconf=nq**n2dp1)
+      parameter(mcase=07,mcam1=mcase-1,mcap1=mcase+1)

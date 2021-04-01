@@ -1,0 +1,2 @@
+      implicit real*4 (a-h,o-z)
+      implicit logical (l)
