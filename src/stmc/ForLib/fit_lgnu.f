@@ -1,7 +1,7 @@
       SUBROUTINE FIT_LGNU(IUD,N,X,Y,EY,A,SGA,COV,PROB)
 C Copyright, Bernd Berg, Dec 13, 2000.
 C PROB:  CONFIDENCE LEVEL FOR THE ELLIPSE.
-      include 'implicit.sta'
+      include '../../ForLib/implicit.sta'
       PARAMETER(NFIG=200)
       DIMENSION X(N),Y(N),EY(N), A(2),SGA(2),COV(2,2)
       DIMENSION COVDD(2),SGB(2),EIGVS(2,2)

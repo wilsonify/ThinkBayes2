@@ -3,8 +3,8 @@ C BERG, JUNE 13, 1999.
 C COMPARISION OF TWO MEANS: (GAUSSIAN DIFFERENCE TEST).
 C INPUT: TWO GAUSSIAN DATA POINTS, MEAN VALUES AND ERROR BARS.
 C OUPUT: LIKELIHOOD Q  THAT THE DISCREPANCY IS DUE TO CHANCE.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       SIGMA=SQRT(EB1**2+EB2**2) 
       XX=+ABS(XM1-XM2)/(SIGMA*SQRT(TWO))
       Q=ONE-ERROR_F(XX)

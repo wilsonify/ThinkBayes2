@@ -1,7 +1,7 @@
       FUNCTION GAU_XQ(Q)
 C
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       EXTERNAL GAU_DF
 C
       IF(Q.EQ.HALF)                  THEN

@@ -4,8 +4,8 @@ C INITIALIZING ROUTINE FOR RANMAR OR RAVMAR, MUST BE CALLED
 C BEFORE GENERATING PSEUDORANDOM NUMBERS WITH RANMAR (RAVMAR).
 C RANGES: 0 <= IJ <= 31328  AND  0 <= KL <= 30081.
 C FOR IUO<=5 THE INFORMATIVE MESSAGES ARE OFF.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       character*(*) cfile
       logical lexist
       COMMON/RASET1/U(97),C,CD,CM,I,J

@@ -2,8 +2,8 @@
      &                     Zln,Aln,A2ln)
 C Copyright Bernd Berg, May 12 2002.
 C Potts model ln of the partition function Z and related variables.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       dimension b(0:nlink),ha(0:nlink),hasum(0:nlink)
 C
       iloop_ha=0 ! Counts runs through the ha(iact).gt.half loop.

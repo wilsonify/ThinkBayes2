@@ -5,8 +5,8 @@ C RESULT:     FI1=X SUCH THAT Y=F(X).
 C PRECISSION: EPS=1/10**8 can be changed, see below.
 C METHOD:     BISECTING INTERVAL, INITIAL RANGE [X1,X2] (X1<X2).
 C ASSUMPTION: F(X) MONOTON (IN- OR DECREASING) IN THE INTERVAL [X1,X2].
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       EXTERNAL F
       EPS=ONE/TEN**8
 C MAXIMUM NUMBER OF ITERATIONS:

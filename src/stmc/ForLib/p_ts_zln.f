@@ -2,8 +2,8 @@
      &                    XM2ln,nstate) ! TEST ONLY!
 C Copyright Bernd Berg, Jul 10 2002. Potts model: ln of the partition 
 C function Z and related variables from time series fragments.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       dimension b(0:nlink),a(0:nlink),tsa(nmeas,0:nq)
       dimension nstate(0:nq-1)
 C

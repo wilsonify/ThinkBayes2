@@ -5,7 +5,7 @@ C THE BIAS-CORRECTED MEAN VALUE  XMM  FROM THE FOLLOWING
 C INPUT:  XJ(N) JACKKNIFE BINS AND  
 C         XM    MEAN VALUE FROM ENTIRE STATISTICS.
 C
-      include 'implicit.sta'
+      include '../../ForLib/implicit.sta'
       DIMENSION XJ(N)
       XJM=STMEAN(N,XJ)
       BIASM=(N-1)*(XM-XJM)

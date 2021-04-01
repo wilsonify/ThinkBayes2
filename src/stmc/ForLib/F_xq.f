@@ -1,7 +1,7 @@
       FUNCTION F_XQ(Q)
 C
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       EXTERNAL F_DF
       COMMON /PARFT/ NF1,NF2
 C

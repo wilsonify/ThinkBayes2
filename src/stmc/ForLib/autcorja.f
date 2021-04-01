@@ -1,8 +1,8 @@
       SUBROUTINE AUTCORJA(NT,NDAT,NBINS,DATA,WORK,ACORJ,LMEAN)
 C Copyright, Bernd Berg, Apr 20 2002.
 C Jackknife array of autocorrelation at IT (0\le IT).
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION DATA(NDAT),WORK(NBINS,0:NT),ACORJ(NBINS,0:NT)
 c
       DMEAN=ZERO

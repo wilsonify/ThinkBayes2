@@ -6,8 +6,8 @@ C - THE MEAN VALUE:   FM,
 C - THE VARIANCE:     FV,
 C - THE ERROR BAR:    FE=SQRT(FV/N), (STANDARD DEVIATION OF FM).   
 C                                                                     
-      include 'implicit.sta' 
-      include 'constants.par' 
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION FJ(N)
 C
       IF(N.LT.2) STOP 'STEBJ0: N TOO SMALL!'

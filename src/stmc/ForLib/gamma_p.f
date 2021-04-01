@@ -1,7 +1,7 @@
       FUNCTION GAMMA_P(A,X)
 C INCOMPLETE GAMMA FUNCTION. BERG JUNE 8, 1999.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       PARAMETER (ITER_MAX=800,EPS=3.D-9)
 C
       LBAD1=.FALSE.

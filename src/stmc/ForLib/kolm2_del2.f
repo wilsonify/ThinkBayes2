@@ -1,6 +1,6 @@
       SUBROUTINE KOLM2_DEL2(N1,N2,DAT1,DAT2,DEL)
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION DAT1(N1),DAT2(N2)
       IF(N1.GT.N2) STOP "KOLM2: N2.GE.N1 required."
 C

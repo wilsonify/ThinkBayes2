@@ -1,8 +1,8 @@
       SUBROUTINE RWGHT_TS_ZLNJ(NRPT,ZlnA,AlnA,A2lnA,ZlnJ,AlnJ,A2lnJ) 
 C BB, Nov 29 2003. Temperature re-weighting of an action time series:
 C                  Jackknife bins.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION ZlnA(nrpt),AlnA(nrpt),A2lnA(nrpt)
       DIMENSION ZlnJ(0:nrpt),AlnJ(0:nrpt),A2lnJ(0:nrpt)
 

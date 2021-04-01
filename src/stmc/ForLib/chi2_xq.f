@@ -1,6 +1,6 @@
       FUNCTION CHI2_XQ(Q)
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       EXTERNAL CHI2_DF
       COMMON /CHI2PAR/ NF
       X1=ZERO

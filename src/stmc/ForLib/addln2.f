@@ -3,8 +3,8 @@ C Copyright, Bernd Berg, Aug 20, 2003.
 C Given ln(A) and ln(B), A>0,B>0. Output for
 C ISGN=+1: CLN=ln(C) with C=A+B, ISGN unchanged,
 C ISGN=-1: CLN=ln(C) with C=|A-B|, ISGN=+1 for A>B and ISGN=-1 for A<B.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       parameter(EPS=EM11,CUT_OFF=700*ONE) ! Change with precission!
       ABS_LN=ABS(ALN-BLN)
       IF(ABS_LN.GT.CUT_OFF) THEN

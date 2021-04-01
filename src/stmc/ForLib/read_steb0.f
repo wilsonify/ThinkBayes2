@@ -4,8 +4,8 @@ C Reads nrpt times the array ha() from unit iud and calculates the
 C       histogram mean values ham() and their error bars hae().
 C Further, the nrpt action variable averages are calculated.
 C norm=0:  no normalization of the ha histogram, otherwise normalization.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       dimension ha(0:nlink),ham(0:nlink),hae(0:nlink),act(nrpt)
 C
       call razero(ham,0,nlink)

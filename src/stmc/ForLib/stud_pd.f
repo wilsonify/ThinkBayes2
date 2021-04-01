@@ -1,6 +1,6 @@
       FUNCTION STUD_PD(T)  
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       COMMON /PARSTUD/ NF
 C
       F=NF*ONE

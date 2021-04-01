@@ -1,5 +1,5 @@
       subroutine potts_pmax(nqmax)
-      include 'implicit.sta'
+      include '../../ForLib/implicit.sta'
 C Metropolis updating with sequential spin choice.
       include 'lat.par'
       include 'potts.par'

@@ -2,8 +2,8 @@
      &                             Zlnj,Alnj,A2lnj,XM2lnj)
 C Copyright Bernd Berg, Apr 9 2004.  Potts model, jackknife 
 C       time series partition function fractions.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       dimension Zlna(nrpt),Alna(nrpt),A2lna(nrpt),XM2lna(nrpt),
      &  Zlnj(0:nrpt),Alnj(0:nrpt),A2lnj(0:nrpt),XM2lnj(0:nrpt)
 C

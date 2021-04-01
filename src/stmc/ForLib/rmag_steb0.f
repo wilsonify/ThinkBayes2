@@ -4,8 +4,8 @@ C Copyright, Bernd Berg, Oct 15 2001.
 C Reads nrpt times the the magnetization arrays hm() from unit iud and 
 C calculates the histogram mean values hmm() and their error bars hme().
 C Further, each of the nq magnetizations is calculated nrpt times in qm().
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       dimension hm(n0:ms,n0:nqm1),hmm(n0:ms,n0:nqm1),hme(n0:ms,0:nqm1)
       dimension qm(nrpt,0:nqm1),ha(n0:mlink)
 C

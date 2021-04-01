@@ -3,8 +3,8 @@ C Copyright, Bernd Berg, Mar 2, 2001.
 C Exact one-sided Kolmogorov tests, implementing equation of
 C Birnbaum and Tingey, Ann. Math. Stat. 22 (1951) 592. See also: 
 C van der Waerden, Mathematical Statistics, Springer 1969.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION Fxct(N)
 C
       DO J=1,2

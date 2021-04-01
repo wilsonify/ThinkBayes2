@@ -2,8 +2,8 @@
 C Copyright, Bernd Berg, Apr 27, 2001.
 C Asymptotic two-sided Kolmogorov test for two data sets.
 C See kolm2_as.f for further comments.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION DAT1(N1),DAT2(N2)
 C
 C

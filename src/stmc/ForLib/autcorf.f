@@ -2,8 +2,8 @@
 C Copyright, Bernd Berg, Feb 11 2001.
 C The function calculates the autocorrelation at IT from the input array 
 C DATA of autocorrelations. Allowed values of IT are IT=0,1, ... < NDAT.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION DATA(NDAT)
       DMEAN=ZERO
       IF(LMEAN) DMEAN=STMEAN(NDAT,DATA)

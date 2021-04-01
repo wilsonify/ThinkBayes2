@@ -2,8 +2,8 @@
 C  COPYRIGHT BERND BERG, FEB 10, 1990.	
 C  INPUT:   ARRAY X(N) WITH (GAUSSIAN) DATA.
 C  OUTPUT:  MEAN VALUE XM, UNBIASED VARIANCE XV AND ERROR BAR XE.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION X(N)
       IF(N.LT.2) STOP 'STEB0: N HAS TO BE .GE. 2!'
 C MEAN VALUE:

@@ -1,7 +1,7 @@
       FUNCTION BBI_NK_XQ(Q)
 C Copyright, Berg, October 23 2000.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       include 'binom.com'
       external BBI_NK_DF
       IF(N.LE.0) STOP "BBI_NK_XK: N.LE.0."

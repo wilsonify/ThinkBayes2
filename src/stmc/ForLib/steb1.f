@@ -3,8 +3,8 @@ C  COPYRIGHT BERND BERG, FEB 12, 1990.
 C  INPUT:   ARRAY X (GAUSSIAN) DATA AND WEIGHT FACTORS.
 C  OUTPUT:  MEAN VALUE XM, AND ITS ERROR BAR XE.
 C           WEIGHT FACTORS NORMALIZED TO ONE.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION X(N),W(N)
 C
 C NORMALIZATION OF WEIGHT FACTORS:

@@ -1,6 +1,6 @@
       FUNCTION CHI2PDF_DF(CHI2)
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       COMMON /CHI2PAR/ NF
       A=HALF*NF
       X=HALF*NF*CHI2

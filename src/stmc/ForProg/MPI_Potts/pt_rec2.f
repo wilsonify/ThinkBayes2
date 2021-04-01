@@ -1,8 +1,8 @@
       SUBROUTINE 
      & PT_REC2(BA,BASUM,NACPT_PT,IP_B,IPI_B,MY_ID,NPM1,NCALL,IUD)
 C Copyright, Bernd Berg, Jan 10 2002.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION BA(0:NPM1),BASUM(0:NPM1)
       DIMENSION NACPT_PT(0:NPM1),IP_B(0:NPM1),IPI_B(0:NPM1)
       DATA WEIGHT/ZERO/, ICALL/0/, IADD/0/

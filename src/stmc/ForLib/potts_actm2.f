@@ -2,8 +2,8 @@
 C Copyright, Bernd Berg, Apr 17 2002.
 C Calculation of the mean action variable from its histogram.
 C Works for the mean of any histogram.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       dimension ha(iamin:iamax)
       potts_actm=zero
       hsum=zero

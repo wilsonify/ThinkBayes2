@@ -1,6 +1,6 @@
       SUBROUTINE PT_REC0(BA,NACPT_PT,IP_B,IPI_B,NPM1,IUD)
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION BA(0:NPM1),NACPT_PT(0:NPM1),IP_B(0:NPM1),IPI_B(0:NPM1)
       NACPT_MAX=0
       DO I=0,NPM1

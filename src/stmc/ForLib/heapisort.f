@@ -1,7 +1,7 @@
       SUBROUTINE HEAPISORT(N,IX)
 C COPYRIGHT, BERND BERG, FEB 14, 2003.
 C
-      include 'implicit.sta'
+      include '../../ForLib/implicit.sta'
       DIMENSION IX(N)
 C
 C BUILDING THE HEAP:

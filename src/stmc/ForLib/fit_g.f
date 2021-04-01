@@ -23,8 +23,8 @@ C CHI2:   CHI SQUARED.
 C Q:      PROBABILITY THAT OBSERVED DEVIATIONS OF DATA FROM BEST FIT
 C         ARE DUE TO CHANCE (ASSUMING GAUSSIAN DISTRIBUTION OF DATA)
 C
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       PARAMETER(IUO=6,MFIT=20,MAX_ITER=250,EPS=TEN**(-4))
       DIMENSION X(NDAT),Y(NDAT),SIGY(NDAT),A(NFIT),COVAR(NFIT,NFIT),
      & AMAT(NFIT,NFIT), ATRY(MFIT),B(MFIT),DELA(MFIT),DYDA(MFIT)
@@ -102,8 +102,8 @@ C
       SUBROUTINE FIT_GC(NDAT,X,Y,SIGY,NFIT,A,AMAT,B,DYDA,CHI2,SUBG)
 C Copyright, Bernd Berg, June 15, 2001.
 C Caculates the matrix AMAT and the vector B.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION X(NDAT),Y(NDAT),SIGY(NDAT),AMAT(NFIT,NFIT),
      &          B(NFIT),DYDA(NFIT)
       EXTERNAL SUBG

@@ -1,8 +1,8 @@
       FUNCTION CHI2_QDF(CHI2)
 C Copyright, Bernd Berg, July 2 1999.
 C CHI2 peaked distribution function.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       COMMON /CHI2PAR/ NF
       A=HALF*NF
       X=HALF*CHI2

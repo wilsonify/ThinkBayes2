@@ -14,7 +14,7 @@ C    OUTPUT:
 C     
 C    DATB:    ARRAY CONTAINING THE BINNED DATA.
 C
-      include 'implicit.sta' 
+      include '../../ForLib/implicit.sta'
       DIMENSION DATA(NDAT),DATB(NBINS)
       DATA IWARN /0/
 C

@@ -1,8 +1,8 @@
       FUNCTION BINO_COEF(N,K)
 C Copyright, Bernd Berg, May 5 2002.
 C Binomial probability density. Fast calculation see below.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
 C For fast calculation activate the next three lines and call the
 C subroutine FCT_LN_INIT before running the present routine.
 c     PARAMETER(NMAX=500)

@@ -1,7 +1,7 @@
       FUNCTION F_QDF(F)
 C VARIANCE RATIO DISTRIBUTION FUNCTION.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       COMMON /PARFT/ NF1,NF2
       XF1H=HALF*NF1
       XF2H=HALF*NF2

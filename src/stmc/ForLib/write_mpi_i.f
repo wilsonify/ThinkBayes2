@@ -1,7 +1,7 @@
       SUBROUTINE WRITE_MPI_I(NSEND,NRECV,NSR,IUO,itag)
 C Copyright, Bernd Berg, Oct 31 2001.
 C Purpose: Prints integer results (up to 10 integers) in a desired order.
-      INCLUDE 'implicit.sta'
+      include '../../ForLib/implicit.sta'
       INCLUDE 'mpif.h'
       DIMENSION ISTATUS(MPI_STATUS_SIZE)
       DIMENSION NSEND(NSR),NRECV(NSR)

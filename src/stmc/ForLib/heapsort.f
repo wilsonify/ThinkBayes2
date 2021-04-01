@@ -1,6 +1,6 @@
       SUBROUTINE HEAPSORT(N,X)
 C COPYRIGHT, BERND BERG, JUNE 16, 1999.
-      include 'implicit.sta'
+      include '../../ForLib/implicit.sta'
       DIMENSION X(N)
 C
 C BUILDING THE HEAP:

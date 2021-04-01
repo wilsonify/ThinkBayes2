@@ -1,8 +1,8 @@
       SUBROUTINE FIT_GGNU(IUO,IUD,NDAT,NFIT,X,Y,SIGY,A)
 C Copyright, Bernd Berg, September 27, 2002.
 C Prepares data files data.d and gfit.d for gnuplot with gfit.plt.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       PARAMETER(NPLOT=200,MMAX=20)
       DIMENSION X(NDAT),Y(NDAT),SIGY(NDAT),A(NFIT),DYDA(MMAX)
       IF(NFIT.GT.MMAX) STOP "FIT_GGNU: MMAX too small."

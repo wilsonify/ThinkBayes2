@@ -1,7 +1,7 @@
       SUBROUTINE HEAP_IPER(N,IX,IPER)
 C COPYRIGHT, BERND BERG, FEB 11, 2003.  
 C VERSION OF HEAP_PER, WHICH SORTS AN INTEGER ARRAY IX.
-      include 'implicit.sta'
+      include '../../ForLib/implicit.sta'
       DIMENSION IX(N),IPER(N)
 C
       DO I=1,N

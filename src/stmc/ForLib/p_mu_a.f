@@ -1,8 +1,8 @@
       subroutine p_mu_a(iact_min,nlink,namin,ndel_muca,beta0,b,a,hasum)
 C Copyright Bernd Berg, Apr 23 2002.  Potts model, calculates the 
 C             dimensionless microcanonical free energy parameters.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       dimension b(0:nlink),a(0:nlink),hasum(0:nlink)
       dimension ndel_muca(0:nlink) ! Eliminate in the final version!
 C

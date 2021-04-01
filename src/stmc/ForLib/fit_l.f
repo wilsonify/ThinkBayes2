@@ -7,8 +7,8 @@ C
 C  RETURNED ARE A(1), A(2) AND THEIR ERROR BARS SGA(1), SGA(2).
 C  FOR N.GE.3: ALSO THE CHI-SQUARE CHI2, AND THE GOODNES OF FIT Q.
  
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION A(2),SGA(2),X(NDAT),Y(NDAT),SGY(NDAT)
       SX=ZERO
       SY=ZERO

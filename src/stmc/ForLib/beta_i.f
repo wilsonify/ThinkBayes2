@@ -1,7 +1,7 @@
       FUNCTION BETA_I(X,A,B)
 C INCOMPLETE BETA FUNCTION. Copyright, Bernd Berg, Apr 2 2000.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       PARAMETER (ITER_MAX=200,EPS=1.D-10)
  
       IF(X.LT.ZERO .OR. X.GT.ONE) STOP 'BAD ARGUMENT X IN BETA_I'

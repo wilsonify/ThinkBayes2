@@ -1,7 +1,7 @@
       SUBROUTINE HEAP_PER(N,X,IPER)
 C COPYRIGHT, BERND BERG, October 4, 2000.  AS HEAPSORT, IN 
 C ADDITION THE ARRAY  IPER  KEEPS TRACK OF THE PERMUTATION.
-      include 'implicit.sta'
+      include '../../ForLib/implicit.sta'
       DIMENSION X(N),IPER(N)
 C
       DO I=1,N

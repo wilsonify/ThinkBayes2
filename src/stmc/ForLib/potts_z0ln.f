@@ -2,8 +2,8 @@
      &                      Zln_dif)
 C Copyright Bernd Berg, May 10 2002.
 C Potts model, normalization of the partition function Z at beta0=0.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       dimension b(0:nlink),ha(0:nlink),hasum(0:nlink)
       dimension ndel_muca(0:nlink) ! Eliminate in the final version!
 C

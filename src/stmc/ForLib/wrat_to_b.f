@@ -2,8 +2,8 @@
 C Copyright Bernd Berg, Nov 27 2000.
 C Calculation of the microcanonical inverse temperature
 C b(ia)=1/T(ia) from given weight ratio and stepsize arrays. 
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       dimension b(0:mlink),wrat(-n2d:n2d,0:mlink+n2d),ndel_muca(0:mlink)
       do ilink=0,mlink
         b(ilink)=zero

@@ -1,8 +1,8 @@
       FUNCTION GAMMA_LN(X)
 C BERG, JUNE 23, 1999.
 C LN OF GAMMA FUNCTION ALA LANCZOS, SIAM Num. Anal. B1 (1964) 1.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       IF(X.LE.ZERO) THEN
         PRINT*,"GAMMA_LN: Argument X =",X
         STOP 'GAMMA_LN: illegal argument.'

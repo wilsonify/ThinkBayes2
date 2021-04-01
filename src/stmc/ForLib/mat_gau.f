@@ -1,7 +1,7 @@
       Subroutine MAT_GAU(AMAT,N,BMAT,M)
 C Invert a square matrix
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       PARAMETER(NMAX=100)
       Dimension AMAT(N,N),BMAT(N,M),BIN(NMAX),IK(NMAX),JK(NMAX)
       IF(N.GT.NMAX) STOP "MAT_GAU: Enlarge NMAX (N.GT.NMAX)!"

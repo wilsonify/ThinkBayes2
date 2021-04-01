@@ -5,8 +5,8 @@ C =================================
 C INPUT:  NUMBER OF GAUSSIAN DATA, CONFIDENCE INTERVAL.
 C OUTPUT: UPPER AND LOWER ERROR BAR LIMITS (ASYMPTOTIC FORMULA).
 C
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       IF(PC.LE.ZERO) SDV=GAU_XQ(HALF*(ONE+0.68268949D00))
       IF(PC.GT.ZERO) SDV=GAU_XQ(HALF*(ONE+PC))
       EBUP=ONE+SDV/SQRT(TWO*(N-1))

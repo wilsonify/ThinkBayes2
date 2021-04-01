@@ -2,8 +2,8 @@
 C Berg, FEB 10, 1991.
 C PSEUDO RANDOM NUMBER GENERATOR. PROPOSED BY 
 C MARSAGLIA, ZAMAN AND TSANG, Stat. Prob. 8 (1990) 35.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       COMMON/RASET1/U(97),C,CD,CM,I,J
 C
       UNI=U(I)-U(J)

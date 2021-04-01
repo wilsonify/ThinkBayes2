@@ -2,8 +2,8 @@
 C Real eigenvalues EVAL and eigenvectors EVCT of the AMAT 2x2 matrix.
 C EVCT returns the eigenvectors stored column-wise. 
 C AMAT is unchanged on exit.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION AMAT(2,2),EVAL(2),EVCT(2,2)
       PHALF=-HALF*(AMAT(1,1)+AMAT(2,2))
       Q=AMAT(1,1)*AMAT(2,2)-AMAT(1,2)*AMAT(2,1)

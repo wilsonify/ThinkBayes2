@@ -1,6 +1,6 @@
       SUBROUTINE QTILES(N,X,Q,XQ1,XQ2)
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION X(N)
       NQ=INT(Q*N)
 c      PRINT*,'NQ,Q,N:',NQ,Q,N
