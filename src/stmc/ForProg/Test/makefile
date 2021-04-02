@@ -1,7 +1,8 @@
 # program name
-MODULE := lran
-FC := /usr/bin/f77
-FCFLAGS = -0 #-fdefault-real-8 -fbacktrace -fno-align-commons -fbounds-check
+# set MODULE from cl; for example:
+# MODULE=hello_world make -f makefile
+FC := /usr/bin/gfortran # /usr/bin/f77
+FCFLAGS = # -fdefault-real-8 -fbacktrace -fno-align-commons -fbounds-check
 FFFLAGS =
 .PHONY: paths all clean test
 
