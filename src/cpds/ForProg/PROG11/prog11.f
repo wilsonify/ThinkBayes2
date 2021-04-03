@@ -71,7 +71,7 @@ C       COR  =  CORRELATION COEFFICIENT
         WRITE(1, 125) 
 125     FORMAT(//, 1H, 25X, "")
 
-        WRITE(1 , 130) 
+        WRITE(1, 130)
 130     FORMAT(//, 1H, 25X, 'THE RESULTS ARE:')
 
         WRITE(1, 140)
