@@ -38,6 +38,7 @@ C       COR  =  CORRELATION COEFFICIENT
         COMMON / DATA8 / YCAL8, A8, B8
 
         INTEGER N
+        INTEGER J
 
         OPEN(UNIT = 3, FILE = 'DATA11.dat', STATUS = 'OLD' , ERR = 18)
 
@@ -51,7 +52,7 @@ C       COR  =  CORRELATION COEFFICIENT
 111     FORMAT(//, 6X, 'FILE DOES NOT EXIST')
         GO TO 999
 
-19      WRITE (1 222) 
+19      WRITE (1, 222)
 222     FORMAT(//, 6X, 'ERROR MESSAGE IN THE DATA VALUE')
         GO TO 999
 
@@ -61,11 +62,11 @@ C       COR  =  CORRELATION COEFFICIENT
         WRITE(1, 110) 
 110     FORMAT(//, 1HO, 25X, 'X', 15X, 'Y')
 
-        DO 10 I = 1, N
+        DO I = 1, N
 
         WRITE(1, 120) I, X(I) , Y(I) 
 120     FORMAT(1H0, 4X, I4, 6X, F14.3, 6X, E14.6) 
-10      CONTINUE
+        end do
 
         WRITE(1, 125) 
 125     FORMAT(//, 1H, 25X, "")
@@ -80,6 +81,7 @@ C       COR  =  CORRELATION COEFFICIENT
         WRITE(1, 150)
 150     FORMAT(//, 1H, 'INTECEPT: A  SLOPE: B COEFFICIENT')
 
+
         J = 1
 4       GO TO (5, 15, 25, 35, 45, 55, 65, 75) , J
 
@@ -90,12 +92,13 @@ C       CURVE FITTING FOR : Y = A + BX
         WRITE(1, 160) A1, B1, COR1
 160     FORMAT(2X, '1.', 5X, 'Y = A + BX', 10X, 3(E10.4, 5X) ) 
         
-        DO 30 I = 1, N
+        DO I = 1, N
         YCAL1(I)  = A1 + B1 * X(I) 
-30      CONTINUE
-        
+        end do
+
+
         J = J + 1
-        IF (J .EQ. 2)  THEN
+        IF (J == 2)  THEN
             GO TO 4
         ELSE
         
@@ -104,20 +107,20 @@ C       CURVE FITTING FOR : Y = A + BX
 
 C       CURVE FITTING FOR Y = A + BX^2
         
-15      DO 40 I = 1, N
+15      DO I = 1, N
         X(I)  = X(I)  * X(I) 
-40      CONTINUE
+        end do
         CALL LINFIT(X, Y, N, A2, B2, COR2) 
         
         WRITE( l , 170)  A2, B2, COR2
 170     FORMAT (2X, '2.', 5X, 'Y = A + B * X^2', 7X, 3(E10.4, 5X) ) 
         
-        DO 44 I = 1, N
-        YCAL2(I)  = A2 + B2 * X(I)  *  * 2
-44      CONTINUE
+        DO I = 1, N
+        YCAL2(I)  = A2 + B2 * X(I)  ** 2
+        end do
  
         J = J + 1
-        IF (J .EQ. 3)  THEN
+        IF (J == 3)  THEN
         GO TO 4
         ELSE
         GO TO 800
@@ -125,20 +128,20 @@ C       CURVE FITTING FOR Y = A + BX^2
 
 C       CURVE FITTING FOR Y = A + B.X^0.5
 
-25      DO 50 I  =  1 , N
-        X(I)  = X(I)  *  * 0.5
-50      CONTINUE
+25      DO I  =  1 , N
+        X(I)  = X(I)  ** 0.5
+        end do
         CALL LINFIT(X, Y, N, A3, B3, COR3) 
 
         WRITE( 1 , 180)  A3, B3, COR3
 180     FORMAT(2X, '3.', 5X, 'Y = A + B * X^0.5', 5X, 3(E10.4, 5X) ) 
 
-        DO 54 I  =  1 , N
-        YCAL3(I)  = A3 + B3 * X(I)  *  * 0.5
-54      CONTINUE
+        DO I  =  1 , N
+        YCAL3(I)  = A3 + B3 * X(I)  ** 0.5
+        end do
 
         J = J + 1
-        IF (J .EQ. 4)  THEN
+        IF (J == 4)  THEN
             GO TO 4
             ELSE
             GO TO 800
@@ -147,23 +150,23 @@ C       CURVE FITTING FOR Y = A + B.X^0.5
 C       CURVE FITTING FOR Y = A.EXP(B.X) 
 C       LINEARIZE TO Ln(Y)  = Ln(A)  + BX
 
-35      DO 60 I  =  1 , N
+35      DO I  =  1 , N
         Y(I)  = ALOG(Y(I) ) 
-60      CONTINUE
+        end do
         
         CALL LINFIT(X, Y, N, A4, B4, COR4) 
         A4 = EXP(A4) 
 
-        WRITE(1 190)  A4, B4, COR4
+        WRITE(1, 190)  A4, B4, COR4
 190     FORMAT(2X, '4.', 5X, 'Y = A * EXP(B * X) ', 4X, 3(E10.4, 5X) ) 
 
-        DO 61 I = 1, N
+        DO I = 1, N
         Y(I)  = EXP(Y(I) ) 
         YCAL4(I)  = A4 * EXP(B4 * X(I) ) 
-61      CONTINUE
+        end do
 
         J = J + 1
-        IF (J .EQ. 5)  THEN
+        IF (J == 5)  THEN
             GO TO 4
             ELSE
             GO TO 800
@@ -171,21 +174,21 @@ C       LINEARIZE TO Ln(Y)  = Ln(A)  + BX
 
 C       CURVE FITTING FOR Y = A + B.Ln(X) 
 
-45      DO 70 I = 1, N
+45      DO I = 1, N
         X(I)  = ALOG(X(I) ) 
-70      CONTINUE
+        end do
         CALL LINFIT(X, Y, N, A5, B5, COR5) 
 
         WRITE(1, 200) A5, B5, COR5
 200     FORMAT(2X, '5.', 5X, 'Y = A + B * Ln(X) ', 5X, 3(E10.4, 5X) ) 
 
-        DO 71 I = 1, N
+        DO I = 1, N
         X(I)  = EXP(X(I) ) 
         YCAL5(I)  = A5 + B5 * ALOG(X(I) ) 
-71      CONTINUE
+        end do
         
         J = J + 1
-        IF (J .EQ. 6)  THEN
+        IF (J == 6)  THEN
             GO TO 4
             ELSE
             GO TO 800
@@ -194,24 +197,24 @@ C       CURVE FITTING FOR Y = A + B.Ln(X)
 C       CURVE FITTING FOR Y = A.X^B
 C       LINEARIZE TO Ln(Y)  = Ln(A)  + B * Ln(X) 
 
-55      DO 80 I = 1, N
+55      DO I = 1, N
         X(I)  = ALOG(X (I) ) 
         Y(I)  = ALOG(Y(I) ) 
-80      CONTINUE
+        end do
         
         CALL LINFIT(X, Y, N, A6, B6, COR6) 
         A6 = EXP(A6) 
         
         WRITE( 1 , 210 )  A6 , B6, COR6
 210     FORMAT(2X, '6.', 5X, 'Y = A * X^B', 9X, 3(E10.4, 5X) ) 
-        DO 85 I = 1, N
+        DO I = 1, N
         X(I)  = EXP(X(I) ) 
         Y(I)  = EXP(Y(I) ) 
-        YCAL6 (I)  = A6 * (X(I)  *  * B6) 
-85      CONTINUE
+        YCAL6 (I)  = A6 * (X(I)  ** B6) 
+        end do
 
         J = J + 1
-        IF (J  =  =  7)  THEN
+        IF (J  ==  7)  THEN
             GO TO 4
             ELSE
             GO TO 800
@@ -219,21 +222,21 @@ C       LINEARIZE TO Ln(Y)  = Ln(A)  + B * Ln(X)
 
 C       CURVE FITTING FOR Y  =  A  +  B . I  /  X
 
-65      DO 90 I = 1, N
+65      DO I = 1, N
         X(I)  = 1 / X(I) 
-90      CONTINUE
+        end do
         CALL LINFIT(X, Y, N, A7, B7, COR7) 
         
         WRITE( 1 , 220 )  A7 , B7, COR7
 220     FORMAT(2X, '7.', 5X, 'Y = A + B * 1 / X', 7X, 3(E10.4, 5X) ) 
         
-        DO 95 I  =  1 , N
+        DO I  =  1 , N
         X(I)  = 1 / X(I) 
         YCAL7 (I)  = A7 + B7 * 1 / X(I) 
-95      CONTINUE
+        end do
 
         J = J + 1
-        IF (J .EQ. 8)  THEN
+        IF (J == 8)  THEN
             GO TO 4
             ELSE
             GO TO 800
@@ -241,10 +244,10 @@ C       CURVE FITTING FOR Y  =  A  +  B . I  /  X
         
 C       CURVE FITTING FOR 1 / Y = A + B.1 / X
 
-75      DO 96 I = 1, N
+75      DO I = 1, N
         X(I)  = 1 / X(I) 
         Y(I)  = 1 / Y(I) 
-96      CONTINUE
+        end do
 
         CALL LINFIT(X, Y, N, A8, B8, COR8) 
 
@@ -253,11 +256,11 @@ C       CURVE FITTING FOR 1 / Y = A + B.1 / X
 
 
 
-        DO 97 I = 1, N
+        DO I = 1, N
         X(I)  = 1 / X(I) 
         Y(I)  = 1 / Y(I) 
         YCAL8(I)  = X(I)  / (A8 * X(I)  + B8) 
-97      CONTINUE
+        end do
 
 800     CALL COMP(X, Y, N, COR1, COR2, COR3, COR4, COR5, COR6,
      + COR7, COR8)
@@ -279,7 +282,7 @@ C       THIS PROGRAM PERFORMS A LINEAR REGRESSION OF X  -  Y VALUES .
         SUMX2 = 0.0
         SUMY2 = 0.0
         
-        DO 10 I  =  1 , N
+        DO I  =  1 , N
         XI = X(I) 
         YI = Y(I) 
         SUMX = SUMX + XI
@@ -287,7 +290,8 @@ C       THIS PROGRAM PERFORMS A LINEAR REGRESSION OF X  -  Y VALUES .
         SUMXY = SUMXY + XI * YI
         SUMX2 = SUMX2 + XI * XI
         SUMY2 = SUMY2 + YI * YI
-10      CONTINUE
+        end do
+
         SXX = N * SUMX2 - SUMX * SUMX
         SXY = N * SUMXY - SUMX * SUMY
         SYY = N * SUMY2 - SUMY * SUMY
@@ -340,29 +344,29 @@ C       FIND THE MAXIMUM VALUE OF THE CORRELATION COEFFICIENTS
         
 C       COMPARE THIS VALUE WITH THE CALCULATED VALUES OF THE REGRESSION ANALYSES
 
-        IF (CORR .EQ. COR1)  THEN
+        IF (CORR == COR1)  THEN
             CALL OUTPUT ( X , Y, YCAL1, N, A1 , B1 , COR1 ) 
             GO TO 10
-        ELSEIF(CORR .EQ. COR2)  THEN
+        ELSEIF(CORR == COR2)  THEN
 
         CALL OUTPUT(X, Y, YCAL2, N, A2, B2, COR2) 
         GO TO 10
-        ELSEIF(CORR .EQ. COR3)  THEN
+        ELSEIF(CORR == COR3)  THEN
         CALL OUTPUT ( X , Y, YCAL3, N, A3, B3, COR3) 
         GO TO 10
-        ELSEIF(CORR .EQ. COR4)  THEN
+        ELSEIF(CORR == COR4)  THEN
         CALL OUTPUT (X, Y, YCAL4, N, A4, B4, COR4) 
         GO TO 10
-        ELSEIF(CORR .EQ. CORS)  THEN
+        ELSEIF(CORR == CORS)  THEN
         CALL OUTPUT ( X , Y, YCAL5, N, A5, B5, COR5) 
         GO TO 10
-        ELSEIF(CORR .EQ. COR6)  THEN
+        ELSEIF(CORR == COR6)  THEN
         CALL OUTPUT ( X , Y, YCAL6, N, A6, B6, COR6) 
         GO TO 10
-        ELSEIF (CORR .EQ. COR7)  THEN
+        ELSEIF (CORR == COR7)  THEN
         CALL OUTPUT (X, Y, YCAL7, N, A7, B7, COR7) 
         GO TO 10
-        ELSEIF (CORR .EQ. COR8)  THEN
+        ELSEIF (CORR == COR8)  THEN
         CALL OUTPUT(X, Y, YCAL8, N, AS, BS, COR8)
         ENDIF
 10      RETURN
@@ -379,16 +383,16 @@ C THE CONSTANTS AND THE CORRELATION COEFFICIENT.
         WRITE(1, 100) 
 100     FORMAT(/, 1H0, 21X, 'X-ACTUAL', 13X, 'Y-ACTUAL', 11X,
      + 'Y-ESTIMATE')
-        DO 10 I  =  1, N
+        DO I  =  1, N
 
         WRITE(1, 110)  I, X(I) , Y(I) , YCAL(I) 
 110     FORMAT(1H0, 4X, I4, 6X, F14.3, 2(6X, F14.6) ) 
-10      CONTINUE
+        end do
 
-        WRITE (1 120) 
+        WRITE (1, 120)
 120     FORMAT (//, 1H, '')
 
-        WRITE (1 130) A, B, COR
+        WRITE (1, 130) A, B, COR
 130     FORMAT(//, 1H0, 6X, 'CONSTANTS FOR THE EQUATION:', /1H0,
      + 6X, 'A:', 6X, F12.4, /1H0, 6X, 'B:', 6X, F12.4, /1H0,
      + 'CORRELATION COEFFICIENT:', F12.4)
