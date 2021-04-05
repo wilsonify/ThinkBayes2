@@ -9,7 +9,7 @@ c Output:  ix   array of nd coordinates of this site
       nspart=ns
       js=is
       do id=nd,1,-1
-        if(id.lt.nd) js=js-ix(id+1)*nspart
+        if(id<nd) js=js-ix(id+1)*nspart
         nspart=nspart/nla(id)
         ix(id)=(js-1)/nspart
       end do

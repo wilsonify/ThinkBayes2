@@ -5,15 +5,15 @@ C
       EXTERNAL F_DF
       COMMON /PARFT/ NF1,NF2
 C
-      IF(Q.EQ.HALF) THEN
+      IF(Q==HALF) THEN
         F_XQ=ONE
         RETURN
       ENDIF
       X2=ONE+ONE/TEN
-      IF(Q.GT.HALF) THEN
+      IF(Q>HALF) THEN
         X1=ONE-ONE/TEN
 1       X2=X2+ONE
-        IF(F_DF(X2).LE.Q) GO TO 1
+        IF(F_DF(X2)<=Q) GO TO 1
       ELSE
         X1=ZERO
       ENDIF

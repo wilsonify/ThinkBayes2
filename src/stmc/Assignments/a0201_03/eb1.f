@@ -10,7 +10,7 @@ C
       IDAT=0
       DO K=1,KMAX
         NDAT=2**K
-        IF(K.EQ.KMAX) NDAT=2
+        IF(K==KMAX) NDAT=2
         IDAT=IDAT+NDAT
         DATA(K)=ZERO
         DO N=1,NDAT

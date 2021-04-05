@@ -18,22 +18,22 @@ C
 1     Y1=F(XX1)
       Y2=F(XX2)
 C
-      IF(Y1.GT.Y2) THEN
+      IF(Y1>Y2) THEN
       XX1=X2
       XX2=X1
       GO TO 1
       END IF
 C
-      IF(Y.LE.Y1 .OR. Y.GE.Y2) GO TO 2 
+      IF(Y<=Y1 .OR. Y>=Y2) GO TO 2
 C
 3     CONTINUE
       ITER=ITER+1
-      IF(ITER.GT.ITERMAX) GO TO 2
+      IF(ITER>ITERMAX) GO TO 2
         XX=HALF*(XX1+XX2)
         FF=F(XX)
-        IF(FF.LE.Y) XX1=XX
-        IF(FF.GT.Y) XX2=XX
-      IF(ABS(XX2-XX1).GT.EPS ) GO TO 3
+        IF(FF<=Y) XX1=XX
+        IF(FF>Y) XX2=XX
+      IF(ABS(XX2-XX1)>EPS ) GO TO 3
 C
       FI1=HALF*(XX2+XX1) 
 C

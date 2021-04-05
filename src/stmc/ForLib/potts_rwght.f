@@ -18,7 +18,7 @@ c
       do iact=0,nlink
         hb(iact)=zero
         hbe(iact)=zero
-        if(ha(iact).gt.half) then
+        if(ha(iact)>half) then
           a=(beta-beta0)*2*(iact-act0m)
           hb(iact)=exp(log(ha(iact))+a)
           hbe(iact)=exp(log(hae(iact))+a)

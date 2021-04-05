@@ -37,12 +37,12 @@ C
           call potts_clw(nclsize)
           nflip=nflip+nclsize
           hflip(nclsize)=hflip(nclsize)+one
-          if(nflip.ge.ns) then
+          if(nflip>=ns) then
             imeas=imeas+1
             nflip=nflip-ns
             tsa(imeas)=(ONE*iact)/nlink ! Action per link.
           end if
-        if(imeas.lt.nmeas) go to 1
+        if(imeas<nmeas) go to 1
 c       print'(" irpt,iact,nclsize:",3I10)',irpt,iact,nclsize
         print'(" irpt,imeas,iact,nflip:",4I10)',
      &           irpt,imeas,iact,nflip

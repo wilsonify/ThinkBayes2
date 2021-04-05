@@ -7,12 +7,12 @@ C Potts model ln of the partition function Z and related variables.
       dimension b(0:nlink),ha(0:nlink),hasum(0:nlink)
 C
       iloop_ha=0 ! Counts runs through the ha(iact).gt.half loop.
-      if(namin.le.0) stop "POTTS_ZLN: namin false."
+      if(namin<=0) stop "POTTS_ZLN: namin false."
       do iact=0,nlink
         ha(iact)=hasum(iact)-ha(iact) ! Jackknife histogram.
-        if(ha(iact).gt.half) then
+        if(ha(iact)>half) then
           iloop_ha=iloop_ha+1
-          if(iloop_ha.eq.1) then
+          if(iloop_ha==1) then
             a=-(beta0-b(iact))*namin ! Ferdinand-Fisher normalization.
             Zln=log(ha(iact))+two*((beta0-b(iact))*iact+a)
             Zln1_max=Zln
@@ -32,21 +32,21 @@ C
         end if
       end do
 C
-      if(iopt.ne.1) return
+      if(iopt/=1) return
 C
 C iact probability density at beta0: (Zln1_max used only here.)
       iloop_ha=0
       hsum=zero
       do iact=0,nlink
-        if(ha(iact).gt.half) then
+        if(ha(iact)>half) then
           iloop_ha=iloop_ha+1
-          if(iloop_ha.eq.1) then
+          if(iloop_ha==1) then
             a=-(beta0-b(iact))*namin
           else
             a=a+(b(iact)-b(iact_old))*iact_old
           end if
           Zln1=log(ha(iact))+two*((beta0-b(iact))*iact+a)-Zln1_max
-          if(Zln1.gt.0.01d00) stop "Zln1." 
+          if(Zln1>0.01d00) stop "Zln1."
           ha(iact)=exp(Zln1)
           hsum=hsum+ha(iact)
           iact_old=iact

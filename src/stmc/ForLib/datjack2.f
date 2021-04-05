@@ -16,7 +16,7 @@ C
       DO I=1,N
       DO J=1,NM1
         JJ=J
-        IF(J.GE.I) JJ=J+1
+        IF(J>=I) JJ=J+1
         XJJ(J,I)=FACTOR*(XSUM-X(I)-X(JJ))
       END DO
       END DO

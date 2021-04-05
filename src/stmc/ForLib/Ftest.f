@@ -11,6 +11,6 @@ C F-RATIO:
       VA2=EB2**2*NDAT2
       F=VA1/VA2  !  Definitions take per degree of freedom already into account!
       Q=TWO*F_DF(F)
-      IF(Q.GT.ONE) Q=TWO-Q
+      IF(Q>ONE) Q=TWO-Q
       RETURN
       END

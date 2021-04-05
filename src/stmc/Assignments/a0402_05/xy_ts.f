@@ -13,7 +13,7 @@ C MC production run to create energy (action variable) time series.
       ltest=.true.
       ltest=.false.
       if(ltest) stop "ltest XY_ts."
-      if(n.ne.2) stop "XY_ts: set n=2 in on.par (for ana_tson.f)!"
+      if(n/=2) stop "XY_ts: set n=2 in on.par (for ana_tson.f)!"
 C
       write(iuo,'(/," XY_ts.f:")')
       call XY_init(.true.) ! Initialize XY Metropolis MC.
@@ -21,7 +21,7 @@ C
       isw0=1
       lacpt=.false.
       do iequi=1,nequi        ! Sweeps for reaching equilibrium.
-	if(iequi.ge.isw0) then
+	if(iequi>=isw0) then
           lacpt=.true.
 c         lacpt=.false.
 	  isw0=2*isw0

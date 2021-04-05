@@ -10,7 +10,7 @@ C O3 model: Sequential heat bath updating.
       include '../../ForLib/on.com'
       amin=act
       amax=act
-      if(ns.le.0 .or. ns.gt.ms) stop "O3_mchb: ns false."
+      if(ns<=0 .or. ns>ms) stop "O3_mchb: ns false."
 
       do is=1,ns
 
@@ -28,10 +28,10 @@ C O3 model: Sequential heat bath updating.
         phi=tpi*rmafun()
         call ranmar(xr)
         rho=zero
-        if(Snorm.lt.eps) then
+        if(Snorm<eps) then
           print*,"O3_mchb: Warning Snorm.lt.eps encountered."
           sta(3,is)=two*(xr-half) ! Occasionally xr=zero => sta(3,is)=-one.
-          if(abs(sta(3,is)).lt.one) rho=sqrt(one-sta(3,is)**2)
+          if(abs(sta(3,is))<one) rho=sqrt(one-sta(3,is)**2)
           sta(1,is)=rho*cos(phi)
           sta(2,is)=rho*sin(phi)
         else
@@ -39,7 +39,7 @@ C Heat bath choice of the new spin:
           Sbeta=beta*Snorm
           Sexp=exp(Sbeta)
           snew3=log(Sexp+xr*(exp(-Sbeta)-Sexp))/Sbeta ! xr=zero => snew3=one.
-          if(snew3.lt.one) rho=sqrt(one-snew3**2)
+          if(snew3<one) rho=sqrt(one-snew3**2)
           snew1=rho*cos(phi)
           snew2=rho*sin(phi)
           fn=one/Snorm
@@ -47,7 +47,7 @@ C Heat bath choice of the new spin:
           zh2=fn*sum2
           zh3=fn*sum3 ! = cos_theta
 
-          if(abs(one-zh3**2).lt.eps) then
+          if(abs(one-zh3**2)<eps) then
             print*,"O3_mchb: Warning |one-zh3**2|.lt.eps encountered."
             xh1=zh3
             xh2=zero
@@ -56,7 +56,7 @@ C Heat bath choice of the new spin:
             yh2=abs(zh3)
           else ! 
             rho=sqrt(one-zh3**2) ! = sin_theta 
-            if(rho.lt.eps) print*,
+            if(rho<eps) print*,
      &        "O3_mchb: Warning rho.lt.eps encountered."
             yh1=-zh2/rho         ! =-sin_phi
             yh2=+zh1/rho         ! = cos_phi; yh3 no needed.

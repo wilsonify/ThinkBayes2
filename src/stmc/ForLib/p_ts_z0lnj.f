@@ -13,7 +13,7 @@ C
       do irpt=1,nrpt
         isgn=-1
         call addln2(Zlnj(0),Zlna(irpt),Zlnj(irpt),isgn)
-        if(isgn.ne.1) stop "P_TS_Z0LNJ: Zlnj negativ."
+        if(isgn/=1) stop "P_TS_Z0LNJ: Zlnj negativ."
       end do
 C
       Zln0=ns*LOG(ONE*nq)

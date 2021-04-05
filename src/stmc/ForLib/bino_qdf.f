@@ -2,10 +2,10 @@
 C Copyright, Berg, October 23 1998.
       include '../../ForLib/implicit.sta'
       include '../../ForLib/constants.par'
-      IF(K.GT.N.OR.N.LE.0.OR.K.LT.0) STOP "BINO_QDF: False N or K."
-      IF(P.LT.ZERO .OR. P.GT.ONE) STOP "BINO_QDF: False P input."
+      IF(K>N.OR.N<=0.OR.K<0) STOP "BINO_QDF: False N or K."
+      IF(P<ZERO .OR. P>ONE) STOP "BINO_QDF: False P input."
 C
-      IF(P.EQ.ZERO.OR.P.EQ.ONE) THEN
+      IF(P==ZERO.OR.P==ONE) THEN
         BINO_QDF=ZERO
         RETURN
       END IF
@@ -15,7 +15,7 @@ C
       DO I=1,K
         BINO_QDF=BINO_QDF+BINO_PD(N,I,P)
       END DO
-      IF(BINO_QDF.GT.HALF) BINO_QDF=ONE-BINO_QDF
+      IF(BINO_QDF>HALF) BINO_QDF=ONE-BINO_QDF
 C
       RETURN
       END

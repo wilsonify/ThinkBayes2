@@ -7,7 +7,7 @@ C Potts model, time series partition function fraction at beta0=0.
 C
       do imeas=1,nmeas
         iact=nint(tsa(imeas))
-        if(imeas.eq.1) then
+        if(imeas==1) then
           Zln=two*(-b(iact)*iact+a(iact))
         else
           Zln1=two*(-b(iact)*iact+a(iact))

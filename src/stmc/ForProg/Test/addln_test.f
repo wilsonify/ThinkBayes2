@@ -21,7 +21,7 @@ c
         cln=addln_cut(aln,bln)
 c       cln=addln(aln,bln)
         cc=exp(cln)
-        if(idat.le.npri)
+        if(idat<=npri)
      &  write(iuo,'(" idat,a,b,c,c:",i5,4f12.6)') idat,a,b,c,cc
       end do
       write(iuo,'(" Last c,c:",2g16.7)') c,cc
@@ -29,7 +29,7 @@ c
       write(iuo,'(/," addln2.f:",/)')
       c=rmafun()
       do idat=1,ndat
-        if(c.gt.zero) then
+        if(c>zero) then
           a=c
           b=rmafun()
           isgn=-1
@@ -43,7 +43,7 @@ c
         bln=log(b)
         call addln2(aln,bln,cln,isgn)
         cc=isgn*exp(cln)
-        if(idat.le.npri)
+        if(idat<=npri)
      &  write(iuo,'(" idat,a,b,c,c:",i5,4f12.6)') idat,a,b,c,cc
       end do
       write(iuo,'(" Last c,c:",2g16.7)') c,cc

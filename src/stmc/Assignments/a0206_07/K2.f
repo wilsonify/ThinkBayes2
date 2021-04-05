@@ -21,7 +21,7 @@ c     PARAMETER(N1=1,N2=2,NRPT=100)
       IF(LCAU) ITEST=ITEST+1
       IF(LGAU) WRITE(IUO,*) "Gaussian random numbers."
       IF(LGAU) ITEST=ITEST+1
-      IF(ITEST.NE.1) STOP "Random number options false or incompatible."
+      IF(ITEST/=1) STOP "Random number options false or incompatible."
       ltest=.true.
       ltest=.false.
       IF(ltest) STOP 'ltest.'
@@ -54,7 +54,7 @@ C
       Q0=ONE
       WRITE(IUD,'(I10,2F12.6)') IRPT0,DEL(IRPT0),Q0
       DO IRPT=2,NRPT
-        IF(DEL(IRPT).GT.DEL(IRPT-1)) THEN
+        IF(DEL(IRPT)>DEL(IRPT-1)) THEN
           F=(ONE*IRPT)/(NRPT+1)
           Q=ONE-F
           WRITE(IUD,'(I10,2F12.6)') IRPT,DEL(IRPT-1),Q0

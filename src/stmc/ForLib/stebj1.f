@@ -21,7 +21,7 @@ C    FE      ERROR BAR.
 C                                                                     
       include '../../ForLib/implicit.sta'
       DIMENSION FJ(N)
-      IF(N.LT.2) STOP 'STEBJ1: N TOO SMALL!'
+      IF(N<2) STOP 'STEBJ1: N TOO SMALL!'
       CALL STEBJ0(N,FJ,FJM,FV,FE)
       CALL BIAS(N,FJ,FMEAN,FMM,BIASM)
       RETURN

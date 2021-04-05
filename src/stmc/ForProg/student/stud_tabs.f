@@ -54,8 +54,8 @@ C
 C
       DO I=2,MDAT
         NF=I-1
-        IF(I.EQ.2) NJ=4
-        IF(I.GT.2) NJ=NSI
+        IF(I==2) NJ=4
+        IF(I>2) NJ=NSI
         DO J=1,NJ
 	  XJ=J*ONE
           P(J)=1.D00-GAU_DF(-XJ)

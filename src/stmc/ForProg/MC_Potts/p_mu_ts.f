@@ -43,13 +43,13 @@ c
           nswp=nswp+1
           call potts_met
           call tun_cnt(namin,namax,iamin,iamax,ntun,ltun0)
-          if(ntun.gt.ntun_old) then
+          if(ntun>ntun_old) then
             write(iuo,'(" ntun,irec,mu_swp,acpt:",I6,I9,I12,F9.3)')
      &      ntun,irec,mu_swp,((nmucasw*irec*one)/(mu_swp*one))
             ntun_old=ntun
-          if(ntun.ge.maxtun) go to 2
+          if(ntun>=maxtun) go to 2
           end if
-        if((acpt/ns).lt.(nmucasw*one)) go to 1 !
+        if((acpt/ns)<(nmucasw*one)) go to 1 !
 C The next MUCA recursion is done, when acpt was  big enough:
         call p_mu_rec
         acpt=acpt/(ns*nswp)
@@ -62,7 +62,7 @@ C
       write(iuo,*) "Muca recursions done."
       write(iuo,*) "  "
       write(iuo,'(I12," sweeps for reaching equilibrium.")') nequi
-      if(nequi.ne.0) then
+      if(nequi/=0) then
         acpt=zero
         do iequi=1,nequi
           call potts_met
@@ -74,7 +74,7 @@ C
       write(iuo,*) "  "
       write(iuo,'(I9," times",I12," sweeps with measurements.")')
      & nrpt,nmeas
-      if(nrpt.gt.0.and.nmeas.gt.0) then
+      if(nrpt>0.and.nmeas>0) then
         open(iud1,file="mu"//cd//"d"//cq//"q"//cl//"lts.D",
      &  form="unformatted",status="unknown")
         write(iud1) nd,ml,nla,nq,namin,namax,irec,nrec_max,nmucasw,

@@ -15,7 +15,7 @@ C
 c         if(iq.eq.0) nstate(iq)=nlink/2 ! Test purposes.
 c         if(iq.ne.0) nstate(iq)=0
         end do
-        if(imeas.eq.1) then
+        if(imeas==1) then
           Zln=two*((beta0-b(iact))*iact+a(iact))
           Aln=Zln+log(iact*one)
           A2ln=Zln+two*log(iact*one)

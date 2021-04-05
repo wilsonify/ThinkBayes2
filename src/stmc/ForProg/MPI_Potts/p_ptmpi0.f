@@ -18,7 +18,7 @@ C
       CALL MPI_COMM_SIZE(MPI_COMM_WORLD,N_PROC,IERR)
       NPM1=N_PROC-1
       call p_inithb_mpi(cd,cq,cl,cmy_id,cnp,.true.) ! Initialize Potts HB MC.
-      IF(MY_ID.EQ.0) THEN
+      IF(MY_ID==0) THEN
         OPEN(IUD,file="pt"//cd//"d"//cq//"q"//cl//".t"//cnp,
      &         form="formatted",status="old",access="append")
         WRITE(IUD,*) "p_ptmpi0.f with recursion pt_rec0.f."
@@ -47,12 +47,12 @@ C
         CALL 
      &    PT_REC0(BA,NACPT_PT,IP_B,IPI_B,MY_ID,NPM1,IUD)
         CALL POTTS_WGHB(WHB_TAB,BA(MY_B),H0,nd,nqm1)
-        IF(MY_ID.EQ.0) THEN
+        IF(MY_ID==0) THEN
           OPEN(IUD,file="pt"//cd//"d"//cq//"q"//cl//".t"//cnp,
      &         form="formatted",status="old",access="append")
           WRITE(IUD,'(I4,".",5X,7I8)') IPT_REC,
      &                        (NACPT_PT(IPI_B(I))/2,I=1,NPM1)
-          IF(IPT_REC.EQ.NPT_REC) WRITE(IUD,'(" BA:",3X,8F8.5)')
+          IF(IPT_REC==NPT_REC) WRITE(IUD,'(" BA:",3X,8F8.5)')
      &                                      (BA(I),I=0,NPM1)
           CLOSE(IUD)
         END IF
@@ -61,7 +61,7 @@ C
           end do
       END DO
 C
-        IF(MY_ID.EQ.0) THEN
+        IF(MY_ID==0) THEN
           OPEN(IUD,file="pt"//cd//"d"//cq//"q"//cl//".t"//cnp,
      &         form="formatted",status="old",access="append")
           WRITE(IUD,*) "Start of the production run ..."
@@ -98,7 +98,7 @@ C
         CLOSE(IUD1) 
       end do
 C
-        IF(MY_ID.EQ.0) THEN
+        IF(MY_ID==0) THEN
           OPEN(IUD1,file="pt"//cd//"d"//cq//"q"//cl//".t"//cnp,
      &         form="formatted",status="old",access="append")
           WRITE(IUD1,'(" all done. Results on",a2,"* files.")') cnp

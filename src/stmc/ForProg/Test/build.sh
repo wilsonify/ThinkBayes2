@@ -11,11 +11,11 @@ for f in *.f; do
   echo "done make $f"
 
   echo "move object"
-  mv ${f//.f/.o} build
+  mv "${f//.f/.o}" build
   echo "object is located in build"
 
   echo "move binary"
-  mv ${f//.f/.out} dist
+  mv "${f//.f/.out}" dist
   echo "binary is located in dist"
 done
 

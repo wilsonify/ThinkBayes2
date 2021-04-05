@@ -5,7 +5,7 @@ C  OUTPUT:  MEAN VALUE XM, UNBIASED VARIANCE XV AND ERROR BAR XE.
       include '../../ForLib/implicit.sta'
       include '../../ForLib/constants.par'
       DIMENSION X(N)
-      IF(N.LT.2) STOP 'STEB0: N HAS TO BE .GE. 2!'
+      IF(N<2) STOP 'STEB0: N HAS TO BE .GE. 2!'
 C MEAN VALUE:
       XM=ZERO
       DO I=1,N

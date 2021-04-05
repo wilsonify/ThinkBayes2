@@ -39,18 +39,18 @@ C
      &     form="unformatted",status="old")
       read(iud1) nd_in,ml_in,nla_in,nq_in,namin_in,namax_in,irec,
      & nrec_max_in,nmucasw_in,mu_sweep,ntun,nequi_in,nrpt_in,nmeas_in
-      if(nd.ne.nd_in) stop "nd.ne.nd_in"
-      if(ml.ne.ml_in) stop "ml.ne.ml_in"
+      if(nd/=nd_in) stop "nd.ne.nd_in"
+      if(ml/=ml_in) stop "ml.ne.ml_in"
       do id=1,nd
-        if(nla(id).ne.nla_in(id)) stop "nla(id).ne.nla_in(id)"
+        if(nla(id)/=nla_in(id)) stop "nla(id).ne.nla_in(id)"
       end do
-      if(nq.ne.nq_in) stop "nq.ne.nq_in"
-      if(namin.ne.namin_in) stop "namin.ne.namin_in"
-      if(namax.ne.namax_in) stop "namax.ne.namax_in"
-      if(nmucasw.ne.nmucasw_in) stop "nmucasw.ne.nmucasw_in"
-      if(nequi.ne.nequi_in) stop "nequi.ne.nequi_in"
-      if(nrpt.ne.nrpt_in) stop "nrpt.ne.nrpt_in"
-      if(nmeas.ne.nmeas_in) stop "nmeas.ne.nmeas_in"
+      if(nq/=nq_in) stop "nq.ne.nq_in"
+      if(namin/=namin_in) stop "namin.ne.namin_in"
+      if(namax/=namax_in) stop "namax.ne.namax_in"
+      if(nmucasw/=nmucasw_in) stop "nmucasw.ne.nmucasw_in"
+      if(nequi/=nequi_in) stop "nequi.ne.nequi_in"
+      if(nrpt/=nrpt_in) stop "nrpt.ne.nrpt_in"
+      if(nmeas/=nmeas_in) stop "nmeas.ne.nmeas_in"
       read(iud1) wrat,ndel_muca
       call wrat_to_b(n2d,mlink,namin,namax,wrat,ndel_muca,b)
       ns=nsfun(nla,nd)
@@ -86,8 +86,8 @@ C
         call razero(ha,0,nlink)
         iopt=0
         do irpt=0,nrpt ! irpt=0 calculates results using all data.
-          if(irpt.ge.1) read(iud1) ha,irpt_in,ntun
-          if(ibeta.eq.0) CALL POTTS_Z0LN(nq,ns,nlink,namin,ndel_muca,
+          if(irpt>=1) read(iud1) ha,irpt_in,ntun
+          if(ibeta==0) CALL POTTS_Z0LN(nq,ns,nlink,namin,ndel_muca,
      &                                   b,ha,hasum,Zlnj_dif(irpt))
           CALL POTTS_ZLN(nlink,namin,beta0,b,ha,hasum,iopt,Zln,Aln,A2ln)
           actj(irpt)=exp(Aln-Zln)/nlink
@@ -99,7 +99,7 @@ C Specific heat from the fluctuation dissipation theorem:
           Zlnj(irpt)=Zln+Zlnj_dif(irpt)
 C Entropy S=(e-F)*beta, but beta_potts=2*beta:
           Sj(irpt)=ej*beta0+Zlnj(irpt)/ns 
-          if(nq.eq.10.and.lfig) Sj(irpt)=(ej*beta0+Zlnj(irpt)/ns)/three
+          if(nq==10.and.lfig) Sj(irpt)=(ej*beta0+Zlnj(irpt)/ns)/three
         end do
 C
 C Action and energy:
@@ -111,11 +111,11 @@ C Action and energy:
         write(iud4,'(4F12.6)') beta0,emj,em,ee
 C Partition function ln:
         call stebj0(nrpt,Zlnj(1),Zlnm,Zlnv,Zlne)
-        if(ibeta.ne.0) then
+        if(ibeta/=0) then
           F=-Zlnj(0)/(ns*beta0)
           Fm=-Zlnm  /(ns*beta0)
           Fe=-Zlne  /(ns*beta0)
-          if(beta0.lt.half) then
+          if(beta0<half) then
              write(iud6,'(4F12.6)') beta0,F,Fm,Fe
           else
              Fas=(log(one*nq)-2*beta0*(nlink-namin))/(ns*beta0)

@@ -41,7 +41,7 @@ C
       OPEN(IUD,FILE="chi2_1.d",form="formatted",status="unknown")
       DO IRPT=1,NRPT
         F=(ONE*IRPT)/(NRPT+1)
-        IF(F.GT.HALF) F=ONE-F
+        IF(F>HALF) F=ONE-F
         WRITE(IUD,'(4F11.5)') Q(IRPT),QFALSE(IRPT),F
       END DO
       CLOSE(IUD)

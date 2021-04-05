@@ -10,22 +10,22 @@ C
       iloop_ha=0 ! Counts runs through the ha_iact.gt.half loop.
       beta0=zero
       Z0ln=ns*LOG(ONE*nq)
-      if(namin.le.0) stop "POTTS_ZLN: namin false."
+      if(namin<=0) stop "POTTS_ZLN: namin false."
       iact_next=namin+ndel_muca(namin) ! For test purposes only.
       do iact=0,nlink
         ha_iact=hasum(iact)-ha(iact) ! Jackknife histogram.
-        if(ha_iact.gt.half) then
+        if(ha_iact>half) then
           iloop_ha=iloop_ha+1
-          if(iloop_ha.eq.1) then
+          if(iloop_ha==1) then
             a=-(beta0-b(iact))*namin ! Ferdinand-Fisher normalization.
             Zln=log(ha_iact)+two*((beta0-b(iact))*iact+a)
           else
             a=a+(b(iact)-b(iact_old))*iact_old
-            if(iact.gt.namin) then
-              if(iact.ne.iact_next) then
+            if(iact>namin) then
+              if(iact/=iact_next) then
                 print'(" iact,_next,has:",2I10,2G15.6)',
      &                   iact,iact_next,hasum(iact),ha(iact)
-                if(iact.eq.nlink) stop "POTTS_Z0LN."
+                if(iact==nlink) stop "POTTS_Z0LN."
               end if
               iact_next=iact+ndel_muca(iact)
             end if

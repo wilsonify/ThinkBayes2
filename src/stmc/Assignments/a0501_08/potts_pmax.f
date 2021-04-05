@@ -16,7 +16,7 @@ c
 c
       nqmax=0
       do jp=0,nqm1
-      if(nstat(jp).gt.nqmax) nqmax=nstat(jp)
+      if(nstat(jp)>nqmax) nqmax=nstat(jp)
       end do
 c
       return

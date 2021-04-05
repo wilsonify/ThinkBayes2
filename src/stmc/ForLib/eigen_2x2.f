@@ -8,7 +8,7 @@ C AMAT is unchanged on exit.
       PHALF=-HALF*(AMAT(1,1)+AMAT(2,2))
       Q=AMAT(1,1)*AMAT(2,2)-AMAT(1,2)*AMAT(2,1)
       ARG=PHALF**2-Q
-      IF(ARG.LT.0) THEN
+      IF(ARG<0) THEN
         PRINT*,"EIGEN_2X2 cannot be used. Eigenvalues are complex!" 
         STOP   "EIGEN_2X2 cannot be used. Eigenvalues are complex!" 
       END IF
@@ -21,8 +21,8 @@ C Eigenvectors:
         ABS1=ABS(DENO1)
         DENO2=EVAL(I)-AMAT(2,2)
         ABS2=ABS(DENO2)
-        IF(ABS1.GT.ABS2) THEN
-          IF(ABS1.EQ.EPS) THEN
+        IF(ABS1>ABS2) THEN
+          IF(ABS1==EPS) THEN
             GO TO 1
           ELSE
             FACTOR=AMAT(1,2)/DENO1
@@ -30,7 +30,7 @@ C Eigenvectors:
             EVCT(1,I)=FACTOR*EVCT(2,I)
           END IF
         ELSE
-          IF(ABS2.EQ.EPS) THEN
+          IF(ABS2==EPS) THEN
             GO TO 1
           ELSE
             FACTOR=AMAT(2,1)/DENO2

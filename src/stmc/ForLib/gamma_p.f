@@ -6,19 +6,19 @@ C INCOMPLETE GAMMA FUNCTION. BERG JUNE 8, 1999.
 C
       LBAD1=.FALSE.
       LBAD2=.FALSE.
-      IF(X.LT.ZERO.OR.A.LE.ZERO) PRINT*,'A,X:',A,X
-      IF(X.LT.ZERO.OR.A.LE.ZERO) STOP 'GAMMA_P - INPUT NOT COVERED'
+      IF(X<ZERO.OR.A<=ZERO) PRINT*,'A,X:',A,X
+      IF(X<ZERO.OR.A<=ZERO) STOP 'GAMMA_P - INPUT NOT COVERED'
       GLN=GAMMA_LN(A)
 3     CONTINUE
-      IF(X.LT.A+ONE.AND..NOT.LBAD2.OR.LBAD1) THEN ! Series expansion
+      IF(X<A+ONE.AND..NOT.LBAD2.OR.LBAD1) THEN ! Series expansion
         GAMMA_P=ZERO
-        IF(X.LE.ZERO) RETURN
+        IF(X<=ZERO) RETURN
       SUM=ONE/A
       ADD=SUM
       DO ITER=1,ITER_MAX
         ADD=ADD*X/(A+ITER)
         SUM=SUM+ADD
-        IF(ABS(ADD).LT.ABS(SUM)*EPS)GO TO 1
+        IF(ABS(ADD)<ABS(SUM)*EPS)GO TO 1
       END DO 
       IF(LBAD1) STOP 'GAMMA_P - 1: A too large, ITER_MAX too small'
       LBAD2=.TRUE.
@@ -37,9 +37,9 @@ C
         B0=(B1+B0*XITERMA)/A1
         B1=X*B0+XITER*B1/A1
         A1=X*A0+XITER
-        IF(A1.EQ.ZERO) STOP 'A1 ZERO in GAMMA_P'
+        IF(A1==ZERO) STOP 'A1 ZERO in GAMMA_P'
         G=B1/A1
-        IF(ABS((G-GOLD)/G).LT.EPS) GO TO 2
+        IF(ABS((G-GOLD)/G)<EPS) GO TO 2
         GOLD=G
       END DO
       If(LBAD2) STOP 'GAMMA_P - 2: A too large, ITER_MAX too small'

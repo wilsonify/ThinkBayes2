@@ -10,7 +10,7 @@ C
       include '../../ForLib/constants.par'
       DIMENSION FJ(N)
 C
-      IF(N.LT.2) STOP 'STEBJ0: N TOO SMALL!'
+      IF(N<2) STOP 'STEBJ0: N TOO SMALL!'
       FM=ZERO
       FV=ZERO
 C

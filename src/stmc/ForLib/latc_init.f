@@ -15,7 +15,7 @@ C
           ix_sum=ix_sum+ix(id)
         end do
         ic=1+mod(ix_sum,2)
-        if(ic.eq.1) then
+        if(ic==1) then
           isc1=isc1+1
           isct=isc1
           ias(ic,isc1)=is

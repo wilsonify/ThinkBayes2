@@ -4,15 +4,15 @@ C INCOMPLETE BETA FUNCTION. Copyright, Bernd Berg, Apr 2 2000.
       include '../../ForLib/constants.par'
       PARAMETER (ITER_MAX=200,EPS=1.D-10)
  
-      IF(X.LT.ZERO .OR. X.GT.ONE) STOP 'BAD ARGUMENT X IN BETA_I'
-      IF(X.EQ.ZERO .OR. X.EQ.ONE) THEN
+      IF(X<ZERO .OR. X>ONE) STOP 'BAD ARGUMENT X IN BETA_I'
+      IF(X==ZERO .OR. X==ONE) THEN
         BT=ZERO
       ELSE
         BT=EXP(GAMMA_LN(A+B)-GAMMA_LN(A)-GAMMA_LN(B)
      &    +A*LOG(X)+B*LOG(ONE-X))
       ENDIF
  
-      IF(X.LT.(A+ONE)/(A+B+TWO)) THEN
+      IF(X<(A+ONE)/(A+B+TWO)) THEN
         XX=X
         AA=A
         BB=B
@@ -43,11 +43,11 @@ C INCOMPLETE BETA FUNCTION. Copyright, Bernd Berg, Apr 2 2000.
         BM=BP/BPP
         BCF=(BCFP+C2*BCF)/BPP
         BZ=ONE
-        IF(ABS(BCF-BCFOLD).LT.EPS*ABS(BCF)) GO TO 1
+        IF(ABS(BCF-BCFOLD)<EPS*ABS(BCF)) GO TO 1
       END DO
       STOP 'BETA_I: A or B too big, or ITER_MAX too small'
 C
-1     IF(X.LT.(A+ONE)/(A+B+TWO)) THEN
+1     IF(X<(A+ONE)/(A+B+TWO)) THEN
         BETA_I=BT*BCF/A
       ELSE
         BETA_I=ONE-BT*BCF/B

@@ -13,7 +13,7 @@ C
           do id=1,nd
             r2=r2+rmafun()**2
           end do
-          if(r2.lt.one) p_in=p_in+one
+          if(r2<one) p_in=p_in+one
         end do
         p_in=p_in/nrpt
         print*,"nd,p_in:",nd,p_in

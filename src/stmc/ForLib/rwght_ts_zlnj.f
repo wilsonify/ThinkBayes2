@@ -18,13 +18,13 @@ C                  Jackknife bins.
       DO IRPT=1,NRPT
         ISGN=-1
         CALL ADDLN2(ZlnJ(0),ZlnA(IRPT),ZlnJ(IRPT),ISGN)
-        if(isgn.ne.1) stop "RWG_TS_ZLNJ: Zlnj negativ."
+        if(isgn/=1) stop "RWG_TS_ZLNJ: Zlnj negativ."
         isgn=-1
         call addln2(Alnj(0),Alna(irpt),Alnj(irpt),isgn)
-        if(isgn.ne.1) stop "RWG_TS_ZLNJ: Alnj negativ."
+        if(isgn/=1) stop "RWG_TS_ZLNJ: Alnj negativ."
         isgn=-1
         call addln2(A2lnj(0),A2lna(irpt),A2lnj(irpt),isgn)
-        if(isgn.ne.1) stop "RWG_TS_ZLNJ: A2lnj negativ."
+        if(isgn/=1) stop "RWG_TS_ZLNJ: A2lnj negativ."
       END DO
 
       RETURN

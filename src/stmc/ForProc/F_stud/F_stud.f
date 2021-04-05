@@ -47,7 +47,7 @@ C
       PRINT*,'DO YOU WANT ANOTHER RUN? (Y). '
       READ(5,100) CHIN
 100   FORMAT(1A16)
-      IF(CHIN.EQ.'Y' .OR. CHIN.EQ.'y') GO TO 1
+      IF(CHIN=='Y' .OR. CHIN=='y') GO TO 1
 C
       STOP
       END

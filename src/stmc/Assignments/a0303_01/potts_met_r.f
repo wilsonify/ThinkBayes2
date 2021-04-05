@@ -17,7 +17,7 @@ C Metropolis updating with random spin choice.
         istaold=ista(is)
         call ranmar(xr)
         istanew=int(q*xr)
-        if(istanew.ne.istaold) then
+        if(istanew/=istaold) then
           call ranmar(xr)
           idact=0
           do id=1,nd
@@ -27,7 +27,7 @@ C Metropolis updating with random spin choice.
             idact=idact+idel(ista2,istanew)-idel(ista2,istaold)
           end do
           iactnew=iact+idact
-          if(xr.lt.wrat(idact,iact)) then
+          if(xr<wrat(idact,iact)) then
             ista(is)=istanew
             iact=iactnew
             acpt=acpt+ONE

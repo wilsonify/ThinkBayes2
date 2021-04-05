@@ -7,8 +7,8 @@ C OUTPUT: UPPER AND LOWER ERROR BAR LIMITS (ASYMPTOTIC FORMULA).
 C
       include '../../ForLib/implicit.sta'
       include '../../ForLib/constants.par'
-      IF(PC.LE.ZERO) SDV=GAU_XQ(HALF*(ONE+0.68268949D00))
-      IF(PC.GT.ZERO) SDV=GAU_XQ(HALF*(ONE+PC))
+      IF(PC<=ZERO) SDV=GAU_XQ(HALF*(ONE+0.68268949D00))
+      IF(PC>ZERO) SDV=GAU_XQ(HALF*(ONE+PC))
       EBUP=ONE+SDV/SQRT(TWO*(N-1))
       EBDO=ONE-SDV/SQRT(TWO*(N-1))
       RETURN

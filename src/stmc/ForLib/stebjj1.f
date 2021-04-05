@@ -11,7 +11,7 @@ C   BIAS CORRECTED MEAN VALUE.
 C                                                                     
       include '../../ForLib/implicit.sta'
       DIMENSION FJJ(N-1,N),FJ(N),FJMM(N)
-      IF(N.LT.3) STOP 'STEBJJ1: N TOO SMALL!'
+      IF(N<3) STOP 'STEBJJ1: N TOO SMALL!'
       N1=N-1
       DO I=1,N
         CALL BIAS(N1,FJJ(1,I),FJ(I),FJMM(I),BIASJM)

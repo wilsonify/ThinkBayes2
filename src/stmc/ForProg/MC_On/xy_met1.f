@@ -19,7 +19,7 @@ C XY model: Sequential Metropolis updating. Single angle variable.
           stab=sta(ipb(id,is))
           dact=dact+cos(abs(stab-stanew))-cos(abs(stab-staold))
         end do
-        if(dact.ge.zero .or. rmafun().lt.exp(beta*dact)) then
+        if(dact>=zero .or. rmafun()<exp(beta*dact)) then
           act=act+dact
           acpt=acpt+one
           amin=min(amin,act)

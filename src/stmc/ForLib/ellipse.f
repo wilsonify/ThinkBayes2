@@ -8,7 +8,7 @@ C
 C 1. ELLIPSE:
 C PROB<0: STANDARD COVARIANCE ELLIPSE WITH 39% CONFIDENCE.
       OPEN(UNIT=IUD,FILE='ellipse.d1',STATUS='UNKNOWN')
-      IF(PROB.LT.ZERO)           THEN
+      IF(PROB<ZERO)           THEN
       R=ONE
                                  ELSE
       R=SQRT(-TWO*LOG(ONE-PROB))

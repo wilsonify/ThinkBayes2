@@ -16,7 +16,7 @@ C
         II=0
         DO IDAT=1,N
           CALL RANMAR(XR)
-          IF(XR.LT.PROB) II=II+1
+          IF(XR<PROB) II=II+1
         END DO
         R=(II*ONE)/(N*ONE) ! Needs change for real*4 or real*16.
         ERROR=ABS(R-PROB)

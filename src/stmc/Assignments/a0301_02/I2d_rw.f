@@ -20,7 +20,7 @@ C
       read(iud,'(1I6,5F12.5)',end=2) iE,es,p,pe,h,he
         idat=idat+1
         iact=-(iE-nlink)/2
-        if(idat.eq.1) iamin=iact
+        if(idat==1) iamin=iact
 c       print'(" idat,iE,iact:",3I9)',idat,iE,iact
 c       print*,'idat,iE,h,he:',idat,iE,h,he
         ha(iact)=h

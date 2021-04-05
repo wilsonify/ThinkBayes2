@@ -35,18 +35,18 @@ C
      &     form="unformatted",status="old")
       read(iud1) nd_in,ml_in,nla_in,nq_in,namin_in,namax_in,irec,
      & nrec_max_in,nmucasw_in,mu_sweep,ntun,nequi_in,nrpt_in,nmeas_in
-      if(nd.ne.nd_in) stop "nd.ne.nd_in"
-      if(ml.ne.ml_in) stop "ml.ne.ml_in"
+      if(nd/=nd_in) stop "nd.ne.nd_in"
+      if(ml/=ml_in) stop "ml.ne.ml_in"
       do id=1,nd
-        if(nla(id).ne.nla_in(id)) stop "nla(id).ne.nla_in(id)"
+        if(nla(id)/=nla_in(id)) stop "nla(id).ne.nla_in(id)"
       end do
-      if(nq.ne.nq_in) stop "nq.ne.nq_in"
-      if(namin.ne.namin_in) stop "namin.ne.namin_in"
-      if(namax.ne.namax_in) stop "namax.ne.namax_in"
-      if(nmucasw.ne.nmucasw_in) stop "nmucasw.ne.nmucasw_in"
-      if(nequi.ne.nequi_in) stop "nequi.ne.nequi_in"
-      if(nrpt.ne.nrpt_in) stop "nrpt.ne.nrpt_in"
-      if(nmeas.ne.nmeas_in) stop "nmeas.ne.nmeas_in"
+      if(nq/=nq_in) stop "nq.ne.nq_in"
+      if(namin/=namin_in) stop "namin.ne.namin_in"
+      if(namax/=namax_in) stop "namax.ne.namax_in"
+      if(nmucasw/=nmucasw_in) stop "nmucasw.ne.nmucasw_in"
+      if(nequi/=nequi_in) stop "nequi.ne.nequi_in"
+      if(nrpt/=nrpt_in) stop "nrpt.ne.nrpt_in"
+      if(nmeas/=nmeas_in) stop "nmeas.ne.nmeas_in"
       read(iud1) wrat,ndel_muca
       call wrat_to_b(n2d,mlink,namin,namax,wrat,ndel_muca,b)
       ns=nsfun(nla,nd)
@@ -88,8 +88,8 @@ C
         call razero(ha,0,nlink)
         iopt=0
         do irpt=0,nrpt ! irpt=0 calculates results using all data.
-          if(irpt.ge.1) read(iud1) ha,irpt_in,ntun
-          if(ibeta.eq.0) CALL POTTS_Z0LN(nq,ns,nlink,namin,ndel_muca,
+          if(irpt>=1) read(iud1) ha,irpt_in,ntun
+          if(ibeta==0) CALL POTTS_Z0LN(nq,ns,nlink,namin,ndel_muca,
      &                                   b,ha,hasum,Zlnj_dif(irpt))
           CALL POTTS_ZLN(nlink,namin,beta0,b,ha,hasum,iopt,Zln,Aln,A2ln)
           actj(irpt)=exp(Aln-Zln)/nlink
@@ -101,7 +101,7 @@ C Specific heat from the fluctuation dissipation theorem:
           Zlnj(irpt)=Zln+Zlnj_dif(irpt)
 C Entropy S=(e-F)*beta, but beta_potts=2*beta:
           Sj(irpt)=ej*beta0+Zlnj(irpt)/ns 
-          if(nq.eq.10.and.lfig) Sj(irpt)=(ej*beta0+Zlnj(irpt)/ns)/three
+          if(nq==10.and.lfig) Sj(irpt)=(ej*beta0+Zlnj(irpt)/ns)/three
         end do
 C
 C Action and energy:
@@ -119,11 +119,11 @@ C Specific heat:
 C Partition function ln:
         call stebj0(nrpt,Zlnj(1),Zlnm,Zlnv,Zlne)
         write(iud5,'(4F12.6)') beta0,Zlnj(0),Zlnm,Zlne
-        if(ibeta.ne.0) then
+        if(ibeta/=0) then
           F=-Zlnj(0)/(ns*beta0)
           Fm=-Zlnm  /(ns*beta0)
           Fe=-Zlne  /(ns*beta0)
-          if(beta0.lt.half) then
+          if(beta0<half) then
              write(iud6,'(4F12.6)') beta0,F,Fm,Fe
           else
              Fas=(log(one*nq)-2*beta0*(nlink-namin))/(ns*beta0)
@@ -166,23 +166,23 @@ C Potts model, normalization of the partition function Z at beta=0.
 C
       beta=zero
       Z0ln=ns*LOG(ONE*nq)
-      if(namin.le.0) stop "POTTS_ZLN: namin false."
+      if(namin<=0) stop "POTTS_ZLN: namin false."
       ilink_min=nlink
       iact_next=namin+ndel_muca(namin) ! For test purposes only.
       do ilink=0,nlink
         ha_ilink=hasum(ilink)-ha(ilink) ! Jackknife histogram.
-        if(ha_ilink.gt.half) then
+        if(ha_ilink>half) then
           iact=ilink-namin
-          if(ilink_min.gt.ilink) then
+          if(ilink_min>ilink) then
             ilink_min=ilink
             a=zero
             Zln=log(ha_ilink)+two*(beta-b(ilink))*iact
             Zln1_max=Zln
           else
-            if(ilink.eq.namin) a=b(namin)*iact_old
-            if(ilink.gt.namin) then
+            if(ilink==namin) a=b(namin)*iact_old
+            if(ilink>namin) then
               a=a+(b(ilink)-b(ilink_old))*iact_old
-              if(ilink.ne.iact_next) stop"POTTS_ZLN: iact_next problem."
+              if(ilink/=iact_next) stop"POTTS_ZLN: iact_next problem."
               iact_next=ilink+ndel_muca(ilink)
             end if
             Zln1=log(ha_ilink)+two*((beta-b(ilink))*iact+a)
@@ -205,13 +205,13 @@ C Potts model ln of the partition function Z and related variables.
       include '../../ForLib/constants.par'
       dimension b(0:nlink),ha(0:nlink),hasum(0:nlink)
 C
-      if(namin.le.0) stop "POTTS_ZLN: namin false."
+      if(namin<=0) stop "POTTS_ZLN: namin false."
       ilink_min=nlink
       do ilink=0,nlink
         ha(ilink)=hasum(ilink)-ha(ilink) ! Jackknife histogram.
-        if(ha(ilink).gt.half) then
+        if(ha(ilink)>half) then
           iact=ilink-namin
-          if(ilink_min.gt.ilink) then
+          if(ilink_min>ilink) then
             ilink_min=ilink
             a=zero
             Zln=log(ha(ilink))+two*(beta0-b(ilink))*iact
@@ -219,8 +219,8 @@ C
             Aln=Zln+log(ilink*one)
             A2ln=Zln+two*log(ilink*one)
           else
-            if(ilink.eq.namin) a=b(namin)*iact_old
-            if(ilink.gt.namin) then
+            if(ilink==namin) a=b(namin)*iact_old
+            if(ilink>namin) then
               a=a+(b(ilink)-b(ilink_old))*iact_old
             end if
             Zln1=log(ha(ilink))+two*((beta0-b(ilink))*iact+a)
@@ -236,18 +236,18 @@ C
         end if
       end do
 C
-      if(iopt.ne.1) return
+      if(iopt/=1) return
 C iact probability density at beta0:
 C
       a=zero
       hsum=zero
       do ilink=0,nlink
-        if(ha(ilink).gt.half) then
-          if(ilink.eq.namin) a=b(namin)*iact_old
-          if(ilink.gt.namin) a=a+(b(ilink)-b(ilink_old))*iact_old
+        if(ha(ilink)>half) then
+          if(ilink==namin) a=b(namin)*iact_old
+          if(ilink>namin) a=a+(b(ilink)-b(ilink_old))*iact_old
           iact=ilink-namin
           Zln1=log(ha(ilink))+two*((beta0-b(ilink))*iact+a)-Zln1_max
-          if(Zln1.gt.0.01d00) stop "Zln1." 
+          if(Zln1>0.01d00) stop "Zln1."
           ha(ilink)=exp(Zln1)
           hsum=hsum+ha(ilink)
           iact_old=iact

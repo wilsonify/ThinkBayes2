@@ -4,7 +4,7 @@
       DIMENSION X(N)
       NQ=INT(Q*N)
 c      PRINT*,'NQ,Q,N:',NQ,Q,N
-      IF(NQ.EQ.0) STOP 'QTILES: N too small.'
+      IF(NQ==0) STOP 'QTILES: N too small.'
       W2=Q*(N+1)-(NQ*ONE)
       W1=ONE-W2
       XQ1=W1*X(NQ)  +W2*X(NQ+1)

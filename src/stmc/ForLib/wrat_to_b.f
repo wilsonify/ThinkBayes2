@@ -13,6 +13,6 @@ C b(ia)=1/T(ia) from given weight ratio and stepsize arrays.
         ndel=ndel_muca(ilink)
         b(ilink+ndel)=log(wrat(ndel,ilink))/(two*ndel)
         ilink=ilink+ndel
-      if(ilink.lt.namax) go to 1
+      if(ilink<namax) go to 1
       return
       end

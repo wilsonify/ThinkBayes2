@@ -30,13 +30,13 @@ C
               do iq=0,nqm1
                 ia=0
                 do id=1,n2d
-                  if(iq.eq.iqarray(id)) ia=ia+1
+                  if(iq==iqarray(id)) ia=ia+1
                 end do
-                if(iq.ne.iq_in) nact_new(ia)=nact_new(ia)+1
-                if(iq.eq.iq_in) nact_new(n2dp1)=ia
+                if(iq/=iq_in) nact_new(ia)=nact_new(ia)+1
+                if(iq==iq_in) nact_new(n2dp1)=ia
               end do
               call p_e_compare(nact_old,nact_new,n2d,mcase,ncase,icase)
-              if(ncase.gt.mcase) stop "p_e_cases: enlarge mcase!"
+              if(ncase>mcase) stop "p_e_cases: enlarge mcase!"
             end do
           end do
           write(iuo,'(" nd,nq,ncase:",2I4,I10)') nd,nq,ncase
@@ -52,11 +52,11 @@ C Copyright Bernd Berg, Jan 02 2002.
       dimension nact_old(0:n2d+1,mcase),nact_new(0:n2d+1)
 c
       n2dp1=n2d+1
-      if(ncase.ge.1) then
+      if(ncase>=1) then
         do icase=1,ncase
           lold=.true.
           do id=0,n2dp1
-            if(nact_old(id,icase).ne.nact_new(id)) lold=.false.
+            if(nact_old(id,icase)/=nact_new(id)) lold=.false.
           end do
           if(lold) return
         end do

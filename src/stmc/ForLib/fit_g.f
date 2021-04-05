@@ -29,7 +29,7 @@ C
       DIMENSION X(NDAT),Y(NDAT),SIGY(NDAT),A(NFIT),COVAR(NFIT,NFIT),
      & AMAT(NFIT,NFIT), ATRY(MFIT),B(MFIT),DELA(MFIT),DYDA(MFIT)
       EXTERNAL SUBG
-      IF(NFIT.GT.MFIT) STOP "FIT_G: Enlarge MFIT."
+      IF(NFIT>MFIT) STOP "FIT_G: Enlarge MFIT."
       N0Chi2=0
 C
       XLA=one/ten**3 ! Initial value of lambda.
@@ -39,7 +39,7 @@ C
 C
       ITER=0
 1     ITER=ITER+1
-      IF(NDAT.GT.NFIT .AND. CHI2.LT.EPS) THEN
+      IF(NDAT>NFIT .AND. CHI2<EPS) THEN
 	WRITE(IUO,'(" Check your error bars: CHI2 =",G16.7)') CHI2
 	STOP "FIT_G: CHI2 too small."
       END IF
@@ -58,10 +58,10 @@ C
         ATRY(J)=A(J)+DELA(J)
       END DO
       CALL FIT_GC(NDAT,X,Y,SIGY,NFIT,ATRY,COVAR,DELA,DYDA,CHI2_TRY,SUBG)
-      IF(NDAT.GT.NFIT) Dchi2=(CHI2-CHI2_TRY)/CHI2
-      IF(NDAT.EQ.NFIT) Dchi2=CHI2/EPS
+      IF(NDAT>NFIT) Dchi2=(CHI2-CHI2_TRY)/CHI2
+      IF(NDAT==NFIT) Dchi2=CHI2/EPS
 C 
-      IF(CHI2_TRY.LT.CHI2) THEN ! Accept try
+      IF(CHI2_TRY<CHI2) THEN ! Accept try
         XLA=XLA/TEN ! and decrease lambda by the factor ten. 
         CHI2=CHI2_TRY
         DO J=1,NFIT
@@ -76,11 +76,11 @@ C
       ENDIF
 C
       IF(LPRI) WRITE(IUO,'(I7,2G15.6)') ITER,CHI2,Dchi2
-      IF(Dchi2.LT.ZERO .OR. Dchi2.GT.EPS) N0Chi2=0
-      IF(Dchi2.LT.ZERO .OR. Dchi2.GT.EPS) GO TO 1
-      IF(Dchi2.EQ.ZERO) THEN
+      IF(Dchi2<ZERO .OR. Dchi2>EPS) N0Chi2=0
+      IF(Dchi2<ZERO .OR. Dchi2>EPS) GO TO 1
+      IF(Dchi2==ZERO) THEN
         N0Chi2=N0Chi2+1
-        IF(N0Chi2.LE.10) GO TO 1
+        IF(N0Chi2<=10) GO TO 1
         WRITE(IUO,'(" FIT_G Warning: N0Chi2.eq.10 reached.",/)')
       END IF
 C
@@ -93,7 +93,7 @@ C
       CALL MAT_GAU(COVAR,NFIT,DELA,1)
       Q=-ONE
       NDGF=NDAT-NFIT
-      IF(NDGF.GT.0) Q=ONE-GAMMA_P(HALF*NDGF,HALF*CHI2)
+      IF(NDGF>0) Q=ONE-GAMMA_P(HALF*NDGF,HALF*CHI2)
 C
       RETURN
       END

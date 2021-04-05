@@ -10,7 +10,7 @@ C THE ARRAY X HAS TO BE SORTED ON INPUT.
       SAVE ICNT,YKEY
 C
       ICNT=ICNT+1
-      IF(ICNT.GT.99) STOP 'DF_GNU: INCT=99 Exhaused!'
+      IF(ICNT>99) STOP 'DF_GNU: INCT=99 Exhaused!'
       WRITE(CI,'(I2.2)') ICNT
 C
 C GNUPLOT SCRIPT:
@@ -23,9 +23,9 @@ C     WRITE(IUG,'(" set key",1G16.6,",0.50")') XKEY
       WRITE(IUG,*) 'pause -1'
       CLOSE(IUG)
 C
-      IF(ICNT.EQ.1) YKEY=XKEY
+      IF(ICNT==1) YKEY=XKEY
       YKEY=MIN(XKEY,YKEY)
-      IF(ICNT.GT.1) THEN ! Create qdf.plt to plot all histograms
+      IF(ICNT>1) THEN ! Create qdf.plt to plot all histograms
       OPEN(IUG,FILE='qdf.plt',STATUS='UNKNOWN',FORM='FORMATTED')
       WRITE(IUG,*) 'set noyzeroaxis'
       WRITE(IUG,*) 'set yrange [0:0.525]'

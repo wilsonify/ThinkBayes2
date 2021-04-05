@@ -16,7 +16,7 @@ C Analysis program for multicanonical data.
 C      equivalence (b(0),wrat(-n2d,0)) ! Optional
       include 'lat.dat'
 C
-      if(nd.ne.2 .or. (nq.ne.2 .and. nq.ne.10)) then
+      if(nd/=2 .or. (nq/=2 .and. nq/=10)) then
 	print*,"This program works only for 2d with nq=2 or nq=10!"
 	stop "ana_pmuh: nd or nq false!"
       end if
@@ -33,16 +33,16 @@ C
      &     form="unformatted",status="old")
       read(iud1) nd_in,ml_in,nla_in,nq_in,namin_in,namax_in,irec,
      & nrec_max_in,nmucasw_in,mu_sweep,ntun,nequi_in,nrpt_in,nmeas_in
-      if(nd.ne.nd_in) stop "nd.ne.nd_in"
-      if(ml.ne.ml_in) stop "ml.ne.ml_in"
+      if(nd/=nd_in) stop "nd.ne.nd_in"
+      if(ml/=ml_in) stop "ml.ne.ml_in"
       do id=1,nd
-        if(nla(id).ne.nla_in(id)) stop "nla(id).ne.nla_in(id)"
+        if(nla(id)/=nla_in(id)) stop "nla(id).ne.nla_in(id)"
       end do
-      if(nq.ne.nq_in) stop "nq.ne.nq_in"
-      if(namin.ne.namin_in) stop "namin.ne.namin_in"
-      if(namax.ne.namax_in) stop "namax.ne.namax_in"
-      if(nrpt.ne.nrpt_in) stop "nrpt.ne.nrpt_in"
-      if(nmeas.ne.nmeas_in) stop "nmeas.ne.nmeas_in"
+      if(nq/=nq_in) stop "nq.ne.nq_in"
+      if(namin/=namin_in) stop "namin.ne.namin_in"
+      if(namax/=namax_in) stop "namax.ne.namax_in"
+      if(nrpt/=nrpt_in) stop "nrpt.ne.nrpt_in"
+      if(nmeas/=nmeas_in) stop "nmeas.ne.nmeas_in"
       read(iud1) wrat,ndel_muca
       call wrat_to_b(n2d,mlink,namin,namax,wrat,ndel_muca,b)
       ns=nsfun(nla,nd)
@@ -67,7 +67,7 @@ C
         read(iud1) ha,acpt,irpt_in,ntun
         do ilink=0,nlink
         ha_max=max(ha_max,hasum(ilink))
-        if(hasum(ilink).gt.half) phe(ilink,1)=phe(ilink,1)+
+        if(hasum(ilink)>half) phe(ilink,1)=phe(ilink,1)+
      &                           (hasum(ilink)-nrpt*ha(ilink))**2
         end do
       end do
@@ -77,13 +77,13 @@ C
       open(iud2,file="hmu"//cd//"d"//cq//"q"//cl//".d",form="formatted",
      & status="unknown")
       do ilink=0,mlink
-        if(hasum(ilink).gt.half) then
+        if(hasum(ilink)>half) then
           actm=(one*ilink)/nlink
           em=two*nd*(one/nq-actm)
           hn=7*10**3*hasum(ilink)/ha_max
           hne=7*10**3*sqrt((phe(ilink,1)/(nrpt*(nrpt-1))))/ha_max
-	  if(nq.eq.02) write(iud2,'(3F16.6)') em,hn,hne
-	  if(nq.eq.10) write(iud2,'(4F16.6)') actm,em,(hn/four),(hne/four)
+	  if(nq==02) write(iud2,'(3F16.6)') em,hn,hne
+	  if(nq==10) write(iud2,'(4F16.6)') actm,em,(hn/four),(hne/four)
         end if
       end do
       close(iud2)
@@ -95,12 +95,12 @@ C
         rewind iud1
         read(iud1)
         read(iud1)
-        if(nq.eq.02) beta0=(two*ibeta)/ten
-        if(nq.eq.10) beta0=0.7075D00+0.0025D00*ibeta
+        if(nq==02) beta0=(two*ibeta)/ten
+        if(nq==10) beta0=0.7075D00+0.0025D00*ibeta
         print*,"beta0 =",beta0
         call razero(phe(0,1+ibeta),0,nlink)
         do irpt=0,nrpt ! irpt=0 calculates results using all data.
-          if(irpt.eq.0) then
+          if(irpt==0) then
             do ilink=0,mlink
               ha(ilink)=zero
             end do
@@ -109,7 +109,7 @@ C
           end if
 	  iopt=1
           CALL POTTS_ZLN(nlink,namin,beta0,b,ha,hasum,iopt,Zln,Aln,A2ln)
-          if(irpt.eq.0) then
+          if(irpt==0) then
             do ilink=0,nlink
               ph(ilink,1+ibeta)=10**5*ha(ilink)
             end do
@@ -129,16 +129,16 @@ C
       open(iud2,file="hb"//cd//"d"//cq//"q"//cl//".d",
      & form="formatted",status="unknown")
       do ilink=140,nlink
-        if(hasum(ilink).gt.half) then
+        if(hasum(ilink)>half) then
           do ibeta=1,3
 C           Just to get the small values out of the figure:
-            if(ph(ilink,ibeta).lt.(one/ten)) ph(ilink,ibeta)=-one
+            if(ph(ilink,ibeta)<(one/ten)) ph(ilink,ibeta)=-one
           end do
           actm=(one*ilink)/nlink
           em=two*nd*(one/nq-actm)
-          if(nq.eq.02) write(iud2,'(F10.5,6F10.1)')
+          if(nq==02) write(iud2,'(F10.5,6F10.1)')
      &    em,(ph(ilink,i),phe(ilink,i),i=1,3)
-          if(nq.eq.10) write(iud2,'(2F10.5,6F10.1)')
+          if(nq==10) write(iud2,'(2F10.5,6F10.1)')
      &    actm,em,(ph(ilink,i),phe(ilink,i),i=1,3)
         end if
       end do

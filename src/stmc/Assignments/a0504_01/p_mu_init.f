@@ -10,7 +10,7 @@
       include '../../ForLib/potts.com'
       include '../../ForLib/potts_muca.com'
       iastep=1
-      if(nq.eq.2) iastep=2 ! The Ising case has a large stepsize.
+      if(nq==2) iastep=2 ! The Ising case has a large stepsize.
 c
       do ia=0,mlink
         ha(ia)=zero

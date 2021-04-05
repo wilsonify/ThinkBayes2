@@ -4,7 +4,7 @@ C Invert a square matrix
       include '../../ForLib/constants.par'
       PARAMETER(NMAX=100)
       Dimension AMAT(N,N),BMAT(N,M),BIN(NMAX),IK(NMAX),JK(NMAX)
-      IF(N.GT.NMAX) STOP "MAT_GAU: Enlarge NMAX (N.GT.NMAX)!"
+      IF(N>NMAX) STOP "MAT_GAU: Enlarge NMAX (N.GT.NMAX)!"
       LTEST=.TRUE.
       LTEST=.FALSE.
       
@@ -14,19 +14,19 @@ C - Find largest element.
         AMAX=ZERO
 1       DO I=K,N
           DO J=K,N
-            IF(Abs(AMAT(I,J)).GT.ABS(AMAX)) THEN
+            IF(Abs(AMAT(I,J))>ABS(AMAX)) THEN
               AMAX=AMAT(I,J)
               IK(K)=I
               JK(K)=J
             END IF
           END DO ! DO J
         END DO ! DO I
-        IF(AMAX.EQ.ZERO) STOP "MAT_GAU: Singular Matrix."
+        IF(AMAX==ZERO) STOP "MAT_GAU: Singular Matrix."
         DET=ONE
 C - Interchange rows and columns to put AMAX in AMAT(k,k).
         I=IK(K)
-        IF(I.LT.K) GOTO 1
-	IF(I.GT.K) THEN
+        IF(I<K) GOTO 1
+	IF(I>K) THEN
           DO J=1,N
             AA=AMAT(K,J)
 	    AMAT(K,J)=AMAT(I,J)
@@ -35,8 +35,8 @@ C - Interchange rows and columns to put AMAX in AMAT(k,k).
 	ENDIF ! IF I.GT.k.
 
         J=JK(K)
-        IF(J.LT.K) GOTO 2
-	IF(J.GT.K) THEN
+        IF(J<K) GOTO 2
+	IF(J>K) THEN
           DO I=1,N
             AA=AMAT(I,K)
 	    AMAT(I,K)=AMAT(I,J)
@@ -46,16 +46,16 @@ C - Interchange rows and columns to put AMAX in AMAT(k,k).
 
 C - Accumulate elements of the inverse matrix.
         DO I=1,N
-          IF(I.NE.K) AMAT(I,K)=-AMAT(I,K)/AMAX
+          IF(I/=K) AMAT(I,K)=-AMAT(I,K)/AMAX
         END DO ! DO I.
         DO I=1,N
           DO J=1,N
-	    IF((I.NE.K).AND.(J.NE.K)) 
+	    IF((I/=K).AND.(J/=K))
      1        AMAT(I,J)=AMAT(I,J)+AMAT(I,K)*AMAT(K,J)
           END DO ! DO J.
         END DO ! DO I.
 	DO J=1,N
-          IF(J.NE.K) AMAT(K,J)=AMAT(K,J)/AMAX
+          IF(J/=K) AMAT(K,J)=AMAT(K,J)/AMAX
         END DO ! DO J.
         AMAT(K,K)=ONE/AMAX
         DET=DET*AMAX ! Determinant (presently not returned on output).
@@ -67,7 +67,7 @@ C - Restore ordering of the matrix.
       DO IL=1,N
         K=N+1-IL
         J=IK(K)
-        IF(J.GT.K) THEN
+        IF(J>K) THEN
           DO I=1,N
             AA=AMAT(I,K)
             AMAT(I,K)=-AMAT(I,J)
@@ -75,7 +75,7 @@ C - Restore ordering of the matrix.
           END DO ! DO I.
 	ENDIF ! IF J.GT.K.
         I=JK(K)
-        IF(I.GT.K) THEN
+        IF(I>K) THEN
           DO J=1,N
             AA=AMAT(K,J)
 	    AMAT(K,J)=-AMAT(I,J)

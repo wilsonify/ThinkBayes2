@@ -26,18 +26,18 @@ C
 C
       do icase=1,2
       write(iuo,'(/," icase = ",I6)') icase
-      if(icase.eq.1) open(iud1,file="p"//cq//"_"//cd//"d"//cl//".d",
+      if(icase==1) open(iud1,file="p"//cq//"_"//cd//"d"//cl//".d",
      &               form="unformatted",status="old")
-      if(icase.eq.2) open(iud1,file="p"//cq//"_"//cd//"d"//cl//"m.d",
+      if(icase==2) open(iud1,file="p"//cq//"_"//cd//"d"//cl//"m.d",
      &               form="unformatted",status="old")
       read(iud1) beta_in,nd_in,nla,nlink,nequi_in,nrpt_in,nmeas_in
       write(iuo,'(" beta,nlink,nd,nla:",F15.10,I10,I3,2X,4I5)')
      &              beta,nlink,nd_in,nla
       write(iuo,'(" nequi,nrpt,nmeas: ",I15,2I10)')
      &              nequi_in,nrpt_in,nmeas_in
-      if(nequi.ne.nequi_in) stop "nequi.ne.nequi_in."
-      if(nrpt.ne.nrpt_in) stop "nrpt.ne.nrpt_in."
-      if(nmeas.ne.nmeas_in) stop "nmeas.ne.nmeas_in."
+      if(nequi/=nequi_in) stop "nequi.ne.nequi_in."
+      if(nrpt/=nrpt_in) stop "nrpt.ne.nrpt_in."
+      if(nmeas/=nmeas_in) stop "nmeas.ne.nmeas_in."
       do irpt=1,nrpt
         read(iud1) tsa,acpt,i_in
         call steb0(nmeas,tsa,act(irpt),actv(irpt,icase),acte)

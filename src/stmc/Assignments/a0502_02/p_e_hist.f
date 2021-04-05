@@ -18,7 +18,7 @@ C
 C
       do iequi=1,nequi      ! Sweeps for reaching equilibrium.
         call p_e_mc(iuo)
-        if(iequi.eq.(nequi/4).or.iequi.eq.(nequi/2)) call Pcase_sort
+        if(iequi==(nequi/4).or.iequi==(nequi/2)) call Pcase_sort
       end do
 C
       write(cd,'(I1.1)') nd

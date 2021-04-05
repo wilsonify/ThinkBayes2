@@ -1,4 +1,4 @@
-        PROGRAM HELLO_WORLD
-        PRINT*,"HELLO WORLD"
-        STOP
-        END
+       PROGRAM HELLO_WORLD
+         PRINT*,"HELLO WORLD"
+         STOP
+       END

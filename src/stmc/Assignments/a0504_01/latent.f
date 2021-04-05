@@ -22,7 +22,7 @@ C
        a2(i)=0
        a3(i)=0
       end do
-      if(nd.ne.2 .or. (nq.ne.2 .and. nq.ne.10)) then
+      if(nd/=2 .or. (nq/=2 .and. nq/=10)) then
        print*,"This program works only for 2d with nq=2 or nq=10!"
        stop "ana_pmuh: nd or nq false!"
       end if
@@ -39,16 +39,16 @@ C
      &     form="unformatted",status="old")
       read(iud1) nd_in,ml_in,nla_in,nq_in,namin_in,namax_in,irec,
      & nrec_max_in,nmucasw_in,mu_sweep,ntun,nequi_in,nrpt_in,nmeas_in
-      if(nd.ne.nd_in) stop "nd.ne.nd_in"
-      if(ml.ne.ml_in) stop "ml.ne.ml_in"
+      if(nd/=nd_in) stop "nd.ne.nd_in"
+      if(ml/=ml_in) stop "ml.ne.ml_in"
       do id=1,nd
-        if(nla(id).ne.nla_in(id)) stop "nla(id).ne.nla_in(id)"
+        if(nla(id)/=nla_in(id)) stop "nla(id).ne.nla_in(id)"
       end do
-      if(nq.ne.nq_in) stop "nq.ne.nq_in"
-      if(namin.ne.namin_in) stop "namin.ne.namin_in"
-      if(namax.ne.namax_in) stop "namax.ne.namax_in"
-      if(nrpt.ne.nrpt_in) stop "nrpt.ne.nrpt_in"
-      if(nmeas.ne.nmeas_in) stop "nmeas.ne.nmeas_in"
+      if(nq/=nq_in) stop "nq.ne.nq_in"
+      if(namin/=namin_in) stop "namin.ne.namin_in"
+      if(namax/=namax_in) stop "namax.ne.namax_in"
+      if(nrpt/=nrpt_in) stop "nrpt.ne.nrpt_in"
+      if(nmeas/=nmeas_in) stop "nmeas.ne.nmeas_in"
       read(iud1) wrat,ndel_muca
       call wrat_to_b(n2d,mlink,namin,namax,wrat,ndel_muca,b)
       ns=nsfun(nla,nd)
@@ -76,7 +76,7 @@ c        print*, "----------- beta=", beta0, "-------------"
         do irpt=0,nrpt ! irpt=0 calculates results using all data.
          read(iud2,*) beta0
          print*, "----------- beta=", beta0, "-------------"
-          if(irpt.eq.0) then
+          if(irpt==0) then
             do ilink=0,mlink
               ha(ilink)=zero
             end do
@@ -86,7 +86,7 @@ c        print*, "----------- beta=", beta0, "-------------"
 	  iopt=1
           CALL POTTS_ZLN(nlink,namin,beta0,b,ha,hasum,iopt,Zln,Aln,A2ln)
 
-          if(irpt.eq.0) then
+          if(irpt==0) then
             do ilink=0,nlink
               ph(ilink)=10**5*ha(ilink)
               acta(ilink)=(one*ilink)/nlink

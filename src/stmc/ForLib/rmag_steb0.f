@@ -45,7 +45,7 @@ C
         read(iud) ha,irpt_in,nstate0,hm
         do iq=n0,nqm1
         do is=n0,ns
-        if(hmm(is,iq).gt.cut) then ! Prevents underflows.
+        if(hmm(is,iq)>cut) then ! Prevents underflows.
           hme(is,iq)=hme(is,iq)+(hm(is,iq)-hmm(is,iq))**2
         end if
         end do

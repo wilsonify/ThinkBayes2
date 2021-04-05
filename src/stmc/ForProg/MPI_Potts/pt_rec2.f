@@ -8,7 +8,7 @@ C Copyright, Bernd Berg, Jan 10 2002.
       DATA WEIGHT/ZERO/, ICALL/0/, IADD/0/
       SAVE WEIGHT,ICALL,IADD
       N_PROC=NPM1+1
-      IF(ICALL.EQ.0) THEN
+      IF(ICALL==0) THEN
         DO I=0,NPM1
           BASUM(I)=ZERO
         END DO
@@ -24,7 +24,7 @@ C Copyright, Bernd Berg, Jan 10 2002.
       DO I=1,NPM1
         NACPT_MIN=MIN(NACPT_MIN,NACPT_PT(IPI_B(I)))
       END DO
-      IF(NACPT_MIN.GT.0) THEN
+      IF(NACPT_MIN>0) THEN
         IADD=IADD+1
         SIG2=ZERO
         DO I=1,NPM1
@@ -36,9 +36,9 @@ C Copyright, Bernd Berg, Jan 10 2002.
           BASUM(I)=BASUM(I)+W*BA(I) 
         END DO
       END IF
-      IF(NACPT_MAX.EQ.0) CALL STOP_MPI(IUD,MY_ID,'PT_REC2: NACPT_MAX=0')
+      IF(NACPT_MAX==0) CALL STOP_MPI(IUD,MY_ID,'PT_REC2: NACPT_MAX=0')
       DO I=0,NPM1
-        IF(NACPT_PT(I).EQ.0) NACPT_PT(I)=1
+        IF(NACPT_PT(I)==0) NACPT_PT(I)=1
       END DO
       XLA_D=ZERO
       DO I=1,NPM1
@@ -51,8 +51,8 @@ C Copyright, Bernd Berg, Jan 10 2002.
         BA(I-1)=BIM1_NEW
         BIM1_NEW=BI_NEW
       END DO
-      IF(IADD.EQ.0) CALL STOP_MPI(IUD,MY_ID,'PT_REC2: IADD=0.')
-      IF(ICALL.EQ.NCALL) THEN
+      IF(IADD==0) CALL STOP_MPI(IUD,MY_ID,'PT_REC2: IADD=0.')
+      IF(ICALL==NCALL) THEN
         DO I=0,NPM1
           BA(I)=BASUM(I)/WEIGHT
         END DO

@@ -13,7 +13,7 @@ C Purpose: to investigate whether xy_met.f has a bias danger.
       ltest=.true.
       ltest=.false.
       if(ltest) stop "ltest XY_ts."
-      if(n.ne.2) stop "XY_ts: set n=2 in on.par (for ana_tson.f)!"
+      if(n/=2) stop "XY_ts: set n=2 in on.par (for ana_tson.f)!"
 C
       write(iuo,'(/," XY_ts.f:")')
       call XY_init(.true.) ! Initialize XY Metropolis MC.

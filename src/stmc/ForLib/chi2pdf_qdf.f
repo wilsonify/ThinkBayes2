@@ -7,6 +7,6 @@ C CHI2 pdf: peaked distribution function.
       A=HALF*NF
       X=HALF*NF*CHI2
       CHI2PDF_QDF=GAMMA_P(A,X)
-      IF(CHI2PDF_QDF.GT.HALF) CHI2PDF_QDF=ONE-CHI2PDF_QDF
+      IF(CHI2PDF_QDF>HALF) CHI2PDF_QDF=ONE-CHI2PDF_QDF
       RETURN
       END

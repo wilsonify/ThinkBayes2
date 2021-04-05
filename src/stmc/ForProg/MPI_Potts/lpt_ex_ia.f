@@ -5,6 +5,6 @@ C Parallel tempering: Acceptance or Rejection of beta exchange (IACT version).
       include '../../ForLib/constants.par'
       LPT_EX_IA=.FALSE.
       DELH=(BETA2-BETA1)*(IACT2-IACT1)
-      IF(RMAFUN().LT.EXP(-DELH)) LPT_EX_IA=.TRUE.
+      IF(RMAFUN()<EXP(-DELH)) LPT_EX_IA=.TRUE.
       RETURN
       END

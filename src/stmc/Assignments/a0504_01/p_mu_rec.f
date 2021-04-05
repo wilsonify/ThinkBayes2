@@ -12,7 +12,7 @@ C Recursion of multicanonical weights.
       include '../../ForLib/potts_muca.com'
 C
 C Weight changes outside the [namin,namax] range forbidden:
-      if(ia_min.lt.namin) then
+      if(ia_min<namin) then
         do ia=ia_min,(namin-iastep),iastep
           hmuca(ia)=hmuca(ia)+ha(ia)
           ha(ia)=zero
@@ -20,7 +20,7 @@ C Weight changes outside the [namin,namax] range forbidden:
         ia_min=namin ! Re-definition of ia_min for this case.
       end if
 C
-      if(ia_max.gt.namax) then
+      if(ia_max>namax) then
         do ia=(namax+iastep),ia_max,iastep
           hmuca(ia)=hmuca(ia)+ha(ia)
           ha(ia)=zero
@@ -32,7 +32,7 @@ C
       hup(ia_min)=hup(ia_min)+ha(ia_min)
       hdn(ia_min)=hdn(ia_min)+ha(ia_min)
       ha(ia_min)=zero
-      if(ia_max.eq.ia_min) stop "p_mu_rec: ia_max.eq.ia_min."
+      if(ia_max==ia_min) stop "p_mu_rec: ia_max.eq.ia_min."
 C
       ia1=ia_min
       ia=ia_min
@@ -41,26 +41,26 @@ C
         hup(ia)=hup(ia)+ha(ia)
         hdn(ia)=hdn(ia)+ha(ia)
         ha(ia)=zero
-        if(hmuca(ia).gt.half) then
+        if(hmuca(ia)>half) then
           ndel_new=ia-ia1
           ndel_old=ndel_muca(ia1)
-          if(ndel_old.gt.ndel_new) then
+          if(ndel_old>ndel_new) then
             gw(ia1)=zero
             ndel_muca(ia1)=ndel_new
             ndel_muca(ia)=ndel_old-ndel_new
           end if
           ia1=ia
         end if
-      if(ia.lt.ia_max) goto 1 ! Only goto to label 1.
+      if(ia<ia_max) goto 1 ! Only goto to label 1.
 C
 C     Calculation of the smallest action considered, ia1:
       ia1=ia_min
       iatest=ia_min
 2     iatest=iatest-iastep ! Tame label 2.
-      if(iatest.ge.namin) then
-        if(iatest+ndel_muca(iatest).eq.ia_min) ia1=iatest
+      if(iatest>=namin) then
+        if(iatest+ndel_muca(iatest)==ia_min) ia1=iatest
       else
-        if(iatest.gt.ia_min-n2d) goto 2 ! Only goto to label 2.
+        if(iatest>ia_min-n2d) goto 2 ! Only goto to label 2.
       end if
 C
 C Weight factor recursion:
@@ -71,7 +71,7 @@ C
         ia_up=ia+idel_muca
         hdn_a=hdn(ia)
         hup_a=hup(ia_up)
-        if(hup_a.gt.half .and. hdn_a.gt.half) then ! if 1
+        if(hup_a>half .and. hdn_a>half) then ! if 1
 C         The new weight factor:
 C         g-weights:
           gw0=hdn_a*hup_a/(hdn_a+hup_a)
@@ -80,7 +80,7 @@ C         g-weights:
           wfactor=wrat(idel_muca,ia)*(hdn_a/hup_a)**gw00
           hdn(ia)=zero
           hup(ia_up)=zero
-          if(idel_muca.eq.iastep) then ! if 2
+          if(idel_muca==iastep) then ! if 2
             wrat(iastep,ia)=wfactor
             wrat(-iastep,ia+iastep)=one/wfactor
             iab=ia
@@ -90,7 +90,7 @@ C         g-weights:
               wrat(-id,iab+id)=one/wrat(id,iab)
             end do
           else ! if 2
-            if(idel_muca.lt.iastep) stop "p_mu_rec: idel_muca error."
+            if(idel_muca<iastep) stop "p_mu_rec: idel_muca error."
             wfactor=wfactor**((iastep*one)/(idel_muca*one))
             nstep=(idel_muca/iastep)
             iaa=ia-iastep

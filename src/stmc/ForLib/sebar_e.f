@@ -9,10 +9,10 @@ C
       include '../../ForLib/constants.par'
       COMMON /CHI2PAR/ NF
       NF=N-1
-      IF(N.GT.17 000) CALL SEBAR_E_AS(N,PC,EBUP,EBDO)
-      IF(N.GT.17 000) RETURN
-      IF(PC.LE.ZERO) Q=HALF*(ONE-0.954499736D00)
-      IF(PC.GT.ZERO) Q=HALF*(ONE-PC)
+      IF(N>17 000) CALL SEBAR_E_AS(N,PC,EBUP,EBDO)
+      IF(N>17 000) RETURN
+      IF(PC<=ZERO) Q=HALF*(ONE-0.954499736D00)
+      IF(PC>ZERO) Q=HALF*(ONE-PC)
       P=ONE-Q
       EBUP=ONE/SQRT(chi2pdf_xq(Q))
       EBDO=ONE/SQRT(chi2pdf_xq(P))

@@ -8,7 +8,7 @@ C equation, see van der Waerden, Mathematical Statistics, Springer 1969.
 C
       DO J=1,2
         EPS=ZERO
-        IF(J.EQ.1) THEN
+        IF(J==1) THEN
           DO I=1,N
             Femp=(ONE*(I-1))/N
             EPS=MAX(EPS,Fxct(I)-Femp)

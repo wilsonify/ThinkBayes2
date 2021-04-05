@@ -7,7 +7,7 @@ C Fit y=c1*exp(-c2*x) -> ynew=ln(y)=ln(c1)-c2*x, then a1=ln(c1), a2=-c2.
       DATA NCALL/0/
       SAVE NCALL
       NCALL=NCALL+1
-      IF(NCALL.EQ.1) WRITE(IUO,'(" SUBL: FIT Y=C1*EXP(-C2*X) ->",
+      IF(NCALL==1) WRITE(IUO,'(" SUBL: FIT Y=C1*EXP(-C2*X) ->",
      &  " Ynew=LOG(Y)=LOG(C1)-C2*X",/,
      &  "            =A1+A2*X with A1=LOG(C1), A2=-C2.",/,"   ")')
       DO I=1,N
@@ -56,7 +56,7 @@ C
       CHI2pdf=CHI2/(N-2)
       WRITE(IUO,*) 'CHI2 and CHI2 per d.g.f. =',CHI2,CHI2/(N-2)
       Q=0
-      IF(N.GT.2.AND.CHI2pdf.LT.TEN) Q=ONE-GAMMA_P(HALF*(N-2),HALF*CHI2)    
+      IF(N>2.AND.CHI2pdf<TEN) Q=ONE-GAMMA_P(HALF*(N-2),HALF*CHI2)
       WRITE(IUO,*) 'Goodness of fit =                     ',Q
 C
       OPEN(UNIT=IUD,FILE='gaudif.d',STATUS='UNKNOWN')

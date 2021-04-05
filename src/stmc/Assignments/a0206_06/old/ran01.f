@@ -23,7 +23,7 @@ c
       do irpt=1,nrpt
         x=(irpt*one)/(nrpt+one)
         peaked=Q(irpt)
-        if(peaked.gt.half) peaked=one-peaked
+        if(peaked>half) peaked=one-peaked
         write(iud,'(3F14.6)') x,Q(irpt),peaked
       end do
       close(iud)

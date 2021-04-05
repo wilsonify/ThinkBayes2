@@ -43,7 +43,7 @@ C Write original data on file for use with gnuplot:
       WRITE(IUO,*) 'COVARIANCE MATRIX:  '
       WRITE(IUO,*) COV(1,1),COV(1,2)
       WRITE(IUO,*) COV(2,1),COV(2,2)
-      IF(N.GT.2) THEN
+      IF(N>2) THEN
         WRITE(IUO,*) '      '
         WRITE(IUO,*) 'STATISTICAL ANALYSIS: '
         WRITE(IUO,*) 'CHI2 =',CHI2

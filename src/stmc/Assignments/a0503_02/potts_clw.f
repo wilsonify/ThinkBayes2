@@ -18,41 +18,41 @@ C
       iqold=ista(is)                ! Present state.
       call ranmar(xr)
       iqnew=int(qm1*xr)
-      if(iqnew.ge.iqold) iqnew=iqnew+1 ! New state.
+      if(iqnew>=iqold) iqnew=iqnew+1 ! New state.
 1     continue
         ista(is)=iqnew
         do id=1,nd
           isf=ipf(id,is)            ! Forward direction.
           iqtest=ista(isf)
-          if(iqold.eq.iqtest) then
+          if(iqold==iqtest) then
             iact=iact-1
             call ranmar(xr)
-            if(xr.lt.boltz1) then
+            if(xr<boltz1) then
               nflip=nflip+1
               iacl(nflip)=isf
               ista(isf)=-1
             end if
           else
-            if(iqnew.eq.iqtest) iact=iact+1
-            if(-1.eq.iqtest) iact=iact-1
+            if(iqnew==iqtest) iact=iact+1
+            if(-1==iqtest) iact=iact-1
           end if
           isb=ipb(id,is)            ! Backward direction.
           iqtest=ista(isb)
-          if(iqold.eq.iqtest) then
+          if(iqold==iqtest) then
             iact=iact-1
             call ranmar(xr)
-            if(xr.lt.boltz1) then
+            if(xr<boltz1) then
               nflip=nflip+1
               iacl(nflip)=isb
               ista(isb)=-1
             end if
           else
-            if(iqnew.eq.iqtest) iact=iact+1
-            if(-1.eq.iqtest) iact=iact-1
+            if(iqnew==iqtest) iact=iact+1
+            if(-1==iqtest) iact=iact-1
           end if
         end do
         icl=icl+1
-        if(icl.le.nflip) then
+        if(icl<=nflip) then
           is=iacl(icl)
       go to 1
         end if

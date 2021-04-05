@@ -18,7 +18,7 @@ C O(n) model: Sequential Metropolis updating (inefficient code).
             stanew(i)=two*(rmafun()-half)
             sum=sum+stanew(i)**2
           end do
-        if(sum.gt.one) go to 1 ! stanew() inside the unit sphere.
+        if(sum>one) go to 1 ! stanew() inside the unit sphere.
         dact=zero
         fn=one/sqrt(sum)
         do id=1,nd
@@ -27,7 +27,7 @@ C O(n) model: Sequential Metropolis updating (inefficient code).
             dact=dact+sta(i,ipb(id,is))*(fn*stanew(i)-sta(i,is))
           end do
         end do
-        if(rmafun().lt.exp(beta*dact)) then
+        if(rmafun()<exp(beta*dact)) then
           do i=1,n
             sta(i,is)=fn*stanew(i)
           end do

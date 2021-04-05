@@ -103,7 +103,7 @@ C
      &    (GMPR(IPIP1)*ML/(ONE-EXP(-GM(IPIP1)*XML)))
      &    **2*EXP(-GM(IPIP1)*XML)
 C
-        IF(GM(IPI).GE.ZERO) THEN
+        IF(GM(IPI)>=ZERO) THEN
           ZZ3=ZZ3+GM(IPI)*XML/TWO+LOG(ONE+EXP(-GM(IPI)*XML))
           ZZP3=ZZP3+GMPR(IPI)*XML/TWO*
      &     (ONE-EXP(-GM(IPI)*XML))/(ONE+EXP(-GM(IPI)*XML))
@@ -121,7 +121,7 @@ C
      &     **2*EXP(GM(IPI)*XML)
         END IF
 C
-        IF(GM(IPI).GE.ZERO) THEN
+        IF(GM(IPI)>=ZERO) THEN
           ZZ4=ZZ4+GM(IPI)*ML/TWO+LOG(ONE-EXP(-GM(IPI)*XML))
           ZZP4=ZZP4+GMPR(IPI)*XML/TWO*(ONE+EXP(-GM(IPI)*XML))/
      &     (ONE-EXP(-GM(IPI)*XML))

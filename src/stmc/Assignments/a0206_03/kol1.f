@@ -26,7 +26,7 @@ C
         END DO 
         CALL KOLM1(N,Fxct,DEL1,DEL2,Q1,Q2)
         WRITE(IUO,'(" N,Q1,Q2:",I6,2F10.2)') N,Q1,Q2
-      IF(N.EQ.8) THEN
+      IF(N==8) THEN
         N=100
       GO TO 1
       END IF

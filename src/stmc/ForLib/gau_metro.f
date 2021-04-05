@@ -19,7 +19,7 @@ C
       DIMENSION DATA(NDAT)
       DATA ICALL/0/
       SAVE X,ICALL
-      IF(ICALL.EQ.0) X=ZERO
+      IF(ICALL==0) X=ZERO
       ICALL=1
 C
       TWOA=TWO*A
@@ -29,12 +29,12 @@ C
         CALL RANMAR(XR)
         XP=X+TWOA*(XR-HALF)
         XP2=XP**2
-        IF(XP2.LE.X2) THEN
+        IF(XP2<=X2) THEN
           X=XP
           ACPT=ACPT+ONE
         ELSE
           CALL RANMAR(XR)
-          IF(EXP(-HALF*(XP2-X2)).GE.XR) THEN
+          IF(EXP(-HALF*(XP2-X2))>=XR) THEN
             X=XP
             ACPT=ACPT+ONE
           END IF

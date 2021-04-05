@@ -22,7 +22,7 @@ C
       N_OMIT=0
 C
       ICNT=ICNT+1
-      IF(ICNT.GT.99) STOP 'HIST_GNU: INCT=99 Exhausted!'
+      IF(ICNT>99) STOP 'HIST_GNU: INCT=99 Exhausted!'
       WRITE(CI,'(I2.2)') ICNT
 C
 C GNUPLOT SCRIPT:
@@ -35,7 +35,7 @@ C GNUPLOT SCRIPT:
       WRITE(IUG,*) 'pause -1'
       CLOSE(IUG)
 C
-      IF(ICNT.GT.1) THEN ! Create his.plt to plot all histograms
+      IF(ICNT>1) THEN ! Create his.plt to plot all histograms
         WRITE(6,*) "HIST_GNU: Open file his.plt to plot all histograms."
         OPEN(IUG,FILE='his.plt',STATUS='UNKNOWN',FORM='FORMATTED')
 C       WRITE(IUG,*) 'plot "h01.d" using 1:2 with line 1,\'  ! DOS
@@ -57,7 +57,7 @@ C
         HIST(I)=ZERO
       END DO
 C
-      IF(XMAX.LE.XMIN) THEN
+      IF(XMAX<=XMIN) THEN
         XMIN=DATA(1)
         XMAX=DATA(1)
         DO IDAT=1,NDAT
@@ -75,7 +75,7 @@ C Map DATA linearly such that XMIN -> 1 and XMAX -> NHIST+1.
       DO IDAT=1,NDAT
         X=HALF+FACTOR*(DATA(IDAT)-XMIN)
         I=NINT(X)
-        IF(I.LE.0. OR. I.GT.NHIST) THEN 
+        IF(I<=0. OR. I.GT.NHIST) THEN
           N_OMIT=N_OMIT+1
         ELSE
           HIST(I)=HIST(I)+ONE
@@ -86,15 +86,15 @@ C
       DEL=(XMAX-XMIN)/(NHIST*ONE)
       OPEN(IUG,FILE='h'//CI//'.d',STATUS='UNKNOWN',FORM='FORMATTED')
       X=XMIN
-      IF(IUG0.LT.0) FACTOR=ONE/XDAT/DEL
-      IF(IUG0.LT.0) HIST(1)=FACTOR*HIST(1)
+      IF(IUG0<0) FACTOR=ONE/XDAT/DEL
+      IF(IUG0<0) HIST(1)=FACTOR*HIST(1)
       WRITE(IUG,'(2G16.7)') X,ZERO
       WRITE(IUG,'(2G16.7)') X,HIST(1)
       DO I=1,(NHIST-1)
-        IF(IUG0.LT.0) HIST(I+1)=FACTOR*HIST(I+1)
+        IF(IUG0<0) HIST(I+1)=FACTOR*HIST(I+1)
         X=X+DEL
         WRITE(IUG,'(2G16.7)') X,HIST(I)
-        IF(IUG.EQ.8) WRITE(IUG,'(2G16.7)') X,ZERO
+        IF(IUG==8) WRITE(IUG,'(2G16.7)') X,ZERO
         WRITE(IUG,'(2G16.7)') X,HIST(I+1)
       END DO
       X=X+DEL
@@ -102,7 +102,7 @@ C
       WRITE(IUG,'(2G16.7)') X,ZERO
       CLOSE(IUG)
 C
-      IF(N_OMIT.GT.0) 
+      IF(N_OMIT>0)
      & WRITE(6,'(" HIST_GNU Warning:",I10," Data omitted")') N_OMIT
       WRITE(6,*) "         "
       RETURN

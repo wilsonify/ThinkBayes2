@@ -11,7 +11,7 @@ C
       call razero(ham,0,nlink)
       do irpt=1,nrpt
         read(iud) ha
-	if(norm.ne.0) then ! Normalization of ha() to hasum-nlink.
+	if(norm/=0) then ! Normalization of ha() to hasum-nlink.
           hasum=zero
           do ilink=0,nlink
             hasum=hasum+ha(ilink)

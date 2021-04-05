@@ -86,7 +86,7 @@ C Acceptance rates for beta-exchange:
       ASUM_B=zero 
       DO MY_B=0,NPM1
         do itime=2,ntime
-          if(MY_ID_TS(itime,MY_B).ne.MY_ID_TS(itime-1,MY_B))
+          if(MY_ID_TS(itime,MY_B)/=MY_ID_TS(itime-1,MY_B))
      &      ACPT_B(MY_B)=ACPT_B(MY_B)+three
         end do
         ACPT_B(MY_B)=ACPT_B(MY_B)/(2*ntime)
@@ -98,9 +98,9 @@ C
       ASUM_PT=zero
       DO MY_B=0,NPM1,2
         do itime=2,ntime
-          if(MY_ID_TS(itime,MY_B).ne.MY_ID_TS(itime-1,MY_B)) then
-            if(MY_B+1.LE.NPM1.and.
-     &      MY_ID_TS(itime,MY_B+1).eq.MY_ID_TS(itime-1,MY_B)) then
+          if(MY_ID_TS(itime,MY_B)/=MY_ID_TS(itime-1,MY_B)) then
+            if(MY_B+1<=NPM1.and.
+     &      MY_ID_TS(itime,MY_B+1)==MY_ID_TS(itime-1,MY_B)) then
               ACPT_PT(MY_B+1)=ACPT_PT(MY_B+1)+three
             else
               ACPT_PT(MY_B)=ACPT_PT(MY_B)+three
@@ -128,9 +128,9 @@ C
       NPM2=NPM1-1
       DO MY_ID=0,NPM1
         DO itime=1,ntm1
-          IF(MY_B_TS(itime,MY_ID).NE.MY_B_TS(itime+1,MY_ID)) THEN
+          IF(MY_B_TS(itime,MY_ID)/=MY_B_TS(itime+1,MY_ID)) THEN
             NACPT(MY_B_TS(itime,MY_ID))=NACPT(MY_B_TS(itime,MY_ID))+1
-            IF(MY_B_TS(1,MY_ID).EQ.MY_B_TS(itime+1,MY_ID)) THEN
+            IF(MY_B_TS(1,MY_ID)==MY_B_TS(itime+1,MY_ID)) THEN
               NBOUNCE(MY_B_TS(itime,MY_ID))=
      &        NBOUNCE(MY_B_TS(itime,MY_ID))+1
             END IF ! MY_B(1,MY_I) is assgned next.
@@ -172,7 +172,7 @@ C
         write(iud1,'(5G14.6)') act,(HA_BETA(ilink,MY_B),MY_B=0,3)
       end do
       close(iud1)
-      IF(NPM1.EQ.7) THEN
+      IF(NPM1==7) THEN
         open(iud1,file="histo_2.d",form="formatted",status="unknown")
         do ilink=0,nlink
           act=(one*ilink)/(one*nlink)

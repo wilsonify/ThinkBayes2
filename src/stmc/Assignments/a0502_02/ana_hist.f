@@ -27,7 +27,7 @@ C
       open(iud1,file="h"//cd//"d"//cq//"q"//cl//".d",
      & form="formatted",status="unknown")
       do ilink=0,nlink
-        if(ham(ilink).gt.(half/nrpt)) then
+        if(ham(ilink)>(half/nrpt)) then
           actm=ilink/(nlink*one)
           em=nd*two*((one/nq)-actm) ! Internal energy per site.
           write(iud1,'(I10,4G15.6)') ilink,actm,em,ham(ilink),hae(ilink)
@@ -45,11 +45,11 @@ c
       acte=0.00006*one
       em=nd*two*((one/nq)-actm) 
       ee=nd*two*acte
-      if(nd.eq.2.and.nq.eq.4) write(iuo,'(" beta=0.53361",
+      if(nd==2.and.nq==4) write(iuo,'(" beta=0.53361",
      &  a,/," em   =",F16.9,"  +/-",F16.9,/)')
      &  ' energy from Caselle et. al. NPB 562 (1999) 549:',em,ee
 c
-      if(nd.eq.3.and.nq.eq.2) 
+      if(nd==3.and.nq==2)
      &  write(iuo,'(a,/," em_A =",F16.9,"  +/-",F16.9,/)')
      &  ' Result in Alves et. al. PRB 41 (1990) 383 notation:',
      &  (em/four),(ee/four)

@@ -2,7 +2,7 @@
       include '../../ForLib/implicit.sta'
       include '../../ForLib/constants.par'
       DIMENSION DAT1(N1),DAT2(N2)
-      IF(N1.GT.N2) STOP "KOLM2: N2.GE.N1 required."
+      IF(N1>N2) STOP "KOLM2: N2.GE.N1 required."
 C
       Femp1=ZERO
       Femp2=ZERO
@@ -10,10 +10,10 @@ C
       I1=1
       I2=1
 1     CONTINUE
-      IF(DAT1(I1).LT.DAT2(I2)) THEN
+      IF(DAT1(I1)<DAT2(I2)) THEN
         Femp1=(ONE*I1)/N1
         I1=I1+1
-      ELSE IF(DAT1(I1).EQ.DAT2(I2)) THEN
+      ELSE IF(DAT1(I1)==DAT2(I2)) THEN
         Femp1=(ONE*I1)/N1
         Femp2=(ONE*I2)/N2
         I1=I1+1
@@ -23,7 +23,7 @@ C
         I2=I2+1  
       END IF
       DEL=MAX(DEL,ABS(Femp1-Femp2))
-      IF(I1.LE.N1.AND.I2.LE.N2) GO TO 1
+      IF(I1<=N1.AND.I2<=N2) GO TO 1
 C
       RETURN
       END

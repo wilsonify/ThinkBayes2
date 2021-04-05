@@ -27,18 +27,18 @@ C
 C
       DO ICASE=1,2
         WRITE(IUO,'(/," ICASE = ",I6)') ICASE
-        if(ICASE.eq.1) OPEN(IUD1,file="p"//cq//"_"//cd//"d"//cl//"hb.d",
+        if(ICASE==1) OPEN(IUD1,file="p"//cq//"_"//cd//"d"//cl//"hb.d",
      &                 form="unformatted",status="old")
-        if(ICASE.eq.2) OPEN(IUD1,file="p"//cq//"_"//cd//"d"//cl//"hbm.d"
+        if(ICASE==2) OPEN(IUD1,file="p"//cq//"_"//cd//"d"//cl//"hbm.d"
      &                ,form="unformatted",status="old")
         READ(IUD1) beta_in,nd_in,nla,nlink,nequi_in,NRPT_in,nmeas_in
         WRITE(iuo,'(" beta,nlink,nd,nla:",F15.10,I10,I3,2X,4I5)')
      &                beta,nlink,nd_in,nla
         WRITE(iuo,'(" nequi,NRPT,nmeas: ",I15,2I10)')
      &                nequi_in,NRPT_in,nmeas_in
-        if(nequi.ne.nequi_in) stop "nequi.ne.nequi_in."
-        if(NRPT.ne.NRPT_in) stop "NRPT.ne.NRPT_in."
-        if(nmeas.ne.nmeas_in) stop "nmeas.ne.nmeas_in."
+        if(nequi/=nequi_in) stop "nequi.ne.nequi_in."
+        if(NRPT/=NRPT_in) stop "NRPT.ne.NRPT_in."
+        if(nmeas/=nmeas_in) stop "nmeas.ne.nmeas_in."
         DO IRPT=1,NRPT
           READ(IUD1) tsa,acpt,i_in
           CALL STEB0(nmeas,tsa,act(IRPT),ACTV0(IRPT,ICASE),acte)
@@ -71,9 +71,9 @@ C
      &                ACTV0m(ICASE),ACTV0e(ICASE)
 C
         WRITE(IUO,*) "Autocorrelation times are on the a*.d file."
-        if(ICASE.eq.1) OPEN(IUD1,file="a"//cq//"_"//cd//"d"//cl//".d",
+        if(ICASE==1) OPEN(IUD1,file="a"//cq//"_"//cd//"d"//cl//".d",
      &                     form="formatted",status="unknown")
-        if(ICASE.eq.2) OPEN(IUD1,file="a"//cq//"_"//cd//"d"//cl//"m.d",
+        if(ICASE==2) OPEN(IUD1,file="a"//cq//"_"//cd//"d"//cl//"m.d",
      &                     form="formatted",status="unknown")
         DO IT=0,NT,NSTEP
           CALL STEB0(NRPT,ATAU(1,IT),ACINT(IT),ACV,ACE(IT))
