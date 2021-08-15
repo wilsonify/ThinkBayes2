@@ -31,7 +31,6 @@ htmlcov/
 .tox/
 .coverage
 .cache
-.cache-main
 nosetests.xml
 coverage.xml
 
@@ -40,7 +39,7 @@ coverage.xml
 
 # Mr Developer
 .mr.developer.cfg
-src/ProbablisticProgramming/.project
+.project
 .pydevproject
 
 # Rope
@@ -53,12 +52,10 @@ src/ProbablisticProgramming/.project
 # Sphinx documentation
 docs/_build/
 
-.idea/
-.ipynb_checkpoints/
-.Rproj.user
-.Rhistory
+# jupyter checkpoints
+**/.ipynb_checkpoints/
 
-# Scala
-*.class
-target/
-.settings/
+# output tables
+**/tables/
+
+.idea/
