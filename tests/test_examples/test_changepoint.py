@@ -11,7 +11,7 @@ import pandas as pd
 import pytest
 from scipy.stats import poisson
 from thinkbayes import Suite, Joint
-from thinkbayes import thinkplot
+import thinkplot
 
 CURDIR = os.path.dirname(__file__)
 PARDIR = os.path.join(CURDIR, os.pardir)

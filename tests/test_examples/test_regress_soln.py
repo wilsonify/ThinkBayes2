@@ -9,7 +9,7 @@ import numpy as np
 
 from thinkbayes import Suite, Joint
 
-from thinkbayes import thinkplot
+import thinkplot
 from thinkbayes.thinkplot import POSTERIOR_MARGINAL_LABEL
 
 

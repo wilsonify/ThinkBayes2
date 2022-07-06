@@ -9,7 +9,7 @@
 
 import numpy as np
 from thinkbayes import Pmf, Beta
-from thinkbayes import thinkplot
+import thinkplot
 
 # ## The skeet problem
 #

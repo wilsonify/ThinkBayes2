@@ -64,7 +64,7 @@ def test_soccer():
     # To construct the prior, I'll start with an unrealistic uniform distribution and update it with fake data until the mean matches the observed rate for a single team, 1.34 goals per game.
 
     import numpy
-    from thinkbayes import thinkplot
+    import thinkplot
 
     hypos = numpy.linspace(start=0, stop=12, num=201)
     hypos = list(hypos)

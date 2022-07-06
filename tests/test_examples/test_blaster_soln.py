@@ -9,7 +9,7 @@ import logging
 import numpy as np
 import pytest
 from thinkbayes import Hist, Pmf, Suite, Beta
-from thinkbayes import thinkplot
+import thinkplot
 
 P_HIT_LABEL = "Probability of hit"
 N_HITS_LABEL = "Number of hits"

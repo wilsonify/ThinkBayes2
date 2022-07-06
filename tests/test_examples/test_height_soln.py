@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import norm
 from thinkbayes import Pmf, Suite, Joint, make_mixture, make_joint
-from thinkbayes import thinkplot
+import thinkplot
 
 dist_height = dict(male=norm(178, 7.7), female=norm(163, 7.3))
 HEIGHT_LABEL = "Height (cm)"

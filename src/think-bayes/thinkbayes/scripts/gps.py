@@ -45,7 +45,7 @@ from itertools import product
 
 import numpy
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 
 class Gps(thinkbayes.Suite, thinkbayes.Joint):

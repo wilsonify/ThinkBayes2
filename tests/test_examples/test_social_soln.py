@@ -9,7 +9,7 @@ import logging
 
 import numpy as np
 from thinkbayes import Suite, Beta
-from thinkbayes import thinkplot
+import thinkplot
 POP_FRAC_LABEL = "Fraction of the population"
 
 def test_social():

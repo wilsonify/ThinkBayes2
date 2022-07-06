@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 from thinkbayes import make_poisson_pmf, eval_binomial_pmf, make_mixture
 from thinkbayes import Pmf, Cdf, Suite, Joint
-from thinkbayes import thinkplot
+import thinkplot
 from thinkbayes.thinkplot import POSTERIOR_MARGINAL_LABEL
 
 

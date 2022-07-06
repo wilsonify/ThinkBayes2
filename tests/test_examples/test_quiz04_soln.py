@@ -9,7 +9,7 @@ import logging
 import numpy as np
 import thinkbayes
 from thinkbayes import Suite, Joint
-from thinkbayes import thinkplot
+import thinkplot
 
 
 class Battleship(Suite, Joint):

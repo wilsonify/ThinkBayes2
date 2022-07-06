@@ -8,7 +8,7 @@ MIT License: https://opensource.org/licenses/MIT
 import numpy
 
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 
 class Electorate(thinkbayes.Suite):

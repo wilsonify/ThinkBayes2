@@ -7,7 +7,7 @@ MIT License: https://opensource.org/licenses/MIT
 
 import numpy as np
 from thinkbayes import Suite, Beta
-from thinkbayes import thinkplot
+import thinkplot
 
 POP_FRAC_LABEL = "Fraction of the population"
 

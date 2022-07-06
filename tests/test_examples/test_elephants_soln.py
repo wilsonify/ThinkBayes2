@@ -8,7 +8,7 @@ from itertools import combinations
 
 import numpy as np
 from thinkbayes import Pmf, Suite
-from thinkbayes import thinkplot
+import thinkplot
 
 
 # ## Cats and rats and elephants

@@ -7,7 +7,7 @@ MIT License: https://opensource.org/licenses/MIT
 
 from thinkbayes import Suite
 
-from thinkbayes import thinkplot
+import thinkplot
 
 
 class Subclass(Suite):

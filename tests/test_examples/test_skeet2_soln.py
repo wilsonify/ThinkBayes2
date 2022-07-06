@@ -8,7 +8,7 @@ import logging
 
 import numpy as np
 from thinkbayes import Pmf, Beta
-from thinkbayes import thinkplot
+import thinkplot
 
 
 def test_comparing_distributions():

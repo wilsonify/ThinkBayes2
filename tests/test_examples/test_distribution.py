@@ -31,7 +31,7 @@ import numpy as np
 import pytest
 from numpy.fft import fft, ifft
 from thinkbayes import Pmf, Cdf
-from thinkbayes import thinkplot
+import thinkplot
 
 
 def show_code(func):

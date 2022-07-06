@@ -13,7 +13,7 @@ import numpy
 import scipy
 import thinkbayes
 from scipy import stats
-from thinkbayes import thinkplot
+import thinkplot
 from thinkbayes.scripts import brfss
 
 NUM_SIGMAS = 1

@@ -25,7 +25,7 @@ and includes functions like `Pdf` that known how to plot `Suites` and other obje
 """
 
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 
 class Coin(thinkbayes.Suite):

@@ -11,7 +11,7 @@ from scipy.stats import poisson
 from thinkbayes import make_mixture
 from thinkbayes import make_normal_pmf
 from thinkbayes import Pmf, Suite
-from thinkbayes import thinkplot
+import thinkplot
 
 
 # ## Warm-up exercises

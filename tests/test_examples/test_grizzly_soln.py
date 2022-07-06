@@ -7,7 +7,7 @@ MIT License: https://opensource.org/licenses/MIT
 
 from scipy.special import binom
 from thinkbayes import Suite
-from thinkbayes import thinkplot
+import thinkplot
 
 
 # ### The Grizzly Bear Problem

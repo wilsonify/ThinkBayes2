@@ -22,7 +22,7 @@ rather than fair?"
 """
 
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 
 class Euro(thinkbayes.Suite):

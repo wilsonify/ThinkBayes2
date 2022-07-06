@@ -8,7 +8,7 @@ MIT License: https://opensource.org/licenses/MIT
 import numpy as np
 
 from thinkbayes import Pmf, Cdf, Suite
-from thinkbayes import thinkplot
+import thinkplot
 
 
 def test_euro_problem():

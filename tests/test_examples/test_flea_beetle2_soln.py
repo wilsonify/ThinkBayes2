@@ -10,7 +10,7 @@ import os
 import numpy as np
 
 from thinkbayes import Cdf, Suite, Joint
-from thinkbayes import thinkplot
+import thinkplot
 
 CURTESTDIR = os.path.abspath(os.path.dirname(__file__))
 TESTDIR = os.path.abspath(os.path.join(CURTESTDIR, os.pardir))

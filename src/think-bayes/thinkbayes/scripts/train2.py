@@ -7,7 +7,7 @@ MIT License: https://opensource.org/licenses/MIT
 
 from thinkbayes.scripts.dice import Dice
 
-from thinkbayes import thinkplot
+import thinkplot
 NTRAINS_LABEL = "Number of trains"
 
 class Train(Dice):

@@ -6,7 +6,7 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 from thinkbayes import Suite, Beta
-from thinkbayes import thinkplot
+import thinkplot
 
 
 class UnreliableCoin(Suite):

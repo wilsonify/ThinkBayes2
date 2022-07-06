@@ -8,7 +8,7 @@ import logging
 import numpy as np
 import pandas as pd
 from thinkbayes import Pmf, Suite
-from thinkbayes import thinkplot
+import thinkplot
 
 
 def test_BayesTable():

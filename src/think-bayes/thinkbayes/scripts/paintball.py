@@ -9,7 +9,7 @@ import math
 import sys
 
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 FORMATS = ["pdf", "eps", "png"]
 

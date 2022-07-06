@@ -11,7 +11,7 @@ import sys
 import matplotlib.pyplot as pyplot
 import numpy as np
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 INTERVAL = 245 / 365.0
 FORMATS = ["pdf", "eps"]

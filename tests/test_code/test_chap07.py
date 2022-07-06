@@ -3,14 +3,14 @@ This is based on code and exercises from Think Bayes: Chapter 7.
 """
 
 import numpy as np
-from thinkbayes import eval_poisson_pmf
+import thinkplot
+from scipy.stats import poisson
+from thinkbayes import Pmf, Suite
 from thinkbayes import make_exponential_pmf
 from thinkbayes import make_gamma_pmf
 from thinkbayes import make_mixture
 from thinkbayes import make_normal_pmf
 from thinkbayes import make_poisson_pmf
-from thinkbayes import Pmf, Suite
-from thinkbayes import thinkplot
 from thinkbayes.scripts.hockey import GOALS_PER_GAME_LABEL
 
 
@@ -38,7 +38,7 @@ class Hockey(Suite):
         """
         lam = hypo
         k = data
-        like = eval_poisson_pmf(k, lam)
+        like = make_poisson_pmf(k, lam)
         return like
 
 
@@ -75,6 +75,20 @@ def MakeGoalTimePmf(suite):
 
     mix = make_mixture(metapmf, label=suite.label)
     return mix
+
+
+def make_poisson_pmf(lam, qs):
+    """Make a PMF of a Poisson distribution.
+
+    lam: event rate
+    qs: sequence of values for `k`
+
+    returns: Pmf
+    """
+    ps = poisson(lam).pmf(qs)
+    pmf = Pmf(ps, qs)
+    pmf.normalize()
+    return pmf
 
 
 def test_Hockey():

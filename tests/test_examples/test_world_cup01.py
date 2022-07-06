@@ -16,7 +16,7 @@ from scipy.stats import poisson
 from thinkbayes import Pmf, Cdf, Suite
 from thinkbayes import make_gamma_pmf
 from thinkbayes import make_poisson_pmf
-from thinkbayes import thinkplot
+import thinkplot
 from thinkbayes.scripts.hockey import GOALS_PER_GAME_LABEL
 
 POSTERIOR_LABEL = "Posterior after 1 goal"

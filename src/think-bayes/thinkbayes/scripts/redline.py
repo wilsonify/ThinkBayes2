@@ -11,7 +11,7 @@ import sys
 
 import numpy
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 FORMATS = ["pdf", "eps", "png", "jpg"]
 

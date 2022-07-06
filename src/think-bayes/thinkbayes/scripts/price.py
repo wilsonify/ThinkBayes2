@@ -11,7 +11,7 @@ import logging
 import matplotlib.pyplot as pyplot
 import numpy as np
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 FORMATS = ["png", "pdf", "eps"]
 

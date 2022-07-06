@@ -11,7 +11,7 @@ import os
 import numpy as np
 import pandas as pd
 from thinkbayes import Suite, Joint
-from thinkbayes import thinkplot
+import thinkplot
 from thinkbayes.thinkplot import POSTERIOR_MARGINAL_LABEL
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))

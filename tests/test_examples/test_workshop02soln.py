@@ -8,7 +8,7 @@ MIT License: https://opensource.org/licenses/MIT
 import numpy as np
 
 from thinkbayes import Suite
-from thinkbayes import thinkplot
+import thinkplot
 
 
 def test_bandit():

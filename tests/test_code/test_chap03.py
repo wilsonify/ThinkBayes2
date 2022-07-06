@@ -4,7 +4,7 @@ This is based on a notebook of example code from Think Bayes.
 import logging
 
 from thinkbayes import Cdf
-from thinkbayes import thinkplot
+
 from thinkbayes.scripts.dice import Dice
 from thinkbayes.scripts.train import Train, NTRAINS_LABEL
 

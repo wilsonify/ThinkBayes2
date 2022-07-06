@@ -7,7 +7,7 @@ import numpy as np
 from scipy.special import gamma
 from thinkbayes import make_mixture
 from thinkbayes import Pmf, Cdf, Suite, Joint
-from thinkbayes import thinkplot
+import thinkplot
 
 
 # ## The rain in Boston problem

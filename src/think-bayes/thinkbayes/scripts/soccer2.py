@@ -9,7 +9,7 @@ import logging
 import numpy
 
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 
 class Soccer(thinkbayes.Suite):

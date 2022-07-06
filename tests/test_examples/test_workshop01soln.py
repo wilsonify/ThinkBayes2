@@ -6,7 +6,7 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 from thinkbayes import Pmf, Suite
-from thinkbayes import thinkplot
+import thinkplot
 
 
 def test_pmfs():

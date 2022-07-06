@@ -8,7 +8,7 @@ import logging
 import random
 
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 FORMATS = ["pdf", "eps", "png"]
 

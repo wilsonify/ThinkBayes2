@@ -15,7 +15,7 @@ import warnings
 import matplotlib.pyplot as pyplot
 import numpy as np
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 warnings.simplefilter("error", RuntimeWarning)
 

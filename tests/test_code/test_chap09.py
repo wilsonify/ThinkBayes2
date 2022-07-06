@@ -14,7 +14,7 @@ from scipy import stats
 from scipy.stats import norm
 from thinkbayes import Pmf, Cdf, Suite, Joint
 from thinkbayes import eval_normal_pdf
-from thinkbayes import thinkplot
+import thinkplot
 from thinkbayes.scripts import gps
 from thinkbayes.scripts.lincoln import choose, binom
 

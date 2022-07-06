@@ -6,7 +6,7 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 
 class Hyrax(thinkbayes.Suite):

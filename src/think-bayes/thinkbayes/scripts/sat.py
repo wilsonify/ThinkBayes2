@@ -10,7 +10,7 @@ import math
 
 import numpy
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 
 def prob_correct(efficacy, difficulty, a=1):

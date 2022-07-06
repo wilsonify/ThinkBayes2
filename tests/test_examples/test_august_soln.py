@@ -9,7 +9,7 @@ import logging
 import numpy as np
 from scipy.special import expit, logit  # pylint: disable=no-name-in-module
 from thinkbayes import Pmf, Suite, Joint
-from thinkbayes import thinkplot
+import thinkplot
 from thinkbayes.thinkplot import POSTERIOR_MARGINAL_LABEL
 
 MONTHS_AFTER_CUTOFF_LABEL = "Months after cutoff"

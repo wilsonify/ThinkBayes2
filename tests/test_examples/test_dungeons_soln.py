@@ -9,7 +9,7 @@ import numpy as np
 import pytest
 import thinkbayes
 from thinkbayes import Pmf, Suite
-from thinkbayes import thinkplot
+import thinkplot
 
 N_PLAYERS_LABEL = "Number of players"
 

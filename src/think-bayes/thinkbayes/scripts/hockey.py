@@ -8,7 +8,7 @@ MIT License: https://opensource.org/licenses/MIT
 import math
 
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 from thinkbayes.scripts import columns
 
 USE_SUMMARY_DATA = True

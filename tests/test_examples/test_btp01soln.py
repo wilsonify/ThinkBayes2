@@ -12,7 +12,7 @@ import numpy as np
 import pytest
 from thinkbayes import Hist, Pmf, Suite
 from thinkbayes import make_mixture
-from thinkbayes import thinkplot
+import thinkplot
 
 
 class Socks(Suite):

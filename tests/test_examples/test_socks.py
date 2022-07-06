@@ -1,5 +1,5 @@
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 
 class Socks(thinkbayes.Suite):

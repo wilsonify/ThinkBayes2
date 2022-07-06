@@ -8,7 +8,7 @@ import logging
 
 from thinkbayes import Suite
 
-from thinkbayes import thinkplot as tplt
+import thinkplot as tplt
 
 
 def test_urns():

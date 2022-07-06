@@ -14,7 +14,7 @@ from scipy import stats
 from thinkbayes import Hist, Pmf, Suite, Beta
 from thinkbayes import make_binomial_pmf
 from thinkbayes import make_mixture
-from thinkbayes import thinkplot
+import thinkplot
 
 
 def flip(p):

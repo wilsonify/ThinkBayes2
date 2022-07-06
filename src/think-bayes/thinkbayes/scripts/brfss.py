@@ -11,7 +11,7 @@ import sys
 import numpy as np
 import pandas
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 
 def summarize(df, column, title):

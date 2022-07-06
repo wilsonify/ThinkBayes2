@@ -48,7 +48,7 @@ is.
 
 import thinkbayes
 import numpy
-from thinkbayes import thinkplot
+import thinkplot
 
 
 def choose(n, k, d=None):
