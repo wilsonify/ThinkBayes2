@@ -24,7 +24,7 @@ class Battleship(Suite, Joint):
 
 
 def test_battle():
-    gap = thinkbayes.make_normal_pmf(7, 1, 3)
+    gap = thinkbayes.MakeNormalPmf(7, 1, 3)
     thinkplot.plot(gap)
 
     metapmf = thinkbayes.Pmf()

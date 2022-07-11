@@ -450,7 +450,7 @@ class Subject(object):
         pred = thinkbayes.Pmf(label=self.code)
         for curve in curves:
             _, last_num_new = curve[-1]
-            pred.incr(last_num_new)
+            pred.Incr(last_num_new)
         pred.normalize()
         return pred
 

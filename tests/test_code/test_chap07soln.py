@@ -8,12 +8,17 @@ import logging
 
 import numpy as np
 from scipy.stats import poisson
-from thinkbayes import make_mixture
-from thinkbayes import make_normal_pmf
+from thinkbayes import MakeMixture
+from thinkbayes import MakeNormalPmf
 from thinkbayes import Pmf, Suite
 import thinkplot
-
-
+from thinkbayes import EvalPoissonPmf
+from thinkbayes import MakePoissonPmf
+from thinkbayes import EvalExponentialCdf
+from thinkbayes import MakeExponentialPmf
+from thinkbayes import MakeGammaPmf
+from thinkbayes.scripts.hockey import GOALS_PER_GAME_LABEL
+from scipy.stats import expon
 # ## Warm-up exercises
 # **Exercise:** Suppose that goal scoring in hockey is well modeled by a
 # Poisson process, and that the long-run goal-scoring rate of the
@@ -22,7 +27,7 @@ import thinkplot
 # that the Bruins score exactly 3 goals?  Plot the PMF of `k`, the number
 # of goals they score in a game.
 # Solution
-from thinkbayes.scripts.hockey import GOALS_PER_GAME_LABEL
+
 
 
 def test_chapt7():
@@ -30,15 +35,15 @@ def test_chapt7():
 
     # Solution
 
-    from thinkbayes import eval_poisson_pmf
 
-    eval_poisson_pmf(3, 2.9)
+
+    EvalPoissonPmf(3, 2.9)
 
     # Solution
 
-    from thinkbayes import make_poisson_pmf
 
-    pmf = make_poisson_pmf(2.9, high=10)
+
+    pmf = MakePoissonPmf(2.9, high=10)
     thinkplot.plot_hist_bar(pmf)
     thinkplot.config_plot(xlabel="Number of goals", ylabel="PMF", xlim=[-0.5, 10.5])
 
@@ -50,7 +55,7 @@ def test_chapt7():
 
     # Solution
 
-    pmf = make_poisson_pmf(2.9, high=30)
+    pmf = MakePoissonPmf(2.9, high=30)
     total = pmf + pmf + pmf
     thinkplot.plot_hist_bar(total)
     thinkplot.config_plot(xlabel="Number of goals", ylabel="PMF", xlim=[-0.5, 22.5])
@@ -58,7 +63,7 @@ def test_chapt7():
 
     # Solution
 
-    eval_poisson_pmf(9, 3 * 2.9)
+    EvalPoissonPmf(9, 3 * 2.9)
 
     # **Exercise:** Suppose that the long-run goal-scoring rate of the
     # Canucks against the Bruins is 2.6 goals per game.  Plot the distribution
@@ -70,33 +75,33 @@ def test_chapt7():
 
     # Solution
 
-    from thinkbayes import make_exponential_pmf
 
-    pmf = make_exponential_pmf(lam=2.6, high=2.5)
+
+    pmf = MakeExponentialPmf(lam=2.6, high=2.5)
     thinkplot.plot_pdf_line(pmf)
     thinkplot.config_plot(xlabel="Time between goals", ylabel="PMF")
 
     # Solution
 
-    from scipy.stats import expon
+
 
     expon.cdf(1 / 3, scale=1 / 2.6)
 
     # Solution
 
-    from thinkbayes import eval_exponential_cdf
 
-    eval_exponential_cdf(1 / 3, 2.6)
+
+    EvalExponentialCdf(1 / 3, 2.6)
 
     # **Exercise:** Assuming again that the goal scoring rate is 2.8, what is the probability that the Canucks get shut out (that is, don't score for an entire game)?  Answer this question two ways, using the CDF of the exponential distribution and the PMF of the Poisson distribution.
 
     # Solution
 
-    logging.info("%r", f"1 - EvalExponentialCdf(1, 2.6) = {1 - eval_exponential_cdf(1, 2.6)}")
+    logging.info("%r", f"1 - EvalExponentialCdf(1, 2.6) = {1 - EvalExponentialCdf(1, 2.6)}")
 
     # Solution
 
-    eval_poisson_pmf(0, 2.6)
+    EvalPoissonPmf(0, 2.6)
 
     # ## The Boston Bruins problem
     #
@@ -115,7 +120,7 @@ def test_chapt7():
             mu = 2.8
             sigma = 0.3
 
-            pmf = make_normal_pmf(mu, sigma, num_sigmas=4, n=101)
+            pmf = MakeNormalPmf(mu, sigma, num_sigmas=4, n=101)
             Suite.__init__(self, pmf, label=label)
 
         def likelihood(self, data, hypo):
@@ -128,7 +133,7 @@ def test_chapt7():
             """
             lam = hypo
             k = data
-            like = eval_poisson_pmf(k, lam)
+            like = EvalPoissonPmf(k, lam)
             return like
 
     # Now we can initialize a suite for each team:
@@ -169,10 +174,10 @@ def test_chapt7():
         metapmf = Pmf()
 
         for lam, prob in suite.items():
-            pmf = make_poisson_pmf(lam, high)
+            pmf = MakePoissonPmf(lam, high)
             metapmf.set(pmf, prob)
 
-        mix = make_mixture(metapmf, label=suite.label)
+        mix = MakeMixture(metapmf, label=suite.label)
         return mix
 
     # Here's what the results look like.
@@ -209,10 +214,10 @@ def test_chapt7():
         metapmf = Pmf()
 
         for lam, prob in suite.items():
-            pmf = make_exponential_pmf(lam, high=2.5, n=1001)
+            pmf = MakeExponentialPmf(lam, high=2.5, n=1001)
             metapmf.set(pmf, prob)
 
-        mix = make_mixture(metapmf, label=suite.label)
+        mix = MakeMixture(metapmf, label=suite.label)
         return mix
 
     # Here's what the predictive distributions for `t` look like.
@@ -261,10 +266,10 @@ def test_chapt7():
     #
     # For a prior distribution on the goal-scoring rate for each team, use a gamma distribution with parameter 1.3.
 
-    from thinkbayes import make_gamma_pmf
+
 
     xs = np.linspace(0, 8, 101)
-    pmf = make_gamma_pmf(xs, 1.3)
+    pmf = MakeGammaPmf(xs, 1.3)
     thinkplot.plot_pdf_line(pmf)
     thinkplot.config_plot(xlabel=GOALS_PER_GAME_LABEL)
     pmf.mean()

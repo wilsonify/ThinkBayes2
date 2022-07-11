@@ -60,17 +60,16 @@ class Gps(thinkbayes.Suite, thinkbayes.Joint):
         std = 30
         meanx, meany = hypo
         x, y = data
-        like = thinkbayes.eval_normal_pdf(x, meanx, std)
-        like *= thinkbayes.eval_normal_pdf(y, meany, std)
+        like = thinkbayes.EvalNormalPdf(x, meanx, std)
+        like *= thinkbayes.EvalNormalPdf(y, meany, std)
         return like
 
 
 def main():
     coords = numpy.linspace(-100, 100, 101)
     joint = Gps(product(coords, coords))
-
-    joint.update((51, -15))
-    joint.update((48, 90))
+    joint.Update((51, -15))
+    joint.Update((48, 90))
 
     pairs = [
         (11.903060613102866, 19.79168669735705),

@@ -260,7 +260,7 @@ def model_cdf(pc=0.35, lam1=0.79, lam2=5.0):
 
     Returns: list of xs, list of ys
     """
-    cdf = thinkbayes.eval_exponential_cdf
+    cdf = thinkbayes.EvalExponentialCdf
     x1 = np.arange(-2, 0, 0.1)
     y1 = [pc * (1 - cdf(-x, lam2)) for x in x1]
     x2 = np.arange(0, 7, 0.1)

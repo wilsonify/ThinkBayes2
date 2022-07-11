@@ -20,7 +20,7 @@ class Electorate(thinkbayes.Suite):
         """
         bias, std, result = data
         error = result - hypo
-        like = thinkbayes.eval_normal_pdf(error, bias, std)
+        like = thinkbayes.EvalNormalPdf(error, bias, std)
         return like
 
 

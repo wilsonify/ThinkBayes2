@@ -375,7 +375,7 @@ class ArrivalRate(thinkbayes.Suite):
         """
         lam = hypo
         x, k = data
-        like = thinkbayes.eval_poisson_pmf(k, lam * x)
+        like = thinkbayes.EvalPoissonPmf(k, lam * x)
         return like
 
 
@@ -438,7 +438,7 @@ class Elapsed(thinkbayes.Suite):
         """
         x = hypo
         lam, k = data
-        like = thinkbayes.eval_poisson_pmf(k, lam * x)
+        like = thinkbayes.EvalPoissonPmf(k, lam * x)
         return like
 
 

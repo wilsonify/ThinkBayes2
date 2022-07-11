@@ -73,7 +73,7 @@ def test_flea_beetle_problem():
     # The following class estimates the mean and standard deviation of a normal distribution, given the data:
 
     from scipy.stats import norm
-    from thinkbayes import eval_normal_pdf
+    from thinkbayes import EvalNormalPdf
 
     class Beetle(Suite, Joint):
         def likelihood(self, data, hypo):
@@ -82,7 +82,7 @@ def test_flea_beetle_problem():
             hypo: mu, sigma
             """
             mu, sigma = hypo
-            likes = eval_normal_pdf(data, mu, sigma)
+            likes = EvalNormalPdf(data, mu, sigma)
             return np.prod(likes)
 
         def PredictiveProb(self, data):

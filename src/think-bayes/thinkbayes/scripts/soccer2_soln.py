@@ -22,7 +22,7 @@ class Soccer(thinkbayes.Suite):
         """
         goals = data
         lam = hypo
-        like = thinkbayes.eval_poisson_pmf(goals, lam)
+        like = thinkbayes.EvalPoissonPmf(goals, lam)
         return like
 
     def predictive_dist(self, label="pred"):

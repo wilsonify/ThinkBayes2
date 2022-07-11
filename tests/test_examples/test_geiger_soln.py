@@ -7,7 +7,7 @@ import logging
 
 import numpy as np
 import pandas as pd
-from thinkbayes import make_poisson_pmf, eval_binomial_pmf, make_mixture
+from thinkbayes import make_poisson_pmf, EvalBinomialPmf, make_mixture
 from thinkbayes import Pmf, Cdf, Suite, Joint
 import thinkplot
 from thinkbayes.thinkplot import POSTERIOR_MARGINAL_LABEL
@@ -46,7 +46,7 @@ def test_geiger_counter_problem():
 
     total = 0
     for n, p in pmf.items():
-        total += p * eval_binomial_pmf(k, n, f)
+        total += p * EvalBinomialPmf(k, n, f)
 
     logging.info("%r", f"total = {total}")
 
@@ -55,7 +55,7 @@ def test_geiger_counter_problem():
         pmf = make_poisson_pmf(r, high=500)
         total = 0
         for n, p in pmf.items():
-            total += p * eval_binomial_pmf(k, n, f)
+            total += p * EvalBinomialPmf(k, n, f)
 
         return total
 
@@ -151,7 +151,7 @@ def test_geiger_counter_problem():
             """
             k = data
             r, n = hypo
-            return eval_binomial_pmf(k, n, self.f)
+            return EvalBinomialPmf(k, n, self.f)
 
     rs = np.linspace(0, 300, 51)
 
@@ -208,7 +208,7 @@ def test_geiger_counter_problem():
             k = data
             n = hypo
 
-            return eval_binomial_pmf(k, n, self.f)
+            return EvalBinomialPmf(k, n, self.f)
 
     r = 160
     k = 15

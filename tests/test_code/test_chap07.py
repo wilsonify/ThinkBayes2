@@ -6,11 +6,11 @@ import numpy as np
 import thinkplot
 from scipy.stats import poisson
 from thinkbayes import Pmf, Suite
-from thinkbayes import make_exponential_pmf
-from thinkbayes import make_gamma_pmf
-from thinkbayes import make_mixture
-from thinkbayes import make_normal_pmf
-from thinkbayes import make_poisson_pmf
+from thinkbayes import MakeExponentialPmf
+from thinkbayes import MakeGammaPmf
+from thinkbayes import MakeMixture
+from thinkbayes import MakeNormalPmf
+from thinkbayes import MakePoissonPmf
 from thinkbayes.scripts.hockey import GOALS_PER_GAME_LABEL
 
 
@@ -25,7 +25,7 @@ class Hockey(Suite):
         mu = 2.8
         sigma = 0.3
 
-        pmf = make_normal_pmf(mu, sigma, num_sigmas=4, n=101)
+        pmf = MakeNormalPmf(mu, sigma, num_sigmas=4, n=101)
         Suite.__init__(self, pmf, label=label)
 
     def likelihood(self, data, hypo):
@@ -56,7 +56,7 @@ def MakeGoalPmf(suite, high=10):
         pmf = make_poisson_pmf(lam, high)
         metapmf.set(pmf, prob)
 
-    mix = make_mixture(metapmf, label=suite.label)
+    mix = MakeMixture(metapmf, label=suite.label)
     return mix
 
 
@@ -70,10 +70,10 @@ def MakeGoalTimePmf(suite):
     metapmf = Pmf()
 
     for lam, prob in suite.items():
-        pmf = make_exponential_pmf(lam, high=2.5, n=1001)
+        pmf = MakeExponentialPmf(lam, high=2.5, n=1001)
         metapmf.set(pmf, prob)
 
-    mix = make_mixture(metapmf, label=suite.label)
+    mix = MakeMixture(metapmf, label=suite.label)
     return mix
 
 
@@ -198,7 +198,7 @@ def test_Hockey():
     # +
 
     xs = np.linspace(0, 8, 101)
-    pmf = make_gamma_pmf(xs, 1.3)
+    pmf = MakeGammaPmf(xs, 1.3)
     thinkplot.plot_pdf_line(pmf)
     thinkplot.config_plot(xlabel=GOALS_PER_GAME_LABEL)
     pmf.mean()

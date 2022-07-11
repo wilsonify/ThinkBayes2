@@ -61,7 +61,7 @@ class Sat3(thinkbayes.Suite):
 
         k = self.exam.reverse(score)
         n = self.exam.max_score
-        like = thinkbayes.eval_binomial_pmf(k, n, p_correct)
+        like = thinkbayes.EvalBinomialPmf(k, n, p_correct)
         return like
 
     def plot_posteriors(self, other):
@@ -244,7 +244,7 @@ class Exam(object):
         cdf = thinkbayes.Cdf(self.raw, label="data")
         thinkplot.plot_cdf_line(cdf)
 
-        efficacies = thinkbayes.make_normal_pmf(0, 1.5, 3)
+        efficacies = thinkbayes.MakeNormalPmf(0, 1.5, 3)
         pmf = self.make_raw_score_dist(efficacies)
         cdf = thinkbayes.Cdf(pmf, label="model")
         thinkplot.plot_cdf_line(cdf)
@@ -300,7 +300,7 @@ class Sat2(thinkbayes.Suite):
         self.score = score
 
         # start with the Normal prior
-        efficacies = thinkbayes.make_normal_pmf(0, 1.5, 3)
+        efficacies = thinkbayes.MakeNormalPmf(0, 1.5, 3)
         thinkbayes.Suite.__init__(self, efficacies)
 
         # update based on an exam score
@@ -487,11 +487,11 @@ def prob_correct_table():
 
 
 def main():
-    p1 = thinkbayes.make_normal_pmf(0, 1, 3, n=101)
+    p1 = thinkbayes.MakeNormalPmf(0, 1, 3, n=101)
     p1.label = "p1"
     p2 = p1.copy(label="p2")
 
-    q1 = thinkbayes.make_normal_pmf(-1, 1, 3, n=101)
+    q1 = thinkbayes.MakeNormalPmf(-1, 1, 3, n=101)
     q1.label = "q1"
     q2 = q1.copy(label="q2")
 
@@ -511,11 +511,11 @@ def main():
     print("Prob p1 > p2", p1 > p2)
     print("Prob q1 > q2", q1 > q2)
 
-    p1 = thinkbayes.make_normal_pmf(0, 1, 3, n=101)
+    p1 = thinkbayes.MakeNormalPmf(0, 1, 3, n=101)
     p1.label = "p1"
     p2 = p1.copy(label="p2")
 
-    q1 = thinkbayes.make_normal_pmf(0, 1, 3, n=101)
+    q1 = thinkbayes.MakeNormalPmf(0, 1, 3, n=101)
     q1.label = "q1"
     q2 = q1.copy(label="q2")
 

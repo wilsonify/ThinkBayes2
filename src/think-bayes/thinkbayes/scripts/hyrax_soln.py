@@ -23,7 +23,7 @@ class Hyrax(thinkbayes.Suite):
             return 0
 
         p = tagged / hypo
-        like = thinkbayes.eval_binomial_pmf(k, n, p)
+        like = thinkbayes.EvalBinomialPmf(k, n, p)
         return like
 
 
@@ -42,7 +42,7 @@ class Hyrax2(thinkbayes.Suite):
         if hypo < k_tagged + (n_caught - k_caught_tagged):
             return 0
 
-        like = thinkbayes.eval_hypergeom_pmf(k_caught_tagged, n_total_population, k_tagged, n_caught)
+        like = thinkbayes.EvalHypergeomPmf(k_caught_tagged, n_total_population, k_tagged, n_caught)
         return like
 
 

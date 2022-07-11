@@ -13,7 +13,7 @@ import pytest
 from scipy import stats
 from scipy.stats import norm
 from thinkbayes import Pmf, Cdf, Suite, Joint
-from thinkbayes import eval_normal_pdf
+from thinkbayes import EvalNormalPdf
 import thinkplot
 from thinkbayes.scripts import gps
 from thinkbayes.scripts.lincoln import choose, binom
@@ -47,7 +47,7 @@ class Normal(Suite, Joint):
         hypo: mu, sigma
         """
         mu, sigma = hypo
-        likes = eval_normal_pdf(data, mu, sigma)
+        likes = EvalNormalPdf(data, mu, sigma)
         return np.prod(likes)
 
 
@@ -141,7 +141,7 @@ class Beetle(Suite, Joint):
         hypo: mu, sigma
         """
         mu, sigma = hypo
-        likes = eval_normal_pdf(data, mu, sigma)
+        likes = EvalNormalPdf(data, mu, sigma)
         return np.prod(likes)
 
     def PredictiveProb(self, data):

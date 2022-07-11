@@ -31,7 +31,7 @@ class Hockey(thinkbayes.Suite):
             mu = 2.8
             sigma = 0.85
 
-        pmf = thinkbayes.make_normal_pmf(mu, sigma, 4)
+        pmf = thinkbayes.MakeNormalPmf(mu, sigma, 4)
         thinkbayes.Suite.__init__(self, pmf, label=label)
 
     def likelihood(self, data, hypo):
@@ -44,7 +44,7 @@ class Hockey(thinkbayes.Suite):
         """
         lam = hypo
         k = data
-        like = thinkbayes.eval_poisson_pmf(k, lam)
+        like = thinkbayes.EvalPoissonPmf(k, lam)
         return like
 
 

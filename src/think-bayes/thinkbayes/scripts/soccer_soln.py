@@ -22,7 +22,7 @@ class Soccer(thinkbayes.Suite):
         """
         x = data
         lam = hypo / 90
-        like = thinkbayes.eval_exponential_pdf(x, lam)
+        like = thinkbayes.EvalExponentialPdf(x, lam)
         return like
 
     def pred_remaining(self, rem_time, score):

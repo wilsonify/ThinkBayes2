@@ -2,8 +2,8 @@ import os
 
 import pandas as pd
 import pytest
-import thinkbayes
 
+import thinkbayes
 
 CONFTESTDIR = os.path.abspath(os.path.dirname(__file__))
 TESTDIR = os.path.abspath(os.path.join(CONFTESTDIR, os.pardir))
@@ -15,7 +15,8 @@ def gss():
     """
     https://gssdataexplorer.norc.org/projects/52787/variables/1698/vshow
     """
-    return pd.read_csv('gss_bayes.csv', index_col=0)
+    return pd.read_hdf(f'{DATADIR}/gss_eda.hdf5')
+
 
 @pytest.fixture
 def six_sided_die_pmf():
@@ -27,7 +28,7 @@ def six_sided_die_pmf():
     pmf = thinkbayes.Pmf()
     for x in [1, 2, 3, 4, 5, 6]:
         pmf[x] = 1
-    pmf.normalize()
+    pmf.Normalize()
     return pmf
 
 
