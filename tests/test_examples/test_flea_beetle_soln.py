@@ -58,9 +58,6 @@ def test_flea_beetles():
     def plot_cdfs(df, col):
         for name, group in df.groupby("Species"):
             cdf = Cdf(group[col], label=name)
-            thinkplot.plot_cdf_line(cdf)
-
-        thinkplot.decorate(xlabel=col, ylabel="CDF", loc="lower right")
 
     plot_cdfs(df, "Width")
 
@@ -103,7 +100,7 @@ def test_flea_beetles():
     # Now we can write the likelihood function concisely.
 
     class Beetle(Suite):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """
             data: sequence of width, height
             hypo: name of species
@@ -126,7 +123,7 @@ def test_flea_beetles():
 
     # Now we can update with the data and print the posterior.
 
-    suite.update((140, 15))
+    suite.Update((140, 15))
     suite.print()
 
     # Based on these measurements, the specimen is very likely to be an example of *Chaetocnema concinna*.

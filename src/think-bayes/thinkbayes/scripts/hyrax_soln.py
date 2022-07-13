@@ -12,7 +12,7 @@ import thinkplot
 class Hyrax(thinkbayes.Suite):
     """Represents hypotheses about how many hyraxes there are."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: total population
@@ -30,7 +30,7 @@ class Hyrax(thinkbayes.Suite):
 class Hyrax2(thinkbayes.Suite):
     """Represents hypotheses about how many hyraxes there are."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: total population (N)

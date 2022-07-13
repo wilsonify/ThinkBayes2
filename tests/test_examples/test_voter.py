@@ -34,7 +34,7 @@ def test_blog():
 
     # Normalizing the posterior distribution returns the total likelihood of the data, which is the normalizing constant.
 
-    posterior.normalize()
+    posterior.Normalize()
 
     # Now the posterior is a proper distribution:
 

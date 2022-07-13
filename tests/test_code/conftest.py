@@ -15,7 +15,7 @@ def gss():
     """
     https://gssdataexplorer.norc.org/projects/52787/variables/1698/vshow
     """
-    return pd.read_hdf(f'{DATADIR}/gss_eda.hdf5')
+    return pd.read_csv(f'{DATADIR}/gss_bayes.csv', index_col=0)
 
 
 @pytest.fixture

@@ -109,7 +109,7 @@ def test_hockey():
     def plot_pmf(sample, **options):
         """Compute and plot a PMF."""
         pmf = Pmf(sample)
-        pmf.normalize()
+        pmf.Normalize()
         xs, ps = pmf.sorted_items()
         bar(xs, ps, **options)
 
@@ -292,7 +292,7 @@ def test_hockey():
             """
             for hypo in self:
                 self[hypo] *= like_func(data, hypo)
-            self.normalize()
+            self.Normalize()
 
         def plot(self, **options):
             """Plot the hypotheses and their probabilities."""
@@ -314,7 +314,7 @@ def test_hockey():
     # Initially `suite` represents the prior distribution of `mu`.
 
     suite = Suite(hypo_mu)
-    suite.normalize()
+    suite.Normalize()
     suite.plot(label="prior")
     pdf_rate()
 
@@ -401,7 +401,7 @@ def test_hockey():
         dist = make_gamma_dist(alpha, beta)
         ps = dist.pdf(xs)
         prior = Suite(dict(zip(xs, ps)))
-        prior.normalize()
+        prior.Normalize()
         return prior
 
     # Here's what it looks like.

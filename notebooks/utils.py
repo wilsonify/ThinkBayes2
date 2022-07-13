@@ -150,7 +150,7 @@ def summarize(posterior, digits=3, prob=0.9):
     prob: probability in the CI
     """
     mean = np.round(posterior.mean(), 3)
-    ci = posterior.credible_interval(prob)
+    ci = posterior.CredibleInterval(prob)
     print (mean, ci)
 
 

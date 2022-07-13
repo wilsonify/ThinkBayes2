@@ -5,9 +5,29 @@ Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
+from scipy import stats
 from scipy.special import binom
+
 from thinkbayes import Suite
-import thinkplot
+
+
+class Hyrax2(Suite):
+    """Represents hypotheses about how many hyraxes there are."""
+
+    def Likelihood(self, data, hypo):
+        """Computes the likelihood of the data under the hypothesis.
+
+        hypo: total population (N)
+        data: # tagged (K), # caught (n), # of caught who were tagged (k)
+        """
+        N = hypo
+        K, n, k = data
+
+        if hypo < K + (n - k):
+            return 0
+
+        like = stats.hypergeom.pmf(k, N, K, n)
+        return like
 
 
 class Hyrax(Suite):
@@ -42,7 +62,7 @@ class Hyrax(Suite):
     Represents hypotheses about how many hyraxes there are.
     """
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: total population (N)
@@ -63,43 +83,20 @@ def test_hydrax():
     suite = Hyrax(hypos)
 
     data = 10, 10, 2
-    suite.update(data)
+    suite.Update(data)
 
     # +
     # Solution
 
-    thinkplot.plot_pdf_line(suite)
-    thinkplot.config_plot(xlabel="Number of hyraxes", ylabel="PMF", legend=False)
-
     # +
     # Solution
 
-    print("Posterior mean", suite.mean())
+    print("Posterior mean", suite.Mean())
     print("Maximum a posteriori estimate", suite.MaximumLikelihood())
-    print("90% credible interval", suite.credible_interval(90))
+    print("90% credible interval", suite.CredibleInterval(90))
 
     # +
     # Solution
-
-    from scipy import stats
-
-    class Hyrax2(Suite):
-        """Represents hypotheses about how many hyraxes there are."""
-
-        def likelihood(self, data, hypo):
-            """Computes the likelihood of the data under the hypothesis.
-
-            hypo: total population (N)
-            data: # tagged (K), # caught (n), # of caught who were tagged (k)
-            """
-            N = hypo
-            K, n, k = data
-
-            if hypo < K + (n - k):
-                return 0
-
-            like = stats.hypergeom.pmf(k, N, K, n)
-            return like
 
     # +
     # Solution
@@ -108,11 +105,11 @@ def test_hydrax():
     suite = Hyrax2(hypos)
 
     data = 10, 10, 2
-    suite.update(data)
+    suite.Update(data)
 
     # +
     # Solution
 
-    print("Posterior mean", suite.mean())
+    print("Posterior mean", suite.Mean())
     print("Maximum a posteriori estimate", suite.MaximumLikelihood())
-    print("90% credible interval", suite.credible_interval(90))
+    print("90% credible interval", suite.CredibleInterval(90))

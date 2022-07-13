@@ -108,7 +108,7 @@ def plot_cdf(cdf):
     # CDF, model and data
 
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=2)
+    thinkplot.PrePlot(num=2)
     mxs, mys = model_cdf()
     thinkplot.plot_line(mxs, mys, label="model", linestyle="dashed")
 
@@ -532,7 +532,7 @@ class Calculator(object):
             cdfs.append(cdf)
 
         thinkplot.clear_figure()
-        thinkplot.pre_plot(num=len(cdfs))
+        thinkplot.PrePlot(num=len(cdfs))
         thinkplot.plot_cdfs(cdfs)
 
         thinkplot.save_plot(
@@ -544,7 +544,7 @@ class Calculator(object):
             loc=4,
         )
 
-    def plot_credible_intervals(self, xscale="linear"):
+    def plot_CredibleIntervals(self, xscale="linear"):
         """Plots the confidence interval for each bucket."""
         xs = []
         ts = []
@@ -793,7 +793,7 @@ def main(script):
 
     calc.plot_conditional_cdfs()
 
-    calc.plot_credible_intervals(xscale="log")
+    calc.plot_CredibleIntervals(xscale="log")
 
     calc.plot_joint_dist()
 

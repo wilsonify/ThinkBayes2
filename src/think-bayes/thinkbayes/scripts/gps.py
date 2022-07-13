@@ -44,14 +44,14 @@ At this point, how certain are you about your location?
 from itertools import product
 
 import numpy
+
 import thinkbayes
-import thinkplot
 
 
 class Gps(thinkbayes.Suite, thinkbayes.Joint):
     """Represents hypotheses about your location in the field."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo:
@@ -82,17 +82,13 @@ def main():
         (45.58108994142448, 3.5718287379754585),
     ]
 
-    joint.update_set(pairs)
+    joint.UpdateSet(pairs)
 
-    thinkplot.pre_plot(2)
-    pdfx = joint.marginal(0)
-    pdfy = joint.marginal(1)
-    thinkplot.plot_pdf_line(pdfx, label="posterior x")
-    thinkplot.plot_pdf_line(pdfy, label="posterior y")
-    thinkplot.show_plot()
+    pdfx = joint.Marginal(0)
+    pdfy = joint.Marginal(1)
 
-    print(pdfx.mean(), pdfx.std())
-    print(pdfy.mean(), pdfy.std())
+    print(pdfx.Mean(), pdfx.Std())
+    print(pdfy.Mean(), pdfy.Std())
 
 
 if __name__ == "__main__":

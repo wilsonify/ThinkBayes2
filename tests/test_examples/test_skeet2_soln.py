@@ -25,10 +25,10 @@ def test_comparing_distributions():
     # First I create a Beta distribution for each of the competitors, and update it with the results.
 
     rhode = Beta(1, 1, label="Rhode")
-    rhode.update((22, 11))
+    rhode.Update((22, 11))
 
     wei = Beta(1, 1, label="Wei")
-    wei.update((21, 12))
+    wei.Update((21, 12))
 
     # Based on the data, the distribution for Rhode is slightly farther right than the distribution for Wei, but there is a lot of overlap.
 
@@ -131,12 +131,12 @@ def test_comparing_distributions():
 
     # Alternatively, we can make a mixture that represents the distribution of `k`, taking into account our uncertainty about `x`:
 
-    from thinkbayes import make_binomial_pmf
+    from thinkbayes import MakeBinomialPmf
 
     def MakeBinomialMix(pmf, label=""):
         mix = Pmf(label=label)
-        for x, prob in pmf.items():
-            binom = make_binomial_pmf(n=25, p=x)
+        for x, prob in pmf.Items():
+            binom = MakeBinomialPmf(n=25, p=x)
             for k, p in binom.items():
                 mix[k] += prob * p
         return mix
@@ -151,14 +151,14 @@ def test_comparing_distributions():
 
     # Alternatively, we could use MakeMixture:
 
-    from thinkbayes import make_mixture
+    from thinkbayes import MakeMixture
 
     def MakeBinomialMix2(pmf):
         binomials = Pmf()
-        for x, prob in pmf.items():
-            binom = make_binomial_pmf(n=25, p=x)
+        for x, prob in pmf.Items():
+            binom = MakeBinomialPmf(n=25, p=x)
             binomials[binom] = prob
-        return make_mixture(binomials)
+        return MakeMixture(binomials)
 
     # Here's how we use it.
 
@@ -183,7 +183,7 @@ def test_comparing_distributions():
     for _ in range(iters):
         k = rhode_rematch.random() + wei_rematch.random()
         pmf[k] += 1
-    pmf.normalize()
+    pmf.Normalize()
     thinkplot.plot_hist_bar(pmf)
 
     # Or we could use `Sample` and NumPy:
@@ -228,7 +228,7 @@ def test_comparing_distributions():
 
     # But there is, according to this model, a 2% chance that she could win by 10.
 
-    p_win_by_10 = sum([p for (x, p) in pmf.items() if x >= 10])
+    p_win_by_10 = sum([p for (x, p) in pmf.Items() if x >= 10])
     logging.info("%r", f"p_win_by_10 = {p_win_by_10}")
 
     # ## Distribution of maximum
@@ -248,7 +248,7 @@ def test_comparing_distributions():
     for _ in range(iters):
         ks = rhode_rematch.sample(6)
         pmf[max(ks)] += 1
-    pmf.normalize()
+    pmf.Normalize()
     thinkplot.plot_hist_bar(pmf)
 
     # And here's a version using NumPy.  I'll generate an array with 6 rows and 10 columns:

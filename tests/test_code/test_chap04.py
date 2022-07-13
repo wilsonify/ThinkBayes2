@@ -4,8 +4,8 @@ This is based on a notebook from Think Bayes : Chapter 4.
 
 import numpy as np
 from scipy import special
+
 from thinkbayes import Pmf, Cdf, Suite
-import thinkplot
 
 
 class Euro(Suite):
@@ -14,7 +14,7 @@ class Euro(Suite):
     Here's a class that represents hypotheses about the probability a coin lands heads.
     """
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of `data` given `hypo`.
         
         data: string 'H' or 'T'
@@ -49,7 +49,7 @@ def TrianglePrior(label="triangle"):
         suite[x] = x
     for x in range(51, 101):
         suite[x] = 100 - x
-    suite.normalize()
+    suite.Normalize()
     return suite
 
 
@@ -63,7 +63,7 @@ def RunUpdate(suite, heads=140, tails=110):
     """
     dataset = "H" * heads + "T" * tails
     for data in dataset:
-        suite.update(data)
+        suite.Update(data)
 
 
 class Euro2(Suite):
@@ -77,7 +77,7 @@ class Euro2(Suite):
     Represents hypotheses about the probability of heads.
     """
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: integer value of x, the probability of heads (0-100)
@@ -164,7 +164,7 @@ class Beta:
 
         if self.alpha < 1 or self.beta < 1:
             cdf = self.MakeCdf()
-            pmf = cdf.make_pmf()
+            pmf = cdf.MakePmf()
             return pmf
 
         xs = [i / (steps - 1) for i in range(steps)]
@@ -197,32 +197,31 @@ def test_uniform():
     dataset = "H" * 140 + "T" * 110
 
     for data in dataset:
-        suite.update(data)
+        suite.Update(data)
     # -
 
     # And here's what the posterior looks like.
 
-    thinkplot.plot_pdf_line(suite)
 
     # We can summarize the posterior several ways, including the mean:
 
-    suite.mean()
+    suite.Mean()
 
     # Median:
 
-    suite.percentile(50)
+    suite.Percentile(50)
 
     # The peak of the posterior, known as the Maximum Aposteori Probability (MAP)
 
-    suite.map()
+    suite.MAP()
 
     # And a 90% credible interval
 
-    suite.credible_interval(90)
+    suite.CredibleInterval(90)
 
     # We can look up a particular value in the posterior PMF, but the result doesn't mean much, because we could have divided the range (0-100) into as many pieces as we like, and the result would be different.
 
-    suite.prob(50)
+    suite.Prob(50)
 
 
 def test_priors():
@@ -230,16 +229,10 @@ def test_priors():
     uniform = UniformPrior()
     suites = [triangle, uniform]
 
-    thinkplot.plot_pdfs(suites)
-    thinkplot.config_plot(xlabel="x", ylabel="Probability")
-
     for suite in suites:
         RunUpdate(suite)
 
     # The results are almost identical; the remaining difference is unlikely to matter in practice.
-
-    thinkplot.plot_pdfs(suites)
-    thinkplot.config_plot(xlabel="x", ylabel="Probability")
 
 
 def test_euro2():
@@ -247,11 +240,9 @@ def test_euro2():
 
     suite = Euro2(range(0, 101))
     dataset = 140, 110
-    suite.update(dataset)
+    suite.Update(dataset)
 
     # Here's what the posterior looks like.
-
-    thinkplot.plot_pdf_line(suite)
 
 
 def test_beta():
@@ -264,8 +255,6 @@ def test_beta():
     beta.Mean()
 
     # And here's the posterior.
-
-    thinkplot.plot_pdf_line(beta.MakePmf())
 
     # Amazing, no?
 

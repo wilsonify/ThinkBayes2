@@ -26,7 +26,7 @@ def test_pmfs():
 
     # `Normalize` adds up the probabilities and divides through.  The return value is the total probability before normalizing.
 
-    d6.normalize()
+    d6.Normalize()
 
     # Now the Pmf is normalized.
 
@@ -60,7 +60,7 @@ def test_pmfs():
     pmf = d6 + d6
     pmf[2] = 0
     pmf[3] = 0
-    pmf.normalize()
+    pmf.Normalize()
     thinkplot.plot_hist_bar(pmf)
     pmf.mean()
 
@@ -76,7 +76,7 @@ def test_pmfs():
 
     cookie["Bowl1"] *= 0.75
     cookie["Bowl2"] *= 0.5
-    cookie.normalize()
+    cookie.Normalize()
 
     # Print the posterior probabilities.
 
@@ -90,7 +90,7 @@ def test_pmfs():
 
     cookie["Bowl1"] *= 0.25
     cookie["Bowl2"] *= 0.5
-    cookie.normalize()
+    cookie.Normalize()
     cookie.print()
 
     # **Exercise 4:** Instead of doing two updates, what if we collapse the two pieces of data into one update?
@@ -104,7 +104,7 @@ def test_pmfs():
     cookie = Pmf(["Bowl1", "Bowl2"])
     cookie["Bowl1"] *= 0.75 * 0.25
     cookie["Bowl2"] *= 0.5 * 0.5
-    cookie.normalize()
+    cookie.Normalize()
     cookie.print()
 
     # The dice problem
@@ -125,7 +125,7 @@ def test_pmfs():
     pmf[8] *= 1 / 8
     pmf[12] *= 1 / 12
 
-    pmf.normalize()
+    pmf.Normalize()
     pmf.print()
 
     # **Exercise 6:**  Now let's do the same calculation using `Suite.Update`.
@@ -139,7 +139,7 @@ def test_pmfs():
     class Dice(Suite):
         # hypo is the number of sides on the die
         # data is the outcome
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             return 1
 
     # Solution
@@ -147,7 +147,7 @@ def test_pmfs():
     class Dice(Suite):
         # hypo is the number of sides on the die
         # data is the outcome
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             if data > hypo:
                 return 0
             else:
@@ -156,13 +156,13 @@ def test_pmfs():
     # Now we can create a `Dice` object and update it.
 
     dice = Dice([4, 6, 8, 12])
-    dice.update(6)
+    dice.Update(6)
     dice.print()
 
     # If we get more data, we can perform more updates.
 
     for roll in [8, 7, 7, 5, 4]:
-        dice.update(roll)
+        dice.Update(roll)
 
     # Here are the results.
 
@@ -175,7 +175,7 @@ def test_pmfs():
     class Tank(Suite):
         # hypo is the number of tanks
         # data is an observed serial number
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             if data > hypo:
                 return 0
             else:
@@ -184,7 +184,7 @@ def test_pmfs():
     # Here are the posterior probabilities after seeing Tank #37.
 
     tank = Tank(range(100))
-    tank.update(37)
+    tank.Update(37)
     thinkplot.plot_pdf_line(tank)
     tank.mean()
 
@@ -195,7 +195,7 @@ def test_pmfs():
     # Solution
 
     thinkplot.plot_pdf_line(tank, color="0.7")
-    tank.update(17)
+    tank.Update(17)
     thinkplot.plot_pdf_line(tank)
     tank.mean()
 
@@ -207,7 +207,7 @@ def test_pmfs():
     # Note that `hypo` is in the range 0 to 100.  Here's an outline to get you started.
 
     class Euro(Suite):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """
             hypo is the prob of heads (0-100)
             data is a string, either 'H' or 'T'
@@ -217,7 +217,7 @@ def test_pmfs():
     # Solution
 
     class Euro(Suite):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """
             hypo is the prob of heads (0-100)
             data is a string, either 'H' or 'T'
@@ -235,17 +235,17 @@ def test_pmfs():
 
     # Now we can update with a single heads:
 
-    euro.update("H")
+    euro.Update("H")
     thinkplot.plot_pdf_line(euro)
 
     # Another heads:
 
-    euro.update("H")
+    euro.Update("H")
     thinkplot.plot_pdf_line(euro)
 
     # And a tails:
 
-    euro.update("T")
+    euro.Update("T")
     thinkplot.plot_pdf_line(euro)
 
     # Starting over, here's what it looks like after 7 heads and 3 tails.
@@ -253,7 +253,7 @@ def test_pmfs():
     euro = Euro(range(101))
 
     for outcome in "HHHHHHHTTT":
-        euro.update(outcome)
+        euro.Update(outcome)
 
     thinkplot.plot_pdf_line(euro)
     euro.MaximumLikelihood()
@@ -266,7 +266,7 @@ def test_pmfs():
 
     evidence = "H" * 140 + "T" * 110
     for outcome in evidence:
-        euro.update(outcome)
+        euro.Update(outcome)
 
     thinkplot.plot_pdf_line(euro)
 
@@ -280,7 +280,7 @@ def test_pmfs():
 
     # The posterior credible interval has a 90% chance of containing the true value (provided that the prior distribution truly represents our background knowledge).
 
-    euro.credible_interval(90)
+    euro.CredibleInterval(90)
 
     # ## Swamping the prior
     #
@@ -293,7 +293,7 @@ def test_pmfs():
             suite[x] = x
         for x in range(51, 101):
             suite[x] = 100 - x
-        suite.normalize()
+        suite.Normalize()
         return suite
 
     # And here's what it looks like:
@@ -309,8 +309,8 @@ def test_pmfs():
 
     evidence = "H" * 140 + "T" * 110
     for outcome in evidence:
-        euro1.update(outcome)
-        euro2.update(outcome)
+        euro1.Update(outcome)
+        euro2.Update(outcome)
 
     thinkplot.plot_pdfs([euro1, euro2])
     thinkplot.config_plot(title="Posteriors")

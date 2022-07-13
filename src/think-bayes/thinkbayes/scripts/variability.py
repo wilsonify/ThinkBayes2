@@ -33,7 +33,7 @@ class Height(thinkbayes.Suite, thinkbayes.Joint):
 
         thinkbayes.Suite.__init__(self, pairs, label=label)
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         Args:
@@ -256,7 +256,7 @@ def plot_coef_variation(suites):
     suites: map from label to Pmf of CVs.
     """
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=2)
+    thinkplot.PrePlot(num=2)
 
     pmfs = {}
     for label, suite in suites.items():

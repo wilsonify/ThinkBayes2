@@ -87,7 +87,7 @@ def test_lincoln_index_problem():
     class Lincoln(Suite, Joint):
         """Represents hypotheses about the number of errors."""
 
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: n, p1, p2
@@ -109,9 +109,9 @@ def test_lincoln_index_problem():
     suite = Lincoln(hypos)
 
     data = 20, 15, 3
-    suite.update(data)
+    suite.Update(data)
 
-    n_marginal = suite.marginal(0)
+    n_marginal = suite.Marginal(0)
 
     print("post mean n", n_marginal.mean())
     print("MAP n", n_marginal.MaximumLikelihood())
@@ -119,8 +119,8 @@ def test_lincoln_index_problem():
     thinkplot.plot_pdf_line(n_marginal, label="n")
     thinkplot.decorate(xlabel="Number of bugs", ylabel="PMF")
 
-    p1_marginal = suite.marginal(1, label="p1")
-    p2_marginal = suite.marginal(2, label="p2")
+    p1_marginal = suite.Marginal(1, label="p1")
+    p2_marginal = suite.Marginal(2, label="p2")
 
     print("post mean p1", p1_marginal.mean())
     print("MAP p1", p1_marginal.MaximumLikelihood())

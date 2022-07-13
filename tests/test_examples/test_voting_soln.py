@@ -70,7 +70,7 @@ def test_vote():
     for val1, p1 in pmf_citizen_report.items():
         c, e = val1
         pmf = pmf_cv_report if c == "citizen" else pmf_ncv_report
-        for val2, p2 in pmf.items():
+        for val2, p2 in pmf.Items():
             mix[val1, val2] = p1 * p2
 
     mix.print()

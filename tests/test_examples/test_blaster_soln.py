@@ -43,7 +43,7 @@ def test_alien_blaster_problem():
     from scipy.stats import binom
 
     class AlienBlaster(Suite):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """Computes the likeliood of data under hypo.
 
             data: number of shots they took
@@ -67,7 +67,7 @@ def test_alien_blaster_problem():
 
     pmf = Beta(1, 1).make_pmf()
     blaster = AlienBlaster(pmf)
-    blaster.update(2)
+    blaster.Update(2)
     thinkplot.plot_pdf_line(blaster)
     thinkplot.decorate(xlabel=P_HIT_LABEL, ylabel="PMF")
 
@@ -80,7 +80,7 @@ def test_alien_blaster_problem():
     pmf = Beta(5, 10).make_pmf()
     blaster = AlienBlaster(pmf)
     thinkplot.plot_pdf_line(blaster, color="gray")
-    blaster.update(2)
+    blaster.Update(2)
     thinkplot.plot_pdf_line(blaster)
     thinkplot.decorate(xlabel=P_HIT_LABEL, ylabel="PMF")
 
@@ -173,10 +173,10 @@ def test_alien_blaster_problem():
 
     # One more way to do the same thing is to make a meta-Pmf, which contains the two binomial `Pmf` objects:
 
-    from thinkbayes import make_binomial_pmf
+    from thinkbayes import MakeBinomialPmf
 
-    pmf1 = make_binomial_pmf(n, x1)
-    pmf2 = make_binomial_pmf(n, x2)
+    pmf1 = MakeBinomialPmf(n, x1)
+    pmf2 = MakeBinomialPmf(n, x2)
 
     metapmf = Pmf({pmf1: 0.3, pmf2: 0.7})
     metapmf.print()
@@ -218,9 +218,9 @@ def test_alien_blaster_problem():
     #
     # In the example, each Pmf is associated with a value of `x` (probability of hitting a target).  The inner loop enumerates the values of `k` (number of targets hit after 10 shots).
 
-    from thinkbayes import make_mixture
+    from thinkbayes import MakeMixture
 
-    mix = make_mixture(metapmf)
+    mix = MakeMixture(metapmf)
     thinkplot.plot_hist_bar(mix)
     mix.mean()
 

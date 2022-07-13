@@ -19,17 +19,17 @@ class Cookie(Pmf):
         """
         Pmf.__init__(self)
         for hypo in hypos:
-            self.set(hypo, 1)
-        self.normalize()
+            self.Set(hypo, 1)
+        self.Normalize()
 
     def Update(self, data):
         """Updates the PMF with new data.
 
         data: string cookie type
         """
-        for hypo in self.values():
+        for hypo in self.Values():
             self[hypo] *= self.Likelihood(data, hypo)
-        self.normalize()
+        self.Normalize()
 
     mixes = {
         "Bowl1": dict(vanilla=0.75, chocolate=0.25),
@@ -94,17 +94,17 @@ class FullMonty(Pmf):
         """
         Pmf.__init__(self)
         for hypo in hypos:
-            self.set(hypo, 1)
-        self.normalize()
+            self.Set(hypo, 1)
+        self.Normalize()
 
     def Update(self, data):
         """Updates each hypothesis based on the data.
 
         data: string 'A', 'B', or 'C'
         """
-        for hypo in self.values():
+        for hypo in self.Values():
             self[hypo] *= self.Likelihood(data, hypo)
-        self.normalize()
+        self.Normalize()
 
     def Likelihood(self, data, hypo):
         """Compute the likelihood of the data under the hypothesis.
@@ -124,7 +124,8 @@ class Monty(Suite):
     """
     # ## The Suite class
     #
-    # Most Bayesian updates look pretty much the same, especially the `Update` method.  So we can encapsulate the framework in a class, `Suite`, and create new classes that extend it.
+    # Most Bayesian updates look pretty much the same, especially the `Update` method.
+    # So we can encapsulate the framework in a class, `Suite`, and create new classes that extend it.
     #
 
     # %psource Suite
@@ -135,7 +136,7 @@ class Monty(Suite):
 
     """
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         if hypo == data:
             return 0
         elif hypo == "A":
@@ -151,9 +152,9 @@ def test_pmf(six_sided_die_pmf):
 
 
 def test_Prob(six_sided_die_pmf):
-    six_sided_die_pmf.prob(1)  # To extract a value from a Pmf, you can use `Prob`
+    six_sided_die_pmf.Prob(1)  # To extract a value from a Pmf, you can use `Prob`
     print(six_sided_die_pmf[1])  # Or you can use the bracket operator.
-    assert six_sided_die_pmf.prob(1) == six_sided_die_pmf[1]
+    assert six_sided_die_pmf.Prob(1) == six_sided_die_pmf[1]
 
 
 def test_exclusive(six_sided_die_pmf):
@@ -168,29 +169,29 @@ def test_cookie():
     pmf = Pmf()
     pmf["Bowl1"] = 0.5
     pmf["Bowl2"] = 0.5
-    pmf.print()
+    pmf.Print()
 
     # And we can update it using `Mult`
 
-    pmf.mult("Bowl1", 0.75)
-    pmf.mult("Bowl2", 0.5)
-    pmf.print()
+    pmf.Mult("Bowl1", 0.75)
+    pmf.Mult("Bowl2", 0.5)
+    pmf.Print()
 
     # Or here's the shorter way to construct the prior.
 
     pmf = Pmf(["Bowl1", "Bowl2"])
-    pmf.print()
+    pmf.Print()
 
     # And we can use `*=` for the update.
 
     pmf["Bowl1"] *= 0.75
     pmf["Bowl2"] *= 0.5
-    pmf.print()
+    pmf.Print()
 
     # Either way, we have to normalize the posterior distribution.
 
-    pmf.normalize()
-    pmf.print()
+    pmf.Normalize()
+    pmf.Print()
 
 
 def test_cookie_update():
@@ -198,7 +199,7 @@ def test_cookie_update():
 
     pmf = Cookie(["Bowl1", "Bowl2"])
     pmf.Update("vanilla")
-    pmf.print()
+    pmf.Print()
 
     # But this implementation is more general; it can handle any sequence of data.
 
@@ -207,29 +208,29 @@ def test_cookie_update():
     for data in dataset:
         pmf.Update(data)
 
-    pmf.print()
+    pmf.Print()
 
 
 def test_monty_hall():
     pmf = FullMonty("ABC")
     pmf.Update("B")
-    pmf.print()
+    pmf.Print()
 
     pmf = Monty("ABC")
-    pmf.update("B")
-    pmf.print()
+    pmf.Update("B")
+    pmf.Print()
 
 
 def test_m_and_m():
     suite = MAndM("AB")
-    suite.update(("bag1", "yellow"))
-    suite.update(("bag2", "green"))
-    suite.print()
+    suite.Update(("bag1", "yellow"))
+    suite.Update(("bag2", "green"))
+    suite.Print()
 
     # **Exercise:**  Suppose you draw another M&M from `bag1` and it's blue.  What can you conclude?  Run the update to confirm your intuition.
 
-    suite.update(("bag1", "blue"))
-    suite.print()
+    suite.Update(("bag1", "blue"))
+    suite.Print()
 
     # **Exercise:**  Now suppose you draw an M&M from `bag2` and it's blue.  What does that mean?  Run the update to see what happens.
 

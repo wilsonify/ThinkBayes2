@@ -23,10 +23,6 @@ def test_dinner_party():
     n_non = 6
     p_allergic = 0.5
     p_non = 0.1
-    pmf = thinkplot.MakeBinomialPmf(n_allergic, p_allergic) + thinkplot.MakeBinomialPmf(
-        n_non, p_non
-    )
-    thinkplot.plot_hist_bar(pmf)
 
     # +
     # Solution
@@ -62,7 +58,7 @@ def test_dinner_party():
     # Here's a class that models the study
 
     class Gluten(Suite):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """Computes the probability of the data under the hypothesis.
 
             data: tuple of (number who identified, number who did not)
@@ -91,7 +87,7 @@ def test_dinner_party():
 
     posterior = prior.copy()
     data = 12, 23
-    posterior.update(data)
+    posterior.Update(data)
 
     # +
     # Solution
@@ -102,4 +98,4 @@ def test_dinner_party():
     # +
     # Solution
 
-    posterior.credible_interval(95)
+    posterior.CredibleInterval(95)

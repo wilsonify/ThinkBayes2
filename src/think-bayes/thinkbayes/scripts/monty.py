@@ -32,7 +32,7 @@ class Monty(Pmf):
         self.normalize()
 
     @staticmethod
-    def likelihood(data, hypo):
+    def Likelihood(data, hypo):
         """Compute the likelihood of the data under the hypothesis.
 
         hypo: string name of the door where the prize is
@@ -53,7 +53,7 @@ def main():
     data = "B"
     pmf.update(data)
 
-    for hypo, prob in sorted(pmf.items()):
+    for hypo, prob in sorted(pmf.Items()):
         print(hypo, prob)
 
 

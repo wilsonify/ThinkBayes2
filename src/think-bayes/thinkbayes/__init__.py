@@ -152,7 +152,6 @@ class _DictWrapper(object):
 
         if isinstance(obj, (_DictWrapper, Cdf, Pdf)):
             self.label = label if label is not None else obj.label
-
         if isinstance(obj, dict):
             self.d.update(obj.items())
         elif isinstance(obj, (_DictWrapper, Cdf, Pdf)):
@@ -1838,6 +1837,7 @@ def MakeNormalPmf(mu, sigma, num_sigmas, n=201):
     high = mu + num_sigmas * sigma
 
     for x in np.linspace(low, high, n):
+        x = float(x)
         p = EvalNormalPdf(x, mu, sigma)
         pmf.Set(x, p)
     pmf.Normalize()

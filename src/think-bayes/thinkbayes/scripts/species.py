@@ -235,11 +235,11 @@ class Subject(object):
     def plot_dist_n(self):
         """Plots distribution of n."""
         pmf = self.suite.dist_n()
-        print("90% CI for N:", pmf.credible_interval(90))
+        print("90% CI for N:", pmf.CredibleInterval(90))
         pmf.label = self.code
 
         thinkplot.clear_figure()
-        thinkplot.pre_plot(num=1)
+        thinkplot.PrePlot(num=1)
 
         thinkplot.plot_pmf_line(pmf)
 
@@ -255,7 +255,7 @@ class Subject(object):
         num: how many species (starting with the highest prevalence)
         """
         thinkplot.clear_figure()
-        thinkplot.pre_plot(num=5)
+        thinkplot.PrePlot(num=5)
 
         for rank in range(1, num + 1):
             self.plot_prevalence(rank)
@@ -283,7 +283,7 @@ class Subject(object):
         mix.label = f"{rank} ({count})"
 
         print(f"90%% CI for prevalence of species {rank}: ")
-        print(mix.credible_interval(90))
+        print(mix.CredibleInterval(90))
 
         if cdf_flag:
             cdf = mix.make_cdf()
@@ -472,7 +472,7 @@ def make_conditionals(curves, ks):
         cdf = pmf.make_cdf()
         cdfs.append(cdf)
         print(f"90%% credible interval for {k} ")
-        print(cdf.credible_interval(90))
+        print(cdf.CredibleInterval(90))
     return cdfs
 
 
@@ -707,7 +707,7 @@ def plot_conditionals(cdfs, root="species-cond"):
     root: string filename root
     """
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=len(cdfs))
+    thinkplot.PrePlot(num=len(cdfs))
 
     thinkplot.plot_cdfs(cdfs)
 
@@ -769,7 +769,7 @@ class Species(thinkbayes.Suite):
         for hypo in self.values():
             hypo.update(data)
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under this hypothesis.
 
         hypo: Dirichlet object
@@ -1096,7 +1096,7 @@ class Species4(Species):
             # call the parent class
             Species.update(self, one)
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under this hypothesis.
 
         Note: this only works correctly if we update one species at a time.
@@ -1255,7 +1255,7 @@ def simple_dirichlet_example():
     This is the case where we know there are exactly three species.
     """
     thinkplot.clear_figure()
-    thinkplot.pre_plot(3)
+    thinkplot.PrePlot(3)
 
     names = ["lions", "tigers", "bears"]
     data = [3, 2, 1]
@@ -1288,7 +1288,7 @@ def hierarchical_example():
     suite.update(data)
 
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=1)
+    thinkplot.PrePlot(num=1)
 
     pmf = suite.dist_n()
     thinkplot.plot_pdf_line(pmf)
@@ -1322,7 +1322,7 @@ def process_subjects(codes):
     code: sequence of string codes
     """
     thinkplot.clear_figure()
-    thinkplot.pre_plot(len(codes))
+    thinkplot.PrePlot(len(codes))
 
     subjects = read_rarefacted_data()
     pmfs = []
@@ -1403,7 +1403,7 @@ def print_prediction(cdf, actual):
     actual: actual value
     """
     median = cdf.percentile(50)
-    low, high = cdf.credible_interval(75)
+    low, high = cdf.CredibleInterval(75)
 
     print("predicted %0.2f (%0.2f %0.2f)" % (median, low, high))
     print("actual", actual)
@@ -1748,7 +1748,7 @@ def score_vector(cdf, ps, actual):
     """
     scores = []
     for p in ps:
-        low, high = cdf.credible_interval(p)
+        low, high = cdf.CredibleInterval(p)
         _score = score(low, high, actual)
         scores.append(_score)
 

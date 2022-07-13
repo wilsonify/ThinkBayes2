@@ -28,7 +28,7 @@ import thinkplot
 class Euro(thinkbayes.Suite):
     """Represents hypotheses about the probability of heads."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: integer value of x, the probability of heads (0-100)
@@ -44,7 +44,7 @@ class Euro(thinkbayes.Suite):
 class Euro2(thinkbayes.Suite):
     """Represents hypotheses about the probability of heads."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: integer value of x, the probability of heads (0-100)
@@ -98,7 +98,7 @@ def summarize(suite):
     print("5th %ile", suite.percentile(5))
     print("95th %ile", suite.percentile(95))
 
-    print("CI", suite.credible_interval(90))
+    print("CI", suite.CredibleInterval(90))
 
 
 def plot_suites(suites, root):
@@ -108,7 +108,7 @@ def plot_suites(suites, root):
     root: string filename to write
     """
     thinkplot.clear_figure()
-    thinkplot.pre_plot(len(suites))
+    thinkplot.PrePlot(len(suites))
     thinkplot.plot_pmfs(suites)
 
     thinkplot.save_plot(root=root, xlabel="x", ylabel="Probability", formats=["pdf", "eps"])

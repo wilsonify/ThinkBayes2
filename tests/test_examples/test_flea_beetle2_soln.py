@@ -9,12 +9,13 @@ import os
 
 import numpy as np
 
-from thinkbayes import Cdf, Suite, Joint
 import thinkplot
+from thinkbayes import Cdf, Suite, Joint
 
 CURTESTDIR = os.path.abspath(os.path.dirname(__file__))
 TESTDIR = os.path.abspath(os.path.join(CURTESTDIR, os.pardir))
 DATADIR = os.path.join(TESTDIR, "data")
+
 
 def test_flea_beetle_problem():
     # ### The flea beetle problem
@@ -62,9 +63,6 @@ def test_flea_beetle_problem():
     def plot_cdfs(df, col):
         for name, group in df.groupby("Species"):
             cdf = Cdf(group[col], label=name)
-            thinkplot.plot_cdf_line(cdf)
-
-        thinkplot.config_plot(xlabel=col, legend=True, loc="lower right")
 
     plot_cdfs(df, "Width")
 
@@ -76,7 +74,7 @@ def test_flea_beetle_problem():
     from thinkbayes import EvalNormalPdf
 
     class Beetle(Suite, Joint):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """
             data: sequence of measurements
             hypo: mu, sigma
@@ -104,7 +102,7 @@ def test_flea_beetle_problem():
         mus = np.linspace(115, 160, 51)
         sigmas = np.linspace(1, 10, 51)
         suite = Beetle(product(mus, sigmas))
-        suite.update(data)
+        suite.Update(data)
         return suite
 
     groups = df.groupby("Species")
@@ -122,7 +120,7 @@ def test_flea_beetle_problem():
         mus = np.linspace(8, 16, 101)
         sigmas = np.linspace(0.1, 2, 101)
         suite = Beetle(product(mus, sigmas))
-        suite.update(data)
+        suite.Update(data)
         return suite
 
     for name, group in groups:
@@ -161,14 +159,14 @@ def test_flea_beetle_problem():
     # Now we can make a `Classifier` that uses the `Species` objects as hypotheses.
 
     class Classifier(Suite):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             return hypo.likelihood(data)
 
     suite = Classifier(species.values())
     for hypo, prob in suite.items():
         print(hypo, prob)
 
-    suite.update(measurements)
+    suite.Update(measurements)
     for hypo, prob in suite.items():
         print(hypo, prob)
 
@@ -261,6 +259,6 @@ def test_flea_beetle_problem():
         print(hypo, like)
         suite[hypo] *= like
 
-    suite.normalize()
+    suite.Normalize()
 
     suite.print()

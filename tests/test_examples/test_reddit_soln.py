@@ -67,7 +67,7 @@ def test_unreliable_evaluators():
     class Pair(Suite):
         """Represents hypotheses about the reliability and quality."""
 
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: q, r
@@ -95,7 +95,7 @@ def test_unreliable_evaluators():
 
     # Solution
 
-    suite.update("up")
+    suite.Update("up")
 
     # Solution
 

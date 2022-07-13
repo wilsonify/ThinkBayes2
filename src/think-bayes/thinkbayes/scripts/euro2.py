@@ -28,7 +28,7 @@ import thinkplot
 class Euro(thinkbayes.Suite):
     """Represents hypotheses about the probability of heads."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: integer value of x, the probability of heads (0-100)
@@ -44,7 +44,7 @@ class Euro(thinkbayes.Suite):
 class Euro2(thinkbayes.Suite):
     """Represents hypotheses about the probability of heads."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: integer value of x, the probability of heads (0-100)

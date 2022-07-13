@@ -64,7 +64,7 @@ def test_oliver():
 
     suite["S"] *= like_S
     suite["S̄"] *= like_s
-    suite.normalize()
+    suite.Normalize()
 
     # In light of this evidence, we are slightly more inclined to believe that Oliver is not guilty (or at least, did not leave a blood trace at the scene).
 

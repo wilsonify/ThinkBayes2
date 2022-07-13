@@ -74,7 +74,7 @@ def main():
     three_exact.label = "exact"
     three_exact.print_size()
 
-    thinkplot.pre_plot(num=2)
+    thinkplot.PrePlot(num=2)
     thinkplot.plot_pmf_line(three)
     thinkplot.plot_pmf_line(three_exact, linestyle="dashed")
     thinkplot.save_plot(
@@ -86,7 +86,7 @@ def main():
     )
 
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=1)
+    thinkplot.PrePlot(num=1)
 
     # compute the distribution of the best attribute the hard way
     best_attr2 = pmf_max(three_exact, three_exact)

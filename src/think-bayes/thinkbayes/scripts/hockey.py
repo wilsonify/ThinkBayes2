@@ -34,7 +34,7 @@ class Hockey(thinkbayes.Suite):
         pmf = thinkbayes.MakeNormalPmf(mu, sigma, 4)
         thinkbayes.Suite.__init__(self, pmf, label=label)
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         Evaluates the Poisson PMF for lambda and k.
@@ -198,7 +198,7 @@ def main():
     suite2 = Hockey("canucks")
 
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=2)
+    thinkplot.PrePlot(num=2)
     thinkplot.plot_pmf_line(suite1)
     thinkplot.plot_pmf_line(suite2)
 
@@ -210,7 +210,7 @@ def main():
     suite2.update_set([1, 3, 1, 0])
 
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=2)
+    thinkplot.PrePlot(num=2)
     thinkplot.plot_pmf_line(suite1)
     thinkplot.plot_pmf_line(suite2)
     thinkplot.save_plot(
@@ -221,7 +221,7 @@ def main():
     goal_dist2 = make_goal_pmf(suite2)
 
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=2)
+    thinkplot.PrePlot(num=2)
     thinkplot.plot_pmf_line(goal_dist1)
     thinkplot.plot_pmf_line(goal_dist2)
     thinkplot.save_plot(
@@ -235,7 +235,7 @@ def main():
     print("MLE canucks", suite2.MaximumLikelihood())
 
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=2)
+    thinkplot.PrePlot(num=2)
     thinkplot.plot_pmf_line(time_dist1)
     thinkplot.plot_pmf_line(time_dist2)
     thinkplot.save_plot(

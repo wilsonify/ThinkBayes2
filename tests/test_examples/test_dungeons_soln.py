@@ -53,7 +53,7 @@ class Dungeons(Suite):
             self.like_max[n] = cdf_max.make_pmf()
             print(self.like_min[n][5], self.like_max[n][16])
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Probability of the data given the hypothesis.
 
         data: lowest attribute, highest attribute, boolean
@@ -190,7 +190,7 @@ def test_analytic(prior):
     And we can confirm that the analytic result matches what we computed by convolution.
     """
 
-    binomial = thinkbayes.make_binomial_pmf(10, 0.7)
+    binomial = thinkbayes.MakeBinomialPmf(10, 0.7)
     thinkplot.plot_pmf_line(prior, color="C1")
     thinkplot.plot_pmf_line(binomial, color="C2", linestyle="dotted")
     thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
@@ -203,7 +203,7 @@ def test_eliminate(prior):
     thinkplot.plot_pmf_line(prior, color="gray")
     del prior[0]
     del prior[1]
-    prior.normalize()
+    prior.Normalize()
     thinkplot.plot_pmf_line(prior, color="C1")
     thinkplot.decorate(xlabel="Number of players", ylabel="PMF")
 
@@ -376,13 +376,13 @@ def test_min_max_same(d6):
 
     del prior[0]
     del prior[1]
-    prior.normalize()
+    prior.Normalize()
 
     suite = Dungeons(prior)
 
-    suite.update((5, 16, False))
+    suite.Update((5, 16, False))
 
-    ci = suite.credible_interval()
+    ci = suite.CredibleInterval()
     print(ci)
     result = sum(suite[n] for n in range(ci[0], ci[1] + 1))
     assert result == pytest.approx(0.9, abs=0.1)

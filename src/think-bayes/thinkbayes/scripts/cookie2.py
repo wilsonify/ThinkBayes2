@@ -36,7 +36,7 @@ class Cookie(Pmf):
         "Bowl2": dict(vanilla=0.5, chocolate=0.5),
     }
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """The likelihood of the data under the hypothesis.
 
         data: string cookie type
@@ -54,7 +54,7 @@ def main():
 
     pmf.update("vanilla")
 
-    for hypo, prob in pmf.items():
+    for hypo, prob in pmf.Items():
         print(hypo, prob)
 
 

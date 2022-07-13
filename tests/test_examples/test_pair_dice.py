@@ -84,7 +84,7 @@ def test_BayesTable():
 
     # Now we can use `update` to compute the posterior probabilities:
 
-    table.update()
+    table.Update()
     logging.info("%r", f"table = {table}")
 
 
@@ -150,7 +150,7 @@ def test_BayesTable():
     logging.info("%r", f"table2 = {table2}")
 
 
-    table2.update()
+    table2.Update()
 
     logging.info("%r", f"table2 = {table2}")
 
@@ -176,7 +176,7 @@ def test_BayesTable():
     # Here's a `Dice` class that implements `Likelihood` by looking up the data, `k`, in the `Pmf` that corresponds to `hypo`:
 
     class Dice(Suite):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """Likelihood of the data given the hypothesis.
 
             data: total of two dice
@@ -193,9 +193,9 @@ def test_BayesTable():
 
     # And the posterior:
 
-    suite.update(3)
+    suite.Update(3)
     suite.print()
 
     # And the posterior probability of getting `11` on the next roll.
 
-    suite.update(11)
+    suite.Update(11)

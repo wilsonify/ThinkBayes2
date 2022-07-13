@@ -56,7 +56,7 @@ def test_cookie_problem():
     # `likelihood` computes the likelihood of the data under the hypothesis,
     # and as a side effect, it removes one of the cookies from `hypo`
 
-    def likelihood(hypo, data):
+    def Likelihood(hypo, data):
         like = hypo[data] / hypo.total()
         if like:
             hypo[data] -= 1
@@ -70,7 +70,7 @@ def test_cookie_problem():
     def update(pmf, data):
         for hypo in pmf:
             pmf[hypo] *= likelihood(hypo, data)
-        return pmf.normalize()
+        return pmf.Normalize()
 
     # Solution
 

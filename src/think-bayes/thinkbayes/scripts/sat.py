@@ -28,7 +28,7 @@ def prob_correct(efficacy, difficulty, a=1):
 class Sat(thinkbayes.Suite, thinkbayes.Joint):
     """Represents the distribution of p_correct for a test-taker."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of data under hypo.
 
         data: boolean, whether the answer is correct
@@ -54,7 +54,7 @@ class Sat3(thinkbayes.Suite):
         # update based on an exam score
         self.update(score)
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of a test score, given efficacy."""
         p_correct = hypo
         score = data
@@ -70,7 +70,7 @@ class Sat3(thinkbayes.Suite):
         self, other: Sat objects.
         """
         thinkplot.clear_figure()
-        thinkplot.pre_plot(num=2)
+        thinkplot.PrePlot(num=2)
 
         cdf1 = thinkbayes.Cdf(self, label=f"posterior {self.score}")
         cdf2 = thinkbayes.Cdf(other, label=f"posterior {other.score}")
@@ -168,7 +168,7 @@ def divide_values(pmf, denom):
     """
     new = thinkbayes.Pmf()
     denom = float(denom)
-    for val, prob in pmf.items():
+    for val, prob in pmf.Items():
         x = val / denom
         new.set(x, prob)
     return new
@@ -239,7 +239,7 @@ class Exam(object):
     def calibrate_difficulty(self):
         """Make a plot showing the model distribution of raw scores."""
         thinkplot.clear_figure()
-        thinkplot.pre_plot(num=2)
+        thinkplot.PrePlot(num=2)
 
         cdf = thinkbayes.Cdf(self.raw, label="data")
         thinkplot.plot_cdf_line(cdf)
@@ -286,7 +286,7 @@ class Exam(object):
             new Pmf
         """
         new = thinkbayes.Pmf()
-        for val, prob in pmf.items():
+        for val, prob in pmf.Items():
             raw = self.reverse(val)
             new.incr(raw, prob)
         return new
@@ -306,7 +306,7 @@ class Sat2(thinkbayes.Suite):
         # update based on an exam score
         self.update(score)
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of a test score, given efficacy."""
         efficacy = hypo
         score = data
@@ -327,7 +327,7 @@ class Sat2(thinkbayes.Suite):
         self, other: Sat objects.
         """
         thinkplot.clear_figure()
-        thinkplot.pre_plot(num=2)
+        thinkplot.PrePlot(num=2)
 
         cdf1 = thinkbayes.Cdf(self, label=f"posterior {self.score}")
         cdf2 = thinkbayes.Cdf(other, label=f"posterior {other.score}")
@@ -402,7 +402,7 @@ def plot_prior_dist(pmf):
     pmf: prior
     """
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=1)
+    thinkplot.PrePlot(num=1)
 
     cdf1 = thinkbayes.Cdf(pmf, label="prior")
 
@@ -500,7 +500,7 @@ def main():
     p2, q1 = update_p_q(p2, q1, True)
     p2, q2 = update_p_q(p2, q2, False)
 
-    thinkplot.pre_plot(num=4, rows=2)
+    thinkplot.PrePlot(num=4, rows=2)
     thinkplot.plot_pmfs([p1, p2])
     thinkplot.config_plot(legend=True)
 
@@ -524,7 +524,7 @@ def main():
     p2, q1 = update_p_q(p2, q1, True)
     p2, q2 = update_p_q(p2, q2, False)
 
-    thinkplot.pre_plot(num=4, rows=2)
+    thinkplot.PrePlot(num=4, rows=2)
     thinkplot.plot_pmfs([p1, p2])
     thinkplot.config_plot(legend=True)
 

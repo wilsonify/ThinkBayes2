@@ -37,7 +37,7 @@ def test_urns():
     # Here's a class that represents a suite of hypotheses about the urns:
 
     class Urns(Suite):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             data: 'B' or 'G'
@@ -61,7 +61,7 @@ def test_urns():
     B5G0 = "B" * 5
 
     for data in B5G0:
-        jacob.update(data)
+        jacob.Update(data)
 
     jacob.print_size()
 
@@ -75,7 +75,7 @@ def test_urns():
     B12G3 = "B" * 12 + "G" * 3
 
     for data in B12G3:
-        emily.update(data)
+        emily.Update(data)
 
     emily.print_size()
 
@@ -121,21 +121,21 @@ def test_urns():
     # Here's the effect on Jacob.
 
     print(prob_b_next(jacob))
-    jacob.update("B")
+    jacob.Update("B")
     print(prob_b_next(jacob))
 
     # And on Emily.
 
     print(prob_b_next(emily))
-    emily.update("B")
+    emily.Update("B")
     print(prob_b_next(emily))
 
     # Suppose we draw a **green** marble from the same urn and show it to Jacob and Emily.  How much do their beliefs about Bnext change?
 
     print(prob_b_next(jacob))
-    jacob.update("G")
+    jacob.Update("G")
     print(prob_b_next(jacob))
 
     print(prob_b_next(emily))
-    emily.update("G")
+    emily.Update("G")
     print(prob_b_next(emily))

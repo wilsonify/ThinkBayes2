@@ -55,7 +55,7 @@ def compare_priors():
     high = 1000
 
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=2)
+    thinkplot.PrePlot(num=2)
 
     constructors = [Train, Train2]
     labels = ["uniform", "power law"]
@@ -74,7 +74,7 @@ def main():
     dataset = [30, 60, 90]
 
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=3)
+    thinkplot.PrePlot(num=3)
 
     for high in [500, 1000, 2000]:
         suite = make_posterior(high, dataset, Train2)

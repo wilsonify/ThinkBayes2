@@ -192,7 +192,7 @@ def test_norm(d6):
     The result is a `Pmf` with probabilities that add to 1.
     """
 
-    d6.normalize()
+    d6.Normalize()
     assert d6.d == {
         1: 0.16666666666666669,
         2: 0.16666666666666669,
@@ -228,7 +228,7 @@ def test_exercise(d6):
     # Solution
 
     die = Pmf(dict(red=2, blue=4))
-    die.normalize()
+    die.Normalize()
     die.print()
 
 

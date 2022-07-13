@@ -14,7 +14,7 @@ import thinkplot
 class Soccer(thinkbayes.Suite):
     """Represents hypotheses about."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: goal rate in goals per game

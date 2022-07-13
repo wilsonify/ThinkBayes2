@@ -11,30 +11,31 @@ from thinkbayes import Pmf, Suite
 def test_pmf_class():
     # ## The Pmf class
     #
-    # I'll start by making a Pmf that represents the outcome of a six-sided die.  Initially there are 6 values with equal probability.
+    # I'll start by making a Pmf that represents the outcome of a six-sided die.
+    # Initially there are 6 values with equal probability.
 
     pmf = Pmf()
     for x in [1, 2, 3, 4, 5, 6]:
         pmf[x] = 1
 
-    pmf.print()
+    pmf.Print()
 
     # To be true probabilities, they have to add up to 1.  So we can normalize the Pmf:
 
-    pmf.normalize()
+    pmf.Normalize()
 
     # The return value from `Normalize` is the sum of the probabilities before normalizing.
 
-    pmf.print()
+    pmf.Print()
 
     # A faster way to make a Pmf is to provide a sequence of values.  The constructor adds the values to the Pmf and then normalizes:
 
     pmf = Pmf([1, 2, 3, 4, 5, 6])
-    pmf.print()
+    pmf.Print()
 
     # To extract a value from a Pmf, you can use `Prob`
 
-    pmf.prob(1)
+    pmf.Prob(1)
 
     # Or you can use the bracket operator.
 
@@ -51,29 +52,29 @@ def test_pmf_class():
     pmf = Pmf()
     pmf["Bowl1"] = 0.5
     pmf["Bowl2"] = 0.5
-    pmf.print()
+    pmf.Print()
 
     # And we can update it using `Mult`
 
-    pmf.mult("Bowl1", 0.75)
-    pmf.mult("Bowl2", 0.5)
-    pmf.print()
+    pmf.Mult("Bowl1", 0.75)
+    pmf.Mult("Bowl2", 0.5)
+    pmf.Print()
 
     # Or here's the shorter way to construct the prior.
 
     pmf = Pmf(["Bowl1", "Bowl2"])
-    pmf.print()
+    pmf.Print()
 
     # And we can use `*=` for the update.
 
     pmf["Bowl1"] *= 0.75
     pmf["Bowl2"] *= 0.5
-    pmf.print()
+    pmf.Print()
 
     # Either way, we have to normalize the posterior distribution.
 
-    pmf.normalize()
-    pmf.print()
+    pmf.Normalize()
+    pmf.Print()
 
     # ## The Bayesian framework
     #
@@ -89,17 +90,17 @@ def test_pmf_class():
             """
             Pmf.__init__(self)
             for hypo in hypos:
-                self.set(hypo, 1)
-            self.normalize()
+                self.Set(hypo, 1)
+            self.Normalize()
 
         def Update(self, data):
             """Updates the PMF with new data.
 
             data: string cookie type
             """
-            for hypo in self.values():
+            for hypo in self.Values():
                 self[hypo] *= self.Likelihood(data, hypo)
-            self.normalize()
+            self.Normalize()
 
         mixes = {
             "Bowl1": dict(vanilla=0.75, chocolate=0.25),
@@ -120,7 +121,7 @@ def test_pmf_class():
 
     pmf = Cookie(["Bowl1", "Bowl2"])
     pmf.Update("vanilla")
-    pmf.print()
+    pmf.Print()
 
     # But this implementation is more general; it can handle any sequence of data.
 
@@ -128,7 +129,7 @@ def test_pmf_class():
     for data in dataset:
         pmf.Update(data)
 
-    pmf.print()
+    pmf.Print()
 
     # ## The Monty Hall problem
     #
@@ -184,17 +185,17 @@ def test_pmf_class():
             """
             Pmf.__init__(self)
             for hypo in hypos:
-                self.set(hypo, 1)
-            self.normalize()
+                self.Set(hypo, 1)
+            self.Normalize()
 
         def Update(self, data):
             """Updates each hypothesis based on the data.
 
             data: string 'A', 'B', or 'C'
             """
-            for hypo in self.values():
+            for hypo in self.Values():
                 self[hypo] *= self.Likelihood(data, hypo)
-            self.normalize()
+            self.Normalize()
 
         def Likelihood(self, data, hypo):
             """Compute the likelihood of the data under the hypothesis.
@@ -213,7 +214,7 @@ def test_pmf_class():
 
     pmf = Monty("ABC")
     pmf.Update("B")
-    pmf.print()
+    pmf.Print()
 
     # ## The Suite class
     #
@@ -227,7 +228,7 @@ def test_pmf_class():
     # So here's the short version of `Monty`
 
     class Monty(Suite):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             if hypo == data:
                 return 0
             elif hypo == "A":
@@ -238,8 +239,8 @@ def test_pmf_class():
     # And it works.
 
     pmf = Monty("ABC")
-    pmf.update("B")
-    pmf.print()
+    pmf.Update("B")
+    pmf.Print()
 
     # ## The M&M problem
     #
@@ -272,7 +273,7 @@ def test_pmf_class():
 
         hypotheses = dict(A=hypoA, B=hypoB)
 
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: string hypothesis (A or B)
@@ -286,14 +287,14 @@ def test_pmf_class():
     # And here's an update:
 
     suite = M_and_M("AB")
-    suite.update(("bag1", "yellow"))
-    suite.update(("bag2", "green"))
-    suite.print()
+    suite.Update(("bag1", "yellow"))
+    suite.Update(("bag2", "green"))
+    suite.Print()
 
     # **Exercise:**  Suppose you draw another M&M from `bag1` and it's blue.  What can you conclude?  Run the update to confirm your intuition.
 
-    suite.update(("bag1", "blue"))
-    suite.print()
+    suite.Update(("bag1", "blue"))
+    suite.Print()
 
     # **Exercise:**  Now suppose you draw an M&M from `bag2` and it's blue.  What does that mean?  Run the update to see what happens.
 

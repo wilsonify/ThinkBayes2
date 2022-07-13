@@ -157,7 +157,7 @@ def test_elephant():
     # Here's a Suite that represents the set of possible zoos.  The likelihood of any zoo is just the total probability of the data.
 
     class Zoo(Suite):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """
             data: sequence of counts
             hypo: Dirichlet object
@@ -174,19 +174,19 @@ def test_elephant():
     )
 
     def print_zoos(suite):
-        for d, p in suite.items():
+        for d, p in suite.Items():
             print(p, d.label)
 
     print_zoos(suite)
 
     # We can update the top level of the hierarchy by calling `Update`
 
-    suite.update(data)
+    suite.Update(data)
 
     # We have to update the bottom level explicitly.
 
     for hypo in suite:
-        hypo.update(data)
+        hypo.Update(data)
 
     # Here's the posterior for the top level.
 

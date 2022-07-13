@@ -92,7 +92,7 @@ def test_weibull():
     # Solution
 
     class LightBulb(Suite, Joint):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             lam, k = hypo
             if lam == 0:
                 return 0
@@ -114,17 +114,17 @@ def test_weibull():
     datum = SampleWeibull(lam, k, 10)
     lam = 2
     k = 1.5
-    suite.update_set(datum)
+    suite.Update_set(datum)
 
     # Solution
 
-    pmf_lam = suite.marginal(0)
+    pmf_lam = suite.Marginal(0)
     thinkplot.plot_pdf_line(pmf_lam)
     pmf_lam.mean()
 
     # Solution
 
-    pmf_k = suite.marginal(1)
+    pmf_k = suite.Marginal(1)
     thinkplot.plot_pdf_line(pmf_k)
     pmf_k.mean()
 
@@ -137,7 +137,7 @@ def test_weibull():
     # Solution
 
     class LightBulb2(Suite, Joint):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             lam, k = hypo
             if lam == 0:
                 return 0
@@ -156,17 +156,17 @@ def test_weibull():
 
     # Solution
 
-    suite.update(1)
+    suite.Update(1)
 
     # Solution
 
-    pmf_lam = suite.marginal(0)
+    pmf_lam = suite.Marginal(0)
     thinkplot.plot_pdf_line(pmf_lam)
     pmf_lam.mean()
 
     # Solution
 
-    pmf_k = suite.marginal(1)
+    pmf_k = suite.Marginal(1)
     thinkplot.plot_pdf_line(pmf_k)
     pmf_k.mean()
 
@@ -217,7 +217,7 @@ def test_weibull():
     # Solution
 
     class LightBulb3(Suite, Joint):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             lam, k = hypo
             if lam == 0:
                 return 0
@@ -241,17 +241,17 @@ def test_weibull():
 
     # Solution
 
-    suite.update_set(data)
+    suite.Update_set(data)
 
     # Solution
 
-    pmf_lam = suite.marginal(0)
+    pmf_lam = suite.Marginal(0)
     thinkplot.plot_pdf_line(pmf_lam)
     pmf_lam.mean()
 
     # Solution
 
-    pmf_k = suite.marginal(1)
+    pmf_k = suite.Marginal(1)
     thinkplot.plot_pdf_line(pmf_k)
     pmf_k.mean()
 
@@ -260,7 +260,7 @@ def test_weibull():
     # Solution
 
     class LightBulb4(Suite, Joint):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             lam, k = hypo
             if lam == 0:
                 return 0
@@ -290,9 +290,9 @@ def test_weibull():
 
     # The number of bulbs that have burned out is distributed Binom(n, p)
     n = 100
-    from thinkbayes import make_binomial_pmf
+    from thinkbayes import MakeBinomialPmf
 
-    pmf_c = make_binomial_pmf(n, p)
+    pmf_c = MakeBinomialPmf(n, p)
     thinkplot.plot_pdf_line(pmf_c)
 
     # **Exercise:** Now suppose that `lam` and `k` are not known precisely, but we have a `LightBulb` object that represents the joint posterior distribution of the parameters after seeing some data.  Compute the posterior predictive distribution for `c`, the number of bulbs burned out after one year.

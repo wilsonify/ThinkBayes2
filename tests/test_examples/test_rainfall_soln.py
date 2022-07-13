@@ -5,9 +5,11 @@ MIT License: https://opensource.org/licenses/MIT
 """
 import numpy as np
 from scipy.special import gamma
-from thinkbayes import make_mixture
-from thinkbayes import Pmf, Cdf, Suite, Joint
+
 import thinkplot
+from thinkbayes import MakeJoint
+from thinkbayes import MakeMixture
+from thinkbayes import Pmf, Cdf, Suite, Joint
 
 
 # ## The rain in Boston problem
@@ -73,7 +75,7 @@ def test_gamma():
     # Now here's the `Suite` we'll use to estimate parameters from data.
 
     class Rainfall(Suite, Joint):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """
 
             data: observed rainfall
@@ -100,9 +102,7 @@ def test_gamma():
 
     # Now we can initialize the suite.
 
-    from thinkbayes import make_joint
-
-    suite = Rainfall(make_joint(pmf_k, pmf_theta))
+    suite = Rainfall(MakeJoint(pmf_k, pmf_theta))
 
     # And update it.
 
@@ -116,44 +116,38 @@ def test_gamma():
     #
     # Anyway, here's the posterior marginal for `k`:
 
-    post_k = suite.marginal(0)
+    post_k = suite.Marginal(0)
     print(post_k.mean())
-    thinkplot.plot_pdf_line(post_k)
-    thinkplot.decorate(xlabel="k", ylabel="PDF")
 
     # And here's the posterior marginal for `theta`
 
-    post_theta = suite.marginal(1)
+    post_theta = suite.Marginal(1)
     print(post_theta.mean())
-    thinkplot.plot_pdf_line(post_theta)
-    thinkplot.decorate(xlabel="theta", ylabel="PDF")
 
     # To make the predictive distribution, we'll need to make PMF approximations to gamma distributions.
 
-    def make_gamma_pmf(xs, k, theta):
+    def MakeGammaPmf(xs, k, theta):
         ps = gamma_pdf(xs, k, theta)
         return Pmf(dict(zip(xs, ps)))
 
     # Here's a test case.
 
     xs = np.linspace(0, 20)
-    pmf = make_gamma_pmf(xs, 3, 2)
-    thinkplot.plot_pdf_line(pmf)
+    pmf = MakeGammaPmf(xs, 3, 2)
 
     # Now we can make a mixture of gamma distributions with parameters from the posterior joint distribution.
 
     xs = np.linspace(0.001, 30, 1001)
 
     metapmf = Pmf()
-    for (k, theta), p in suite.items():
-        pmf = make_gamma_pmf(xs, k, theta)
+    for (k, theta), p in suite.Items():
+        pmf = MakeGammaPmf(xs, k, theta)
         metapmf[pmf] = p
 
     # Here's the posterior predictive distribution.  Since it is so steep near 0, we need a pretty fine grid to get an accurate estimate of the posterior predictive mean (which we'll verify by comparison to the solution from MCMC below).
 
-    pred_pmf = make_mixture(metapmf)
+    pred_pmf = MakeMixture(metapmf)
     print(pred_pmf.mean())
-    thinkplot.plot_pdf_line(pred_pmf)
 
     # ### Now with PyMC
     #
@@ -182,8 +176,6 @@ def test_gamma():
     # Here are the posterior distributions.
 
     pm.traceplot(trace)
-
-    pm.plot_posterior(trace)
 
     # Here are the posterior means.
 

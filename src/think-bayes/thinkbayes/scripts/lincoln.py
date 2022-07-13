@@ -90,7 +90,7 @@ def binom(k, n, p):
 class Lincoln(thinkbayes.Suite, thinkbayes.Joint):
     """Represents hypotheses about the number of errors."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: n, p1, p2

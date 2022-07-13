@@ -31,7 +31,7 @@ class UnreliableCoin(Suite):
         super().__init__(prior)
         self.y = y
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """
         data: outcome of unreliable measurement, either 'H' or 'T'
         hypo: probability of heads, 0-100
@@ -55,7 +55,7 @@ def test_UnreliableCoin():
     # And update with 3 heads and 7 tails.
 
     for outcome in "HHHTTTTTTT":
-        suite.update(outcome)
+        suite.Update(outcome)
 
     thinkplot.plot_pdf_line(suite)
 
@@ -68,7 +68,7 @@ def test_UnreliableCoin():
         prior = range(0, 101)
         suite = UnreliableCoin(prior, y=y)
         for outcome in "HHHTTTTTTT":
-            suite.update(outcome)
+            suite.Update(outcome)
 
         thinkplot.plot_pdf_line(suite, label="y=%g" % y)
 
@@ -138,7 +138,7 @@ def test_UnreliableCoin():
     class Redditor(Suite):
         """Represents hypotheses about the trustworthiness of a redditor."""
 
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: integer value of r, the prob of a correct vote (0-100)
@@ -161,7 +161,7 @@ def test_UnreliableCoin():
     class Item(Suite):
         """Represents hypotheses about the quality of an item."""
 
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: integer value of x, the prob of garnering an upvote
@@ -209,8 +209,8 @@ def test_UnreliableCoin():
     # Note: this is a shortcut that should give us an approximate solution; later
     # we will come back and do this right with a joint distribution of q and r.
 
-    redditor.update(("up", mean_q))
-    item.update(("up", mean_r))
+    redditor.Update(("up", mean_q))
+    item.Update(("up", mean_r))
 
     # +
     # Solution
@@ -219,7 +219,7 @@ def test_UnreliableCoin():
     # the vote provides no information about the redditor:
 
     thinkplot.plot_pdf_line(redditor)
-    print(redditor.mean(), redditor.credible_interval(90))
+    print(redditor.mean(), redditor.CredibleInterval(90))
 
     # +
     # Solution
@@ -228,7 +228,7 @@ def test_UnreliableCoin():
     # some information about the item:
 
     thinkplot.plot_pdf_line(item)
-    print(item.mean(), item.credible_interval(90))
+    print(item.mean(), item.CredibleInterval(90))
 
     # +
     # Solution

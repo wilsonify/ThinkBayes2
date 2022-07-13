@@ -45,7 +45,7 @@ def test_Grizzly():
     class Grizzly(Suite):
         """Represents hypotheses about how many bears there are."""
 
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: total population (N)
@@ -66,18 +66,12 @@ def test_Grizzly():
     suite = Grizzly(hypos)
 
     data = 23, 19, 4
-    suite.update(data)
+    suite.Update(data)
 
     # Solution
-
-    thinkplot.plot_pdf_line(suite)
-    thinkplot.config_plot(xlabel="Number of bears", ylabel="PMF", legend=False)
-
-    # Solution
-
-    print("Posterior mean", suite.mean())
+    print("Posterior mean", suite.Mean())
     print("Maximum a posteriori estimate", suite.MaximumLikelihood())
-    print("90% credible interval", suite.credible_interval(90))
+    print("90% credible interval", suite.CredibleInterval(90))
 
     # Solution
 
@@ -89,7 +83,7 @@ def test_Grizzly():
     class Grizzly2(Suite):
         """Represents hypotheses about how many bears there are."""
 
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: total population (N)
@@ -110,10 +104,10 @@ def test_Grizzly():
     suite = Grizzly2(hypos)
 
     data = 23, 19, 4
-    suite.update(data)
+    suite.Update(data)
 
     # Solution
 
     print("Posterior mean", suite.mean())
     print("Maximum a posteriori estimate", suite.MaximumLikelihood())
-    print("90% credible interval", suite.credible_interval(90))
+    print("90% credible interval", suite.CredibleInterval(90))

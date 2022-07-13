@@ -18,7 +18,7 @@ def test_beta():
 
     # %psource beta.Update
 
-    beta.update((15, 0))
+    beta.Update((15, 0))
     posterior = beta.make_pmf()
 
     thinkplot.plot_pdf_line(prior, color="gray", label="prior")
@@ -29,7 +29,7 @@ def test_beta():
 
     posterior.map()
 
-    posterior.credible_interval()
+    posterior.CredibleInterval()
 
     x = posterior.random()
 

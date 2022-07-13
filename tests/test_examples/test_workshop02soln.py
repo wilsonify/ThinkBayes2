@@ -20,7 +20,7 @@ def test_bandit():
     # Note that `hypo` is in the range 0 to 100.
 
     class Bandit(Suite):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """
             hypo is the prob of win (0-100)
             data is a string, either 'W' or 'L'
@@ -39,19 +39,19 @@ def test_bandit():
 
     # Now we can update with a single loss:
 
-    bandit.update("L")
+    bandit.Update("L")
     thinkplot.plot_pdf_line(bandit)
     thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
 
     # Another loss:
 
-    bandit.update("L")
+    bandit.Update("L")
     thinkplot.plot_pdf_line(bandit)
     thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
 
     # And a win:
 
-    bandit.update("W")
+    bandit.Update("W")
     thinkplot.plot_pdf_line(bandit)
     thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
 
@@ -60,7 +60,7 @@ def test_bandit():
     bandit = Bandit(range(101))
 
     for outcome in "WLLLLLLLLL":
-        bandit.update(outcome)
+        bandit.Update(outcome)
 
     thinkplot.plot_pdf_line(bandit)
     thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
@@ -75,7 +75,7 @@ def test_bandit():
 
     # The posterior credible interval has a 90% chance of containing the true value (provided that the prior distribution truly represents our background knowledge).
 
-    bandit.credible_interval(90)
+    bandit.CredibleInterval(90)
 
     # ## Multiple bandits
 
@@ -129,7 +129,7 @@ def test_bandit():
     # Now suppose we play each machine 10 times.  This function updates our beliefs about one of the machines based on one outcome.
 
     def update(beliefs, i, outcome):
-        beliefs[i].update(outcome)
+        beliefs[i].Update(outcome)
 
     for i in range(4):
         for _ in range(10):
@@ -192,7 +192,7 @@ def test_bandit():
     # We can summarize `beliefs` by printing the posterior mean and credible interval:
 
     for i, b in enumerate(beliefs):
-        print(b.mean(), b.credible_interval(90))
+        print(b.mean(), b.CredibleInterval(90))
 
     # The credible intervals usually contain the true values (10, 20, 30, and 40).
     #

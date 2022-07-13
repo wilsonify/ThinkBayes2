@@ -8,7 +8,6 @@ MIT License: https://opensource.org/licenses/MIT
 import numpy as np
 
 from thinkbayes import Pmf, Cdf, Suite
-import thinkplot
 
 
 def test_euro_problem():
@@ -17,7 +16,7 @@ def test_euro_problem():
     # Here's a class that represents hypotheses about the probability a coin lands heads.
 
     class Euro(Suite):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, _data, hypo):
             """Computes the likelihood of `data` given `hypo`.
 
             data: string 'H' or 'T'
@@ -26,7 +25,7 @@ def test_euro_problem():
             returns: float
             """
             x = hypo
-            if data == "H":
+            if _data == "H":
                 return x / 100
             else:
                 return 1 - x / 100
@@ -37,31 +36,29 @@ def test_euro_problem():
     dataset = "H" * 140 + "T" * 110
 
     for data in dataset:
-        suite.update(data)
+        suite.Update(data)
 
     # And here's what the posterior looks like.
 
-    thinkplot.plot_pdf_line(suite)
-
     # We can summarize the posterior several ways, including the mean:
 
-    suite.mean()
+    suite.Mean()
 
     # Median:
 
-    suite.percentile(50)
+    suite.Percentile(50)
 
     # The peak of the posterior, known as the Maximum Aposteori Probability (MAP)
 
-    suite.map()
+    suite.MAP()
 
     # And a 90% credible interval
 
-    suite.credible_interval(90)
+    suite.CredibleInterval(90)
 
     # We can look up a particular value in the posterior PMF, but the result doesn't mean much, because we could have divided the range (0-100) into as many pieces as we like, and the result would be different.
 
-    suite.prob(50)
+    suite.Prob(50)
 
     # ## Different priors
     #
@@ -83,7 +80,7 @@ def test_euro_problem():
             suite[x] = x
         for x in range(51, 101):
             suite[x] = 100 - x
-        suite.normalize()
+        suite.Normalize()
         return suite
 
     # Here's what they look like:
@@ -91,9 +88,6 @@ def test_euro_problem():
     triangle = TrianglePrior()
     uniform = UniformPrior()
     suites = [triangle, uniform]
-
-    thinkplot.plot_pdfs(suites)
-    thinkplot.config_plot(xlabel="x", ylabel="Probability")
 
     # If we update them both with the same data:
 
@@ -106,15 +100,12 @@ def test_euro_problem():
         """
         dataset = "H" * heads + "T" * tails
         for data in dataset:
-            suite.update(data)
+            suite.Update(data)
 
     for suite in suites:
         RunUpdate(suite)
 
     # The results are almost identical; the remaining difference is unlikely to matter in practice.
-
-    thinkplot.plot_pdfs(suites)
-    thinkplot.config_plot(xlabel="x", ylabel="Probability")
 
     # ## The binomial likelihood function
     #
@@ -125,7 +116,7 @@ def test_euro_problem():
     class Euro2(Suite):
         """Represents hypotheses about the probability of heads."""
 
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: integer value of x, the probability of heads (0-100)
@@ -140,11 +131,9 @@ def test_euro_problem():
 
     suite = Euro2(range(0, 101))
     dataset = 140, 110
-    suite.update(dataset)
+    suite.Update(dataset)
 
     # Here's what the posterior looks like.
-
-    thinkplot.plot_pdf_line(suite)
 
     # ## The Beta distribution
     #
@@ -223,7 +212,7 @@ def test_euro_problem():
 
             if self.alpha < 1 or self.beta < 1:
                 cdf = self.MakeCdf()
-                pmf = cdf.make_pmf()
+                pmf = cdf.MakePmf()
                 return pmf
 
             xs = [i / (steps - 1) for i in range(steps)]
@@ -255,8 +244,6 @@ def test_euro_problem():
 
     # And here's the posterior.
 
-    thinkplot.plot_pdf_line(beta.MakePmf())
-
     # Amazing, no?
 
     # **Exercise:** One way to construct priors is to make a Beta distribution and adjust the parameters until it has the shape you want.  Then when you do an update, the data get added to the parameters of the prior.  Since the parameters of the prior play the same mathematical role as the data, they are sometimes called "precounts".
@@ -270,14 +257,12 @@ def test_euro_problem():
     # Here's the uniform prior
 
     uniform = Beta(1, 1, label="uniform")
-    thinkplot.plot_pdf_line(uniform.MakePmf())
 
     # Solution
 
     # And here's what it looks like after the update
 
     uniform.Update(dataset)
-    thinkplot.plot_pdf_line(beta.MakePmf())
 
     # Solution
 
@@ -285,21 +270,15 @@ def test_euro_problem():
     # background knowledge about coins.
 
     beta = Beta(100, 100, label="beta")
-    thinkplot.plot_pdf_line(beta.MakePmf())
 
     # Solution
 
     # And here's what it looks like after the update
 
     beta.Update(dataset)
-    thinkplot.plot_pdf_line(beta.MakePmf())
 
     # Solution
 
     # Comparing the two, we see that the (more) informative
     # prior influences the location and spread of the
     # posterior.
-
-    thinkplot.plot_pdf_line(beta.MakePmf())
-    thinkplot.plot_pdf_line(uniform.MakePmf())
-    thinkplot.config_plot(xlabel="x", ylabel="Probability")

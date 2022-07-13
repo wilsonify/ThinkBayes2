@@ -58,7 +58,7 @@ def test_ur_problem():
 
     # Here's the distribution of the number of rolls:
 
-    pmf_sim.normalize()
+    pmf_sim.Normalize()
 
     pmf_sim.print()
 
@@ -92,7 +92,7 @@ def test_ur_problem():
     # If the prior is uniform, the posterior equals the likelihood function, normalized.
 
     posterior = pmf_13.copy()
-    posterior.normalize()
+    posterior.Normalize()
     assert posterior.d == {}
 
     # That sure looks similar to what we got by simulation.  Let's compare them.

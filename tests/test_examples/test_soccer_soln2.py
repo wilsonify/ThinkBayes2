@@ -40,7 +40,7 @@ import pandas as pd
 class Soccer(thinkbayes.Suite):
     """Represents hypotheses about goal-scoring rates."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: goal rate in goals per game
@@ -69,7 +69,7 @@ def test_soccer():
     hypos = numpy.linspace(start=0, stop=12, num=201)
     hypos = list(hypos)
     suite = Soccer(hypos)
-    suite.update(0.33)  # fake data chosen by trial and error to yield the observed prior mean
+    suite.Update(0.33)  # fake data chosen by trial and error to yield the observed prior mean
 
     thinkplot.plot_pdf_line(suite)
     suite.mean()
@@ -82,8 +82,8 @@ def test_soccer():
 
     germany = suite.copy(label="Germany")
     argentina = suite.copy(label="Argentina")
-    germany.update(1)
-    argentina.update(0)
+    germany.Update(1)
+    argentina.Update(0)
 
     print("posterior mean Germany", germany.mean())
     print("posterior mean Argentina", argentina.mean())
@@ -126,10 +126,10 @@ def test_soccer():
         """
         metapmf = thinkbayes.Pmf()
         for lam, prob in suite.items():
-            pred = thinkbayes.make_poisson_pmf(lam * duration, 15)
+            pred = thinkbayes.MakePoissonPmf(lam * duration, 15)
             metapmf[pred] = prob
 
-        mix = thinkbayes.make_mixture(metapmf, label=label)
+        mix = thinkbayes.MakeMixture(metapmf, label=label)
         return mix
 
     germany_pred = PredictiveDist(germany, label="germany")

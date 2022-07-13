@@ -74,7 +74,7 @@ def test_interpreting_medical_tests():
 
     likelihood_ratio = table.likelihood["cancer"] / table.likelihood["no_cancer"]
 
-    table.update()
+    table.Update()
     logging.info("%r", f"table = {table}")
 
     logging.info("%r", f"table.posterior[cancer] * 100 = {table.posterior['cancer'] * 100}")
@@ -89,7 +89,7 @@ def test_interpreting_medical_tests():
         pmf = Pmf()
         pmf["cancer"] = base_rate * sensitivity
         pmf["no_cancer"] = (1 - base_rate) * (1 - specificity)
-        pmf.normalize()
+        pmf.Normalize()
         return pmf
 
     pmf = compute_ppv(base_rate, sensitivity, specificity)

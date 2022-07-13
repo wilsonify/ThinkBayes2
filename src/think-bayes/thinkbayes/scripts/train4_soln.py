@@ -16,7 +16,7 @@ class Train(Dice):
     for the Dice problem.
     """
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         sample_size = hypo
         k, m = data
         if sample_size < m:

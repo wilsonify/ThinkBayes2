@@ -8,16 +8,30 @@
 
 
 import numpy as np
-from thinkbayes import Pmf, Beta
-import thinkplot
+
+from thinkbayes import Beta
 
 # ## The skeet problem
 #
-# At the 2016 Summer Olympics in the Women's Skeet event, Kim Rhode faced Wei Meng in the bronze medal match.  They each hit 15 of 25 skeets, sending the match into sudden death.  In the first round, both hit 1 of 2 skeets.  In the next two rounds, they each hit 2 skeets.  Finally, in the fourth round, Rhode hit 2 and Wei hit 1, so Rhode won the bronze medal, making her the first Summer Olympian to win an individual medal at six consecutive summer games.
+# At the 2016 Summer Olympics in the Women's Skeet event,
+# Kim Rhode faced Wei Meng in the bronze medal match.
+# They each hit 15 of 25 skeets, sending the match into sudden death.
+# In the first round, both hit 1 of 2 skeets.
+# In the next two rounds, they each hit 2 skeets.
+# Finally, in the fourth round, Rhode hit 2 and Wei hit 1,
+# so Rhode won the bronze medal,
+# making her the first Summer Olympian to win an individual medal at six consecutive summer games.
 #
-# But after all that shooting, what is the probability that Rhode is actually a better shooter than Wei?  If the same match were held again, what is the probability that Rhode would win?
+# But after all that shooting,
+# what is the probability that Rhode is actually a better shooter than Wei?
+# If the same match were held again, what is the probability that Rhode would win?
 #
-# As always, you will have to make some modeling decisions, but one approach is to estimate, for each shooter, the probability of hitting a skeet.  Then, to estimate the probability that Rhode is a better shooter, you can draw samples from the two posterior distributions and compare them.  To estimate the probability of winning a rematch, you could draw samples from the posterior distributions and simulate a round of 25 shots.
+# As always, you will have to make some modeling decisions,
+# but one approach is to estimate, for each shooter, the probability of hitting a skeet.
+# Then, to estimate the probability that Rhode is a better shooter,
+# you can draw samples from the two posterior distributions and compare them.
+# To estimate the probability of winning a rematch,
+# you could draw samples from the posterior distributions and simulate a round of 25 shots.
 
 
 # Solution
@@ -26,30 +40,26 @@ import thinkplot
 # of hitting a skeet
 
 rhode_beta = Beta(1, 1, label="Rhode")
-rhode_beta.update((22, 11))
+rhode_beta.Update((22, 11))
 
 # Solution
 
 # And another Beta for Wei
 
 wei_beta = Beta(1, 1, label="Wei")
-wei_beta.update((21, 12))
+wei_beta.Update((21, 12))
 
 # Solution
 
 # Here's what the posteriors look like
-
-thinkplot.plot_pdf_line(rhode_beta.make_pmf())
-thinkplot.plot_pdf_line(wei_beta.make_pmf())
-thinkplot.config_plot(xlabel="x", ylabel="Probability")
 
 # Solution
 
 # To estimate the probability of superiority, we can
 # draw samples from the posteriors and compare them
 
-rhode_sample = rhode_beta.sample(10000)
-wei_sample = wei_beta.sample(10000)
+rhode_sample = rhode_beta.Sample(10000)
+wei_sample = wei_beta.Sample(10000)
 
 # Solution
 
@@ -70,7 +80,6 @@ np.mean(rhode_sample < wei_sample)
 # with parameters `p` and `n=25`.
 
 rhode_rematch = np.random.binomial(25, rhode_sample)
-thinkplot.plot_hist_bar(Pmf(rhode_rematch))
 
 # Solution
 

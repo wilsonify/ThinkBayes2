@@ -28,7 +28,7 @@ import thinkbayes
 class Soccer(thinkbayes.Suite):
     """Represents hypotheses about goal-scoring rates."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: goal rate in goals per game
@@ -58,7 +58,7 @@ def test_soccer():
 
     hypos = numpy.linspace(0, 12, 201)
     suite = Soccer(hypos)
-    suite.update(
+    suite.Update(
         134
     )  # fake data chosen by trial and error to yield the observed prior mean
 
@@ -67,7 +67,7 @@ def test_soccer():
 
     # Now that we have a prior, we can update with the time of the first goal, 11 minutes.
 
-    suite.update(11)  # time until first goal is 11 minutes
+    suite.Update(11)  # time until first goal is 11 minutes
     thinkplot.plot_pdf_line(suite)
     suite.mean()
 
@@ -75,7 +75,7 @@ def test_soccer():
     #
     # Now we update with the second goal:
 
-    suite.update(12)  # time between first and second goals is 12 minutes
+    suite.Update(12)  # time between first and second goals is 12 minutes
     thinkplot.plot_pdf_line(suite)
     suite.mean()
 
@@ -98,11 +98,11 @@ def test_soccer():
         metapmf = thinkbayes.Pmf()
         for lam, prob in suite.items():
             lt = lam * rem_time / 90
-            pred = thinkbayes.make_poisson_pmf(lt, 15)
+            pred = thinkbayes.MakePoissonPmf(lt, 15)
             metapmf[pred] = prob
             thinkplot.plot_pdf_line(pred, color="gray", alpha=0.3, linewidth=0.5)
 
-        mix = thinkbayes.make_mixture(metapmf)
+        mix = thinkbayes.MakeMixture(metapmf)
         return mix
 
     mix = PredRemaining(suite, 90 - 23)
@@ -138,7 +138,7 @@ def test_soccer():
         Returns: Pmf object.
         """
         mix = thinkbayes.Pmf(label=label)
-        for pmf, p1 in metapmf.items():
-            for x, p2 in pmf.items():
+        for pmf, p1 in metapmf.Items():
+            for x, p2 in pmf.Items():
                 mix.incr(x, p1 * p2)
         return mix

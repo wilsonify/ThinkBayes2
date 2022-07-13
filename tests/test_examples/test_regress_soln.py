@@ -10,7 +10,6 @@ import numpy as np
 from thinkbayes import Suite, Joint
 
 import thinkplot
-from thinkbayes.thinkplot import POSTERIOR_MARGINAL_LABEL
 
 
 def test_bayes_reg():
@@ -42,7 +41,7 @@ def test_bayes_reg():
     # Your results will depend on the random data you generated, but in general you should find that the posterior marginal distributions peak near the actual parameters.
 
     class Regress(Suite, Joint):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """
 
             data: x, y
@@ -55,7 +54,7 @@ def test_bayes_reg():
     from scipy.stats import norm
 
     class Regress(Suite, Joint):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """
 
             data: x, y
@@ -80,19 +79,19 @@ def test_bayes_reg():
     suite = Regress(hypos)
 
     for data in zip(xs, ys):
-        suite.update(data)
+        suite.Update(data)
 
-    thinkplot.plot_pdf_line(suite.marginal(0))
+    thinkplot.plot_pdf_line(suite.Marginal(0))
     thinkplot.decorate(
         xlabel="Slope", ylabel="PMF", title=POSTERIOR_MARGINAL_LABEL
     )
 
-    thinkplot.plot_pdf_line(suite.marginal(1))
+    thinkplot.plot_pdf_line(suite.Marginal(1))
     thinkplot.decorate(
         xlabel="Intercept", ylabel="PMF", title=POSTERIOR_MARGINAL_LABEL
     )
 
-    thinkplot.plot_pdf_line(suite.marginal(2))
+    thinkplot.plot_pdf_line(suite.Marginal(2))
     thinkplot.decorate(
         xlabel="Sigma", ylabel="PMF", title=POSTERIOR_MARGINAL_LABEL
     )

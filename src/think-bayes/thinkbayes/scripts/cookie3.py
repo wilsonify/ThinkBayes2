@@ -11,7 +11,7 @@ import thinkbayes
 class Cookie(thinkbayes.Suite):
     """Suite to represent bowls of cookies."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """The likelihood of the data under the hypothesis.
 
         data: string cookie type

@@ -20,13 +20,13 @@ def test_tinder():
     # Ignore
 
     metapmf = thinkbayes.Pmf()
-    for lam, prob in pmf.items():
+    for lam, prob in pmf.Items():
         if lam == 0:
             continue
         pmf = thinkbayes.make_exponential_pmf(lam, high=30)
         metapmf[pmf] = prob
 
-    interarrival = thinkbayes.make_mixture(metapmf)
+    interarrival = thinkbayes.MakeMixture(metapmf)
     thinkplot.plot_pdf_line(interarrival)
 
     # Ok, let's start here.  Suppose we know $\lambda$.  We can compute the distribution of interarrival times (times between logins).
@@ -40,7 +40,7 @@ def test_tinder():
     observed = interarrival.copy()
     for val, prob in observed.items():
         observed[val] *= val
-    observed.normalize()
+    observed.Normalize()
 
     print(interarrival.mean(), observed.mean())
     thinkplot.plot_pdf_line(observed)
@@ -54,7 +54,7 @@ def test_tinder():
         pmf = thinkbayes.make_uniform_pmf(0, time, 101)
         metapmf[pmf] = prob
 
-    timesince = thinkbayes.make_mixture(metapmf)
+    timesince = thinkbayes.MakeMixture(metapmf)
     print(timesince.mean())
     thinkplot.plot_pdf_line(timesince)
 

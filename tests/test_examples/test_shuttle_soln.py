@@ -10,12 +10,32 @@ import os
 
 import numpy as np
 import pandas as pd
+from scipy.special import expit
+
 from thinkbayes import Suite, Joint
-import thinkplot
-from thinkbayes.thinkplot import POSTERIOR_MARGINAL_LABEL
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
 DATADIR = os.path.join(TESTDIR, "data")
+
+
+class Logistic(Suite, Joint):
+    def Likelihood(self, data, hypo):
+        """
+        data: T, fail
+        hypo: b0, b1
+        """
+        temp, fail = data
+        b0, b1 = hypo
+
+        log_odds = b0 + b1 * temp
+        p_fail = expit(log_odds)
+        if fail == 1:
+            return p_fail
+        elif fail == 0:
+            return 1 - p_fail
+        else:
+            # NaN
+            return 1
 
 
 def test_shuttle():
@@ -62,7 +82,7 @@ def test_shuttle():
     # Hint: the `expit` function from `scipy.special` computes the inverse of the `logit` function.
 
     class Logistic(Suite, Joint):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """
 
             data: T, fail
@@ -71,28 +91,6 @@ def test_shuttle():
             return 1
 
     # Solution
-
-    from scipy.special import expit
-
-    class Logistic(Suite, Joint):
-        def likelihood(self, data, hypo):
-            """
-
-            data: T, fail
-            hypo: b0, b1
-            """
-            temp, fail = data
-            b0, b1 = hypo
-
-            log_odds = b0 + b1 * temp
-            p_fail = expit(log_odds)
-            if fail == 1:
-                return p_fail
-            elif fail == 0:
-                return 1 - p_fail
-            else:
-                # NaN
-                return 1
 
     b0 = np.linspace(0, 50, 101)
 
@@ -106,17 +104,7 @@ def test_shuttle():
 
     for data in zip(df.Temperature, df.Incident):
         print(data)
-        suite.update(data)
-
-    thinkplot.plot_pdf_line(suite.marginal(0))
-    thinkplot.decorate(
-        xlabel="Intercept", ylabel="PMF", title=POSTERIOR_MARGINAL_LABEL
-    )
-
-    thinkplot.plot_pdf_line(suite.marginal(1))
-    thinkplot.decorate(
-        xlabel="Log odds ratio", ylabel="PMF", title=POSTERIOR_MARGINAL_LABEL
-    )
+        suite.Update(data)
 
     # According to the posterior distribution, what was the probability of damage when the shuttle launched at 31 degF?
 
@@ -125,7 +113,7 @@ def test_shuttle():
     T = 31
     total = 0
 
-    for hypo, p in suite.items():
+    for hypo, p in suite.Items():
         b0, b1 = hypo
         log_odds = b0 + b1 * T
         p_fail = expit(log_odds)
@@ -135,8 +123,8 @@ def test_shuttle():
 
     # Solution
 
-    pred = suite.copy()
-    pred.update((31, True))
+    pred = suite.Copy()
+    pred.Update((31, True))
 
     # ### MCMC
     #
