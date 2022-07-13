@@ -228,7 +228,7 @@ def test_posterior_distribution(gamma_pmf):
 
     # The predictive mean is about 2 goals.
 
-    pred.mean()
+    pred.Mean()
 
     # And the chance of scoring 5 more goals is still small.
 
@@ -323,8 +323,8 @@ def test_wc2():
     germany.Update(1)
     argentina.Update(0)
 
-    print("posterior mean Germany", germany.mean())
-    print("posterior mean Argentina", argentina.mean())
+    print("posterior mean Germany", germany.Mean())
+    print("posterior mean Argentina", argentina.Mean())
 
     # `Update` invokes the likelihood function for each hypothetical value of $\lambda$ and updates the distribution accordingly.
     #
@@ -425,7 +425,7 @@ def test_wc():
     """
     xs = np.linspace(0, 12, 101)
     pmf_gamma = thinkbayes.MakeGammaPmf(xs, 1.3)
-    pmf_gamma.mean()
+    pmf_gamma.Mean()
 
     prior = Soccer(pmf_gamma)
     assert prior.Mean() == pytest.approx(1.3, abs=0.1)
@@ -573,7 +573,7 @@ def test_world_cup():
 
     xs = np.linspace(0, 12, 101)
     pmf_gamma = MakeGammaPmf(xs, 1.3)
-    pmf_gamma.mean()
+    pmf_gamma.Mean()
 
     prior = Soccer(pmf_gamma)
     prior.Mean()
@@ -630,7 +630,7 @@ def test_pymc_wc():
 
     xs = np.linspace(0, 8, 101)
     pmf = MakeGammaPmf(xs, 1.3)
-    assert pmf.mean() == pytest.approx(1.3, abs=0.1)
+    assert pmf.Mean() == pytest.approx(1.3, abs=0.1)
 
     germany = Soccer2(pmf)
     germany.Update(1)

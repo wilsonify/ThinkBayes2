@@ -4,12 +4,14 @@ Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 import logging
+from itertools import product
 
 import numpy as np
-
-from thinkbayes import Suite, Joint
+import pymc3 as pm
+from scipy.stats import norm
 
 import thinkplot
+from thinkbayes import Suite, Joint
 
 
 def test_bayes_reg():
@@ -51,8 +53,6 @@ def test_bayes_reg():
 
     # Solution
 
-    from scipy.stats import norm
-
     class Regress(Suite, Joint):
         def Likelihood(self, data, hypo):
             """
@@ -72,8 +72,6 @@ def test_bayes_reg():
 
     sigmas = np.linspace(0.1, 2, 20)
 
-    from itertools import product
-
     hypos = product(params, params, sigmas)
 
     suite = Regress(hypos)
@@ -81,36 +79,16 @@ def test_bayes_reg():
     for data in zip(xs, ys):
         suite.Update(data)
 
-    thinkplot.plot_pdf_line(suite.Marginal(0))
-    thinkplot.decorate(
-        xlabel="Slope", ylabel="PMF", title=POSTERIOR_MARGINAL_LABEL
-    )
-
-    thinkplot.plot_pdf_line(suite.Marginal(1))
-    thinkplot.decorate(
-        xlabel="Intercept", ylabel="PMF", title=POSTERIOR_MARGINAL_LABEL
-    )
-
-    thinkplot.plot_pdf_line(suite.Marginal(2))
-    thinkplot.decorate(
-        xlabel="Sigma", ylabel="PMF", title=POSTERIOR_MARGINAL_LABEL
-    )
-
     # ### MCMC
     #
     # Implement this model using MCMC.  As a starting place, you can use this example from [Computational Statistics in Python](http://people.duke.edu/~ccc14/sta-663-2016/16C_PyMC3.html#Linear-regression).
     #
     # You also have the option of using the GLM module, [described here](https://docs.pymc.io/notebooks/GLM-linear.html).
 
-    import pymc3 as pm
-
     logging.info("%r", f"pm.GLM = {pm.GLM}")
-
 
     thinkplot.plot(xs, ys)
     thinkplot.decorate(xlabel="x", ylabel="y")
-
-    import pymc3 as pm
 
     with pm.Model() as model:
         """Fill this in"""

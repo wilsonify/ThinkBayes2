@@ -110,7 +110,7 @@ def test_blaster31(prior):
     pmf = Beta(1, 1).MakePmf()
     blaster = AlienBlaster(pmf)
     blaster.Update(2)
-    assert prior.mean() < blaster.Mean()
+    assert prior.Mean() < blaster.Mean()
 
 
 def test_blaster32(prior):
@@ -124,9 +124,7 @@ def test_blaster32(prior):
     blaster = AlienBlaster(pmf)
     blaster.Update(2)
 
-    assert (
-            prior.mean() > blaster.Mean()
-    )  # The posterior mean and MAP are lower than in the prior.
+    assert prior.mean() > blaster.Mean(), "The posterior mean and MAP are lower than in the prior"
 
 
 def test_blaster35(prior):
