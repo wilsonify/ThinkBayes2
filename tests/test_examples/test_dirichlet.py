@@ -16,7 +16,7 @@ from thinkbayes import Suite, Joint
 
 
 def dirichlet_marginal(dirichlet, i):
-    return dirichlet.Marginal_beta(i).make_pmf()
+    return dirichlet.MarginalBeta(i).MakePmf()
 
 
 Dirichlet.Marginal = dirichlet_marginal
@@ -125,7 +125,6 @@ def test_dirichlet(suite):
 
     plot_marginal_cdfs(dirichlet)
 
-    thinkplot.PrePlot(6)
     plot_marginal_cdfs(dirichlet)
     plot_marginal_cdfs(suite)
 
@@ -159,14 +158,11 @@ def test_mcmc(suite):
         trace = dict(ps=pm.sample(100, step))
         # a = pm.traceplot(trace)
 
-    # plot_trace_cdfs(trace)
-    # pmf = Pmf(trace['xs'][0])
-    # thinkplot.Hist(pmf)
-
     with model:
         start = pm.find_MAP()
         step = pm.Metropolis()
         trace = pm.sample(1000, start=start, step=step, tune=100)
+
 
 def test_ltb3():
     """
@@ -198,10 +194,10 @@ def test_ltb3():
 
     plot_marginal_cdfs(suite)
 
-    probability_bear = suite.Marginal(2).mean()
+    probability_bear = suite.Marginal(2).Mean()
     logging.info(f"probability_bear = {probability_bear}")
 
-    probability_bear_pseudo_update = suite.copy().Update("B")
+    probability_bear_pseudo_update = suite.Copy().Update("B")
     logging.info(f"probability_bear_pseudo_update = {probability_bear_pseudo_update}")
 
     dirichlet = Dirichlet(3)
@@ -209,7 +205,6 @@ def test_ltb3():
     dirichlet.Update((3, 2, 1))
     plot_marginal_pmfs(dirichlet)
     plot_marginal_cdfs(dirichlet)
-    thinkplot.PrePlot(6)  # same results as the grid algorithm.
     plot_marginal_cdfs(dirichlet)
     plot_marginal_cdfs(suite)
 
@@ -231,7 +226,6 @@ def test_ltb3():
 
     # And compare them to what we got with Dirichlet:
 
-    thinkplot.PrePlot(6)
     plot_marginal_cdfs(dirichlet)
     plot_trace_cdfs(trace)
 
@@ -256,18 +250,12 @@ def test_ltb3():
 
     pm.traceplot(trace)
 
-    thinkplot.PrePlot(6)
     plot_marginal_cdfs(dirichlet)
     plot_trace_cdfs(trace)
 
     summary = pm.summary(trace)  # `summary` to get the posterior means, and other summary stats.
     summary.index = animals
     logging.info("%r", f"summary = {summary}")
-
-    ax = pm.plot_posterior(trace, varnames=["ps"])  # `plot_posterior` to get a better view of the results.
-
-    for i, a in enumerate(animals):
-        ax[i].set_title(a)
 
 
 def test_ltb2():
@@ -290,8 +278,8 @@ def test_ltb2():
         suite.Update(data)
 
     plot_marginal_cdfs(suite)
-    suite.Marginal(2).mean()
-    suite.copy().Update("B")
+    suite.Marginal(2).Mean()
+    suite.Copy().Update("B")
 
     Dirichlet.Marginal = dirichlet_marginal
 
@@ -304,7 +292,6 @@ def test_ltb2():
 
     plot_marginal_cdfs(dirichlet)
 
-    thinkplot.PrePlot(6)
     plot_marginal_cdfs(dirichlet)
     plot_marginal_cdfs(suite)
 
@@ -329,7 +316,6 @@ def test_ltb2():
 
     plot_trace_cdfs(trace)
 
-    thinkplot.PrePlot(6)
     plot_marginal_cdfs(dirichlet)
     plot_trace_cdfs(trace)
 
@@ -344,7 +330,6 @@ def test_ltb2():
 
     pm.traceplot(trace)
 
-    thinkplot.PrePlot(6)
     plot_marginal_cdfs(dirichlet)
     plot_trace_cdfs(trace)
 
