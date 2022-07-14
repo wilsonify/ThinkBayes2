@@ -79,7 +79,7 @@ def test_blaster(prior):
     :return:
     """
 
-    assert prior.mean() == 0.4
+    assert prior.Mean() == 0.4
 
 
 def test_blaster2():
@@ -124,7 +124,7 @@ def test_blaster32(prior):
     blaster = AlienBlaster(pmf)
     blaster.Update(2)
 
-    assert prior.mean() > blaster.Mean(), "The posterior mean and MAP are lower than in the prior"
+    assert prior.Mean() > blaster.Mean(), "The posterior mean and MAP are lower than in the prior"
 
 
 def test_blaster35(prior):
@@ -142,9 +142,7 @@ def test_blaster35(prior):
     blaster = AlienBlaster(pmf)
     blaster.Update(2)
 
-    assert (
-            prior.map() > blaster.MAP()
-    )  # The posterior mean and MAP are lower than in the prior.
+    assert  prior.MAP() > blaster.MAP(), "The posterior mean and MAP are lower than in the prior."
 
 
 def test_blaster4():
@@ -269,7 +267,7 @@ def test_blaster7():
     metapmf.Print()
 
     ks = [
-        metapmf.Random().random() for _ in range(1000)
+        metapmf.Random().Random() for _ in range(1000)
     ]  # Here's how we can draw samples from the meta-Pmf:
 
     pmf = Pmf(ks)
@@ -313,4 +311,4 @@ def test_blaster8():
     pmf2 = MakeBinomialPmf(n_const, x2)
     metapmf = Pmf({pmf1: 0.3, pmf2: 0.7})
     mix = MakeMixture(metapmf)
-    assert mix.mean() == pytest.approx(3.7, abs=0.2)
+    assert mix.Mean() == pytest.approx(3.7, abs=0.2)

@@ -8,7 +8,7 @@ from itertools import product
 
 import arviz as az
 import numpy as np
-import pymc3 as pm
+import pymc as pm
 import pytest
 
 from thinkbayes import Dirichlet, Cdf, Pmf
@@ -336,11 +336,6 @@ def test_ltb2():
     summary = pm.summary(trace)
     summary.index = animals
     logging.info("%r", f"summary = {summary}")
-
-    ax = pm.plot_posterior(trace, varnames=["ps"])
-
-    for i, a in enumerate(animals):
-        ax[i].set_title(a)
 
 
 def test_ltb4():

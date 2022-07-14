@@ -2,5 +2,5 @@ empiricaldist
 pandas
 scipy
 arviz
-pymc3
+pymc
 pytest

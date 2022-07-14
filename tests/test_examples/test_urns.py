@@ -8,11 +8,10 @@ import logging
 
 from thinkbayes import Suite
 
-import thinkplot as tplt
-
 
 def test_urns():
-    # Here's a problem from Joyce, "[How probabilities reflect evidence](http://www-personal.umich.edu/~jjoyce/papers/hpre.pdf)":
+    # Here's a problem from Joyce,
+    # "[How probabilities reflect evidence](http://www-personal.umich.edu/~jjoyce/papers/hpre.pdf)":
     #
     # >Four Urns: Jacob and Emily both start out knowing that the urn U was
     # randomly chosen from a set of four urns {urn0, urn1, urn2, urn3} where urn_i
@@ -52,22 +51,16 @@ def test_urns():
     # Here's the uniform prior:
 
     prior = Urns([0, 1, 2, 3])
-    tplt.plot_hist_bar(prior)
-    tplt.decorate(xlabel="Urn_index", ylabel="PMF")
 
     # Here's Jacob's update after 5 blue marbles.
 
-    jacob = prior.copy()
+    jacob = prior.Copy()
     B5G0 = "B" * 5
 
     for data in B5G0:
         jacob.Update(data)
 
-    jacob.print_size()
-
-    tplt.plot_hist_bar(prior, color="gray")
-    tplt.plot_hist_bar(jacob)
-    tplt.decorate(xlabel="Urn_index", ylabel="PMF")
+    jacob.Print()
 
     # Here's Emily's update after an additional 12 blue and 3 green.
 
@@ -77,15 +70,7 @@ def test_urns():
     for data in B12G3:
         emily.Update(data)
 
-    emily.print_size()
-
-    tplt.preplot(cols=2)
-    tplt.plot_hist_bar(jacob, label="Jacob")
-    tplt.decorate(xlabel="Urn_index", ylabel="PMF")
-
-    tplt.subplot(2)
-    tplt.plot_hist_bar(emily, label="Emily")
-    tplt.decorate(xlabel="Urn_index", ylabel="PMF")
+    emily.Print()
 
     # What should Jacob believe about Bnext?
 
@@ -96,7 +81,6 @@ def test_urns():
         total += prob_i * prob_blue
 
     logging.info("%r", f"total = {total}")
-
 
     # Let's make it a function:
 

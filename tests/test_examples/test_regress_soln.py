@@ -7,7 +7,7 @@ import logging
 from itertools import product
 
 import numpy as np
-import pymc3 as pm
+import pymc as pm
 from scipy.stats import norm
 
 import thinkplot

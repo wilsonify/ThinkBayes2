@@ -15,7 +15,7 @@ def test_blog():
     # My solution follows.  First I'll create a suite to represent our prior knowledge.  If we know nothing about a voter, we would use the relative populations of the states to guess where they are from.
 
     prior = thinkbayes.Suite({"State 1": 0.4, "State 2": 0.25, "State 3": 0.35})
-    prior.print()
+    prior.Print()
 
     # Now if we know a voter supports Party 1, we can use that as data to update our belief.  The following dictionary contains the likelihood of the data (supporting Party 1) under each hypothesis (which state the voter is from).
 
@@ -27,10 +27,10 @@ def test_blog():
     #
     # The result is a map from hypotheses to posterior likelihoods, but they are not probabilities yet because they are not normalized.
 
-    posterior = prior.copy()
+    posterior = prior.Copy()
     for hypo in posterior:
         posterior[hypo] *= likelihood[hypo]
-    posterior.print_size()
+    posterior.Print()
 
     # Normalizing the posterior distribution returns the total likelihood of the data, which is the normalizing constant.
 
@@ -38,6 +38,6 @@ def test_blog():
 
     # Now the posterior is a proper distribution:
 
-    posterior.print_size()
+    posterior.Print()
 
     # And the probability that the voter is from State 2 is about 32%.

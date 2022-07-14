@@ -9,7 +9,7 @@ import logging
 
 import arviz as az
 import numpy as np
-import pymc3 as pm
+import pymc as pm
 import pytest
 from scipy.stats import poisson
 

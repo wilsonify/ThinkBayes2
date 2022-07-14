@@ -14,7 +14,7 @@ import logging
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pymc3 as pm
+import pymc as pm
 
 
 def test_hockey():
