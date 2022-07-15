@@ -255,7 +255,7 @@ if __name__=="__main__":
     # Unfortunately, we can't we just give `[p1, p2]` to our `Categorical` variable. PyMC3 uses Theano under the hood to construct the models so we need to use `theano.tensor.stack()` to combine $p_1$ and $p_2$ into a vector that it can understand. We pass this vector into the `Categorical` variable as well as the `testval` parameter to give our variable an idea of where to start from.
 
     # +
-    import pymc3 as pm
+    import pymc as pm
     import theano.tensor as T
 
     with pm.Model() as model:
@@ -475,7 +475,7 @@ if __name__=="__main__":
     # Another small example to illustrate the point. Suppose two variables, $x$ and $y$, are related by $x+y=10$. We model $x$ as a Normal random variable with mean 4 and explore 500 samples.
 
     # +
-    import pymc3 as pm
+    import pymc as pm
 
     with pm.Model() as model:
         x = pm.Normal("x", mu=4, tau=10)
@@ -587,7 +587,7 @@ if __name__=="__main__":
     # +
     figsize(12.5, 4)
 
-    import pymc3 as pm
+    import pymc as pm
     x_t = np.random.normal(0, 1, 200)
     x_t[0] = 0
     y_t = np.zeros(200)

@@ -136,7 +136,7 @@ def test_shuttle():
 
     simplefilter("ignore", FutureWarning)
 
-    import pymc3 as pm
+    import pymc as pm
 
     # Solution
 

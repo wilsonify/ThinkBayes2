@@ -57,7 +57,7 @@ def test_cookie_problem():
     # and as a side effect, it removes one of the cookies from `hypo`
 
     def Likelihood(hypo, data):
-        like = hypo[data] / hypo.total()
+        like = hypo[data] / hypo.Total()
         if like:
             hypo[data] -= 1
         return like

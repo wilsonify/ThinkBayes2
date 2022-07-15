@@ -30,7 +30,7 @@
 # In PyMC3, we typically handle all the variables we want in our model within the context of the `Model` object.
 
 # + jupyter={"outputs_hidden": false}
-import pymc3 as pm
+import pymc as pm
 if __name__=="__main__":
     with pm.Model() as model:
         parameter = pm.Exponential("poisson_param", 1.0)
@@ -363,7 +363,7 @@ if __name__=="__main__":
     # To setup a Bayesian model, we need to assign prior distributions to our unknown quantities. *A priori*, what do we think $p_A$ might be? For this example, we have no strong conviction about $p_A$, so for now, let's assume $p_A$ is uniform over [0,1]:
 
     # + jupyter={"outputs_hidden": false}
-    import pymc3 as pm
+    import pymc as pm
 
     # The parameters are the bounds of the Uniform.
     with pm.Model() as model:
@@ -425,7 +425,7 @@ if __name__=="__main__":
     # A similar analysis can be done for site B's response data to determine the analogous $p_B$. But what we are really interested in is the *difference* between $p_A$ and $p_B$. Let's infer $p_A$, $p_B$, *and* $\text{delta} = p_A - p_B$, all at once. We can do this using PyMC3's deterministic variables. (We'll assume for this exercise that $p_B = 0.04$, so $\text{delta} = 0.01$, $N_B = 750$ (significantly less than $N_A$) and we will simulate site B's data like we did for site A's data )
 
     # + jupyter={"outputs_hidden": false}
-    import pymc3 as pm
+    import pymc as pm
     figsize(12, 4)
 
     #these two quantities are unknown to us.
@@ -581,7 +581,7 @@ if __name__=="__main__":
     # Suppose 100 students are being surveyed for cheating, and we wish to find $p$, the proportion of cheaters. There are a few ways we can model this in PyMC3. I'll demonstrate the most explicit way, and later show a simplified version. Both versions arrive at the same inference. In our data-generation model, we sample $p$, the true proportion of cheaters, from a prior. Since we are quite ignorant about $p$, we will assign it a $\text{Uniform}(0,1)$ prior.
 
     # + jupyter={"outputs_hidden": false}
-    import pymc3 as pm
+    import pymc as pm
 
     N = 100
     with pm.Model() as model:
@@ -859,7 +859,7 @@ if __name__=="__main__":
     # Below we continue our modeling of the Challenger space craft:
 
     # + jupyter={"outputs_hidden": false}
-    import pymc3 as pm
+    import pymc as pm
 
     temperature = challenger_data[:, 0]
     D = challenger_data[:, 1]  # defect or not?

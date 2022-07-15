@@ -157,7 +157,7 @@ def test_gamma():
 
     simplefilter("ignore", FutureWarning)
 
-    import pymc3 as pm
+    import pymc as pm
 
     # Here's the model in three lines.  The only trick part is translating to yet another parameterization.
 

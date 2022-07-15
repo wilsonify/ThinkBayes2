@@ -178,7 +178,7 @@ def test_flea_beetle_problem():
 
     simplefilter("ignore", FutureWarning)
 
-    import pymc3 as pm
+    import pymc as pm
 
     N = 10000
 

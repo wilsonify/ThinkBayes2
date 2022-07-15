@@ -358,7 +358,7 @@ if __name__=="__main__":
     #  For a given true upvote ratio $p$ and $N$ votes, the number of upvotes will look like a Binomial random variable with parameters $p$ and $N$. (This is because of the equivalence between upvote ratio and probability of upvoting versus downvoting, out of $N$ possible votes/trials). We create a function that performs Bayesian inference on $p$, for a particular submission's upvote/downvote pair.
 
     # +
-    import pymc3 as pm
+    import pymc as pm
 
     def posterior_upvote_ratio( upvotes, downvotes, samples = 20000):
         """

@@ -437,7 +437,7 @@ if __name__=="__main__":
     # PyMC3 code is easy to read. The only novel thing should be the syntax. Simply remember that we are representing the model's components ($\tau, \lambda_1, \lambda_2$ ) as variables.
 
     # + jupyter={"outputs_hidden": false}
-    import pymc3 as pm
+    import pymc as pm
     import theano.tensor as tt
 
     with pm.Model() as model:

@@ -203,7 +203,7 @@ if __name__=="__main__":
     plt.legend([p3], [sp3.get_label()]);
 
     # +
-    import pymc3 as pm
+    import pymc as pm
 
     data_mu = [3e3, 12e3]
 
@@ -442,7 +442,7 @@ if __name__=="__main__":
     # where $\alpha, \beta$ are our unknown parameters and $\epsilon \sim \text{Normal}(0, \sigma)$. The most common priors on $\beta$ and $\alpha$ are Normal priors. We will also assign a prior on $\sigma$, so that $\sigma$ is uniform over 0 to 100.
 
     # +
-    import pymc3 as pm
+    import pymc as pm
 
     with pm.Model() as model:
         std = pm.Uniform("std", 0, 100)
@@ -616,7 +616,7 @@ if __name__=="__main__":
     #
 
     # +
-    import pymc3 as pm
+    import pymc as pm
     import theano.tensor as T
 
     def euclidean_distance(x, y):

@@ -664,7 +664,7 @@ if __name__=="__main__":
     # And here let's form our basic model:
 
     # +
-    import pymc3 as pm
+    import pymc as pm
     import theano.tensor as tt
     from theano.tensor.nlinalg import matrix_inverse, diag, matrix_dot
 

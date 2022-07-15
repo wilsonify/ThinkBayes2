@@ -206,7 +206,7 @@ def test_alien_blaster_problem():
 
 
     mix = MakeMixture(metapmf)
-    mix.mean()
+    mix.Mean()
 
     assert mix[3] == pytest.approx(0.23, abs=0.1)
 

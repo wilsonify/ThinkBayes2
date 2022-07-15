@@ -3,15 +3,41 @@ Think Bayes
 Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
-import logging
 from itertools import product
 
 import numpy as np
-import pymc as pm
 from scipy.stats import norm
 
 import thinkplot
 from thinkbayes import Suite, Joint
+
+
+class Regress1(Suite, Joint):
+    def Likelihood(self, data, hypo):
+        """
+
+        data: x, y
+        hypo: slope, inter, sigma
+        """
+        return 1
+
+
+# Solution
+
+class Regress2(Suite, Joint):
+    def Likelihood(self, data, hypo):
+        """
+
+        data: x, y
+        hypo: slope, inter, sigma
+        """
+        x, y = data
+        slope, inter, sigma = hypo
+
+        yfit = inter + slope * x
+        error = yfit - y
+        like = norm(0, sigma).pdf(error)
+        return like
 
 
 def test_bayes_reg():
@@ -42,88 +68,13 @@ def test_bayes_reg():
     #
     # Your results will depend on the random data you generated, but in general you should find that the posterior marginal distributions peak near the actual parameters.
 
-    class Regress(Suite, Joint):
-        def Likelihood(self, data, hypo):
-            """
-
-            data: x, y
-            hypo: slope, inter, sigma
-            """
-            return 1
-
-    # Solution
-
-    class Regress(Suite, Joint):
-        def Likelihood(self, data, hypo):
-            """
-
-            data: x, y
-            hypo: slope, inter, sigma
-            """
-            x, y = data
-            slope, inter, sigma = hypo
-
-            yfit = inter + slope * x
-            error = yfit - y
-            like = norm(0, sigma).pdf(error)
-            return like
-
     params = np.linspace(-4, 4, 21)
 
     sigmas = np.linspace(0.1, 2, 20)
 
     hypos = product(params, params, sigmas)
 
-    suite = Regress(hypos)
+    suite = Regress2(hypos)
 
     for data in zip(xs, ys):
         suite.Update(data)
-
-    # ### MCMC
-    #
-    # Implement this model using MCMC.  As a starting place, you can use this example from [Computational Statistics in Python](http://people.duke.edu/~ccc14/sta-663-2016/16C_PyMC3.html#Linear-regression).
-    #
-    # You also have the option of using the GLM module, [described here](https://docs.pymc.io/notebooks/GLM-linear.html).
-
-    logging.info("%r", f"pm.GLM = {pm.GLM}")
-
-    thinkplot.plot(xs, ys)
-    thinkplot.decorate(xlabel="x", ylabel="y")
-
-    with pm.Model() as model:
-        """Fill this in"""
-
-    # Solution
-
-    with pm.Model() as model:
-        slope = pm.Uniform("slope", -4, 4)
-        inter = pm.Uniform("inter", -4, 4)
-        sigma = pm.Uniform("sigma", 0, 2)
-
-        y_est = slope * xs + inter
-        y = pm.Normal("y", mu=y_est, sd=sigma, observed=ys)
-        trace = pm.sample_prior_predictive(100)
-
-    # Solution
-
-    for y_prior in trace["y"]:
-        thinkplot.plot(xs, y_prior, color="gray", linewidth=0.5)
-
-    thinkplot.decorate(xlabel="x", ylabel="y")
-
-    # Solution
-
-    with pm.Model() as model:
-        slope = pm.Uniform("slope", -4, 4)
-        inter = pm.Uniform("inter", -4, 4)
-        sigma = pm.Uniform("sigma", 0, 2)
-
-        y_est = slope * xs + inter
-        y = pm.Normal("y", mu=y_est, sd=sigma, observed=ys)
-        trace = pm.sample(1000, tune=2000)
-
-    # Solution
-
-    pm.traceplot(trace)
-
-    # The posterior distributions for these parameters should be similar to what we got with the grid algorithm.
