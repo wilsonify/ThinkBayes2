@@ -84,7 +84,7 @@ def test_elephant():
             self.params = np.ones(n, dtype=np.float) * conc
             self.label = label if label is not None else "_nolegend_"
 
-        def update(self, data):
+        def Update(self, data):
             """Updates a Dirichlet distribution.
 
             data: sequence of observations, in order corresponding to params
@@ -92,7 +92,7 @@ def test_elephant():
             m = len(data)
             self.params[:m] += data
 
-        def random(self):
+        def Random(self):
             """Generates a random variate from this distribution.
 
             Returns: normalized vector of fractions
@@ -100,7 +100,7 @@ def test_elephant():
             p = np.random.gamma(self.params)
             return p / p.sum()
 
-        def mean(self):
+        def Mean(self):
             """Array of means."""
             return self.params / self.params.sum()
 
@@ -110,7 +110,7 @@ def test_elephant():
 
     # Here's a sample from it.
 
-    p = d4.random()
+    p = d4.Random()
 
     # Now we can compute the probability of the data, given these prevalences, using the multinomial distribution.
 
@@ -145,7 +145,7 @@ def test_elephant():
         """
         data = zero_pad(data, dirichlet.n)
         m = np.sum(data)
-        likes = [multinomial(m, dirichlet.random()).pmf(data) for i in range(iters)]
+        likes = [multinomial(m, dirichlet.Random()).pmf(data) for i in range(iters)]
         return np.mean(likes)
 
     # And here's an example:
@@ -195,13 +195,13 @@ def test_elephant():
     # Here's how we can get the posterior distribution of `n`, the number of species.
 
     pmf_n = Pmf()
-    for d, p in suite.items():
+    for d, p in suite.Items():
         pmf_n[d.n] += p
 
     # And here's what it looks like.
 
-    thinkplot.plot_hist_bar(pmf_n)
-    print(pmf_n.mean())
+
+    print(pmf_n.Mean())
     thinkplot.decorate(xlabel="n", ylabel="PMF", title="Posterior distribution of n")
 
     # Now, to answer the question, we have to compute the posterior distribution of the prevalence of elephants.  Here's a function that computes it.

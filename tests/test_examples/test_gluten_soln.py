@@ -5,8 +5,7 @@ Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from thinkbayes import Suite
-import thinkplot
+from thinkbayes import Suite, MakeBinomialPmf
 
 
 def test_dinner_party():
@@ -14,7 +13,10 @@ def test_dinner_party():
 
     # ## The dinner party
     #
-    # Suppose you are having a dinner party with 10 guests and 4 of them are allergic to cats.  Because you have cats, you expect 50% of the allergic guests to sneeze during dinner.  At the same time, you expect 10% of the non-allergic guests to sneeze.  What is the distribution of the total number of guests who sneeze?
+    # Suppose you are having a dinner party with 10 guests and 4 of them are allergic to cats.
+    # Because you have cats, you expect 50% of the allergic guests to sneeze during dinner.
+    # At the same time, you expect 10% of the non-allergic guests to sneeze.
+    # What is the distribution of the total number of guests who sneeze?
 
     # +
     # Solution
@@ -27,7 +29,7 @@ def test_dinner_party():
     # +
     # Solution
 
-    pmf.mean()
+    # pmf.mean()
 
     # -
 
@@ -37,10 +39,16 @@ def test_dinner_party():
     #
     # Here is a description of the study:
     #
-    # >"We studied 35 non-CD subjects (31 females) that were on a gluten-free diet (GFD), in a double-blind challenge study. Participants were randomised to receive either gluten-containing ﬂour or gluten-free ﬂour for 10 days, followed by a 2-week washout period and were then crossed over. The main outcome measure was their ability to identify which ﬂour contained gluten.
+    # >We studied 35 non-CD subjects (31 females) that were on a gluten-free diet (GFD),
+    # in a double-blind challenge study.
+    # Participants were randomised to receive either gluten-containing flour or gluten-free flour for 10 days,
+    # followed by a 2-week washout period and were then crossed over.
+    # The main outcome measure was their ability to identify which flour contained gluten.
     #
-    # >"The gluten-containing ﬂour was correctly identiﬁed by 12 participants (34%)..."
-    # Since 12 out of 35 participants were able to identify the gluten flour, the authors conclude "Double-blind gluten challenge induces symptom recurrence in just one-third of patients fulﬁlling the clinical diagnostic criteria for non-coeliac gluten sensitivity."
+    # >"The gluten-containing flour was correctly identified by 12 participants (34%)..."
+    # Since 12 out of 35 participants were able to identify the gluten flour,
+    # the authors conclude "Double-blind gluten challenge induces symptom recurrence in just one-third
+    # of patients fulfilling the clinical diagnostic criteria for non-celiac gluten sensitivity."
     #
     # This conclusion seems odd to me, because if none of the patients were sensitive to gluten, we would expect some of them to identify the gluten flour by chance.  So the results are consistent with the hypothesis that none of the subjects are actually gluten sensitive.
     #
@@ -71,8 +79,8 @@ def test_dinner_party():
             n = yes + no
             ngs = n - gs
 
-            pmf1 = thinkplot.MakeBinomialPmf(gs, 0.95)
-            pmf2 = thinkplot.MakeBinomialPmf(ngs, 0.4)
+            pmf1 = MakeBinomialPmf(gs, 0.95)
+            pmf2 = MakeBinomialPmf(ngs, 0.4)
             pmf = pmf1 + pmf2
             return pmf[yes]
 
@@ -80,20 +88,16 @@ def test_dinner_party():
     # Solution
 
     prior = Gluten(range(0, 35 + 1))
-    thinkplot.plot_pdf_line(prior)
 
     # +
     # Solution
 
-    posterior = prior.copy()
+    posterior = prior.Copy()
     data = 12, 23
     posterior.Update(data)
 
     # +
     # Solution
-
-    thinkplot.plot_pdf_line(posterior)
-    thinkplot.config_plot(xlabel="# who are gluten sensitive", ylabel="PMF", legend=False)
 
     # +
     # Solution

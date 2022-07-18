@@ -4,9 +4,9 @@ This notebook presents code and exercises from Think Bayes, second edition.
 Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import pytest
 
 from thinkbayes import Pmf
-import thinkplot
 
 
 def test_ur_problem():
@@ -44,7 +44,7 @@ def test_ur_problem():
         for i in range(iters):
             total = 0
             for n in range(1, 1000):
-                total += roll.random()
+                total += roll.Random()
                 if total > 14:
                     break
                 yield (n, total)
@@ -60,14 +60,13 @@ def test_ur_problem():
 
     pmf_sim.Normalize()
 
-    pmf_sim.print()
-
-    thinkplot.plot_hist_bar(pmf_sim, label="Simulation")
-    thinkplot.decorate(xlabel="Number of rolls to get to space 13", ylabel="PMF")
+    pmf_sim.Print()
 
     # ### Bayes
     #
-    # Now let's think about a Bayesian solution.  It is straight forward to compute the likelihood function, which is the probability of being on space 13 after a hypothetical `n` rolls.
+    # Now let's think about a Bayesian solution.
+    # It is straight forward to compute the likelihood function,
+    # which is the probability of being on space 13 after a hypothetical `n` rolls.
     #
     # `pmf_n` is the distribution of spaces after `n` rolls.
     #
@@ -78,8 +77,8 @@ def test_ur_problem():
         pmf_n = sum([roll] * n)
         pmf_13[n] = pmf_n[13]
 
-    pmf_13.print()
-    pmf_13.total()
+    pmf_13.Print()
+    pmf_13.Total()
 
     # The total probability of the data is very close to 1/2, but it's not obvious (to me) why.
     #
@@ -91,14 +90,24 @@ def test_ur_problem():
     #
     # If the prior is uniform, the posterior equals the likelihood function, normalized.
 
-    posterior = pmf_13.copy()
+    posterior = pmf_13.Copy()
     posterior.Normalize()
-    assert posterior.d == {}
+    assert posterior.d == {
+        4: pytest.approx(0.0170, abs=0.01),
+        5: pytest.approx(0.1478, abs=0.01),
+        6: pytest.approx(0.2975, abs=0.01),
+        7: pytest.approx(0.2789, abs=0.01),
+        8: pytest.approx(0.1617, abs=0.01),
+        9: pytest.approx(0.0672, abs=0.01),
+        10: pytest.approx(0.0218, abs=0.01),
+        11: pytest.approx(0.0059, abs=0.01),
+        12: pytest.approx(0.0013, abs=0.01),
+        13: pytest.approx(0.0002, abs=0.01),
+        14: pytest.approx(5.2456, abs=0.01)
+    }
 
     # That sure looks similar to what we got by simulation.  Let's compare them.
 
-    thinkplot.plot_hist_bar(pmf_sim, label="Simulation")
-    thinkplot.plot_pmf_line(posterior, color="orange", label="Normalized likelihoods")
-    thinkplot.decorate(xlabel="Number of rolls (n)", ylabel="PMF")
-
-    # Since the posterior distribution based on a uniform prior matches the simulation, it seems like the uniform prior must be correct.  But it is not obvious (to me) why.
+    # Since the posterior distribution based on a uniform prior matches the simulation,
+    # it seems like the uniform prior must be correct.
+    # But it is not obvious (to me) why.

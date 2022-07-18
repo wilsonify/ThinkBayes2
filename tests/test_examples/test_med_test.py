@@ -32,19 +32,19 @@ def test_interpreting_medical_tests():
             super().__init__(index=hypo, columns=columns, **options)
             self.prior = prior
 
-        def mult(self):
+        def Mult(self):
             self.unnorm = self.prior * self.likelihood
 
-        def norm(self):
+        def Norm(self):
             nc = np.sum(self.unnorm)
             self.posterior = self.unnorm / nc
             return nc
 
-        def update(self):
+        def Update(self):
             self.mult()
             return self.norm()
 
-        def reset(self):
+        def Reset(self):
             return BayesTable(self.hypo, self.posterior)
 
     # ### Assumptions and interpretation

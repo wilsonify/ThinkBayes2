@@ -119,11 +119,11 @@ def test_flea_beetles():
     # We'll start with equal priors
 
     suite = Beetle(hypos)
-    suite.print()
+    suite.Print()
 
     # Now we can update with the data and print the posterior.
 
     suite.Update((140, 15))
-    suite.print()
+    suite.Print()
 
     # Based on these measurements, the specimen is very likely to be an example of *Chaetocnema concinna*.

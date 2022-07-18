@@ -280,7 +280,7 @@ def test_moments_expecations(d6):
     and add up the product of `p` and some function of `x`.
 
     """
-    d6.Mean(), d6.var()
+    d6.Mean(), d6.Var()
 
 
 def test_third_central_moment(d6):
@@ -293,7 +293,7 @@ def test_third_central_moment(d6):
     Because the distribution is symmetric, the third central moment is 0.
     """
     mu = d6.Mean()
-    result = d6.expect(lambda x: (x - mu) ** 3)
+    result = d6.Expect(lambda x: (x - mu) ** 3)
     assert result == 0
 
 

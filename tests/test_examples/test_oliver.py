@@ -38,7 +38,7 @@ def test_oliver():
     # I'll create a `Pmf` object with the distribution of blood types.
 
     types = Pmf({"O\t": 0.6, "AB\t": 0.01, "other\t": 0.39})
-    types.print()
+    types.Print()
 
     # Now we can compute `P(D | S) = p(AB)`
 

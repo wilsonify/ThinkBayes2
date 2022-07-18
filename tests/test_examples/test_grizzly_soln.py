@@ -108,6 +108,6 @@ def test_Grizzly():
 
     # Solution
 
-    print("Posterior mean", suite.mean())
+    print("Posterior mean", suite.Mean())
     print("Maximum a posteriori estimate", suite.MaximumLikelihood())
     print("90% credible interval", suite.CredibleInterval(90))

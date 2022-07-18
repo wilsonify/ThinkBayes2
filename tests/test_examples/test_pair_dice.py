@@ -11,32 +11,34 @@ from thinkbayes import Pmf, Suite
 import thinkplot
 
 
+class BayesTable(pd.DataFrame):
+    def __init__(self, hypo, prior=1, **options):
+        columns = ["hypo", "prior", "likelihood", "unnorm", "posterior"]
+        super().__init__(columns=columns, **options)
+        self.hypo = hypo
+        self.prior = prior
+
+    def Mult(self):
+        self.unnorm = self.prior * self.likelihood
+
+    def Norm(self):
+        nc = np.sum(self.unnorm)
+        self.posterior = self.unnorm / nc
+        return nc
+
+    def Update(self):
+        self.mult()
+        return self.norm()
+
+    def Reset(self):
+        return BayesTable(self.hypo, self.posterior)
+
 def test_BayesTable():
     # ### The BayesTable class
     #
     # Here's the class that represents a Bayesian table.
 
-    class BayesTable(pd.DataFrame):
-        def __init__(self, hypo, prior=1, **options):
-            columns = ["hypo", "prior", "likelihood", "unnorm", "posterior"]
-            super().__init__(columns=columns, **options)
-            self.hypo = hypo
-            self.prior = prior
 
-        def mult(self):
-            self.unnorm = self.prior * self.likelihood
-
-        def norm(self):
-            nc = np.sum(self.unnorm)
-            self.posterior = self.unnorm / nc
-            return nc
-
-        def update(self):
-            self.mult()
-            return self.norm()
-
-        def reset(self):
-            return BayesTable(self.hypo, self.posterior)
 
     # ### The pair of dice problem
     #
