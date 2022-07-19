@@ -47,7 +47,7 @@ def test_oliver():
     # `Pmf` provides an addition operator that computes the distribution of all pairs of outcomes:
 
     pairs = types + types
-    pairs.print_size()
+    pairs.Print()
 
     # Reading this table, we can see more explicitly that there are two outcomes that account for the data, `AB O` and `O AB`.
     #
@@ -60,7 +60,7 @@ def test_oliver():
     # Let's do the update, assuming that the prior is 50:50.
 
     suite = Suite(["S", "S̄"])
-    suite.print()
+    suite.Print()
 
     suite["S"] *= like_S
     suite["S̄"] *= like_s
@@ -68,4 +68,4 @@ def test_oliver():
 
     # In light of this evidence, we are slightly more inclined to believe that Oliver is not guilty (or at least, did not leave a blood trace at the scene).
 
-    suite.print()
+    suite.Print()

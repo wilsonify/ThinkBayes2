@@ -185,7 +185,7 @@ def test_UnreliableCoin():
 
     redditor = Redditor(label="redditor")
     beta = Beta(2, 1)
-    for val, prob in beta.make_pmf().items():
+    for val, prob in beta.MakePmf().Items():
         redditor.set(val * 100, prob)
 
     thinkplot.plot_pdf_line(redditor)

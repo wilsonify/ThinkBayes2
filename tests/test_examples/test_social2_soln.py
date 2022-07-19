@@ -81,7 +81,7 @@ def test_social_desirability_problem():
 
     beta = Beta(1, 1)
     beta.Update((60, 40))
-    thinkplot.plot_pdf_line(beta.make_pmf(), label="Direct", color="gray")
+    thinkplot.plot_pdf_line(beta.MakePmf(), label="Direct", color="gray")
 
     thinkplot.plot_pdf_line(suite, label="Randomized")
     thinkplot.decorate(xlabel=POP_FRAC_LABEL, ylabel="PDF")
@@ -94,7 +94,7 @@ def test_social_desirability_problem():
     factor = 4
     beta = Beta(1, 1)
     beta.Update((60 / factor, 40 / factor))
-    thinkplot.plot_pdf_line(beta.make_pmf(), label="Direct", color="gray")
+    thinkplot.plot_pdf_line(beta.MakePmf(), label="Direct", color="gray")
 
     thinkplot.plot_pdf_line(suite, label="Randomized")
     thinkplot.decorate(xlabel=POP_FRAC_LABEL, ylabel="PDF")

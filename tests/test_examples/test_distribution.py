@@ -95,7 +95,7 @@ class CharFunc:
         """Computes the elementwise product of two CFs."""
         return CharFunc(self.hs * other.hs)
 
-    def make_pmf(self, thresh=1e-11):
+    def MakePmf(self, thresh=1e-11):
         """Converts a CF to a PMF.
 
         Values with probabilities below `thresh` are dropped.
@@ -161,7 +161,7 @@ class Dist(Pmf, Cdf, CharFunc):
     def __mul__(self, other):
         """Computes the distribution of the sum using CharFunc.__mul__.
         """
-        pmf = CharFunc.__mul__(self, other).make_pmf()
+        pmf = CharFunc.__mul__(self, other).MakePmf()
         return Dist(pmf.d)
 
 
@@ -532,7 +532,7 @@ def test_characteristic(d6):
     but it is encoded in a form that is hard to interpret.
     However, if we are given a characteristic function, we can find the corresponding `Pmf`.
 
-    `CharFunc` provides `make_pmf`, which uses the inverse FFT to get back to the `Pmf` representation.
+    `CharFunc` provides `MakePmf`, which uses the inverse FFT to get back to the `Pmf` representation.
 
 
     Now we can use the characteristic function to compute a convolution.
@@ -543,7 +543,7 @@ def test_characteristic(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    sixth = (cf * cf).make_pmf()
+    sixth = (cf * cf).MakePmf()
 
 
 def test_sixth(d6):
@@ -559,7 +559,7 @@ def test_sixth(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    sixth = (cf * cf).make_pmf()
+    sixth = (cf * cf).MakePmf()
     sixth.Print()
     sixth.Mean()
     sixth.Var()
@@ -596,7 +596,7 @@ def test_dist(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    sixth = (cf * cf).make_pmf()
+    sixth = (cf * cf).MakePmf()
     dist = Dist(sixth.d)
     assert dist[21] == pytest.approx(0.0928, abs=0.01)
 
@@ -609,7 +609,7 @@ def test_meanvar(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    sixth = (cf * cf).make_pmf()
+    sixth = (cf * cf).MakePmf()
     dist = Dist(sixth.d)
     dist.Mean(), dist.Var()
 
@@ -622,7 +622,7 @@ def test_value_array(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    sixth = (cf * cf).make_pmf()
+    sixth = (cf * cf).MakePmf()
     dist = Dist(sixth.d)
     dist.ValueArray((0.25, 0.5, 0.75))
 
@@ -632,7 +632,7 @@ def test_probs(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    sixth = (cf * cf).make_pmf()
+    sixth = (cf * cf).MakePmf()
     dist = Dist(sixth.d)
     dist.Probs((18, 21, 24))
 
@@ -642,7 +642,7 @@ def test_sample(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    sixth = (cf * cf).make_pmf()
+    sixth = (cf * cf).MakePmf()
     dist = Dist(sixth.d)
     dist.Sample(10)
 
@@ -656,7 +656,7 @@ def test_slow(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    sixth = (cf * cf).make_pmf()
+    sixth = (cf * cf).MakePmf()
     dist = Dist(sixth.d)
     twelfth = dist + dist
     twelfth.Mean()
@@ -671,7 +671,7 @@ def test_mul(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    sixth = (cf * cf).make_pmf()
+    sixth = (cf * cf).MakePmf()
     dist = Dist(sixth.d)
     twelfth_fft = dist * dist
     twelfth_fft.Mean()

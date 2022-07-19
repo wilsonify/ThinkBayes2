@@ -200,7 +200,7 @@ def test_bandit():
     #
     # Let's see how many times each machine got played.  If things go according to play, the machines with higher probabilities should get played more often.
 
-    for machine, count in sorted(counter.items()):
+    for machine, count in sorted(counter.Items()):
         print(machine, count)
 
     # **Exercise:**  Go back and run this section again with a different value of `num_play` and see how it does.

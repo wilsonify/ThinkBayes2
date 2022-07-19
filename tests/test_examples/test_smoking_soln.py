@@ -36,4 +36,4 @@ def test_smoking_problem():
     pmf["smoker"] *= 13
     pmf["nonsmoker"] *= 1
     pmf.Normalize()
-    pmf.print()
+    pmf.Print()

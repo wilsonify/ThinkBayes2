@@ -207,8 +207,8 @@ def test_elephant():
     # Now, to answer the question, we have to compute the posterior distribution of the prevalence of elephants.  Here's a function that computes it.
 
     def enumerate_posterior(suite):
-        for d, p in suite.items():
-            mean = d.mean()
+        for d, p in suite.Items():
+            mean = d.Mean()
             index = d.label.find("E")
             p_elephant = 0 if index == -1 else mean[index]
             yield d, p, p_elephant

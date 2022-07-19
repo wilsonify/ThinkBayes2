@@ -96,7 +96,7 @@ def test_soccer():
         rem_time: remaining time in the game in minutes
         """
         metapmf = thinkbayes.Pmf()
-        for lam, prob in suite.items():
+        for lam, prob in suite.Items():
             lt = lam * rem_time / 90
             pred = thinkbayes.MakePoissonPmf(lt, 15)
             metapmf[pred] = prob

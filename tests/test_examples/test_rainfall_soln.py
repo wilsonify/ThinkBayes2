@@ -117,12 +117,12 @@ def test_gamma():
     # Anyway, here's the posterior marginal for `k`:
 
     post_k = suite.Marginal(0)
-    print(post_k.mean())
+    print(post_k.Mean())
 
     # And here's the posterior marginal for `theta`
 
     post_theta = suite.Marginal(1)
-    print(post_theta.mean())
+    print(post_theta.Mean())
 
     # To make the predictive distribution, we'll need to make PMF approximations to gamma distributions.
 
@@ -147,7 +147,7 @@ def test_gamma():
     # Here's the posterior predictive distribution.  Since it is so steep near 0, we need a pretty fine grid to get an accurate estimate of the posterior predictive mean (which we'll verify by comparison to the solution from MCMC below).
 
     pred_pmf = MakeMixture(metapmf)
-    print(pred_pmf.mean())
+    print(pred_pmf.Mean())
 
     # ### Now with PyMC
     #

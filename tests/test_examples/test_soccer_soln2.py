@@ -125,7 +125,7 @@ def test_soccer():
         returns: new Pmf (mixture of Poissons)
         """
         metapmf = thinkbayes.Pmf()
-        for lam, prob in suite.items():
+        for lam, prob in suite.Items():
             pred = thinkbayes.MakePoissonPmf(lam * duration, 15)
             metapmf[pred] = prob
 

@@ -14,7 +14,7 @@ from scipy.special import expit
 
 from thinkbayes import Suite, Joint
 
-TESTDIR = os.path.abspath(os.path.dirname(__file__))
+TESTDIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 DATADIR = os.path.join(TESTDIR, "data")
 
 

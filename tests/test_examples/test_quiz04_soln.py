@@ -28,21 +28,17 @@ def test_battle():
     thinkplot.plot(gap)
 
     metapmf = thinkbayes.Pmf()
-    for t, p in gap.items():
+    for t, p in gap.Items():
         arrivals = thinkbayes.MakePoissonPmf(1.3 * t, 25)
         thinkplot.plot(arrivals, color="C0", linewidth=0.1)
         metapmf[arrivals] = p
 
     metapmf = thinkbayes.Pmf()
-    for t, p in gap.items():
+    for t, p in gap.Items():
         arrivals = thinkbayes.MakePoissonPmf(1.3 * t, 25)
         thinkplot.plot(arrivals, color="C0", linewidth=0.1)
         metapmf[arrivals] = p
 
     mix = thinkbayes.MakeMixture(metapmf)
-    mix.mean()
-    thinkplot.plot_hist_bar(mix)
-    thinkplot.decorate(xlabel="Number of passengers", ylabel="PMF")
-
+    mix.Mean()
     logging.info("%r", f"likelihood = {mix[10]}")
-

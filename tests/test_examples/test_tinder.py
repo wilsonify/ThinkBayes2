@@ -38,7 +38,7 @@ def test_tinder():
     # If we observe someone, we are more likely to land during a longer interval.
 
     observed = interarrival.copy()
-    for val, prob in observed.items():
+    for val, prob in observed.Items():
         observed[val] *= val
     observed.Normalize()
 
@@ -48,7 +48,7 @@ def test_tinder():
     # If we land during an intererval of duration $x$, the time since last login is uniform between 0 and $x$.  So the distribution of time since last login (`timesince`) is a mixture of uniform distributions.
 
     metapmf = thinkbayes.Pmf()
-    for time, prob in observed.items():
+    for time, prob in observed.Items():
         if time == 0:
             continue
         pmf = thinkbayes.make_uniform_pmf(0, time, 101)

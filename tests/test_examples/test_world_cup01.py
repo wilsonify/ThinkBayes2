@@ -589,7 +589,7 @@ def test_world_cup():
     posterior2.Mean()
 
     metapmf = Pmf()
-    for lam, prob in posterior2.items():
+    for lam, prob in posterior2.Items():
         lt = lam * rem_time / 90
         pred = MakePoissonPmf(lt, 15)
         metapmf[pred] = prob

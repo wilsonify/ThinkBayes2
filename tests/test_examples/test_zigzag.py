@@ -82,7 +82,7 @@ def test_hockey():
 
         def sorted_items(self):
             """Returns the outcomes and their probabilities."""
-            return zip(*sorted(self.items()))
+            return zip(*sorted(self.Items()))
 
     # Here are some functions for plotting PMFs.
 
@@ -94,7 +94,7 @@ def test_hockey():
         options: dictionary
         """
 
-        for key, val in plot_options.items():
+        for key, val in plot_options.Items():
             options.setdefault(key, val)
         return options
 
@@ -110,7 +110,7 @@ def test_hockey():
         """Compute and plot a PMF."""
         pmf = Pmf(sample)
         pmf.Normalize()
-        xs, ps = pmf.sorted_items()
+        xs, ps = pmf.sorted_Items()
         bar(xs, ps, **options)
 
     def pmf_goals():
@@ -155,7 +155,7 @@ def test_hockey():
     def plot_cdf(sample, **options):
         """Compute and plot the CDF of a sample."""
         pmf = Pmf(sample)
-        xs, freqs = pmf.sorted_items()
+        xs, freqs = pmf.sorted_Items()
         ps = np.cumsum(freqs, dtype=np.float)
         ps /= ps[-1]
         plot(xs, ps, **options)
@@ -296,7 +296,7 @@ def test_hockey():
 
         def plot(self, **options):
             """Plot the hypotheses and their probabilities."""
-            xs, ps = self.sorted_items()
+            xs, ps = self.sorted_Items()
             plot(xs, ps, **options)
 
     def pdf_rate():
@@ -535,7 +535,7 @@ def test_hockey():
         suite: Suite object
         size: sample size
         """
-        xs, ps = zip(*suite.items())
+        xs, ps = zip(*suite.Items())
         return np.random.choice(xs, size, replace=True, p=ps)
 
     # Here's a sample of `mu` drawn from the posterior distribution (after one game).
@@ -893,7 +893,7 @@ def test_hockey():
 
         mu = dict()
         goals = dict()
-        for name, observed in data.items():
+        for name, observed in data.Items():
             mu[name] = pm.Gamma("mu_" + name, alpha, beta)
             goals[name] = pm.Poisson(name, mu[name], observed=observed)
 

@@ -22,7 +22,7 @@ def test_pmfs():
 
     # Initially the probabilities don't add up to 1.
 
-    d6.print()
+    d6.Print()
 
     # `Normalize` adds up the probabilities and divides through.  The return value is the total probability before normalizing.
 
@@ -30,7 +30,7 @@ def test_pmfs():
 
     # Now the Pmf is normalized.
 
-    d6.print()
+    d6.Print()
 
     # And we can compute its mean (which only works if it's normalized).
 
@@ -70,7 +70,7 @@ def test_pmfs():
     #
 
     cookie = Pmf(["Bowl1", "Bowl2"])
-    cookie.print()
+    cookie.Print()
 
     # Update each hypothesis with the likelihood of the data (a vanilla cookie).
 
@@ -80,7 +80,7 @@ def test_pmfs():
 
     # Print the posterior probabilities.
 
-    cookie.print()
+    cookie.Print()
 
     # **Exercise 3:** Suppose we put the first cookie back, stir, choose again from the same bowl, and get a chocolate cookie.
     #
@@ -91,7 +91,7 @@ def test_pmfs():
     cookie["Bowl1"] *= 0.25
     cookie["Bowl2"] *= 0.5
     cookie.Normalize()
-    cookie.print()
+    cookie.Print()
 
     # **Exercise 4:** Instead of doing two updates, what if we collapse the two pieces of data into one update?
     #
@@ -105,14 +105,14 @@ def test_pmfs():
     cookie["Bowl1"] *= 0.75 * 0.25
     cookie["Bowl2"] *= 0.5 * 0.5
     cookie.Normalize()
-    cookie.print()
+    cookie.Print()
 
     # The dice problem
 
     # Create a Suite to represent dice with different numbers of sides.
 
     pmf = Pmf([4, 6, 8, 12])
-    pmf.print()
+    pmf.Print()
 
     # **Exercise 5:** We'll solve this problem two ways.  First we'll do it "by hand", as we did with the cookie problem; that is, we'll multiply each hypothesis by the likelihood of the data, and then renormalize.
     #
@@ -126,7 +126,7 @@ def test_pmfs():
     pmf[12] *= 1 / 12
 
     pmf.Normalize()
-    pmf.print()
+    pmf.Print()
 
     # **Exercise 6:**  Now let's do the same calculation using `Suite.Update`.
     #
@@ -157,7 +157,7 @@ def test_pmfs():
 
     dice = Dice([4, 6, 8, 12])
     dice.Update(6)
-    dice.print()
+    dice.Print()
 
     # If we get more data, we can perform more updates.
 
@@ -166,7 +166,7 @@ def test_pmfs():
 
     # Here are the results.
 
-    dice.print()
+    dice.Print()
 
     # The German tank problem
 

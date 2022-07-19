@@ -75,7 +75,7 @@ def test_urns():
     # What should Jacob believe about Bnext?
 
     total = 0
-    for i, prob_i in jacob.items():
+    for i, prob_i in jacob.Items():
         print(i, prob_i)
         prob_blue = i / 3
         total += prob_i * prob_blue
@@ -86,7 +86,7 @@ def test_urns():
 
     def prob_b_next(suite):
         total = 0
-        for i, prob_i in suite.items():
+        for i, prob_i in suite.Items():
             prob_blue = i / 3
             total += prob_i * prob_blue
 

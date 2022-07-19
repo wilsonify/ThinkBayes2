@@ -336,9 +336,9 @@ def test_precompute(cdf_thrice, like_min, like_max):
     dungeon_instance = Dungeons()
     for n in range(2, 11):
         cdf_min = dungeon_instance.compute_cdf_min(cdf_thrice, n * 6)
-        like_min[n] = cdf_min.make_pmf()
-        cdf_max = cdf_thrice.max(n * 6)
-        like_max[n] = cdf_max.make_pmf()
+        like_min[n] = cdf_min.MakePmf()
+        cdf_max = cdf_thrice.Max(n * 6)
+        like_max[n] = cdf_max.MakePmf()
         print(like_min[n][5], like_max[n][16])
 
 
