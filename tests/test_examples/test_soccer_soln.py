@@ -23,6 +23,7 @@ If goal-scoring is a Poisson process, the distribution of time between goals is 
 """
 
 import thinkbayes
+import numpy
 
 
 class Soccer(thinkbayes.Suite):
@@ -53,31 +54,27 @@ def test_soccer():
     #
     # To construct the prior, I'll start with an unrealistic uniform distribution and update it with fake data until the mean matches the observed rate for a single team, 1.34 goals per game.
 
-    import numpy
-    import thinkplot
-
     hypos = numpy.linspace(0, 12, 201)
     suite = Soccer(hypos)
     suite.Update(
         134
     )  # fake data chosen by trial and error to yield the observed prior mean
 
-    thinkplot.plot_pdf_line(suite)
-    suite.mean()
+    suite.Mean()
 
     # Now that we have a prior, we can update with the time of the first goal, 11 minutes.
 
     suite.Update(11)  # time until first goal is 11 minutes
-    thinkplot.plot_pdf_line(suite)
-    suite.mean()
+
+    suite.Mean()
 
     # After the first goal, the posterior mean rate is almost 1.9 goals per game.
     #
     # Now we update with the second goal:
 
     suite.Update(12)  # time between first and second goals is 12 minutes
-    thinkplot.plot_pdf_line(suite)
-    suite.mean()
+
+    suite.Mean()
 
     # After the second goal, the posterior mean goal rate is 2.3 goals per game.
     #
@@ -100,7 +97,6 @@ def test_soccer():
             lt = lam * rem_time / 90
             pred = thinkbayes.MakePoissonPmf(lt, 15)
             metapmf[pred] = prob
-            thinkplot.plot_pdf_line(pred, color="gray", alpha=0.3, linewidth=0.5)
 
         mix = thinkbayes.MakeMixture(metapmf)
         return mix
@@ -113,14 +109,11 @@ def test_soccer():
     #
     # Finally, `PredRemaining` uses `MakeMixture` to compute the mixture of the distributions.  Here's what the predictive distribution looks like.
 
-    thinkplot.plot_hist_bar(mix)
-    thinkplot.config_plot(xlim=[-0.5, 10.5])
-
     # After the first two goals, the most likely outcome is that Germany will score once more, but there is a substantial chance of scoring 0 or 2--4 additional goals.
     #
     # Now we can answer the original questions: what is the chance of scoring 5 or more additional goals:
 
-    mix.prob_greater(4)
+    mix.ProbGreater(4)
 
     # After the first two goals, there was only a 6% chance of scoring 5 more times.  And the expected number of additional goals was only 1.7.
 
@@ -140,5 +133,5 @@ def test_soccer():
         mix = thinkbayes.Pmf(label=label)
         for pmf, p1 in metapmf.Items():
             for x, p2 in pmf.Items():
-                mix.incr(x, p1 * p2)
+                mix.Incr(x, p1 * p2)
         return mix

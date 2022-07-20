@@ -12,7 +12,7 @@ import pytest
 import thinkplot
 from thinkbayes import MakePoissonPmf, EvalBinomialPmf, MakeMixture
 from thinkbayes import Pmf, Suite, Joint
-
+import pymc3 as pm
 
 class Detector(Suite):
     """Represents hypotheses about n."""
@@ -161,7 +161,7 @@ def test_geiger_mcmc():
     #
     # As a challege, try writing the model more explicitly, rather than using the GLM module.
 
-    import pymc as pm
+
 
     # Solution
 

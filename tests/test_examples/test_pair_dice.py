@@ -8,7 +8,7 @@ import logging
 import numpy as np
 import pandas as pd
 from thinkbayes import Pmf, Suite
-import thinkplot
+
 
 
 class BayesTable(pd.DataFrame):
@@ -144,7 +144,7 @@ def test_BayesTable():
     #
     # 3) Computing the normalizing constant.
 
-    table2 = table.reset()
+    table2 = table.Reset()
     for i, row in table2.iterrows():
         n1, n2 = row.hypo
         table2.loc[i, "likelihood"] = prob_total(11, n1, n2)

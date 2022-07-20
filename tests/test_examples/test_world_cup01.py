@@ -392,7 +392,7 @@ def test_wc2():
 
     # Using the predictive distributions, we can compute probabilities for the outcomes of a rematch.
 
-    win = germany_pred.prob_greater(argentina_pred)
+    win = germany_pred.ProbGreater(argentina_pred)
     lose = germany_pred.prob_less(argentina_pred)
     tie = 1 - (win + lose)
 

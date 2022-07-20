@@ -69,7 +69,7 @@ def test_comparing_distributions():
     pmf2 = wei.MakePmf(1001)
     ProbGreater(pmf1, pmf2)
 
-    pmf1.prob_greater(pmf2)
+    pmf1.ProbGreater(pmf2)
 
     pmf1.prob_less(pmf2)
 
@@ -155,7 +155,7 @@ def test_comparing_distributions():
 
     rhode_rematch = MakeBinomialMix2(rhode.MakePmf())
     wei_rematch = MakeBinomialMix2(wei.MakePmf())
-    rhode_rematch.prob_greater(wei_rematch), rhode_rematch.prob_less(wei_rematch)
+    rhode_rematch.ProbGreater(wei_rematch), rhode_rematch.prob_less(wei_rematch)
 
     # **Exercise:** Run this analysis again with a different prior and see how much effect it has on the results.
 

@@ -7,9 +7,13 @@
 """
 import logging
 import os
+from itertools import product
+from warnings import simplefilter
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import pymc3 as pm
 from scipy.special import expit
 
 from thinkbayes import Suite, Joint
@@ -57,13 +61,11 @@ def test_shuttle():
     """
     columns = ["Date", "Temperature", "Incident"]
     df = pd.read_csv(os.path.join(DATADIR, "challenger_data.csv"), parse_dates=[0])
-    df.drop(labels=[3, 24], inplace=True)
+    df.drop(labels=[3, 24], axis=1, inplace=True)
     logging.info("%r", f"df.shape = {df.shape}")
 
     df["Incident"] = df["Damage Incident"].astype(float)
     logging.info("%r", f"df.shape = {df.shape}")
-
-    import matplotlib.pyplot as plt
 
     plt.scatter(df.Temperature, df.Incident, s=75, color="k", alpha=0.5)
     plt.yticks([0, 1])
@@ -96,7 +98,7 @@ def test_shuttle():
 
     b1 = np.linspace(-1, 1, 101)
 
-    from itertools import product
+
 
     hypos = product(b0, b1)
 
@@ -132,11 +134,7 @@ def test_shuttle():
     #
     # As a challege, try writing the model more explicitly, rather than using the GLM module.
 
-    from warnings import simplefilter
-
     simplefilter("ignore", FutureWarning)
-
-    import pymc as pm
 
     # Solution
 

@@ -57,8 +57,7 @@ def test_bayes_reg():
 
     ys = inter + slope * xs + np.random.normal(0, sigma, len(xs))
 
-    thinkplot.plot(xs, ys)
-    thinkplot.decorate(xlabel="x", ylabel="y")
+
 
     # ### Grid algorithm
     #
