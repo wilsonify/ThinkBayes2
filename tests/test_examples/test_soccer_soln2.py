@@ -32,10 +32,9 @@ To compute the distribution of $\lambda$ we can define a new class that
 inherits from `thinkbayes.Suite` and provides an appropriate `Likelihood` function:
 first a little house-keeping
 """
-
+import numpy
 import thinkbayes
-import numpy as np
-import pandas as pd
+
 
 class Soccer(thinkbayes.Suite):
     """Represents hypotheses about goal-scoring rates."""
@@ -63,16 +62,11 @@ def test_soccer():
     #
     # To construct the prior, I'll start with an unrealistic uniform distribution and update it with fake data until the mean matches the observed rate for a single team, 1.34 goals per game.
 
-    import numpy
-    import thinkplot
-
     hypos = numpy.linspace(start=0, stop=12, num=201)
     hypos = list(hypos)
     suite = Soccer(hypos)
-    suite.Update(0.33)  # fake data chosen by trial and error to yield the observed prior mean
-
-    thinkplot.plot_pdf_line(suite)
-    suite.mean()
+    suite.Update([0.33])  # fake data chosen by trial and error to yield the observed prior mean
+    suite.Mean()
 
     # According to this prior, the goal-scoring rates are always greater than zero, with the most likely value (a priori) near 0.5.  Goal scoring rates greater than 5 are considered unlikely.
     #
@@ -80,8 +74,8 @@ def test_soccer():
     #
     # The next step is to compute the posteriors for the two teams:
 
-    germany = suite.copy(label="Germany")
-    argentina = suite.copy(label="Argentina")
+    germany = suite.Copy(label="Germany")
+    argentina = suite.Copy(label="Argentina")
     germany.Update(1)
     argentina.Update(0)
 
@@ -91,10 +85,6 @@ def test_soccer():
     # `Update` invokes the likelihood function for each hypothetical value of $\lambda$ and updates the distribution accordingly.
     #
     # Since both teams scored fewer goals than the prior mean (1.4), we expect both posterior means to be lower.  Germany's posterior mean is 1.2; Argentina's is 0.7.  We can plot the posteriors:
-
-    thinkplot.plot_pdf_line(germany)
-    thinkplot.plot_pdf_line(argentina)
-    thinkplot.config_plot(xlabel="goal-scoring rate", ylabel="probability")
 
     # To answer the first question, "How much evidence does this victory provide that Germany had the better team?", we can compute the posterior probability that Germany had a higher goal-scoring rate:
 
@@ -119,7 +109,7 @@ def test_soccer():
     #
     # We don't actually know $\lambda$, but we can use the posterior distribution of $\lambda$ to generate a predictive distribution for the number of additional goals.
 
-    def PredictiveDist(suite, duration=1, label="pred"):
+    def PredictiveDist(suite, duration=1.0, label="pred"):
         """Computes the distribution of goals scored in a game.
 
         returns: new Pmf (mixture of Poissons)
@@ -140,10 +130,6 @@ def test_soccer():
     # It loops through the hypotheses in `suite`, computes the predictive distribution of goals for each hypothesis, and assembles a "meta-Pmf" which is a Pmf that maps from each predictive distribution to its probability.
     #
     # Finally, it uses `MakeMixture` to compute the mixture of the distributions.  Here's what the predictive distributions look like.
-
-    thinkplot.plot_hist_bar(germany_pred, width=0.45, align="right")
-    thinkplot.plot_hist_bar(argentina_pred, width=0.45, align="left")
-    thinkplot.config_plot(xlabel="predicted # goals", ylabel="probability", xlim=[-0.5, 7])
 
     # Using the predictive distributions, we can compute probabilities for the outcomes of a rematch.
 

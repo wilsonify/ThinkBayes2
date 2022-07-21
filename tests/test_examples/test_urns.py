@@ -64,7 +64,7 @@ def test_urns():
 
     # Here's Emily's update after an additional 12 blue and 3 green.
 
-    emily = jacob.copy()
+    emily = jacob.Copy()
     B12G3 = "B" * 12 + "G" * 3
 
     for data in B12G3:

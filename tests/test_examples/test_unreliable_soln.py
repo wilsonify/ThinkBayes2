@@ -47,7 +47,6 @@ class UnreliableCoin(Suite):
 def test_UnreliableCoin():
     prior = range(0, 101)
     suite = UnreliableCoin(prior, y=0.9)
-    thinkplot.plot_pdf_line(suite)
 
     # +
     # Solution
@@ -56,8 +55,6 @@ def test_UnreliableCoin():
 
     for outcome in "HHHTTTTTTT":
         suite.Update(outcome)
-
-    thinkplot.plot_pdf_line(suite)
 
     # +
     # Solution
@@ -70,11 +67,9 @@ def test_UnreliableCoin():
         for outcome in "HHHTTTTTTT":
             suite.Update(outcome)
 
-        thinkplot.plot_pdf_line(suite, label="y=%g" % y)
+            # +
 
-    # +
     # Solution
-
     # The posterior distribution gets wider as the measurement gets less reliable.
 
     compute_prior(1)
@@ -186,10 +181,10 @@ def test_UnreliableCoin():
     redditor = Redditor(label="redditor")
     beta = Beta(2, 1)
     for val, prob in beta.MakePmf().Items():
-        redditor.set(val * 100, prob)
+        redditor.Set(val * 100, prob)
 
-    thinkplot.plot_pdf_line(redditor)
-    mean_r = redditor.mean() / 100.0
+
+    mean_r = redditor.Mean() / 100.0
 
     # +
     # Solution
@@ -198,8 +193,8 @@ def test_UnreliableCoin():
 
     item = Item(range(0, 101), label="item")
 
-    thinkplot.plot_pdf_line(item)
-    mean_q = item.mean() / 100.0
+
+    mean_q = item.Mean() / 100.0
 
     # +
     # Solution
@@ -218,8 +213,8 @@ def test_UnreliableCoin():
     # And here are the results.  Since we knew nothing about the item,
     # the vote provides no information about the redditor:
 
-    thinkplot.plot_pdf_line(redditor)
-    print(redditor.mean(), redditor.CredibleInterval(90))
+
+    print(redditor.Mean(), redditor.CredibleInterval(90))
 
     # +
     # Solution
@@ -227,8 +222,8 @@ def test_UnreliableCoin():
     # But since we think the redditor is reliable, the vote provides
     # some information about the item:
 
-    thinkplot.plot_pdf_line(item)
-    print(item.mean(), item.CredibleInterval(90))
+
+    print(item.Mean(), item.CredibleInterval(90))
 
     # +
     # Solution

@@ -71,7 +71,7 @@ def test_comparing_distributions():
 
     pmf1.ProbGreater(pmf2)
 
-    pmf1.prob_less(pmf2)
+    pmf1.ProbLess(pmf2)
 
     # **Exercise:** Run this analysis again with a different prior and see how much effect it has on the results.
 
@@ -155,7 +155,7 @@ def test_comparing_distributions():
 
     rhode_rematch = MakeBinomialMix2(rhode.MakePmf())
     wei_rematch = MakeBinomialMix2(wei.MakePmf())
-    rhode_rematch.ProbGreater(wei_rematch), rhode_rematch.prob_less(wei_rematch)
+    rhode_rematch.ProbGreater(wei_rematch), rhode_rematch.ProbLess(wei_rematch)
 
     # **Exercise:** Run this analysis again with a different prior and see how much effect it has on the results.
 
@@ -172,13 +172,13 @@ def test_comparing_distributions():
     iters = 1000
     pmf = Pmf()
     for _ in range(iters):
-        k = rhode_rematch.random() + wei_rematch.random()
+        k = rhode_rematch.Random() + wei_rematch.Random()
         pmf[k] += 1
     pmf.Normalize()
 
     # Or we could use `Sample` and NumPy:
 
-    ks = rhode_rematch.sample(iters) + wei_rematch.sample(iters)
+    ks = rhode_rematch.Sample(iters) + wei_rematch.Sample(iters)
     pmf = Pmf(ks)
 
     # Alternatively, we could compute the distribution of the sum by enumeration:
@@ -208,7 +208,9 @@ def test_comparing_distributions():
 
     # On average, we expect Rhode to win by about 1 clay.
 
-    pmf.mean(), pmf.median(), pmf.mode()
+    pmf.Mean()
+    pmf.Median()
+    pmf.Mode()
 
     # Solution
 
@@ -232,7 +234,7 @@ def test_comparing_distributions():
     iters = 1000
     pmf = Pmf()
     for _ in range(iters):
-        ks = rhode_rematch.sample(6)
+        ks = rhode_rematch.Sample(6)
         pmf[max(ks)] += 1
     pmf.Normalize()
 

@@ -363,8 +363,8 @@ def test_wc2():
 
     # Solution
 
-    gdr_goals = poisson.rvs(germany.sample(1000))
-    arg_goals = poisson.rvs(argentina.sample(1000))
+    gdr_goals = poisson.rvs(germany.Sample(1000))
+    arg_goals = poisson.rvs(argentina.Sample(1000))
     np.mean(gdr_goals > arg_goals)
 
     # Solution
@@ -393,7 +393,7 @@ def test_wc2():
     # Using the predictive distributions, we can compute probabilities for the outcomes of a rematch.
 
     win = germany_pred.ProbGreater(argentina_pred)
-    lose = germany_pred.prob_less(argentina_pred)
+    lose = germany_pred.ProbLess(argentina_pred)
     tie = 1 - (win + lose)
 
     print("Posterior prob Germany wins rematch", win)
@@ -465,7 +465,7 @@ def test_wc():
         (15, 1.710560897772643e-05)
     ]
 
-    cdf_gamma = pmf_gamma.make_cdf()
+    cdf_gamma = pmf_gamma.MakeCdf()
 
     mean_rate = 1.3
     with pm.Model() as model:

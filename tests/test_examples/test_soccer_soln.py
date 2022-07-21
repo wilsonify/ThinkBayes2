@@ -117,7 +117,7 @@ def test_soccer():
 
     # After the first two goals, there was only a 6% chance of scoring 5 more times.  And the expected number of additional goals was only 1.7.
 
-    mix.mean()
+    mix.Mean()
 
     # That's the end of this example.  But for completeness (and if you are curious), here is the code for `MakeMixture`:
 

@@ -34,26 +34,22 @@ def test_bandit():
     # We'll start with a uniform distribution from 0 to 100.
 
     bandit = Bandit(range(101))
-    thinkplot.plot_pdf_line(bandit)
-    thinkplot.config_plot(xlabel="x", ylabel="Probability")
+
 
     # Now we can update with a single loss:
 
     bandit.Update("L")
-    thinkplot.plot_pdf_line(bandit)
-    thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
+
 
     # Another loss:
 
     bandit.Update("L")
-    thinkplot.plot_pdf_line(bandit)
-    thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
+
 
     # And a win:
 
     bandit.Update("W")
-    thinkplot.plot_pdf_line(bandit)
-    thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
+
 
     # Starting over, here's what it looks like after 1 win and 9 losses.
 
@@ -62,12 +58,11 @@ def test_bandit():
     for outcome in "WLLLLLLLLL":
         bandit.Update(outcome)
 
-    thinkplot.plot_pdf_line(bandit)
-    thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
+
 
     # The posterior mean is about 17%
 
-    bandit.mean()
+    bandit.Mean()
 
     # The most likely value is the observed proportion 1/10
 
@@ -121,8 +116,7 @@ def test_bandit():
         thinkplot.preplot(rows=2, cols=2)
         for i, b in enumerate(beliefs):
             thinkplot.subplot(i + 1)
-            thinkplot.plot_pdf_line(b, label=i)
-            thinkplot.config_plot(**options)
+
 
     plot(beliefs, legend=True)
 
@@ -140,7 +134,7 @@ def test_bandit():
 
     # After playing each machine 10 times, we have some information about their probabilies:
 
-    [belief.mean() for belief in beliefs]
+    [belief.Mean() for belief in beliefs]
 
     # ## Bayesian Bandits
     #
@@ -153,7 +147,7 @@ def test_bandit():
     # `argmax` returns the index of the machine that chose the highest value.
 
     def choose(beliefs):
-        ps = [b.random() for b in beliefs]
+        ps = [b.Random() for b in beliefs]
         return np.argmax(ps)
 
     # Here's an example.
@@ -167,7 +161,7 @@ def test_bandit():
         outcome = play(i)
         update(beliefs, i, outcome)
         if verbose:
-            print(i, outcome, beliefs[i].mean())
+            print(i, outcome, beliefs[i].Mean())
 
     # Here's an example
 
@@ -192,7 +186,7 @@ def test_bandit():
     # We can summarize `beliefs` by printing the posterior mean and credible interval:
 
     for i, b in enumerate(beliefs):
-        print(b.mean(), b.CredibleInterval(90))
+        print(b.Mean(), b.CredibleInterval(90))
 
     # The credible intervals usually contain the true values (10, 20, 30, and 40).
     #
@@ -200,7 +194,7 @@ def test_bandit():
     #
     # Let's see how many times each machine got played.  If things go according to play, the machines with higher probabilities should get played more often.
 
-    for machine, count in sorted(counter.Items()):
+    for machine, count in sorted(counter.items()):
         print(machine, count)
 
     # **Exercise:**  Go back and run this section again with a different value of `num_play` and see how it does.

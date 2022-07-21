@@ -6,7 +6,7 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 from thinkbayes import Pmf, Suite
-import thinkplot
+
 
 
 def test_pmfs():
@@ -34,22 +34,18 @@ def test_pmfs():
 
     # And we can compute its mean (which only works if it's normalized).
 
-    d6.mean()
+    d6.Mean()
 
     # `Random` chooses a random value from the Pmf.
 
-    d6.random()
-
-    # `thinkplot` provides methods for plotting Pmfs in a few different styles.
-
-    thinkplot.plot_hist_bar(d6)
+    d6.Random()
 
     # **Exercise 1:**  The Pmf object provides `__add__`, so you can use the `+` operator to compute the Pmf of the sum of two dice.
     #
     # Compute and plot the Pmf of the sum of two 6-sided dice.
 
     # Solution
-    thinkplot.plot_hist_bar(d6 + d6)
+
 
     # **Exercise 2:** Suppose I roll two dice and tell you the result is greater than 3.
     #
@@ -61,8 +57,8 @@ def test_pmfs():
     pmf[2] = 0
     pmf[3] = 0
     pmf.Normalize()
-    thinkplot.plot_hist_bar(pmf)
-    pmf.mean()
+
+    pmf.Mean()
 
     # The cookie problem
 
@@ -136,7 +132,7 @@ def test_pmfs():
     #
     # Here's an outline to get you started:
 
-    class Dice(Suite):
+    class Dice1(Suite):
         # hypo is the number of sides on the die
         # data is the outcome
         def Likelihood(self, data, hypo):
@@ -144,7 +140,7 @@ def test_pmfs():
 
     # Solution
 
-    class Dice(Suite):
+    class Dice2(Suite):
         # hypo is the number of sides on the die
         # data is the outcome
         def Likelihood(self, data, hypo):
@@ -155,7 +151,7 @@ def test_pmfs():
 
     # Now we can create a `Dice` object and update it.
 
-    dice = Dice([4, 6, 8, 12])
+    dice = Dice2([4, 6, 8, 12])
     dice.Update(6)
     dice.Print()
 
@@ -185,8 +181,8 @@ def test_pmfs():
 
     tank = Tank(range(100))
     tank.Update(37)
-    thinkplot.plot_pdf_line(tank)
-    tank.mean()
+
+    tank.Mean()
 
     # **Exercise 7:**  Suppose we see another tank with serial number 17.  What effect does this have on the posterior probabilities?
     #
@@ -194,10 +190,10 @@ def test_pmfs():
 
     # Solution
 
-    thinkplot.plot_pdf_line(tank, color="0.7")
+
     tank.Update(17)
-    thinkplot.plot_pdf_line(tank)
-    tank.mean()
+
+    tank.Mean()
 
     # The Euro problem
 
@@ -206,7 +202,7 @@ def test_pmfs():
     #
     # Note that `hypo` is in the range 0 to 100.  Here's an outline to get you started.
 
-    class Euro(Suite):
+    class Euro1(Suite):
         def Likelihood(self, data, hypo):
             """
             hypo is the prob of heads (0-100)
@@ -216,7 +212,7 @@ def test_pmfs():
 
     # Solution
 
-    class Euro(Suite):
+    class Euro2(Suite):
         def Likelihood(self, data, hypo):
             """
             hypo is the prob of heads (0-100)
@@ -230,49 +226,49 @@ def test_pmfs():
 
     # We'll start with a uniform distribution from 0 to 100.
 
-    euro = Euro(range(101))
-    thinkplot.plot_pdf_line(euro)
+    euro = Euro2(range(101))
+
 
     # Now we can update with a single heads:
 
     euro.Update("H")
-    thinkplot.plot_pdf_line(euro)
+
 
     # Another heads:
 
     euro.Update("H")
-    thinkplot.plot_pdf_line(euro)
+
 
     # And a tails:
 
     euro.Update("T")
-    thinkplot.plot_pdf_line(euro)
+
 
     # Starting over, here's what it looks like after 7 heads and 3 tails.
 
-    euro = Euro(range(101))
+    euro = Euro2(range(101))
 
     for outcome in "HHHHHHHTTT":
         euro.Update(outcome)
 
-    thinkplot.plot_pdf_line(euro)
+
     euro.MaximumLikelihood()
 
     # The maximum posterior probability is 70%, which is the observed proportion.
     #
     # Here are the posterior probabilities after 140 heads and 110 tails.
 
-    euro = Euro(range(101))
+    euro = Euro2(range(101))
 
     evidence = "H" * 140 + "T" * 110
     for outcome in evidence:
         euro.Update(outcome)
 
-    thinkplot.plot_pdf_line(euro)
+
 
     # The posterior mean s about 56%
 
-    euro.mean()
+    euro.Mean()
 
     # So is the value with Maximum Aposteriori Probability (MAP).
 
@@ -288,7 +284,7 @@ def test_pmfs():
 
     def TrianglePrior():
         """Makes a Suite with a triangular prior."""
-        suite = Euro(label="triangle")
+        suite = Euro2(label="triangle")
         for x in range(0, 51):
             suite[x] = x
         for x in range(51, 101):
@@ -298,10 +294,9 @@ def test_pmfs():
 
     # And here's what it looks like:
 
-    euro1 = Euro(range(101), label="uniform")
+    euro1 = Euro2(range(101), label="uniform")
     euro2 = TrianglePrior()
-    thinkplot.plot_pdfs([euro1, euro2])
-    thinkplot.config_plot(title="Priors")
+
 
     # **Exercise 9:** Update euro1 and euro2 with the same data we used before (140 heads and 110 tails) and plot the posteriors.  How big is the difference in the means?
 
@@ -312,6 +307,6 @@ def test_pmfs():
         euro1.Update(outcome)
         euro2.Update(outcome)
 
-    thinkplot.plot_pdfs([euro1, euro2])
-    thinkplot.config_plot(title="Posteriors")
-    euro1.mean(), euro2.mean()
+
+    euro1.Mean()
+    euro2.Mean()

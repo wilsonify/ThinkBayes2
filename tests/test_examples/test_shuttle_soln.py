@@ -60,8 +60,7 @@ def test_shuttle():
     !wget https://raw.githubusercontent.com/CamDavidsonPilon/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/master/Chapter2_MorePyMC/data/challenger_data.csv
     """
     columns = ["Date", "Temperature", "Incident"]
-    df = pd.read_csv(os.path.join(DATADIR, "challenger_data.csv"), parse_dates=[0])
-    df.drop(labels=[3, 24], axis=1, inplace=True)
+    df = pd.read_csv(os.path.join(DATADIR, "challenger_data.csv"), parse_dates=[0], index_col=0)
     logging.info("%r", f"df.shape = {df.shape}")
 
     df["Incident"] = df["Damage Incident"].astype(float)
@@ -79,7 +78,8 @@ def test_shuttle():
     #
     # $\mathrm{logit}(p) = b0 + b1 * T$
     #
-    # and each datum being a temperature `T` and a boolean outcome `fail`, which is true is there was damage and false otherwise.
+    # and each datum being a temperature `T` and a boolean outcome `fail`,
+    # which is true is there was damage and false otherwise.
     #
     # Hint: the `expit` function from `scipy.special` computes the inverse of the `logit` function.
 
@@ -98,8 +98,6 @@ def test_shuttle():
 
     b1 = np.linspace(-1, 1, 101)
 
-
-
     hypos = product(b0, b1)
 
     suite = Logistic(hypos)
@@ -108,7 +106,8 @@ def test_shuttle():
         print(data)
         suite.Update(data)
 
-    # According to the posterior distribution, what was the probability of damage when the shuttle launched at 31 degF?
+    # According to the posterior distribution,
+    # what was the probability of damage when the shuttle launched at 31 degF?
 
     # Solution
 
@@ -128,13 +127,21 @@ def test_shuttle():
     pred = suite.Copy()
     pred.Update((31, True))
 
+
+def test_shuttle_pymc():
     # ### MCMC
     #
-    # Implement this model using MCMC.  As a starting place, you can use this example from [the PyMC3 docs](https://docs.pymc.io/notebooks/GLM-logistic.html#The-model).
+    # Implement this model using MCMC.
+    # As a starting place, you can use this example from
+    # [the PyMC3 docs](https://docs.pymc.io/notebooks/GLM-logistic.html#The-model).
     #
-    # As a challege, try writing the model more explicitly, rather than using the GLM module.
+    # As a challenge, try writing the model more explicitly, rather than using the GLM module.
 
     simplefilter("ignore", FutureWarning)
+    columns = ["Date", "Temperature", "Incident"]
+    df = pd.read_csv(os.path.join(DATADIR, "challenger_data.csv"), parse_dates=[0], index_col=0)
+    logging.info("%r", f"df.shape = {df.shape}")
+    df["Incident"] = df["Damage Incident"].astype(float)
 
     # Solution
 

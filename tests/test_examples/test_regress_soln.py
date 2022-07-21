@@ -33,7 +33,6 @@ class Regress2(Suite, Joint):
         """
         x, y = data
         slope, inter, sigma = hypo
-
         yfit = inter + slope * x
         error = yfit - y
         like = norm(0, sigma).pdf(error)
@@ -47,7 +46,8 @@ def test_bayes_reg():
     #
     # ### Data
     #
-    # Suppose there is a linear relationship between `x` and `y` with slope 2 and intercept 1, but the measurements of `y` are noisy; specifically, the noise is Gaussian with mean 0 and `sigma = 0.3`.
+    # Suppose there is a linear relationship between `x` and `y` with slope 2 and intercept 1,
+    # but the measurements of `y` are noisy; specifically, the noise is Gaussian with mean 0 and `sigma = 0.3`.
 
     slope = 2
     inter = 1
@@ -57,15 +57,14 @@ def test_bayes_reg():
 
     ys = inter + slope * xs + np.random.normal(0, sigma, len(xs))
 
-
-
     # ### Grid algorithm
     #
     # We can solve the problem first using a grid algorithm, with uniform priors for slope, intercept, and sigma.
     #
     # As an exercise, fill in this likelihood function, then test it using the code below.
     #
-    # Your results will depend on the random data you generated, but in general you should find that the posterior marginal distributions peak near the actual parameters.
+    # Your results will depend on the random data you generated,
+    # but in general you should find that the posterior marginal distributions peak near the actual parameters.
 
     params = np.linspace(-4, 4, 21)
 

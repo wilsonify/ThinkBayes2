@@ -15,6 +15,41 @@ import logging
 import matplotlib.pyplot as plt
 import numpy as np
 import pymc3 as pm
+from collections import Counter
+
+
+class Pmf(Counter):
+    def Normalize(self):
+        """Normalizes the PMF so the probabilities add to 1."""
+        total = sum(self.values())
+        for key in self:
+            self[key] /= total
+
+    def SortedItems(self):
+        """Returns the outcomes and their probabilities."""
+        return zip(*sorted(self.items()))
+
+
+def half_game(lam_per_min, min_per_game=60):
+    """
+    If we assume that a goal is equally likely during any minute of the game,
+    and we ignore the possibility of scoring more than one goal in the same minute,
+
+    we can simulate a game by generating one random value each minute.
+    np.random.random(min_per_game)
+    If the random value is less than `lam_per_min`, that means we score a goal during that minute.
+    np.random.random(min_per_game) < lam_per_min
+
+    So we can get the number of goals scored by one team like this:
+    np.sum(np.random.random(min_per_game) < lam_per_min)
+
+    I'll wrap that in a function.
+
+    :param lam_per_min:
+    :param min_per_game:
+    :return:
+    """
+    return np.sum(np.random.random(min_per_game) < lam_per_min)
 
 
 def test_hockey():
@@ -25,27 +60,6 @@ def test_hockey():
     For the first example, we'll assume that `lambda` is known (somehow) to be 2.7.
     Since regulation play (as opposed to overtime) is 60 minutes, we can compute the goal scoring rate per minute.
     """
-
-    def half_game(lam_per_min, min_per_game=60):
-        """
-        If we assume that a goal is equally likely during any minute of the game,
-        and we ignore the possibility of scoring more than one goal in the same minute,
-
-        we can simulate a game by generating one random value each minute.
-        np.random.random(min_per_game)
-        If the random value is less than `lam_per_min`, that means we score a goal during that minute.
-        np.random.random(min_per_game) < lam_per_min
-
-        So we can get the number of goals scored by one team like this:
-        np.sum(np.random.random(min_per_game) < lam_per_min)
-
-        I'll wrap that in a function.
-
-        :param lam_per_min:
-        :param min_per_game:
-        :return:
-        """
-        return np.sum(np.random.random(min_per_game) < lam_per_min)
 
     # And simulate 10 games.
     lam_per_game = 2.7
@@ -71,19 +85,6 @@ def test_hockey():
     #
     #
 
-    from collections import Counter
-
-    class Pmf(Counter):
-        def normalize(self):
-            """Normalizes the PMF so the probabilities add to 1."""
-            total = sum(self.values())
-            for key in self:
-                self[key] /= total
-
-        def sorted_items(self):
-            """Returns the outcomes and their probabilities."""
-            return zip(*sorted(self.Items()))
-
     # Here are some functions for plotting PMFs.
 
     plot_options = dict(linewidth=3, alpha=0.6)
@@ -94,7 +95,7 @@ def test_hockey():
         options: dictionary
         """
 
-        for key, val in plot_options.Items():
+        for key, val in plot_options.items():
             options.setdefault(key, val)
         return options
 
@@ -110,7 +111,7 @@ def test_hockey():
         """Compute and plot a PMF."""
         pmf = Pmf(sample)
         pmf.Normalize()
-        xs, ps = pmf.sorted_Items()
+        xs, ps = pmf.SortedItems()
         bar(xs, ps, **options)
 
     def pmf_goals():
@@ -155,7 +156,7 @@ def test_hockey():
     def plot_cdf(sample, **options):
         """Compute and plot the CDF of a sample."""
         pmf = Pmf(sample)
-        xs, freqs = pmf.sorted_Items()
+        xs, freqs = pmf.SortedItems()
         ps = np.cumsum(freqs, dtype=np.float)
         ps /= ps[-1]
         plot(xs, ps, **options)
@@ -296,7 +297,7 @@ def test_hockey():
 
         def plot(self, **options):
             """Plot the hypotheses and their probabilities."""
-            xs, ps = self.sorted_Items()
+            xs, ps = self.SortedItems()
             plot(xs, ps, **options)
 
     def pdf_rate():
@@ -667,7 +668,6 @@ def test_hockey():
 
     # With `goals` fixed, the only unknown is `mu`, so `trace` contains a sample drawn from the posterior distribution of `mu`.  We can plot the posterior using a function provided by PyMC:
 
-    pm.plot_posterior(trace)
     pdf_rate()
 
     # And we can extract a sample from the posterior of `mu`
@@ -686,7 +686,7 @@ def test_hockey():
     # To generate a posterior predictive distribution, we can use `sample_ppc`
 
     with model:
-        post_pred = pm.sample_ppc(trace, samples=2000)
+        post_pred = pm.sample_prior_predictive(trace, samples=2000)
 
     # Here's what it looks like:
 

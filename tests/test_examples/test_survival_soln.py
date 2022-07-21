@@ -8,7 +8,44 @@ import logging
 
 import numpy as np
 from thinkbayes import Pmf, Cdf, Suite, Joint
-import thinkplot
+
+
+def SampleWeibull(lam, k, n=1):
+    return np.random.weibull(k, size=n) * lam
+
+
+def EvalWeibullPdf(x, lam, k):
+    """Computes the Weibull PDF.
+
+    x: value
+    lam: parameter lambda in events per unit time
+    k: parameter
+
+    returns: float probability density
+    """
+    arg = x / lam
+    return k / lam * arg ** (k - 1) * np.exp(-(arg ** k))
+
+
+def EvalWeibullCdf(x, lam, k):
+    """Evaluates CDF of the Weibull distribution."""
+    arg = x / lam
+    return 1 - np.exp(-(arg ** k))
+
+
+def MakeWeibullPmf(lam, k, high, n=200):
+    """Makes a PMF discrete approx to a Weibull distribution.
+
+    lam: parameter lambda in events per unit time
+    k: parameter
+    high: upper bound
+    n: number of values in the Pmf
+
+    returns: normalized Pmf
+    """
+    xs = np.linspace(0, high, n)
+    ps = EvalWeibullPdf(xs, lam, k)
+    return Pmf(dict(zip(xs, ps)))
 
 
 def test_weibull():
@@ -17,37 +54,6 @@ def test_weibull():
     # The Weibull distribution is often used in survival analysis because it models the distribution of lifetimes for manufactured products, at least over some parts of the range.
     #
     # The following functions evaluate its PDF and CDF.
-
-    def EvalWeibullPdf(x, lam, k):
-        """Computes the Weibull PDF.
-
-        x: value
-        lam: parameter lambda in events per unit time
-        k: parameter
-
-        returns: float probability density
-        """
-        arg = x / lam
-        return k / lam * arg ** (k - 1) * np.exp(-(arg ** k))
-
-    def EvalWeibullCdf(x, lam, k):
-        """Evaluates CDF of the Weibull distribution."""
-        arg = x / lam
-        return 1 - np.exp(-(arg ** k))
-
-    def MakeWeibullPmf(lam, k, high, n=200):
-        """Makes a PMF discrete approx to a Weibull distribution.
-
-        lam: parameter lambda in events per unit time
-        k: parameter
-        high: upper bound
-        n: number of values in the Pmf
-
-        returns: normalized Pmf
-        """
-        xs = np.linspace(0, high, n)
-        ps = EvalWeibullPdf(xs, lam, k)
-        return Pmf(dict(zip(xs, ps)))
 
     # SciPy also provides functions to evaluate the Weibull distribution, which I'll use to check my implementation.
 
@@ -68,20 +74,14 @@ def test_weibull():
     # And here's what the PDF looks like, for these parameters.
 
     pmf = MakeWeibullPmf(lam, k, high=10)
-    thinkplot.plot_pdf_line(pmf)
-    thinkplot.config_plot(xlabel="Lifetime", ylabel="PMF")
 
     # We can use np.random.weibull to generate random values from a Weibull distribution with given parameters.
     #
     # To check that it is correct, I generate a large sample and compare its CDF to the analytic CDF.
 
-    def SampleWeibull(lam, k, n=1):
-        return np.random.weibull(k, size=n) * lam
-
     data = SampleWeibull(lam, k, 10000)
     cdf = Cdf(data)
-    model = pmf.make_cdf()
-    thinkplot.plot_cdfs([cdf, model])
+    model = pmf.MakeCdf()
 
     # **Exercise:** Write a class called `LightBulb` that inherits from `Suite` and `Joint` and provides a `Likelihood` function that takes an observed lifespan as data and a tuple, `(lam, k)`, as a hypothesis.  It should return a likelihood proportional to the probability of the observed lifespan in a Weibull distribution with the given parameters.
     #
@@ -114,25 +114,25 @@ def test_weibull():
     datum = SampleWeibull(lam, k, 10)
     lam = 2
     k = 1.5
-    suite.Update_set(datum)
+    suite.UpdateSet(datum)
 
     # Solution
 
     pmf_lam = suite.Marginal(0)
-    thinkplot.plot_pdf_line(pmf_lam)
-    pmf_lam.mean()
+
+    pmf_lam.Mean()
 
     # Solution
 
     pmf_k = suite.Marginal(1)
-    thinkplot.plot_pdf_line(pmf_k)
-    pmf_k.mean()
+
+    pmf_k.Mean()
 
     # Solution
 
-    thinkplot.contour_plot(suite)
-
-    # **Exercise:** Now suppose that instead of observing a lifespan, `k`, you observe a lightbulb that has operated for 1 year and is still working.  Write another version of `LightBulb` that takes data in this form and performs an update.
+    # **Exercise:** Now suppose that instead of observing a lifespan,
+    # `k`, you observe a lightbulb that has operated for 1 year and is still working.
+    # Write another version of `LightBulb` that takes data in this form and performs an update.
 
     # Solution
 
@@ -161,13 +161,13 @@ def test_weibull():
     # Solution
 
     pmf_lam = suite.Marginal(0)
-    thinkplot.plot_pdf_line(pmf_lam)
-    pmf_lam.mean()
+
+    pmf_lam.Mean()
 
     # Solution
 
     pmf_k = suite.Marginal(1)
-    thinkplot.plot_pdf_line(pmf_k)
+
     pmf_k.mean()
 
     # **Exercise:** Now let's put it all together.  Suppose you have 15 lightbulbs installed at different times over a 10 year period.  When you observe them, some have died and some are still working.  Write a version of `LightBulb` that takes data in the form of a `(flag, x)` tuple, where:
@@ -241,18 +241,18 @@ def test_weibull():
 
     # Solution
 
-    suite.Update_set(data)
+    suite.UpdateSet(data)
 
     # Solution
 
     pmf_lam = suite.Marginal(0)
-    thinkplot.plot_pdf_line(pmf_lam)
+
     pmf_lam.mean()
 
     # Solution
 
     pmf_k = suite.Marginal(1)
-    thinkplot.plot_pdf_line(pmf_k)
+
     pmf_k.mean()
 
     # **Exercise:** Suppose you install a light bulb and then you don't check on it for a year, but when you come back, you find that it has burned out.  Extend `LightBulb` to handle this kind of data, too.
@@ -285,7 +285,6 @@ def test_weibull():
     p = EvalWeibullCdf(1, lam, k)
     logging.info("%r", f"p = {p}")
 
-
     # Solution
 
     # The number of bulbs that have burned out is distributed Binom(n, p)
@@ -293,9 +292,12 @@ def test_weibull():
     from thinkbayes import MakeBinomialPmf
 
     pmf_c = MakeBinomialPmf(n, p)
-    thinkplot.plot_pdf_line(pmf_c)
 
-    # **Exercise:** Now suppose that `lam` and `k` are not known precisely, but we have a `LightBulb` object that represents the joint posterior distribution of the parameters after seeing some data.  Compute the posterior predictive distribution for `c`, the number of bulbs burned out after one year.
+    # **Exercise:** Now suppose that `lam` and `k` are not known precisely,
+    # but we have a `LightBulb` object that represents the joint posterior distribution of the parameters
+    # after seeing some data.
+    # Compute the posterior predictive distribution for `c`,
+    # the number of bulbs burned out after one year.
 
     # Solution
 
