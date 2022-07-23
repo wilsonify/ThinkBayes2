@@ -1,3 +1,4 @@
+import logging
 import os
 
 import pytest
@@ -6,6 +7,8 @@ from thinkbayes import Pmf
 CONFTESTDIR = os.path.abspath(os.path.dirname(__file__))
 TESTDIR = os.path.abspath(os.path.join(CONFTESTDIR, os.pardir))
 DATADIR = os.path.join(TESTDIR, "data")
+
+logging.basicConfig()
 
 
 @pytest.fixture(name="d6")

@@ -241,7 +241,7 @@ def test_comparing_distributions():
     # And here's a version using NumPy.  I'll generate an array with 6 rows and 10 columns:
 
     iters = 1000
-    ks = rhode_rematch.sample((6, iters))
+    ks = rhode_rematch.Sample((6, iters))
     logging.info("%r", f"ks = {ks}")
 
     # Compute the maximum in each column:
@@ -259,7 +259,7 @@ def test_comparing_distributions():
     #
     # `Pmf` provides a method that computes and returns this `Cdf`, so we can compute the distribution of the maximum like this:
 
-    pmf = rhode_rematch.max(6).MakePmf()
+    pmf = rhode_rematch.Max(6).MakePmf()
 
     # **Exercise:**  Here's how Pmf.Max works:
     #
@@ -277,7 +277,7 @@ def test_comparing_distributions():
     # Write a function that takes a Pmf and an integer `n` and returns a Pmf that represents the distribution of the minimum of `k` values drawn from the given Pmf.  Use your function to compute the distribution of the minimum score Kim Rhode would be expected to shoot in six competitions.
 
     def Min(pmf, k):
-        cdf = pmf.make_cdf()
+        cdf = pmf.MakeCdf()
         cdf.ps = 1 - (1 - cdf.ps) ** k
         return cdf
 

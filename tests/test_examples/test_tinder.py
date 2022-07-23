@@ -82,4 +82,4 @@ def test_tinder():
 
     # Numerical differentiation is more accurate, especially near zero.  The value at zero is wrong: there are ways we could fix it, but it's not necessary because we won't get zero as data.
 
-    thinkplot.plot(xs, ys)
+

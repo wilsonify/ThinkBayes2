@@ -18,6 +18,42 @@ MONTHS_AFTER_CUTOFF_LABEL = "Months after cutoff"
 DIAGNOSIS_RATE_LABEL = "Diagnosis rate per 10,000"
 
 
+def errorbar(xs, low, high, **options):
+    for x, l, h in zip(xs, low, high):
+        plt.vlines(x, l, h, **options)
+
+
+class August(Suite, Joint):
+    def Likelihood(self, data, hypo):
+        x, d, t = data
+        b0, b1 = hypo
+
+        p = expit(b0 + b1 * x)
+        like = scipy.stats.binom.pmf(d, t, p)
+
+        return like
+
+    def posterior_predictive(self, x):
+        pmf = Pmf()
+
+        for (b0, b1), p in self.Items():
+            base = expit(b0 + b1 * x) * 10000
+            pmf[base] += p
+
+        return pmf
+
+    def posterior_predictive_diff(self):
+        pmf = Pmf()
+
+        for (b0, b1), p in self.Items():
+            p0 = expit(b0) * 10000
+            p1 = expit(b0 + b1 * 11) * 10000
+            diff = p1 - p0
+            pmf[diff] += p
+
+        return pmf
+
+
 def test_birthday_problem():
     # ### The August birthday problem
     #
@@ -47,7 +83,8 @@ def test_birthday_problem():
     #
     # It includes this figure:
     #
-    # ![](https://www.nejm.org/na101/home/literatum/publisher/mms/journals/content/nejm/2018/nejm_2018.379.issue-22/nejmoa1806828/20181123/images/img_xlarge/nejmoa1806828_f1.jpeg)
+    # ![](https://www.nejm.org/na101/home/literatum/publisher/mms/journals/content/nejm/2018/nejm_2018.379.issue-22/
+    # nejmoa1806828/20181123/images/img_xlarge/nejmoa1806828_f1.jpeg)
     #
     # However, there is an error in this figure, confirmed by personal correspondence:
     #
@@ -98,7 +135,8 @@ def test_birthday_problem():
 
     # For the first 9 months,
     # from September to May,
-    # we see what we would expect if at least some of the excess diagnoses are due to behavioral differences due to age.
+    # we see what we would expect if some diagnoses
+    # are due to behavioral differences due to age.
     # For each month of difference in age, we see an increase in the number of diagnoses.
     #
     # This pattern breaks down for the last three months, June, July, and August.
@@ -111,7 +149,6 @@ def test_birthday_problem():
     # rather than just looking at their months of birth.
     #
     # I'll use a beta distribution to compute the posterior credible interval for each of these rates.
-
 
     pcount = 1
     res = []
@@ -131,11 +168,6 @@ def test_birthday_problem():
 
     # Here's what the plot looks like with error bars.
 
-
-    def errorbar(xs, low, high, **options):
-        for x, l, h in zip(xs, low, high):
-            plt.vlines(x, l, h, **options)
-
     errorbar(xs, low, high, color="gray", alpha=0.7)
     thinkplot.plot(xs, rates)
     thinkplot.decorate(xlabel=MONTHS_AFTER_CUTOFF_LABEL, ylabel=DIAGNOSIS_RATE_LABEL)
@@ -152,19 +184,7 @@ def test_birthday_problem():
 
     # Here's a Suite that estimates the parameters of a logistic regression model, `b0` and `b1`.
 
-    class August(Suite, Joint):
-        def Likelihood(self, data, hypo):
-            x, d, t = data
-            b0, b1 = hypo
-
-            p = expit(b0 + b1 * x)
-            like = scipy.stats.binom.pmf(d, t, p)
-
-            return like
-
     # The prior distributions are uniform over a grid that covers the most likely values.
-
-
 
     b0 = np.linspace(-4.75, -5.1, 101)
     b1 = np.linspace(-0.05, 0.05, 101)
@@ -189,7 +209,6 @@ def test_birthday_problem():
     b1 = pmf1.Mean()
     print(b1)
 
-
     # Let's see what the posterior regression lines look like, superimposed on the data.
 
     for _ in range(100):
@@ -212,20 +231,11 @@ def test_birthday_problem():
     # we can look at the posterior predictive distribution for
     # the difference between a child born in September and one born in August:
 
-    def posterior_predictive(x):
-        pmf = Pmf()
-
-        for (b0, b1), p in suite.Items():
-            base = expit(b0 + b1 * x) * 10000
-            pmf[base] += p
-
-        return pmf
-
     # Here are posterior predictive CDFs for diagnosis rates.
 
-    pmf0 = posterior_predictive(0)
+    pmf0 = suite.posterior_predictive(0)
 
-    pmf1 = posterior_predictive(11)
+    pmf1 = suite.posterior_predictive(11)
 
     thinkplot.decorate(
         title="Posterior predictive distribution",
@@ -237,18 +247,7 @@ def test_birthday_problem():
 
     # And we can compute the posterior predictive distribution for the difference.
 
-    def posterior_predictive_diff():
-        pmf = Pmf()
-
-        for (b0, b1), p in suite.Items():
-            p0 = expit(b0) * 10000
-            p1 = expit(b0 + b1 * 11) * 10000
-            diff = p1 - p0
-            pmf[diff] += p
-
-        return pmf
-
-    pmf_diff = posterior_predictive_diff()
+    pmf_diff = suite.posterior_predictive_diff()
 
     thinkplot.decorate(
         title="Posterior predictive distribution",
