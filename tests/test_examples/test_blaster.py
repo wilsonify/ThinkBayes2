@@ -142,7 +142,7 @@ def test_blaster35(prior):
     blaster = AlienBlaster(pmf)
     blaster.Update(2)
 
-    assert  prior.MAP() > blaster.MAP(), "The posterior mean and MAP are lower than in the prior."
+    assert prior.MAP() > blaster.MAP(), "The posterior mean and MAP are lower than in the prior."
 
 
 def test_blaster4():
