@@ -5,7 +5,7 @@ Copyright 2014 Allen B. Downey
 License: GNU GPLv3 http://www.gnu.org/licenses/gpl.html
 """
 
-from __future__ import print_function
+from __future__ import print_function, division
 
 import math
 import matplotlib
@@ -16,17 +16,18 @@ import pandas
 import warnings
 
 # customize some matplotlib attributes
-#matplotlib.rc('figure', figsize=(4, 3))
+# matplotlib.rc('figure', figsize=(4, 3))
 
-#matplotlib.rc('font', size=14.0)
-#matplotlib.rc('axes', labelsize=22.0, titlesize=22.0)
-#matplotlib.rc('legend', fontsize=20.0)
+# matplotlib.rc('font', size=14.0)
+# matplotlib.rc('axes', labelsize=22.0, titlesize=22.0)
+# matplotlib.rc('legend', fontsize=20.0)
 
-#matplotlib.rc('xtick.major', size=6.0)
-#matplotlib.rc('xtick.minor', size=3.0)
+# matplotlib.rc('xtick.major', size=6.0)
+# matplotlib.rc('xtick.minor', size=3.0)
 
-#matplotlib.rc('ytick.major', size=6.0)
-#matplotlib.rc('ytick.minor', size=3.0)
+# matplotlib.rc('ytick.major', size=6.0)
+# matplotlib.rc('ytick.minor', size=3.0)
+from thinkbayes import NormalProbability, MeanVar, FitLine
 
 
 class _Brewer(object):
@@ -41,7 +42,7 @@ class _Brewer(object):
 
     colors = ['#f7fbff', '#deebf7', '#c6dbef',
               '#9ecae1', '#6baed6', '#4292c6',
-              '#2171b5','#08519c','#08306b'][::-1]
+              '#2171b5', '#08519c', '#08306b'][::-1]
 
     # lists that indicate which colors to use depending on how many are used
     which_colors = [[],
@@ -167,6 +168,7 @@ def PrePlot(num=None, rows=None, cols=None):
         ax = plt.gca()
 
     return ax
+
 
 def SubPlot(plot_number, rows=None, cols=None, **options):
     """Configures the number of subplots and changes the current plot.
@@ -375,16 +377,16 @@ def Hist(hist, **options):
         # if not, replace values with numbers
         labels = [str(x) for x in xs]
         xs = np.arange(len(xs))
-        plt.xticks(xs+0.5, labels)
+        plt.xticks(xs + 0.5, labels)
 
     if 'width' not in options:
         try:
             options['width'] = 0.9 * np.diff(xs).min()
         except TypeError:
             warnings.warn("Hist: Can't compute bar width automatically."
-                            "Check for non-numeric types in Hist."
-                            "Or try providing width option."
-                            )
+                          "Check for non-numeric types in Hist."
+                          "Or try providing width option."
+                          )
 
     options = _Underride(options, label=hist.label)
     options = _Underride(options, align='center')
@@ -440,7 +442,7 @@ def Pmf(pmf, **options):
 
         points.append((x, lasty))
         points.append((x, y))
-        points.append((x+width, y))
+        points.append((x + width, y))
 
         lastx = x + width
         lasty = y
@@ -449,7 +451,7 @@ def Pmf(pmf, **options):
 
     align = options.pop('align', 'center')
     if align == 'center':
-        pxs = np.array(pxs) - width/2.0
+        pxs = np.array(pxs) - width / 2.0
     if align == 'right':
         pxs = np.array(pxs) - width
 
@@ -480,7 +482,7 @@ def Diff(t):
     Returns:
         sequence of differences (length one less than t)
     """
-    diffs = [t[i+1] - t[i] for i in range(len(t)-1)]
+    diffs = [t[i + 1] - t[i] for i in range(len(t) - 1)]
     return diffs
 
 
@@ -517,12 +519,12 @@ def Cdf(cdf, complement=False, transform=None, **options):
         scale['xscale'] = 'log'
 
     if complement:
-        ps = [1.0-p for p in ps]
+        ps = [1.0 - p for p in ps]
 
     if transform == 'weibull':
         xs = np.delete(xs, -1)
         ps = np.delete(ps, -1)
-        ps = [-math.log(1.0-p) for p in ps]
+        ps = [-math.log(1.0 - p) for p in ps]
         scale['xscale'] = 'log'
         scale['yscale'] = 'log'
 
@@ -632,6 +634,7 @@ def Text(x, y, s, **options):
 
 LEGEND = True
 LOC = None
+
 
 def Config(**options):
     """Configures the plot.
@@ -829,3 +832,34 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+def NormalProbabilityPlot(sample, fit_color='0.8', **options):
+    """Makes a normal probability plot with a fitted line.
+
+    sample: sequence of numbers
+    fit_color: color string for the fitted line
+    options: passed along to Plot
+    """
+    xs, ys = NormalProbability(sample)
+    mean, var = MeanVar(sample)
+    std = math.sqrt(var)
+
+    fit = FitLine(xs, mean, std)
+    plt.plot(*fit, color=fit_color, label='model')
+
+    xs, ys = NormalProbability(sample)
+    plt.plot(xs, ys, **options)
+
+
+def PlotCdf(ht, label=None):
+    """
+    Draws a Cdf with vertical lines at the observed test stat.
+    """
+
+    def VertLine(x):
+        """Draws a vertical line at x."""
+        plt.plot([x, x], [0, 1], color='0.8')
+
+    VertLine(ht.actual)
+    ht.test_cdf.plot(label=label)
