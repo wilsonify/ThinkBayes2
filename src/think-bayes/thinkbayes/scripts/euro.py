@@ -22,6 +22,7 @@ rather than fair?"
 """
 
 import thinkbayes
+import thinkbayes.c01_probability
 import thinkplot
 
 
@@ -88,7 +89,7 @@ def run_update(suite, heads=140, tails=110):
 
 def summarize(suite):
     """Prints summary statistics for the suite."""
-    print(suite.prob(50))
+    print(thinkbayes.c01_probability.prob(50))
 
     print("MLE", suite.MaximumLikelihood())
 

@@ -4,49 +4,9 @@ This is based on a notebook of example code from Think Bayes.
 import logging
 
 from thinkbayes import Cdf
+from thinkbayes.c03_distributions import Mean, MakePosterior, Train2
 from thinkbayes.scripts.dice import Dice
 from thinkbayes.scripts.train import Train
-
-
-def Mean(suite):
-    total = 0
-    for hypo, prob in suite.Items():
-        total += hypo * prob
-    return total
-
-
-def MakePosterior(high, dataset, constructor=Train):
-    """Solves the train problem.
-
-    Sensitivity to the prior
-    Here's a function that solves the train problem for different priors and data
-
-
-    high: int maximum number of trains
-    dataset: sequence of observed train numbers
-    constructor: function used to construct the Train object
-
-    returns: Train object representing the posterior suite
-    """
-    hypos = range(1, high + 1)
-    suite = constructor(hypos)
-
-    for data in dataset:
-        suite.Update(data)
-
-    return suite
-
-
-class Train2(Train):
-    # The results are quite sensitive to the prior, even with several observations.
-    # ## Power law prior
-    # Now let's try it with a power law prior.
-
-    def __init__(self, hypos, alpha=1.0):
-        super().__init__(self)
-        for hypo in hypos:
-            self[hypo] = hypo ** (-alpha)
-        self.Normalize()
 
 
 def test_dice():
@@ -172,14 +132,12 @@ def test_sensitivity():
     dataset = [60]
     high = 1000
 
-
     constructors = [Train, Train2]  # Now let's see what the posteriors look like after observing one train.
     labels = ["uniform", "power law"]
 
     for constructor, label in zip(constructors, labels):
         suite = MakePosterior(high, dataset, constructor)
         suite.label = label
-
 
     dataset = [30, 60, 90]
 

@@ -10,6 +10,7 @@ import math
 
 import numpy
 import thinkbayes
+import thinkbayes.c01_probability
 import thinkplot
 
 
@@ -313,7 +314,7 @@ class Sat2(thinkbayes.Suite):
         raw = self.exam.reverse(score)
 
         pmf = self.exam.pmf_correct(efficacy)
-        like = pmf.prob(raw)
+        like = thinkbayes.c01_probability.prob(raw)
         return like
 
     def make_predictive_dist(self):
@@ -351,7 +352,7 @@ def plot_joint_dist(pmf1, pmf2, thresh=0.8):
 
     def clean(probability_mass_function):
         """Removes values below thresh."""
-        vals = [val for val in probability_mass_function.values() if val < thresh]
+        vals = [val for val in thinkbayes.c01_probability.values() if val < thresh]
         for val in vals:
             probability_mass_function.remove(val)
 

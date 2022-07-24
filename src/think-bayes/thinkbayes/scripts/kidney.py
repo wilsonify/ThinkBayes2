@@ -11,6 +11,7 @@ import sys
 import matplotlib.pyplot as pyplot
 import numpy as np
 import thinkbayes
+import thinkbayes.c01_probability
 import thinkplot
 
 INTERVAL = 245 / 365.0
@@ -346,7 +347,7 @@ class Cache(object):
         """
         bucket = cm_to_bucket(cm)
         cdf = self.conditional_cdf(bucket)
-        p = cdf.prob(age)
+        p = thinkbayes.c01_probability.prob(age)
         return 1 - p
 
     def get_dist_age_size(self, size_thresh=MAXSIZE):

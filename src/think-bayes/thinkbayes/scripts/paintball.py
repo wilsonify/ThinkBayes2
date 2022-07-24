@@ -9,6 +9,7 @@ import math
 import sys
 
 import thinkbayes
+import thinkbayes.c01_probability
 import thinkplot
 
 FORMATS = ["pdf", "eps", "png"]
@@ -131,7 +132,7 @@ def make_conditional_plot(suite):
     thinkplot.PrePlot(num=len(betas))
 
     for beta in betas:
-        cond = suite.conditional(0, 1, beta)
+        cond = thinkbayes.c01_probability.conditional(0, 1, beta)
         cond.name = f"beta = {beta}"
         thinkplot.plot_pdf_line(cond)
 
@@ -159,7 +160,7 @@ def make_credible_plot(suite):
 
     suite: Suite
     """
-    d = dict((pair, 0) for pair in suite.values())
+    d = dict((pair, 0) for pair in thinkbayes.c01_probability.values())
 
     percentages = [75, 50, 25]
     for p in percentages:

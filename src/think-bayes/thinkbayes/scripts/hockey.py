@@ -8,6 +8,7 @@ MIT License: https://opensource.org/licenses/MIT
 import math
 
 import thinkbayes
+import thinkbayes.c01_probability
 import thinkplot
 from thinkbayes.scripts import columns
 
@@ -245,7 +246,7 @@ def main():
     diff = goal_dist1 - goal_dist2
     p_win = diff.prob_greater(0)
     p_loss = diff.prob_less(0)
-    p_tie = diff.prob(0)
+    p_tie = thinkbayes.c01_probability.prob(0)
 
     print(p_win, p_loss, p_tie)
 

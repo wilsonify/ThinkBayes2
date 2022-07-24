@@ -6,20 +6,10 @@ MIT License: https://opensource.org/licenses/MIT
 """
 import logging
 
+from thinkbayes.c05_counts import Odds, Probability
+
 
 def test_chapt5():
-    # ## Odds
-    #
-    # The following function converts from probabilities to odds.
-
-    def Odds(p):
-        return p / (1 - p)
-
-    # And this function converts from odds to probabilities.
-
-    def Probability(o):
-        return o / (o + 1)
-
     # If 20% of bettors think my horse will win, that corresponds to odds of 1:4, or 0.25.
 
     p = 0.2
@@ -37,12 +27,10 @@ def test_chapt5():
     post_odds = prior_odds * likelihood_ratio
     logging.info("%r", f"post_odds = {post_odds}")
 
-
     # And then we can compute the posterior probability, if desired.
 
     post_prob = Probability(post_odds)
     logging.info("%r", f"post_prob = {post_prob}")
-
 
     # If we draw another cookie and it's chocolate, we can do another update:
 
@@ -50,20 +38,28 @@ def test_chapt5():
     post_odds *= likelihood_ratio
     logging.info("%r", f"post_odds = {post_odds}")
 
-
     # And convert back to probability.
 
     post_prob = Probability(post_odds)
     logging.info("%r", f"post_prob = {post_prob}")
 
 
+def test_oliver_blood():
     # ## Oliver's blood
     #
-    # The likelihood ratio is also useful for talking about the strength of evidence without getting bogged down talking about priors.
+    # The likelihood ratio is also useful for talking about the strength of evidence
+    # without getting bogged down talking about priors.
     #
-    # As an example, we'll solve this problem from MacKay's {\it Information Theory, Inference, and Learning Algorithms}:
+    # As an example,
+    # we'll solve this problem from MacKay's {\it Information Theory, Inference, and Learning Algorithms}:
     #
-    # > Two people have left traces of their own blood at the scene of a crime.  A suspect, Oliver, is tested and found to have type 'O' blood.  The blood groups of the two traces are found to be of type 'O' (a common type in the local population, having frequency 60) and of type 'AB' (a rare type, with frequency 1). Do these data [the traces found at the scene] give evidence in favor of the proposition that Oliver was one of the people [who left blood at the scene]?
+    # > Two people have left traces of their own blood at the scene of a crime.
+    # A suspect, Oliver, is tested and found to have type 'O' blood.
+    # The blood groups of the two traces are found to be of type 'O'
+    # (a common type in the local population, having frequency 60)
+    # and of type 'AB' (a rare type, with frequency 1).
+    # Do these data [the traces found at the scene] give evidence
+    # in favor of the proposition that Oliver was one of the people [who left blood at the scene]?
     #
     # If Oliver is
     # one of the people who left blood at the crime scene, then he
@@ -87,19 +83,25 @@ def test_chapt5():
     likelihood_ratio = like1 / like2
     logging.info("%r", f"likelihood_ratio = {likelihood_ratio}")
 
-
-    # Since the ratio is less than 1, it is evidence *against* the hypothesis that Oliver left blood at the scence.
+    # Since the ratio is less than 1,
+    # it is evidence *against* the hypothesis that Oliver left blood at the scence.
     #
-    # But it is weak evidence.  For example, if the prior odds were 1 (that is, 50% probability), the posterior odds would be 0.83, which corresponds to a probability of:
+    # But it is weak evidence.
+    # For example, if the prior odds were 1 (that is, 50% probability),
+    # the posterior odds would be 0.83, which corresponds to a probability of:
 
     post_odds = 1 * like1 / like2
     Probability(post_odds)
 
     # So this evidence doesn't "move the needle" very much.
 
-    # **Exercise:** Suppose other evidence had made you 90% confident of Oliver's guilt.  How much would this exculpatory evidence change your beliefs?  What if you initially thought there was only a 10% chance of his guilt?
+    # **Exercise:**
+    # Suppose other evidence had made you 90% confident of Oliver's guilt.
+    # How much would this exculpatory evidence change your beliefs?
+    # What if you initially thought there was only a 10% chance of his guilt?
     #
-    # Notice that evidence with the same strength has a different effect on probability, depending on where you started.
+    # Notice that evidence with the same strength has a different effect on probability,
+    # depending on where you started.
 
     # Solution
 

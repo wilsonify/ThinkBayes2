@@ -13,6 +13,8 @@ import numpy
 import scipy
 import thinkbayes
 from scipy import stats
+
+import thinkbayes.c01_probability
 import thinkplot
 from thinkbayes.scripts import brfss
 
@@ -324,7 +326,7 @@ def read_heights(nrows=None):
 
     d = {}
     for name, group in groups:
-        d[name] = group.htm3.values
+        d[name] = thinkbayes.c01_probability.values
 
     return d
 

@@ -46,6 +46,7 @@ from itertools import product
 import numpy
 
 import thinkbayes
+import thinkbayes.c03_distributions
 
 
 class Gps(thinkbayes.Suite, thinkbayes.Joint):
@@ -87,8 +88,8 @@ def main():
     pdfx = joint.Marginal(0)
     pdfy = joint.Marginal(1)
 
-    print(pdfx.Mean(), pdfx.Std())
-    print(pdfy.Mean(), pdfy.Std())
+    print(thinkbayes.c03_distributions.Mean(), pdfx.Std())
+    print(thinkbayes.c03_distributions.Mean(), pdfy.Std())
 
 
 if __name__ == "__main__":

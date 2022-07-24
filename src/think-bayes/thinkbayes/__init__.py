@@ -9,6 +9,8 @@ from __future__ import print_function, division
 
 from sympy.core.relational import Relational
 
+import thinkbayes.c01_probability
+
 """This file contains class definitions for:
 
 Hist: represents a histogram (map from values to integer frequencies).
@@ -1228,7 +1230,7 @@ class Cdf:
 
         returns: array of percentile ranks in the range 0 to 100
         """
-        return self.Probs(x) * 100
+        return self.Probs(xs) * 100
 
     def Random(self):
         """Chooses a random value from this distribution."""
@@ -2436,24 +2438,6 @@ def Jitter(values, jitter=0.5):
     return np.random.normal(0, jitter, n) + values
 
 
-def NormalProbabilityPlot(sample, fit_color='0.8', **options):
-    """Makes a normal probability plot with a fitted line.
-
-    sample: sequence of numbers
-    fit_color: color string for the fitted line
-    options: passed along to Plot
-    """
-    xs, ys = NormalProbability(sample)
-    mean, var = MeanVar(sample)
-    std = math.sqrt(var)
-
-    fit = FitLine(xs, mean, std)
-    plt.plot(*fit, color=fit_color, label='model')
-
-    xs, ys = NormalProbability(sample)
-    plt.plot(xs, ys, **options)
-
-
 def Mean(xs):
     """Computes mean.
 
@@ -2847,7 +2831,7 @@ class FixedWidthVariables(object):
         self.colspecs = variables[['start', 'end']] - index_base
 
         # convert colspecs to a list of pair of int
-        self.colspecs = self.colspecs.astype(np.int).values.tolist()
+        self.colspecs = thinkbayes.c01_probability.values.tolist()
         self.names = variables['name']
 
     def ReadFixedWidth(self, filename, **options):
@@ -3033,17 +3017,6 @@ class HypothesisTest(object):
         """Returns the largest test statistic seen during simulations.
         """
         return max(self.test_stats)
-
-    def PlotCdf(self, label=None):
-        """Draws a Cdf with vertical lines at the observed test stat.
-        """
-
-        def VertLine(x):
-            """Draws a vertical line at x."""
-            plt.plot([x, x], [0, 1], color='0.8')
-
-        VertLine(self.actual)
-        self.test_cdf.plot(label=label)
 
     def TestStatistic(self, data):
         """Computes the test statistic.

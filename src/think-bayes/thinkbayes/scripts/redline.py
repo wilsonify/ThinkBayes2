@@ -11,6 +11,7 @@ import sys
 
 import numpy
 import thinkbayes
+import thinkbayes.c01_probability
 import thinkplot
 
 FORMATS = ["pdf", "eps", "png", "jpg"]
@@ -132,7 +133,7 @@ def bias_pmf(pmf, label=None, invert=False):
     """
     new_pmf = pmf.copy(label=label)
 
-    for x in pmf.values():
+    for x in thinkbayes.c01_probability.values():
         if invert:
             new_pmf.mult(x, 1.0 / x)
         else:
@@ -462,7 +463,7 @@ def remove_negatives(pmf):
 
     pmf: Pmf
     """
-    for val in list(pmf.values()):
+    for val in list(thinkbayes.c01_probability.values()):
         if val < 0:
             pmf.remove(val)
     pmf.normalize()
@@ -841,7 +842,7 @@ def run_loop(gap_times, nums, lam=0.0333):
 
         # compute the posterior prob of waiting more than 15 minutes
         cdf_y = ete.pmf_y.make_cdf()
-        prob = 1 - cdf_y.prob(900)
+        prob = 1 - thinkbayes.c01_probability.prob(900)
         probs.append(prob)
 
         # thinkplot.Cdf(ete.pmf_y.MakeCdf(label=str(num_passengers)))

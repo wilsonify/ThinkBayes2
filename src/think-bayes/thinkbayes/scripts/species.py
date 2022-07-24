@@ -15,6 +15,7 @@ import warnings
 import matplotlib.pyplot as pyplot
 import numpy as np
 import thinkbayes
+import thinkbayes.c01_probability
 import thinkplot
 
 warnings.simplefilter("error", RuntimeWarning)
@@ -305,7 +306,7 @@ class Subject(object):
         metapmf, mix = self.suite.dist_of_prevalence(index)
 
         thinkplot.clear_figure()
-        for pmf in metapmf.values():
+        for pmf in thinkbayes.c01_probability.values():
             thinkplot.plot_pmf_line(pmf, color="blue", alpha=0.2, linewidth=0.5)
 
         thinkplot.plot_pmf_line(mix, color="blue", alpha=0.9, linewidth=2)
@@ -728,7 +729,7 @@ def plot_frac_cdfs(cdfs, root="species-frac"):
         thinkplot.plot_line(xs, ys, color=color, linewidth=1)
 
         x = 0.9
-        y = 1 - cdf.prob(x)
+        y = 1 - thinkbayes.c01_probability.prob(x)
         pyplot.text(
             x,
             y,
@@ -823,7 +824,7 @@ class Species2(object):
         Just an experiment.  Doesn't work.
         """
         m = len(data)
-        singletons = data.count(1)
+        singletons = thinkbayes.c01_probability.count(1)
         num = m - singletons
         print(m, singletons, num)
         addend = np.ones(num, dtype=np.float) * 1

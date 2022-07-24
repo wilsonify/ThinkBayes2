@@ -11,6 +11,7 @@ import logging
 import matplotlib.pyplot as pyplot
 import numpy as np
 import thinkbayes
+import thinkbayes.c01_probability
 import thinkplot
 
 FORMATS = ["png", "pdf", "eps"]
@@ -187,14 +188,14 @@ class Player(object):
     def prob_overbid(self):
         """Returns the probability this player overbids.
         """
-        return self.cdf_diff.prob(-1)
+        return thinkbayes.c01_probability.prob(-1)
 
     def prob_worse_than(self, diff):
         """Probability this player's diff is greater than the given diff.
 
         diff: how much the oppenent is off by (always positive)
         """
-        return 1 - self.cdf_diff.prob(diff)
+        return 1 - thinkbayes.c01_probability.prob(diff)
 
     def make_beliefs(self, guess):
         """Makes a posterior distribution based on estimated price.
