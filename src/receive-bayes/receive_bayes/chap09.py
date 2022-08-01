@@ -10,7 +10,6 @@ from itertools import product
 import numpy as np
 import pytest
 
-import thinkplot
 from thinkbayes.c09_decisions import (
     MakeAngleSuite,
     Normal,
@@ -96,7 +95,6 @@ def paintball_strategy(self, body: dict):
     locations = range(0, 31)
     alpha = 10
     betas = [10, 20, 40]
-    thinkplot.PrePlot(num=len(betas))
 
     marginal_alpha = suite.Marginal(
         0, label="alpha"
@@ -107,7 +105,6 @@ def paintball_strategy(self, body: dict):
     print("beta CI", marginal_beta.CredibleInterval(50))
 
     betas = [10, 20, 40]
-    thinkplot.PrePlot(num=len(betas))
 
     d = dict((pair, 0) for pair in suite.Values())
 
@@ -316,7 +313,6 @@ def paintballing_strategy(self, body: dict):
     locations = range(0, 31)
     alpha = 10
     betas = [10, 20, 40]
-    thinkplot.PrePlot(num=len(betas))
 
     for beta in betas:
         pmf = MakeLocationPmf(alpha, beta, locations)

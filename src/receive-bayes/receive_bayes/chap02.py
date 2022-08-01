@@ -6,22 +6,11 @@ from thinkbayes.c02_bayes_theorem import Cookie, FullMonty, Monty
 from thinkbayes.scripts.mandm import MAndM
 
 
-
-def test_pmf(six_sided_die_pmf):
-    # A faster way to make a Pmf is to provide a sequence of values.
-    # The constructor adds the values to the Pmf and then normalizes:
-    pmf = Pmf([1, 2, 3, 4, 5, 6])
-    assert pmf == six_sided_die_pmf
-
-
-def test_Prob(six_sided_die_pmf):
+def six_sided_die_prob_strategy(self, body):
+    six_sided_die_pmf = Pmf([1, 2, 3, 4, 5, 6])
     six_sided_die_pmf.Prob(1)  # To extract a value from a Pmf, you can use `Prob`
     print(six_sided_die_pmf[1])  # Or you can use the bracket operator.
     assert six_sided_die_pmf.Prob(1) == six_sided_die_pmf[1]
-
-
-def test_exclusive(six_sided_die_pmf):
-    assert six_sided_die_pmf[7] == 0  # not in the Pmf, the result is 0.
 
 
 def cookie_strategy(self, body: dict):

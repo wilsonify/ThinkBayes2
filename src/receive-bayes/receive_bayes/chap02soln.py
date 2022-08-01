@@ -10,46 +10,6 @@ from thinkbayes.c02_bayes_theorem import (
     Cookie2, Monty2, Monty3, M_and_M2
 )
 
-
-def pmf_class_strategy(self, body: dict):
-    # ## The Pmf class
-    # I'll start by making a Pmf that represents the outcome of a six-sided die.
-    # Initially there are 6 values with equal probability.
-
-    pmf = Pmf()
-    for x in [1, 2, 3, 4, 5, 6]:
-        pmf[x] = 1
-
-    pmf.Print()
-
-    # To be true probabilities, they have to add up to 1.
-    # So we can normalize the Pmf:
-
-    pmf.Normalize()
-
-    # The return value from `Normalize` is the sum of the probabilities before normalizing.
-
-    pmf.Print()
-
-    # A faster way to make a Pmf is to provide a sequence of values.
-    # The constructor adds the values to the Pmf and then normalizes:
-
-    pmf = Pmf([1, 2, 3, 4, 5, 6])
-    pmf.Print()
-
-    # To extract a value from a Pmf, you can use `Prob`
-
-    pmf.Prob(1)
-
-    # Or you can use the bracket operator.
-
-    print(pmf[1])
-
-    # Either way, if you ask for the probability of something that's not in the Pmf, the result is 0.
-
-    print(pmf[7])
-
-
 def cookie_strategy(self, body: dict):
     # ## The cookie problem
     #

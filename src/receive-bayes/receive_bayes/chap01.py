@@ -3,7 +3,10 @@ This notebook presents example code and exercise solutions for Think Bayes.
 """
 
 import numpy as np
+import pandas as pd
 
+from receive_bayes.conf import DATADIR
+from thinkbayes import Pmf
 from thinkbayes.c01_probability import (
     values,
     prob,
@@ -14,7 +17,9 @@ from thinkbayes.c01_probability import (
 )
 
 
-def test_total(gss):
+def total_strategy(self, body):
+
+    gss = pd.read_csv(f'{DATADIR}/gss_bayes.csv', index_col=0)
     # gss.feminist.replace([0, 8, 9], np.nan, inplace=True)
     gss.polviews.replace([0, 8, 9], np.nan, inplace=True)
     gss.partyid.replace([8, 9], np.nan, inplace=True)
