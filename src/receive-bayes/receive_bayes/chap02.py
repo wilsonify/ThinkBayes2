@@ -24,7 +24,7 @@ def test_exclusive(six_sided_die_pmf):
     assert six_sided_die_pmf[7] == 0  # not in the Pmf, the result is 0.
 
 
-def test_cookie():
+def cookie_strategy(self, body: dict):
     # ## The cookie problem
     #
     # Here's a Pmf that represents the prior distribution.
@@ -57,7 +57,7 @@ def test_cookie():
     pmf.Print()
 
 
-def test_cookie_update():
+def cookie_update_strategy(self, body: dict):
     # We can confirm that we get the same result.
 
     pmf = Cookie(["Bowl1", "Bowl2"])
@@ -74,7 +74,7 @@ def test_cookie_update():
     pmf.Print()
 
 
-def test_monty_hall():
+def monty_hall_strategy(self, body: dict):
     pmf = FullMonty("ABC")
     pmf.Update("B")
     pmf.Print()
@@ -84,7 +84,7 @@ def test_monty_hall():
     pmf.Print()
 
 
-def test_m_and_m():
+def m_and_m_strategy(self, body: dict):
     suite = MAndM("AB")
     suite.Update(("bag1", "yellow"))
     suite.Update(("bag2", "green"))

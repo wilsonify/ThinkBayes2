@@ -8,20 +8,20 @@ import pytest
 from thinkbayes.c05_counts import Odds, Probability
 
 
-def test_odds():
+def odds_strategy(self, body: dict):
     # If 20% of bettors think my horse will win, that corresponds to odds of 1:4, or 0.25.
     result = Odds(0.2)
     assert result == 0.25
 
 
-def test_Probability():
+def Probability_strategy(self, body: dict):
     # If the odds against my horse are 1:5, that corresponds to a probability of 1/6.
 
     result = Probability(1 / 5)
     assert result == pytest.approx(1 / 6, abs=0.1)
 
 
-def test_cookie():
+def cookie_strategy(self, body: dict):
     # We can use the odds form of Bayes's theorem to solve the cookie problem:
 
     prior_odds = 1
@@ -46,7 +46,7 @@ def test_cookie():
     logging.debug("%r", f"post_prob={post_prob}")
 
 
-def test_Oliver():
+def Oliver_strategy(self, body: dict):
     # ## Oliver's blood
     #
     # The likelihood ratio is also useful for talking about the

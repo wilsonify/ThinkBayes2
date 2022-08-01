@@ -8,7 +8,7 @@ MIT License: https://opensource.org/licenses/MIT
 from thinkbayes.c04_proportions import Euro3, Euro4, UniformPrior2, TrianglePrior2, RunUpdate2, Beta2
 
 
-def test_euro_problem():
+def euro_problem_strategy(self, body: dict):
     # ## The Euro problem
     #
     # Here's a class that represents hypotheses about the probability a coin lands heads.

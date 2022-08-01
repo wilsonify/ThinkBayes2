@@ -9,7 +9,7 @@ import logging
 from thinkbayes.c05_counts import Odds, Probability
 
 
-def test_chapt5():
+def chapt5_strategy(self, body: dict):
     # If 20% of bettors think my horse will win, that corresponds to odds of 1:4, or 0.25.
 
     p = 0.2
@@ -44,7 +44,7 @@ def test_chapt5():
     logging.info("%r", f"post_prob = {post_prob}")
 
 
-def test_oliver_blood():
+def oliver_blood_strategy(self, body: dict):
     # ## Oliver's blood
     #
     # The likelihood ratio is also useful for talking about the strength of evidence

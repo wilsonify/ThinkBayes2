@@ -5,7 +5,7 @@ This is based on a notebook from Think Bayes : Chapter 4.
 from thinkbayes.c04_proportions import Euro, UniformPrior, TrianglePrior, RunUpdate, Euro2, Beta
 
 
-def test_uniform():
+def uniform_strategy(self, body: dict):
     # We can make a uniform prior and update it with 140 heads and 110 tails:
 
     # +
@@ -40,7 +40,7 @@ def test_uniform():
     suite.Prob(50)
 
 
-def test_priors():
+def priors_strategy(self, body: dict):
     triangle = TrianglePrior()
     uniform = UniformPrior()
     suites = [triangle, uniform]
@@ -51,7 +51,7 @@ def test_priors():
     # The results are almost identical; the remaining difference is unlikely to matter in practice.
 
 
-def test_euro2():
+def euro2_strategy(self, body: dict):
     # I left out the binomial coefficient ${n}\choose{k}$ because it does not depend on `p`, so it's the same for all hypotheses.
 
     suite = Euro2(range(0, 101))
@@ -61,7 +61,7 @@ def test_euro2():
     # Here's what the posterior looks like.
 
 
-def test_beta():
+def beta_strategy(self, body: dict):
     # -
 
     # Here's how we use it.

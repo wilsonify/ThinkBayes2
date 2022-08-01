@@ -8,7 +8,7 @@ import logging
 from thinkbayes.c11_comparison import Euro, SuiteLikelihood, TrianglePrior
 
 
-def test_euro():
+def euro_strategy(self, body: dict):
     """
     If we know the coin is fair, we can evaluate the likelihood of the data directly.
     If we cheat and pretend that the alternative hypothesis is exactly the observed proportion,

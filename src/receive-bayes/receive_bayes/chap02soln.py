@@ -11,7 +11,7 @@ from thinkbayes.c02_bayes_theorem import (
 )
 
 
-def test_pmf_class():
+def pmf_class_strategy(self, body: dict):
     # ## The Pmf class
     # I'll start by making a Pmf that represents the outcome of a six-sided die.
     # Initially there are 6 values with equal probability.
@@ -50,7 +50,7 @@ def test_pmf_class():
     print(pmf[7])
 
 
-def test_cookie():
+def cookie_strategy(self, body: dict):
     # ## The cookie problem
     #
     # Here's a Pmf that represents the prior distribution.
@@ -101,7 +101,7 @@ def test_cookie():
     pmf.Print()
 
 
-def test_mhp():
+def mhp_strategy(self, body: dict):
     # ## The Monty Hall problem
     #
     # The Monty Hall problem might be the most contentious question in

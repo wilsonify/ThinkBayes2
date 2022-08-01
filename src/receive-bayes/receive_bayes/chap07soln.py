@@ -17,7 +17,7 @@ from thinkbayes import MakePoissonPmf
 from thinkbayes.c07_mixture import Hockey2, MakeGoalPmf2, MakeGoalTimePmf2
 
 
-def test_chapt7():
+def chapt7_strategy(self, body: dict):
     # ## Warm-up exercises
     # **Exercise:**
     # Suppose that goal scoring in hockey is well modeled by a

@@ -9,7 +9,7 @@ from thinkbayes.scripts.dice import Dice
 from thinkbayes.scripts.train import Train
 
 
-def test_dice():
+def dice_strategy(self, body: dict):
     # Here's what the update looks like:
 
     suite = Dice([4, 6, 8, 12, 20])
@@ -21,7 +21,7 @@ def test_dice():
     suite.Print()
 
 
-def test_hypos():
+def hypos_strategy(self, body: dict):
     hypos = range(1, 1001)  # But there are many more hypotheses
     suite = Train(hypos)
     suite.Update(60)
@@ -29,7 +29,7 @@ def test_hypos():
     suite.Mean()  # Or we can just use the method
 
 
-def test_MakePosterior():
+def MakePosterior_strategy(self, body: dict):
     # Let's run it with the same dataset and several uniform priors
     dataset = [30, 60, 90]
     for high in [500, 1000, 2000]:
@@ -37,7 +37,7 @@ def test_MakePosterior():
         print(high, suite.Mean())
 
 
-def test_Train2():
+def Train2_strategy(self, body: dict):
     high = 100
     hypos = range(1, high + 1)
     suite1 = Train(hypos)  # uniform prior
@@ -79,7 +79,7 @@ def test_Train2():
     logging.info("%r", f"cdf.percentile(95) = {cdf.Percentile(95)}")
 
 
-def test_dice_problem():
+def dice_problem_strategy(self, body: dict):
     """
     ## The Dice problem
     Suppose I have a box of dice that contains a 4-sided die, a 6-sided
@@ -100,7 +100,7 @@ def test_dice_problem():
     suite.Print()
 
 
-def test_train_problem():
+def train_problem_strategy(self, body: dict):
     """
     ## The train problem
     The Train problem has the same likelihood as the Dice problem.
@@ -114,7 +114,7 @@ def test_train_problem():
     suite.Mean()  # Or we can just use the method
 
 
-def test_sensitivity():
+def sensitivity_strategy(self, body: dict):
     """
     ## Sensitivity to the prior
     Here's a function that solves the train problem for different priors and data
@@ -158,7 +158,7 @@ def test_sensitivity():
     logging.info("%r", f"cdf.percentile(95) = {cdf.Percentile(95)}")
 
 
-def test_exercise():
+def exercise_strategy(self, body: dict):
     """
     To write a likelihood function for the locomotive problem, we had
     to answer this question:  "If the railroad has `N` locomotives, what

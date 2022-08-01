@@ -71,7 +71,7 @@ def test_reading(drp_scores_df):
     )  # And then we can extract the marginal distribution of `mu`
 
 
-def test_paintball():
+def paintball_strategy(self, body: dict):
     """
     The prior probabilities for `alpha` and `beta` are uniform.
 
@@ -283,7 +283,7 @@ def test_improving_reading_ability(drp_scores_df):
     # low scorers more than high scorers.
 
 
-def test_paintballing():
+def paintballing_strategy(self, body: dict):
     # ## Paintball
 
     # Suppose you are playing paintball in an indoor arena 30 feet
@@ -356,7 +356,7 @@ def test_paintballing():
 
 
 @pytest.mark.skip(reason="long running")
-def test_bugs():
+def bugs_strategy(self, body: dict):
     # **Exercise:** From [John D. Cook](http://www.johndcook.com/blog/2010/07/13/lincoln-index/)
     # "Suppose you have a tester who finds 20 bugs in your program.
     # You want to estimate how many bugs are really in the program.
@@ -403,5 +403,5 @@ def test_bugs():
 
 
 @pytest.mark.skip(reason="long running test")
-def test_gps():
+def gps_strategy(self, body: dict):
     gps.main()
