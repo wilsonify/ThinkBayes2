@@ -23,3 +23,5 @@ connection_parameters = pika.ConnectionParameters(
     credentials=cred,
 )
 from receive_bayes.abstract import Strategy
+
+

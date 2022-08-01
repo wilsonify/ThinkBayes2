@@ -1,0 +1,101 @@
+"""
+This notebook presents example code and exercise solutions for Think Bayes.
+"""
+
+import numpy as np
+
+from thinkbayes.c01_probability import (
+    values,
+    prob,
+    count,
+    conditional,
+    conjunction,
+    bayes_theorem
+)
+
+
+def test_total(gss):
+    # gss.feminist.replace([0, 8, 9], np.nan, inplace=True)
+    gss.polviews.replace([0, 8, 9], np.nan, inplace=True)
+    gss.partyid.replace([8, 9], np.nan, inplace=True)
+    gss.indus10.replace([0], np.nan, inplace=True)
+    # gss.occ10.replace([0], np.nan, inplace=True)
+
+    # values(gss.feminist)
+    values(gss.polviews)
+    values(gss.partyid)
+    # values(gss.race)
+    values(gss.sex)
+    values(gss.indus10).head()
+    np.mean(gss.indus10 == 6870)
+
+    (gss.indus10 == 6870).mean()
+
+    subset = gss.dropna(subset=["sex", "polviews", "partyid", "indus10"])
+    assert subset.shape == (49290, 6)
+
+    female = gss.sex == 2
+    values(female)
+
+    liberal = gss.polviews <= 2
+    values(liberal)
+
+    democrat = gss.partyid <= 1
+    values(democrat)
+
+    banker = gss.indus10 == 6870
+    values(banker)
+
+    total = 0
+    for x in banker:
+        if x is True:
+            total += 1
+
+    print(total / len(banker))
+
+    prob(female)
+
+    prob(liberal)
+
+    prob(democrat)
+
+    prob(banker)
+
+    prob(democrat & liberal)
+
+    count(banker[female])
+
+    prob(banker[female])
+
+    prob(female & banker)
+
+    banker_given_female = prob(banker & female) / prob(female)
+    print(banker_given_female)
+
+    conditional(banker, female)
+
+    conditional(liberal, democrat)
+
+    conditional(democrat, liberal)
+
+    conditional(democrat, female)
+
+    prob(liberal & democrat)
+
+    conjunction(liberal, democrat)
+
+    liberal_and_democrat = prob(liberal) * prob(democrat)
+    print(liberal_and_democrat)
+
+    conjunction(democrat, liberal)
+    female_given_banker = conditional(female, banker)
+    banker_given_female = prob(banker) * female_given_banker / prob(female)
+    print(banker_given_female)
+
+    bayes_theorem(democrat, liberal)
+
+    conditional(banker, female)
+
+    conditional(banker, female & liberal)
+
+    conditional(banker & democrat, female & liberal)
