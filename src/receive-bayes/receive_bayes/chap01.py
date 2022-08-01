@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 from receive_bayes.conf import DATADIR
-from thinkbayes import Pmf
+
 from thinkbayes.c01_probability import (
     values,
     prob,

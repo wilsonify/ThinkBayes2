@@ -8,7 +8,6 @@ import logging
 from itertools import product
 
 import numpy as np
-import pytest
 
 from thinkbayes.c09_decisions import (
     MakeAngleSuite,
@@ -351,7 +350,6 @@ def paintballing_strategy(self, body: dict):
             d[pair] += 1
 
 
-@pytest.mark.skip(reason="long running")
 def bugs_strategy(self, body: dict):
     # **Exercise:** From [John D. Cook](http://www.johndcook.com/blog/2010/07/13/lincoln-index/)
     # "Suppose you have a tester who finds 20 bugs in your program.
@@ -398,6 +396,5 @@ def bugs_strategy(self, body: dict):
     print("MAP n", n_marginal.map())
 
 
-@pytest.mark.skip(reason="long running test")
 def gps_strategy(self, body: dict):
     gps.main()
