@@ -11,7 +11,6 @@ from receive_bayes.chap02 import (
     m_and_m_strategy
 )
 from receive_bayes.chap02soln import (
-    pmf_class_strategy,
     mhp_strategy
 )
 from receive_bayes.chap03 import (
