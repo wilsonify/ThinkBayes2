@@ -39,7 +39,7 @@ class Euro(thinkbayes.Suite):
         if data == 'H':
             return x
         else:
-            return 1-x
+            return 1 - x
 
 
 class Euro2(thinkbayes.Suite):
@@ -53,13 +53,13 @@ class Euro2(thinkbayes.Suite):
         """
         x = hypo / 100.0
         heads, tails = data
-        like = x**heads * (1-x)**tails
+        like = x ** heads * (1 - x) ** tails
         return like
 
 
 def UniformPrior():
     """Makes a Suite with a uniform prior."""
-    suite = Euro(xrange(0, 101))
+    suite = Euro(range(0, 101))
     return suite
 
 
@@ -69,7 +69,7 @@ def TrianglePrior():
     for x in range(0, 51):
         suite.Set(x, x)
     for x in range(51, 101):
-        suite.Set(x, 100-x) 
+        suite.Set(x, 100 - x)
     suite.Normalize()
     return suite
 
@@ -89,17 +89,17 @@ def RunUpdate(suite, heads=140, tails=110):
 
 def Summarize(suite):
     """Prints summary statistics for the suite."""
-    print suite.Prob(50)
+    print(suite.Prob(50))
 
-    print 'MLE', suite.MaximumLikelihood()
+    print('MLE', suite.MaximumLikelihood())
 
-    print 'Mean', suite.Mean()
-    print 'Median', thinkbayes.Percentile(suite, 50) 
+    print('Mean', suite.Mean())
+    print('Median', thinkbayes.Percentile(suite, 50))
 
-    print '5th %ile', thinkbayes.Percentile(suite, 5) 
-    print '95th %ile', thinkbayes.Percentile(suite, 95) 
+    print('5th %ile', thinkbayes.Percentile(suite, 5))
+    print('95th %ile', thinkbayes.Percentile(suite, 95))
 
-    print 'CI', thinkbayes.CredibleInterval(suite, 90)
+    print('CI', thinkbayes.CredibleInterval(suite, 90))
 
 
 def PlotSuites(suites, root):

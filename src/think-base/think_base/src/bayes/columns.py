@@ -16,7 +16,7 @@ def read_csv(filename, constructor):
     fp = open(filename)
     reader = csv.reader(fp)
 
-    header = reader.next()
+    header = next(reader)
     names = [s.lower() for s in header]
 
     objs = [make_object(t, names, constructor) for t in reader]
@@ -47,7 +47,7 @@ def print_cols(cols):
     cols: list of columns
     """
     for i, col in enumerate(cols):
-        print i, col[0], col[1]
+        print(i, col[0], col[1])
 
 
 def make_col_dict(cols, names):
@@ -81,4 +81,3 @@ def make_object(row, names, constructor):
         setattr(obj, name, val)
     obj.clean()
     return obj
-

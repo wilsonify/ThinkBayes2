@@ -8,8 +8,6 @@ License: GNU GPLv3 http://www.gnu.org/licenses/gpl.html
 import thinkbayes
 import thinkplot
 
-from math import exp
-
 """This file contains a solution to an exercise from Think Bayes,
 by Allen B. Downey
 
@@ -38,6 +36,7 @@ are emitted?
 
 FORMATS = ['pdf', 'eps', 'png']
 
+
 class Emitter(thinkbayes.Suite):
     """Represents hypotheses about r."""
 
@@ -56,7 +55,7 @@ class Emitter(thinkbayes.Suite):
         data: number of particles counted
         """
         thinkbayes.Suite.Update(self, data)
-        
+
         for detector in self.Values():
             detector.Update()
 
@@ -80,7 +79,7 @@ class Emitter(thinkbayes.Suite):
         return thinkbayes.MakePmfFromItems(items, name=name)
 
     def DistOfN(self, name=''):
-        """Returns the PMF of n."""        
+        """Returns the PMF of n."""
         return thinkbayes.MakeMixture(self, name=name)
 
 
@@ -114,7 +113,7 @@ class Emitter2(thinkbayes.Suite):
         return thinkbayes.MakePmfFromItems(items, name=name)
 
     def DistOfN(self, name=''):
-        """Returns the PMF of n."""        
+        """Returns the PMF of n."""
         return thinkbayes.MakeMixture(self, name=name)
 
 
@@ -156,7 +155,7 @@ class Detector(thinkbayes.Suite):
             like = self.Likelihood(data, hypo)
             total += prob * like
         return total
-        
+
 
 def main():
     k = 15
@@ -168,7 +167,7 @@ def main():
         suite = Detector(r, f, step=1)
         suite.Update(k)
         thinkplot.Pmf(suite)
-        print suite.MaximumLikelihood()
+        print(suite.MaximumLikelihood())
 
     thinkplot.Save(root='jaynes1',
                    xlabel='Number of particles (n)',
@@ -176,7 +175,7 @@ def main():
                    formats=FORMATS)
 
     # plot the posterior distributions of r and n
-    hypos = range(1, 501, 5)
+    hypos = list(range(1, 501, 5))
     suite = Emitter2(hypos, f=f)
     suite.Update(k)
 

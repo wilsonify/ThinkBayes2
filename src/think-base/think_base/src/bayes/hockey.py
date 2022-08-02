@@ -9,11 +9,11 @@ import math
 
 import columns
 import thinkbayes
-import thinkstats
 import thinkplot
-
+import thinkstats
 
 USE_SUMMARY_DATA = True
+
 
 class Hockey(thinkbayes.Suite):
     """Represents hypotheses about the scoring rate for a team."""
@@ -34,7 +34,7 @@ class Hockey(thinkbayes.Suite):
 
         pmf = thinkbayes.MakeGaussianPmf(mu, sigma, 4)
         thinkbayes.Suite.__init__(self, pmf, name=name)
-            
+
     def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
@@ -112,7 +112,7 @@ def ReadHockeyData(filename='hockey_data.csv'):
 
     # map from (team1, team2) to (score1, score2)
     pairs = {}
-    for key, pair in games.iteritems():
+    for key, pair in games.items():
         t1, t2 = pair
         key = t1.team, t2.team
         entry = t1.total, t2.total
@@ -129,7 +129,7 @@ def ProcessScoresPairwise(pairs):
     """
     # map from (team1, team2) to list of goals scored
     goals_scored = {}
-    for key, entries in pairs.iteritems():
+    for key, entries in pairs.items():
         t1, t2 = key
         for entry in entries:
             g1, g2 = entry
@@ -138,7 +138,7 @@ def ProcessScoresPairwise(pairs):
 
     # make a list of average goals scored
     lams = []
-    for key, goals in goals_scored.iteritems():
+    for key, goals in goals_scored.items():
         if len(goals) < 3:
             continue
         lam = thinkstats.Mean(goals)
@@ -150,9 +150,9 @@ def ProcessScoresPairwise(pairs):
     thinkplot.Show()
 
     mu, var = thinkstats.MeanVar(lams)
-    print 'mu, sig', mu, math.sqrt(var)
+    print('mu, sig', mu, math.sqrt(var))
 
-    print 'BOS v VAN', pairs['BOS', 'VAN']
+    print('BOS v VAN', pairs['BOS', 'VAN'])
 
 
 def ProcessScoresTeamwise(pairs):
@@ -162,7 +162,7 @@ def ProcessScoresTeamwise(pairs):
     """
     # map from team to list of goals scored
     goals_scored = {}
-    for key, entries in pairs.iteritems():
+    for key, entries in pairs.items():
         t1, t2 = key
         for entry in entries:
             g1, g2 = entry
@@ -171,7 +171,7 @@ def ProcessScoresTeamwise(pairs):
 
     # make a list of average goals scored
     lams = []
-    for key, goals in goals_scored.iteritems():
+    for key, goals in goals_scored.items():
         lam = thinkstats.Mean(goals)
         lams.append(lam)
 
@@ -181,12 +181,12 @@ def ProcessScoresTeamwise(pairs):
     thinkplot.Show()
 
     mu, var = thinkstats.MeanVar(lams)
-    print 'mu, sig', mu, math.sqrt(var)
+    print('mu, sig', mu, math.sqrt(var))
 
 
 def main():
-    #ReadHockeyData()
-    #return
+    # ReadHockeyData()
+    # return
 
     formats = ['pdf', 'eps']
 
@@ -198,9 +198,9 @@ def main():
     thinkplot.Pmf(suite1)
     thinkplot.Pmf(suite2)
     thinkplot.Save(root='hockey0',
-                xlabel='Goals per game',
-                ylabel='Probability',
-                formats=formats)
+                   xlabel='Goals per game',
+                   ylabel='Probability',
+                   formats=formats)
 
     suite1.UpdateSet([0, 2, 8, 4])
     suite2.UpdateSet([1, 3, 1, 0])
@@ -210,10 +210,9 @@ def main():
     thinkplot.Pmf(suite1)
     thinkplot.Pmf(suite2)
     thinkplot.Save(root='hockey1',
-                xlabel='Goals per game',
-                ylabel='Probability',
-                formats=formats)
-
+                   xlabel='Goals per game',
+                   ylabel='Probability',
+                   formats=formats)
 
     goal_dist1 = MakeGoalPmf(suite1)
     goal_dist2 = MakeGoalPmf(suite2)
@@ -223,20 +222,20 @@ def main():
     thinkplot.Pmf(goal_dist1)
     thinkplot.Pmf(goal_dist2)
     thinkplot.Save(root='hockey2',
-                xlabel='Goals',
-                ylabel='Probability',
-                formats=formats)
+                   xlabel='Goals',
+                   ylabel='Probability',
+                   formats=formats)
 
-    time_dist1 = MakeGoalTimePmf(suite1)    
+    time_dist1 = MakeGoalTimePmf(suite1)
     time_dist2 = MakeGoalTimePmf(suite2)
- 
-    print 'MLE bruins', suite1.MaximumLikelihood()
-    print 'MLE canucks', suite2.MaximumLikelihood()
-   
+
+    print('MLE bruins', suite1.MaximumLikelihood())
+    print('MLE canucks', suite2.MaximumLikelihood())
+
     thinkplot.Clf()
     thinkplot.PrePlot(num=2)
     thinkplot.Pmf(time_dist1)
-    thinkplot.Pmf(time_dist2)    
+    thinkplot.Pmf(time_dist2)
     thinkplot.Save(root='hockey3',
                    xlabel='Games until goal',
                    ylabel='Probability',
@@ -247,24 +246,24 @@ def main():
     p_loss = diff.ProbLess(0)
     p_tie = diff.Prob(0)
 
-    print p_win, p_loss, p_tie
+    print(p_win, p_loss, p_tie)
 
     p_overtime = thinkbayes.PmfProbLess(time_dist1, time_dist2)
     p_adjust = thinkbayes.PmfProbEqual(time_dist1, time_dist2)
     p_overtime += p_adjust / 2
-    print 'p_overtime', p_overtime 
+    print('p_overtime', p_overtime)
 
-    print p_overtime * p_tie
+    print(p_overtime * p_tie)
     p_win += p_overtime * p_tie
-    print 'p_win', p_win
+    print('p_win', p_win)
 
     # win the next two
-    p_series = p_win**2
+    p_series = p_win ** 2
 
     # split the next two, win the third
-    p_series += 2 * p_win * (1-p_win) * p_win
+    p_series += 2 * p_win * (1 - p_win) * p_win
 
-    print 'p_series', p_series
+    print('p_series', p_series)
 
 
 if __name__ == '__main__':

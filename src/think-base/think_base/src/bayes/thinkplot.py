@@ -5,27 +5,27 @@ Copyright 2014 Allen B. Downey
 License: GNU GPLv3 http://www.gnu.org/licenses/gpl.html
 """
 
-from __future__ import print_function
-
 import logging
 import math
+
 import matplotlib
 import matplotlib.pyplot as pyplot
 import numpy as np
 import pandas
 
+
 # customize some matplotlib attributes
-#matplotlib.rc('figure', figsize=(4, 3))
+# matplotlib.rc('figure', figsize=(4, 3))
 
-#matplotlib.rc('font', size=14.0)
-#matplotlib.rc('axes', labelsize=22.0, titlesize=22.0)
-#matplotlib.rc('legend', fontsize=20.0)
+# matplotlib.rc('font', size=14.0)
+# matplotlib.rc('axes', labelsize=22.0, titlesize=22.0)
+# matplotlib.rc('legend', fontsize=20.0)
 
-#matplotlib.rc('xtick.major', size=6.0)
-#matplotlib.rc('xtick.minor', size=3.0)
+# matplotlib.rc('xtick.major', size=6.0)
+# matplotlib.rc('xtick.minor', size=3.0)
 
-#matplotlib.rc('ytick.major', size=6.0)
-#matplotlib.rc('ytick.minor', size=3.0)
+# matplotlib.rc('ytick.major', size=6.0)
+# matplotlib.rc('ytick.minor', size=3.0)
 
 
 class _Brewer(object):
@@ -157,7 +157,7 @@ def _Underride(d, **options):
     if d is None:
         d = {}
 
-    for key, val in options.items():
+    for key, val in list(options.items()):
         d.setdefault(key, val)
 
     return d
@@ -254,8 +254,8 @@ def Scatter(xs, ys=None, **options):
     ys: y values
     options: options passed to pyplot.scatter
     """
-    options = _Underride(options, color='blue', alpha=0.2, 
-                        s=30, edgecolors='none')
+    options = _Underride(options, color='blue', alpha=0.2,
+                         s=30, edgecolors='none')
 
     if ys is None and isinstance(xs, pandas.Series):
         ys = xs.values
@@ -381,16 +381,16 @@ def Pmf(pmf, **options):
 
         points.append((x, lasty))
         points.append((x, y))
-        points.append((x+width, y))
+        points.append((x + width, y))
 
         lastx = x + width
         lasty = y
     points.append((lastx, 0))
-    pxs, pys = zip(*points)
+    pxs, pys = list(zip(*points))
 
     align = options.pop('align', 'center')
     if align == 'center':
-        pxs = np.array(pxs) - width/2.0
+        pxs = np.array(pxs) - width / 2.0
     if align == 'right':
         pxs = np.array(pxs) - width
 
@@ -421,7 +421,7 @@ def Diff(t):
     Returns:
         sequence of differences (length one less than t)
     """
-    diffs = [t[i+1] - t[i] for i in range(len(t)-1)]
+    diffs = [t[i + 1] - t[i] for i in range(len(t) - 1)]
     return diffs
 
 
@@ -444,7 +444,7 @@ def Cdf(cdf, complement=False, transform=None, **options):
 
     scale = dict(xscale='linear', yscale='linear')
 
-    for s in ['xscale', 'yscale']: 
+    for s in ['xscale', 'yscale']:
         if s in options:
             scale[s] = options.pop(s)
 
@@ -458,12 +458,12 @@ def Cdf(cdf, complement=False, transform=None, **options):
         scale['xscale'] = 'log'
 
     if complement:
-        ps = [1.0-p for p in ps]
+        ps = [1.0 - p for p in ps]
 
     if transform == 'weibull':
         xs = np.delete(xs, -1)
         ps = np.delete(ps, -1)
-        ps = [-math.log(1.0-p) for p in ps]
+        ps = [-math.log(1.0 - p) for p in ps]
         scale['xscale'] = 'log'
         scale['yscale'] = 'log'
 
@@ -506,7 +506,7 @@ def Contour(obj, pcolor=False, contour=True, imshow=False, **options):
 
     _Underride(options, linewidth=3, cmap=matplotlib.cm.Blues)
 
-    xs, ys = zip(*d.keys())
+    xs, ys = list(zip(*list(d.keys())))
     xs = sorted(set(xs))
     ys = sorted(set(ys))
 
@@ -527,7 +527,7 @@ def Contour(obj, pcolor=False, contour=True, imshow=False, **options):
     if imshow:
         extent = xs[0], xs[-1], ys[0], ys[-1]
         pyplot.imshow(Z, extent=extent, **options)
-        
+
 
 def Pcolor(xs, ys, zs, pcolor=True, contour=False, **options):
     """Makes a pseudocolor plot.
@@ -554,7 +554,7 @@ def Pcolor(xs, ys, zs, pcolor=True, contour=False, **options):
     if contour:
         cs = pyplot.contour(X, Y, Z, **options)
         pyplot.clabel(cs, inline=1, fontsize=10)
-        
+
 
 def Text(x, y, s, **options):
     """Puts text in a figure.
@@ -565,7 +565,7 @@ def Text(x, y, s, **options):
     options: keyword args passed to pyplot.text
     """
     options = _Underride(options, verticalalignment='top',
-                        horizontalalignment='left')
+                         horizontalalignment='left')
     pyplot.text(x, y, s, **options)
 
 
@@ -596,7 +596,7 @@ def Config(**options):
                 }
 
     loc = options.get('loc', 0)
-    #loc = loc_dict.get(loc, loc)
+    # loc = loc_dict.get(loc, loc)
 
     legend = options.get('legend', True)
     if legend:

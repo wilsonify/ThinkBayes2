@@ -5,8 +5,8 @@ Copyright 2012 Allen B. Downey
 License: GNU GPLv3 http://www.gnu.org/licenses/gpl.html
 """
 
-from dice import Dice
 import thinkplot
+from dice import Dice
 
 
 class Train(Dice):
@@ -18,11 +18,11 @@ class Train(Dice):
 
 
 def main():
-    hypos = xrange(1, 1001)
+    hypos = range(1, 1001)
     suite = Train(hypos)
 
     suite.Update(60)
-    print suite.Mean()
+    print(suite.Mean())
 
     thinkplot.PrePlot(1)
     thinkplot.Pmf(suite)

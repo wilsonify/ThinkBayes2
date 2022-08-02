@@ -23,7 +23,7 @@ class Die(thinkbayes.Pmf):
         name: string
         """
         thinkbayes.Pmf.__init__(self, name=name)
-        for x in xrange(1, sides+1):
+        for x in range(1, sides + 1):
             self.Set(x, 1)
         self.Normalize()
 
@@ -38,9 +38,9 @@ def PmfMax(pmf1, pmf2):
     res = thinkbayes.Pmf()
     for v1, p1 in pmf1.Items():
         for v2, p2 in pmf2.Items():
-            res.Incr(max(v1, v2), p1*p2)
+            res.Incr(max(v1, v2), p1 * p2)
     return res
-    
+
 
 def main():
     pmf_dice = thinkbayes.Pmf()
@@ -54,15 +54,15 @@ def main():
     mix = thinkbayes.Pmf()
     for die, weight in pmf_dice.Items():
         for outcome, prob in die.Items():
-            mix.Incr(outcome, weight*prob)
+            mix.Incr(outcome, weight * prob)
 
     mix = thinkbayes.MakeMixture(pmf_dice)
 
     thinkplot.Hist(mix, width=0.9)
     thinkplot.Save(root='dungeons3',
-                xlabel='Outcome',
-                ylabel='Probability',
-                formats=FORMATS)
+                   xlabel='Outcome',
+                   ylabel='Probability',
+                   formats=FORMATS)
 
     random.seed(17)
 
@@ -81,14 +81,14 @@ def main():
     thinkplot.Pmf(three)
     thinkplot.Pmf(three_exact, linestyle='dashed')
     thinkplot.Save(root='dungeons1',
-                xlabel='Sum of three d6',
-                ylabel='Probability',
-                axis=[2, 19, 0, 0.15],
-                formats=FORMATS)
+                   xlabel='Sum of three d6',
+                   ylabel='Probability',
+                   axis=[2, 19, 0, 0.15],
+                   formats=FORMATS)
 
     thinkplot.Clf()
     thinkplot.PrePlot(num=1)
-    
+
     # compute the distribution of the best attribute the hard way
     best_attr2 = PmfMax(three_exact, three_exact)
     best_attr4 = PmfMax(best_attr2, best_attr2)
@@ -103,11 +103,10 @@ def main():
 
     thinkplot.Pmf(best_attr_pmf)
     thinkplot.Save(root='dungeons2',
-                xlabel='Best of three d6',
-                ylabel='Probability',
-                axis=[2, 19, 0, 0.23],
-                formats=FORMATS)
-    
+                   xlabel='Best of three d6',
+                   ylabel='Probability',
+                   axis=[2, 19, 0, 0.23],
+                   formats=FORMATS)
 
 
 if __name__ == '__main__':

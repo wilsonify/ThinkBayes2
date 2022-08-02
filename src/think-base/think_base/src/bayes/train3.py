@@ -7,9 +7,8 @@ License: GNU GPLv3 http://www.gnu.org/licenses/gpl.html
 
 import thinkbayes
 import thinkplot
-
-from thinkbayes import Pmf, Percentile
 from dice import Dice
+from thinkbayes import Pmf, Percentile
 
 
 class Train(Dice):
@@ -27,7 +26,7 @@ class Train2(Dice):
         """
         Pmf.__init__(self)
         for hypo in hypos:
-            self.Set(hypo, hypo**(-alpha))
+            self.Set(hypo, hypo ** (-alpha))
         self.Normalize()
 
 
@@ -40,7 +39,7 @@ def MakePosterior(high, dataset, constructor):
 
     Returns: posterior Suite
     """
-    hypos = xrange(1, high+1)
+    hypos = range(1, high + 1)
     suite = constructor(hypos)
     suite.name = str(high)
 
@@ -67,8 +66,9 @@ def ComparePriors():
         thinkplot.Pmf(suite)
 
     thinkplot.Save(root='train4',
-                xlabel='Number of trains',
-                ylabel='Probability')
+                   xlabel='Number of trains',
+                   ylabel='Probability')
+
 
 def main():
     ComparePriors()
@@ -80,18 +80,18 @@ def main():
 
     for high in [500, 1000, 2000]:
         suite = MakePosterior(high, dataset, Train2)
-        print high, suite.Mean()
+        print(high, suite.Mean())
 
     thinkplot.Save(root='train3',
                    xlabel='Number of trains',
                    ylabel='Probability')
 
     interval = Percentile(suite, 5), Percentile(suite, 95)
-    print interval
+    print(interval)
 
     cdf = thinkbayes.MakeCdfFromPmf(suite)
     interval = cdf.Percentile(5), cdf.Percentile(95)
-    print interval
+    print(interval)
 
 
 if __name__ == '__main__':

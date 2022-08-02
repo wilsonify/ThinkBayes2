@@ -5,14 +5,13 @@ Copyright 2012 Allen B. Downey
 License: GNU GPLv3 http://www.gnu.org/licenses/gpl.html
 """
 
-import thinkbayes
-
-import matplotlib.pyplot as pyplot
-import thinkplot
-
 import math
 import sys
 
+import matplotlib.pyplot as pyplot
+
+import thinkbayes
+import thinkplot
 
 FORMATS = ['pdf', 'eps', 'png']
 
@@ -27,7 +26,7 @@ def StrafingSpeed(alpha, beta, x):
     Returns: derivative of x with respect to theta
     """
     theta = math.atan2(x - alpha, beta)
-    speed = beta / math.cos(theta)**2
+    speed = beta / math.cos(theta) ** 2
     return speed
 
 
@@ -66,8 +65,8 @@ class Paintball(thinkbayes.Suite, thinkbayes.Joint):
         locations: possible locations along the wall
         """
         self.locations = locations
-        pairs = [(alpha, beta) 
-                 for alpha in alphas 
+        pairs = [(alpha, beta)
+                 for alpha in alphas
                  for beta in betas]
         thinkbayes.Suite.__init__(self, pairs)
 
@@ -86,9 +85,9 @@ class Paintball(thinkbayes.Suite, thinkbayes.Joint):
         return like
 
 
-def MakePmfPlot(alpha = 10):
+def MakePmfPlot(alpha=10):
     """Plots Pmf of location for a range of betas."""
-    locations = range(0, 31)
+    locations = list(range(0, 31))
 
     betas = [10, 20, 40]
     thinkplot.PrePlot(num=len(betas))
@@ -99,9 +98,9 @@ def MakePmfPlot(alpha = 10):
         thinkplot.Pmf(pmf)
 
     thinkplot.Save('paintball1',
-                xlabel='Distance',
-                ylabel='Prob',
-                formats=FORMATS)
+                   xlabel='Distance',
+                   ylabel='Prob',
+                   formats=FORMATS)
 
 
 def MakePosteriorPlot(suite):
@@ -114,29 +113,29 @@ def MakePosteriorPlot(suite):
     marginal_beta = suite.Marginal(1)
     marginal_beta.name = 'beta'
 
-    print 'alpha CI', marginal_alpha.CredibleInterval(50)
-    print 'beta CI', marginal_beta.CredibleInterval(50)
+    print('alpha CI', marginal_alpha.CredibleInterval(50))
+    print('beta CI', marginal_beta.CredibleInterval(50))
 
     thinkplot.PrePlot(num=2)
 
-    #thinkplot.Pmf(marginal_alpha)
-    #thinkplot.Pmf(marginal_beta)
-    
+    # thinkplot.Pmf(marginal_alpha)
+    # thinkplot.Pmf(marginal_beta)
+
     thinkplot.Cdf(thinkbayes.MakeCdfFromPmf(marginal_alpha))
     thinkplot.Cdf(thinkbayes.MakeCdfFromPmf(marginal_beta))
-    
+
     thinkplot.Save('paintball2',
-                xlabel='Distance',
-                ylabel='Prob',
-                loc=4,
-                formats=FORMATS)
+                   xlabel='Distance',
+                   ylabel='Prob',
+                   loc=4,
+                   formats=FORMATS)
 
 
 def MakeConditionalPlot(suite):
     """Plots marginal CDFs for alpha conditioned on beta.
 
     suite: posterior joint distribution of location
-    """    
+    """
     betas = [10, 20, 40]
     thinkplot.PrePlot(num=len(betas))
 
@@ -146,9 +145,9 @@ def MakeConditionalPlot(suite):
         thinkplot.Pmf(cond)
 
     thinkplot.Save('paintball3',
-                xlabel='Distance',
-                ylabel='Prob',
-                formats=FORMATS)
+                   xlabel='Distance',
+                   ylabel='Prob',
+                   formats=FORMATS)
 
 
 def MakeContourPlot(suite):
@@ -159,10 +158,10 @@ def MakeContourPlot(suite):
     thinkplot.Contour(suite.GetDict(), contour=False, pcolor=True)
 
     thinkplot.Save('paintball4',
-                xlabel='alpha',
-                ylabel='beta',
-                axis=[0, 30, 0, 20],
-                formats=FORMATS)
+                   xlabel='alpha',
+                   ylabel='beta',
+                   axis=[0, 30, 0, 20],
+                   formats=FORMATS)
 
 
 def MakeCrediblePlot(suite):
@@ -184,16 +183,15 @@ def MakeCrediblePlot(suite):
     pyplot.text(17, 30, '75')
 
     thinkplot.Save('paintball5',
-                xlabel='alpha',
-                ylabel='beta',
-                formats=FORMATS)
+                   xlabel='alpha',
+                   ylabel='beta',
+                   formats=FORMATS)
 
 
 def main(script):
-
-    alphas = range(0, 31)
-    betas = range(1, 51)
-    locations = range(0, 31)
+    alphas = list(range(0, 31))
+    betas = list(range(1, 51))
+    locations = list(range(0, 31))
 
     suite = Paintball(alphas, betas, locations)
     suite.UpdateSet([15, 16, 18, 21])

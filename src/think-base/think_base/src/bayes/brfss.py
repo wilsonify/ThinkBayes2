@@ -7,6 +7,7 @@ License: GNU GPLv3 http://www.gnu.org/licenses/gpl.html
 
 import math
 import sys
+
 import survey
 import thinkstats
 
@@ -18,7 +19,7 @@ class Respondents(survey.Table):
         filename = self.GetFilename()
         self.ReadFile(data_dir,
                       filename,
-                      self.GetFields(), 
+                      self.GetFields(),
                       survey.Respondent,
                       n)
         self.Recode()
@@ -52,7 +53,7 @@ class Respondents(survey.Table):
             ('wtkg2', 1254, 1258, int),
             ('htm3', 1251, 1253, int),
             ('sex', 143, 143, int),
-            ]
+        ]
 
     def Recode(self):
         """Recode variables that need cleaning."""
@@ -86,22 +87,21 @@ class Respondents(survey.Table):
             if rec.age in [7, 9]:
                 rec.age = 'NA'
 
-
     def SummarizeHeight(self):
         """Print summary statistics for male and female height."""
 
         # make a dictionary that maps from gender code to list of heights
-        d = {1:[], 2:[], 'all':[]}
+        d = {1: [], 2: [], 'all': []}
         [d[r.sex].append(r.htm3) for r in self.records if r.htm3 != 'NA']
         [d['all'].append(r.htm3) for r in self.records if r.htm3 != 'NA']
-        
-        print 'Height (cm):'
-        print 'key n     mean     var    sigma     cv'
-        for key, t in d.iteritems():
+
+        print('Height (cm):')
+        print('key n     mean     var    sigma     cv')
+        for key, t in d.items():
             mu, var = thinkstats.TrimmedMeanVar(t)
             sigma = math.sqrt(var)
             cv = sigma / mu
-            print key, len(t), mu, var, sigma, cv
+            print(key, len(t), mu, var, sigma, cv)
 
         return d
 
@@ -109,36 +109,36 @@ class Respondents(survey.Table):
         """Print summary statistics for male and female weight."""
 
         # make a dictionary that maps from gender code to list of weights
-        d = {1:[], 2:[], 'all':[]}
+        d = {1: [], 2: [], 'all': []}
         [d[r.sex].append(r.weight2) for r in self.records if r.weight2 != 'NA']
         [d['all'].append(r.weight2) for r in self.records if r.weight2 != 'NA']
 
-        print 'Weight (kg):'
-        print 'key n     mean     var    sigma     cv'
-        for key, t in d.iteritems():
+        print('Weight (kg):')
+        print('key n     mean     var    sigma     cv')
+        for key, t in d.items():
             mu, var = thinkstats.TrimmedMeanVar(t)
             sigma = math.sqrt(var)
             cv = sigma / mu
-            print key, len(t), mu, var, sigma, cv
-
+            print(key, len(t), mu, var, sigma, cv)
 
     def SummarizeWeightChange(self):
         """Print the mean reported change in weight in kg."""
-        
+
         data = [(r.weight2, r.wtyrago) for r in self.records
                 if r.weight2 != 'NA' and r.wtyrago != 'NA']
-        
+
         changes = [(curr - prev) for curr, prev in data]
-            
-        print 'Mean change', thinkstats.Mean(changes)
-        
-    
+
+        print('Mean change', thinkstats.Mean(changes))
+
+
 def main(name, data_dir='.'):
     resp = Respondents()
     resp.ReadRecords(data_dir)
     resp.SummarizeHeight()
     resp.SummarizeWeight()
     resp.SummarizeWeightChange()
-    
+
+
 if __name__ == '__main__':
     main(*sys.argv)

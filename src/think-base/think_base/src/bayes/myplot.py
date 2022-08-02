@@ -6,22 +6,24 @@ License: GNU GPLv3 http://www.gnu.org/licenses/gpl.html
 """
 
 import math
+
 import matplotlib
 import matplotlib.pyplot as pyplot
 import numpy as np
 
+
 # customize some matplotlib attributes
-#matplotlib.rc('figure', figsize=(4, 3))
+# matplotlib.rc('figure', figsize=(4, 3))
 
-#matplotlib.rc('font', size=14.0)
-#matplotlib.rc('axes', labelsize=22.0, titlesize=22.0)
-#matplotlib.rc('legend', fontsize=20.0)
+# matplotlib.rc('font', size=14.0)
+# matplotlib.rc('axes', labelsize=22.0, titlesize=22.0)
+# matplotlib.rc('legend', fontsize=20.0)
 
-#matplotlib.rc('xtick.major', size=6.0)
-#matplotlib.rc('xtick.minor', size=3.0)
+# matplotlib.rc('xtick.major', size=6.0)
+# matplotlib.rc('xtick.minor', size=3.0)
 
-#matplotlib.rc('ytick.major', size=6.0)
-#matplotlib.rc('ytick.minor', size=3.0)
+# matplotlib.rc('ytick.major', size=6.0)
+# matplotlib.rc('ytick.minor', size=3.0)
 
 
 class Brewer(object):
@@ -104,7 +106,7 @@ def PrePlot(num=None, rows=1, cols=1):
         global SUBPLOT_ROWS, SUBPLOT_COLS
         SUBPLOT_ROWS = rows
         SUBPLOT_COLS = cols
-    
+
 
 def SubPlot(plot_number):
     pyplot.subplot(SUBPLOT_ROWS, SUBPLOT_COLS, plot_number)
@@ -112,6 +114,7 @@ def SubPlot(plot_number):
 
 class InfiniteList(list):
     """A list that returns the same value for all indices."""
+
     def __init__(self, val):
         """Initializes the list.
 
@@ -141,7 +144,7 @@ def Underride(d, **options):
     if d is None:
         d = {}
 
-    for key, val in options.iteritems():
+    for key, val in options.items():
         d.setdefault(key, val)
 
     return d
@@ -151,13 +154,13 @@ def Clf():
     """Clears the figure and any hints that have been set."""
     Brewer.ClearIter()
     pyplot.clf()
-    
+
 
 def Figure(**options):
     """Sets options for the current figure."""
     Underride(options, figsize=(6, 8))
     pyplot.figure(**options)
-    
+
 
 def Plot(xs, ys, style='', **options):
     """Plots a line.
@@ -172,11 +175,11 @@ def Plot(xs, ys, style='', **options):
 
     if color_iter:
         try:
-            options = Underride(options, color=color_iter.next())
+            options = Underride(options, color=next(color_iter))
         except StopIteration:
-            print 'Warning: Brewer ran out of colors.'
+            print('Warning: Brewer ran out of colors.')
             Brewer.ClearIter()
-        
+
     options = Underride(options, linewidth=3, alpha=0.8)
     pyplot.plot(xs, ys, style, **options)
 
@@ -188,7 +191,7 @@ def Scatter(xs, ys, **options):
     ys: y values
     options: options passed to pyplot.scatter
     """
-    options = Underride(options, color='blue', alpha=0.2, 
+    options = Underride(options, color='blue', alpha=0.2,
                         s=30, edgecolors='none')
     pyplot.scatter(xs, ys, **options)
 
@@ -234,7 +237,7 @@ def Hist(hist, **options):
     if hist.name:
         options = Underride(options, label=hist.name)
 
-    options = Underride(options, 
+    options = Underride(options,
                         align='center',
                         linewidth=0,
                         width=width)
@@ -265,7 +268,7 @@ def Diff(t):
     Returns:
         sequence of differences (length one less than t)
     """
-    diffs = [t[i+1] - t[i] for i in range(len(t)-1)]
+    diffs = [t[i + 1] - t[i] for i in range(len(t) - 1)]
     return diffs
 
 
@@ -295,12 +298,12 @@ def Cdf(cdf, complement=False, transform=None, **options):
         scale['xscale'] = 'log'
 
     if complement:
-        ps = [1.0-p for p in ps]
+        ps = [1.0 - p for p in ps]
 
     if transform == 'weibull':
         xs.pop()
         ps.pop()
-        ps = [-math.log(1.0-p) for p in ps]
+        ps = [-math.log(1.0 - p) for p in ps]
         scale['xscale'] = 'log'
         scale['yscale'] = 'log'
 
@@ -345,7 +348,7 @@ def Contour(obj, pcolor=False, contour=True, imshow=False, **options):
 
     Underride(options, linewidth=3, cmap=matplotlib.cm.Blues)
 
-    xs, ys = zip(*d.iterkeys())
+    xs, ys = list(zip(*iter(d.keys())))
     xs = sorted(set(xs))
     ys = sorted(set(ys))
 
@@ -366,7 +369,7 @@ def Contour(obj, pcolor=False, contour=True, imshow=False, **options):
     if imshow:
         extent = xs[0], xs[-1], ys[0], ys[-1]
         pyplot.imshow(Z, extent=extent, **options)
-        
+
 
 def Pcolor(xs, ys, zs, pcolor=True, contour=False, **options):
     """Makes a pseudocolor plot.
@@ -393,7 +396,7 @@ def Pcolor(xs, ys, zs, pcolor=True, contour=False, **options):
     if contour:
         cs = pyplot.contour(X, Y, Z, **options)
         pyplot.clabel(cs, inline=1, fontsize=10)
-        
+
 
 def Config(**options):
     """Configures the plot.
@@ -473,7 +476,7 @@ def SaveFormat(root, fmt='eps'):
       fmt: string format
     """
     filename = '%s.%s' % (root, fmt)
-    print 'Writing', filename
+    print('Writing', filename)
     pyplot.savefig(filename, format=fmt, dpi=300)
 
 
@@ -501,7 +504,8 @@ save = Save
 def main():
     color_iter = Brewer.ColorGenerator(7)
     for color in color_iter:
-        print color
+        print(color)
+
 
 if __name__ == '__main__':
     main()

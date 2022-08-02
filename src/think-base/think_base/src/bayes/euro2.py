@@ -39,7 +39,7 @@ class Euro(thinkbayes.Suite):
         if data == 'H':
             return x
         else:
-            return 1-x
+            return 1 - x
 
 
 class Euro2(thinkbayes.Suite):
@@ -53,12 +53,12 @@ class Euro2(thinkbayes.Suite):
         """
         x = hypo / 100.0
         heads, tails = data
-        like = x**heads * (1-x)**tails
+        like = x ** heads * (1 - x) ** tails
         return like
 
 
 def Version1():
-    suite = Euro(xrange(0, 101))
+    suite = Euro(range(0, 101))
     heads, tails = 140, 110
     dataset = 'H' * heads + 'T' * tails
 
@@ -69,7 +69,7 @@ def Version1():
 
 
 def Version2():
-    suite = Euro(xrange(0, 101))
+    suite = Euro(range(0, 101))
     heads, tails = 140, 110
     dataset = 'H' * heads + 'T' * tails
 
@@ -78,7 +78,7 @@ def Version2():
 
 
 def Version3():
-    suite = Euro2(xrange(0, 101))
+    suite = Euro2(range(0, 101))
     heads, tails = 140, 110
 
     suite.Update((heads, tails))
@@ -86,13 +86,11 @@ def Version3():
 
 
 def main():
-
     suite = Version3()
-    print suite.Mean()
+    print(suite.Mean())
 
     thinkplot.Pmf(suite)
     thinkplot.Show()
-    
 
 
 if __name__ == '__main__':
