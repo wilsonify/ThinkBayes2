@@ -15,13 +15,9 @@ import thinkstats
 class Respondents(survey.Table):
     """Represents the respondent table."""
 
-    def ReadRecords(self, data_dir='.', n=None):
+    def ReadRecords(self, data_dir=".", n=None):
         filename = self.GetFilename()
-        self.ReadFile(data_dir,
-                      filename,
-                      self.GetFields(),
-                      survey.Respondent,
-                      n)
+        self.ReadFile(data_dir, filename, self.GetFields(), survey.Respondent, n)
         self.Recode()
 
     def GetFilename(self):
@@ -32,12 +28,12 @@ class Respondents(survey.Table):
         The BRFSS data is available from thinkstats.com/CDBRFS08.ASC.gz
 
         """
-        return 'CDBRFS08.ASC.gz'
+        return "CDBRFS08.ASC.gz"
 
     def GetFields(self):
         """Returns a tuple specifying the fields to extract.
-        
-        BRFSS codebook 
+
+        BRFSS codebook
         http://www.cdc.gov/brfss/technical_infodata/surveydata/2008.htm
 
         The elements of the tuple are field, start, end, case.
@@ -47,12 +43,12 @@ class Respondents(survey.Table):
                 case is a callable that converts the result to int, float, etc.
         """
         return [
-            ('age', 101, 102, int),
-            ('weight2', 119, 122, int),
-            ('wtyrago', 127, 130, int),
-            ('wtkg2', 1254, 1258, int),
-            ('htm3', 1251, 1253, int),
-            ('sex', 143, 143, int),
+            ("age", 101, 102, int),
+            ("weight2", 119, 122, int),
+            ("wtyrago", 127, 130, int),
+            ("wtkg2", 1254, 1258, int),
+            ("htm3", 1251, 1253, int),
+            ("sex", 143, 143, int),
         ]
 
     def Recode(self):
@@ -60,7 +56,7 @@ class Respondents(survey.Table):
 
         def CleanWeight(weight):
             if weight in [7777, 9999]:
-                return 'NA'
+                return "NA"
             elif weight < 1000:
                 return weight / 2.2
             elif 9000 < weight < 9999:
@@ -70,8 +66,8 @@ class Respondents(survey.Table):
 
         for rec in self.records:
             # recode wtkg2
-            if rec.wtkg2 in ['NA', 99999]:
-                rec.wtkg2 = 'NA'
+            if rec.wtkg2 in ["NA", 99999]:
+                rec.wtkg2 = "NA"
             else:
                 rec.wtkg2 /= 100.0
 
@@ -81,22 +77,22 @@ class Respondents(survey.Table):
 
             # recode htm3
             if rec.htm3 == 999:
-                rec.htm3 = 'NA'
+                rec.htm3 = "NA"
 
             # recode age
             if rec.age in [7, 9]:
-                rec.age = 'NA'
+                rec.age = "NA"
 
     def SummarizeHeight(self):
         """Print summary statistics for male and female height."""
 
         # make a dictionary that maps from gender code to list of heights
-        d = {1: [], 2: [], 'all': []}
-        [d[r.sex].append(r.htm3) for r in self.records if r.htm3 != 'NA']
-        [d['all'].append(r.htm3) for r in self.records if r.htm3 != 'NA']
+        d = {1: [], 2: [], "all": []}
+        [d[r.sex].append(r.htm3) for r in self.records if r.htm3 != "NA"]
+        [d["all"].append(r.htm3) for r in self.records if r.htm3 != "NA"]
 
-        print('Height (cm):')
-        print('key n     mean     var    sigma     cv')
+        print("Height (cm):")
+        print("key n     mean     var    sigma     cv")
         for key, t in d.items():
             mu, var = thinkstats.TrimmedMeanVar(t)
             sigma = math.sqrt(var)
@@ -109,12 +105,12 @@ class Respondents(survey.Table):
         """Print summary statistics for male and female weight."""
 
         # make a dictionary that maps from gender code to list of weights
-        d = {1: [], 2: [], 'all': []}
-        [d[r.sex].append(r.weight2) for r in self.records if r.weight2 != 'NA']
-        [d['all'].append(r.weight2) for r in self.records if r.weight2 != 'NA']
+        d = {1: [], 2: [], "all": []}
+        [d[r.sex].append(r.weight2) for r in self.records if r.weight2 != "NA"]
+        [d["all"].append(r.weight2) for r in self.records if r.weight2 != "NA"]
 
-        print('Weight (kg):')
-        print('key n     mean     var    sigma     cv')
+        print("Weight (kg):")
+        print("key n     mean     var    sigma     cv")
         for key, t in d.items():
             mu, var = thinkstats.TrimmedMeanVar(t)
             sigma = math.sqrt(var)
@@ -124,15 +120,18 @@ class Respondents(survey.Table):
     def SummarizeWeightChange(self):
         """Print the mean reported change in weight in kg."""
 
-        data = [(r.weight2, r.wtyrago) for r in self.records
-                if r.weight2 != 'NA' and r.wtyrago != 'NA']
+        data = [
+            (r.weight2, r.wtyrago)
+            for r in self.records
+            if r.weight2 != "NA" and r.wtyrago != "NA"
+        ]
 
         changes = [(curr - prev) for curr, prev in data]
 
-        print('Mean change', thinkstats.Mean(changes))
+        print("Mean change", thinkstats.Mean(changes))
 
 
-def main(name, data_dir='.'):
+def main(name, data_dir="."):
     resp = Respondents()
     resp.ReadRecords(data_dir)
     resp.SummarizeHeight()
@@ -140,5 +139,5 @@ def main(name, data_dir='.'):
     resp.SummarizeWeightChange()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(*sys.argv)

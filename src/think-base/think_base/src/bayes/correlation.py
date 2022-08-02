@@ -126,7 +126,7 @@ def CoefDetermination(ys, res):
     Args:
         ys: dependent variable
         res: residuals
-        
+
     Returns:
         float coefficient of determination
     """
@@ -140,7 +140,7 @@ def MapToRanks(t):
 
     Args:
         t: sequence of numbers
-    
+
     Returns:
         list of integer ranks, starting at 1
     """
@@ -171,7 +171,7 @@ def CorrelatedGenerator(rho):
     x = random.gauss(0, 1)
     yield x
 
-    sigma = math.sqrt(1 - rho ** 2);
+    sigma = math.sqrt(1 - rho ** 2)
     while True:
         x = random.gauss(x * rho, sigma)
         yield x
@@ -194,5 +194,5 @@ def main():
     pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

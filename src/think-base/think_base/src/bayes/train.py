@@ -26,11 +26,13 @@ def main():
 
     thinkplot.PrePlot(1)
     thinkplot.Pmf(suite)
-    thinkplot.Save(root='train1',
-                   xlabel='Number of trains',
-                   ylabel='Probability',
-                   formats=['pdf', 'eps'])
+    thinkplot.Save(
+        root="train1",
+        xlabel="Number of trains",
+        ylabel="Probability",
+        formats=["pdf", "eps"],
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

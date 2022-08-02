@@ -24,16 +24,14 @@ NUM_SIGMAS = 1
 class Height(thinkbayes.Suite, thinkbayes.Joint):
     """Hypotheses about parameters of the distribution of height."""
 
-    def __init__(self, mus, sigmas, name=''):
+    def __init__(self, mus, sigmas, name=""):
         """Makes a prior distribution for mu and sigma based on a sample.
 
         mus: sequence of possible mus
         sigmas: sequence of possible sigmas
         name: string name for the Suite
         """
-        pairs = [(mu, sigma)
-                 for mu in mus
-                 for sigma in sigmas]
+        pairs = [(mu, sigma) for mu in mus for sigma in sigmas]
 
         thinkbayes.Suite.__init__(self, pairs, name=name)
 
@@ -109,7 +107,7 @@ class Height(thinkbayes.Suite, thinkbayes.Joint):
 
         # compute summary stats
         median, s = MedianS(xs, num_sigmas=NUM_SIGMAS)
-        print('median, s', median, s)
+        print("median, s", median, s)
 
         self.LogUpdateSetABC(n, median, s)
 
@@ -151,8 +149,8 @@ def FindPriorRanges(xs, num_points, num_stderrs=3.0, median_flag=False):
     xs: sample
     num_points: number of values in each dimension
     num_stderrs: number of standard errors to include on either side
-    
-    Returns: sequence of mus, sequence of sigmas    
+
+    Returns: sequence of mus, sequence of sigmas
     """
 
     def MakeRange(estimate, stderr):
@@ -175,7 +173,7 @@ def FindPriorRanges(xs, num_points, num_stderrs=3.0, median_flag=False):
         m = numpy.mean(xs)
         s = numpy.std(xs)
 
-    print('classical estimators', m, s)
+    print("classical estimators", m, s)
 
     # compute ranges for m and s
     stderr_m = s / math.sqrt(n)
@@ -238,16 +236,18 @@ def PlotCdfs(d, labels):
 
 def PlotPosterior(suite, pcolor=False, contour=True):
     """Makes a contour plot.
-    
+
     suite: Suite that maps (mu, sigma) to probability
     """
     thinkplot.Clf()
     thinkplot.Contour(suite.GetDict(), pcolor=pcolor, contour=contour)
 
-    thinkplot.Save(root='variability_posterior_%s' % suite.name,
-                   title='Posterior joint distribution',
-                   xlabel='Mean height (cm)',
-                   ylabel='Stddev (cm)')
+    thinkplot.Save(
+        root="variability_posterior_%s" % suite.name,
+        title="Posterior joint distribution",
+        xlabel="Mean height (cm)",
+        ylabel="Stddev (cm)",
+    )
 
 
 def PlotCoefVariation(suites):
@@ -261,20 +261,18 @@ def PlotCoefVariation(suites):
     pmfs = {}
     for label, suite in suites.items():
         pmf = CoefVariation(suite)
-        print('CV posterior mean', pmf.Mean())
+        print("CV posterior mean", pmf.Mean())
         cdf = thinkbayes.MakeCdfFromPmf(pmf, label)
         thinkplot.Cdf(cdf)
 
         pmfs[label] = pmf
 
-    thinkplot.Save(root='variability_cv',
-                   xlabel='Coefficient of variation',
-                   ylabel='Probability')
+    thinkplot.Save(
+        root="variability_cv", xlabel="Coefficient of variation", ylabel="Probability"
+    )
 
-    print('female bigger', thinkbayes.PmfProbGreater(pmfs['female'],
-                                                     pmfs['male']))
-    print('male bigger', thinkbayes.PmfProbGreater(pmfs['male'],
-                                                   pmfs['female']))
+    print("female bigger", thinkbayes.PmfProbGreater(pmfs["female"], pmfs["male"]))
+    print("male bigger", thinkbayes.PmfProbGreater(pmfs["male"], pmfs["female"]))
 
 
 def PlotOutliers(samples):
@@ -288,10 +286,12 @@ def PlotOutliers(samples):
 
     thinkplot.Clf()
     thinkplot.Cdfs(cdfs)
-    thinkplot.Save(root='variability_cdfs',
-                   title='CDF of height',
-                   xlabel='Reported height (cm)',
-                   ylabel='CDF')
+    thinkplot.Save(
+        root="variability_cdfs",
+        title="CDF of height",
+        xlabel="Reported height (cm)",
+        ylabel="CDF",
+    )
 
 
 def PlotMarginals(suite):
@@ -314,15 +314,15 @@ def PlotMarginals(suite):
     thinkplot.Show()
 
 
-def DumpHeights(data_dir='.', n=10000):
+def DumpHeights(data_dir=".", n=10000):
     """Read the BRFSS dataset, extract the heights and pickle them."""
     resp = brfss.Respondents()
     resp.ReadRecords(data_dir, n)
 
     d = {1: [], 2: []}
-    [d[r.sex].append(r.htm3) for r in resp.records if r.htm3 != 'NA']
+    [d[r.sex].append(r.htm3) for r in resp.records if r.htm3 != "NA"]
 
-    fp = open('variability_data.pkl', 'wb')
+    fp = open("variability_data.pkl", "wb")
     pickle.dump(d, fp)
     fp.close()
 
@@ -332,7 +332,7 @@ def LoadHeights():
 
     returns: map from sex code to list of heights.
     """
-    fp = open('variability_data.pkl', 'r')
+    fp = open("variability_data.pkl", "r")
     d = pickle.load(fp)
     fp.close()
     return d
@@ -442,8 +442,8 @@ def Summarize(xs):
     """
     # print smallest and largest
     xs.sort()
-    print('smallest', xs[:10])
-    print('largest', xs[-10:])
+    print("smallest", xs[:10])
+    print("largest", xs[-10:])
 
     # print median and interquartile range
     cdf = thinkbayes.MakeCdfFromList(xs)
@@ -458,7 +458,7 @@ def RunEstimate(update_func, num_points=31, median_flag=False):
     """
     DumpHeights(n=10000000)
     d = LoadHeights()
-    labels = {1: 'male', 2: 'female'}
+    labels = {1: "male", 2: "female"}
 
     # PlotCdfs(d, labels)
 
@@ -474,14 +474,14 @@ def RunEstimate(update_func, num_points=31, median_flag=False):
         suite = Height(mus, sigmas, name)
         suites[name] = suite
         update_func(suite, xs)
-        print('MLE', suite.MaximumLikelihood())
+        print("MLE", suite.MaximumLikelihood())
 
         PlotPosterior(suite)
 
         pmf_m = suite.Marginal(0)
         pmf_s = suite.Marginal(1)
-        print('marginal mu', pmf_m.Mean(), pmf_m.Var())
-        print('marginal sigma', pmf_s.Mean(), pmf_s.Var())
+        print("marginal mu", pmf_m.Mean(), pmf_m.Var())
+        print("marginal sigma", pmf_s.Mean(), pmf_s.Var())
 
         # PlotMarginals(suite)
 
@@ -492,11 +492,11 @@ def main():
     random.seed(17)
 
     func = UpdateSuite5
-    median_flag = (func == UpdateSuite5)
+    median_flag = func == UpdateSuite5
     RunEstimate(func, median_flag=median_flag)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
 
 """ Results:

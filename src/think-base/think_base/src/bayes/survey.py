@@ -38,14 +38,14 @@ class Table(object):
             data_dir: string directory name
             filename: string name of the file to read
 
-            fields: sequence of (name, start, end, case) tuples specifying 
+            fields: sequence of (name, start, end, case) tuples specifying
             the fields to extract
 
             constructor: what kind of object to create
         """
         filename = os.path.join(data_dir, filename)
 
-        if filename.endswith('gz'):
+        if filename.endswith("gz"):
             fp = gzip.open(filename)
         else:
             fp = open(filename)
@@ -63,7 +63,7 @@ class Table(object):
         Args:
             line: string line from a data file
 
-            fields: sequence of (name, start, end, cast) tuples specifying 
+            fields: sequence of (name, start, end, cast) tuples specifying
             the fields to extract
 
             constructor: callable that makes an object for the record.
@@ -74,12 +74,12 @@ class Table(object):
         obj = constructor()
         for (field, start, end, cast) in fields:
             try:
-                s = line[start - 1:end]
+                s = line[start - 1: end]
                 val = cast(s)
             except ValueError:
                 # print line
                 # print field, start, end, s
-                val = 'NA'
+                val = "NA"
             setattr(obj, field, val)
         return obj
 
@@ -107,13 +107,13 @@ class Table(object):
 class Respondents(Table):
     """Represents the respondent table."""
 
-    def ReadRecords(self, data_dir='.', n=None):
+    def ReadRecords(self, data_dir=".", n=None):
         filename = self.GetFilename()
         self.ReadFile(data_dir, filename, self.GetFields(), Respondent, n)
         self.Recode()
 
     def GetFilename(self):
-        return '2002FemResp.dat.gz'
+        return "2002FemResp.dat.gz"
 
     def GetFields(self):
         """Returns a tuple specifying the fields to extract.
@@ -125,20 +125,20 @@ class Respondents(Table):
                 cast is a callable that converts the result to int, float, etc.
         """
         return [
-            ('caseid', 1, 12, int),
+            ("caseid", 1, 12, int),
         ]
 
 
 class Pregnancies(Table):
     """Contains survey data about a Pregnancy."""
 
-    def ReadRecords(self, data_dir='.', n=None):
+    def ReadRecords(self, data_dir=".", n=None):
         filename = self.GetFilename()
         self.ReadFile(data_dir, filename, self.GetFields(), Pregnancy, n)
         self.Recode()
 
     def GetFilename(self):
-        return '2002FemPreg.dat.gz'
+        return "2002FemPreg.dat.gz"
 
     def GetFields(self):
         """Gets information about the fields to extract from the survey data.
@@ -150,16 +150,16 @@ class Pregnancies(Table):
             sequence of (name, start, end, type) tuples
         """
         return [
-            ('caseid', 1, 12, int),
-            ('nbrnaliv', 22, 22, int),
-            ('babysex', 56, 56, int),
-            ('birthwgt_lb', 57, 58, int),
-            ('birthwgt_oz', 59, 60, int),
-            ('prglength', 275, 276, int),
-            ('outcome', 277, 277, int),
-            ('birthord', 278, 279, int),
-            ('agepreg', 284, 287, int),
-            ('finalwgt', 423, 440, float),
+            ("caseid", 1, 12, int),
+            ("nbrnaliv", 22, 22, int),
+            ("babysex", 56, 56, int),
+            ("birthwgt_lb", 57, 58, int),
+            ("birthwgt_oz", 59, 60, int),
+            ("prglength", 275, 276, int),
+            ("outcome", 277, 277, int),
+            ("birthord", 278, 279, int),
+            ("agepreg", 284, 287, int),
+            ("finalwgt", 423, 440, float),
         ]
 
     def Recode(self):
@@ -167,7 +167,7 @@ class Pregnancies(Table):
 
             # divide mother's age by 100
             try:
-                if rec.agepreg != 'NA':
+                if rec.agepreg != "NA":
                     rec.agepreg /= 100.0
             except AttributeError:
                 pass
@@ -177,24 +177,28 @@ class Pregnancies(Table):
             # that are almost certainly errors, but for now I am not
             # filtering
             try:
-                if (rec.birthwgt_lb != 'NA' and rec.birthwgt_lb < 20 and
-                        rec.birthwgt_oz != 'NA' and rec.birthwgt_oz <= 16):
+                if (
+                        rec.birthwgt_lb != "NA"
+                        and rec.birthwgt_lb < 20
+                        and rec.birthwgt_oz != "NA"
+                        and rec.birthwgt_oz <= 16
+                ):
                     rec.totalwgt_oz = rec.birthwgt_lb * 16 + rec.birthwgt_oz
                 else:
-                    rec.totalwgt_oz = 'NA'
+                    rec.totalwgt_oz = "NA"
             except AttributeError:
                 pass
 
 
-def main(name, data_dir='.'):
+def main(name, data_dir="."):
     resp = Respondents()
     resp.ReadRecords(data_dir)
-    print('Number of respondents', len(resp.records))
+    print("Number of respondents", len(resp.records))
 
     preg = Pregnancies()
     preg.ReadRecords(data_dir)
-    print('Number of pregnancies', len(preg.records))
+    print("Number of pregnancies", len(preg.records))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(*sys.argv)

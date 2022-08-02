@@ -36,7 +36,7 @@ class Euro(thinkbayes.Suite):
         data: string 'H' or 'T'
         """
         x = hypo / 100.0
-        if data == 'H':
+        if data == "H":
             return x
         else:
             return 1 - x
@@ -60,7 +60,7 @@ class Euro2(thinkbayes.Suite):
 def Version1():
     suite = Euro(range(0, 101))
     heads, tails = 140, 110
-    dataset = 'H' * heads + 'T' * tails
+    dataset = "H" * heads + "T" * tails
 
     for data in dataset:
         suite.Update(data)
@@ -71,7 +71,7 @@ def Version1():
 def Version2():
     suite = Euro(range(0, 101))
     heads, tails = 140, 110
-    dataset = 'H' * heads + 'T' * tails
+    dataset = "H" * heads + "T" * tails
 
     suite.UpdateSet(dataset)
     return suite
@@ -93,5 +93,5 @@ def main():
     thinkplot.Show()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

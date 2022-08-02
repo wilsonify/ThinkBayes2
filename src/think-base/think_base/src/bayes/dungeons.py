@@ -10,13 +10,13 @@ import random
 import thinkbayes
 import thinkplot
 
-FORMATS = ['pdf', 'eps', 'png']
+FORMATS = ["pdf", "eps", "png"]
 
 
 class Die(thinkbayes.Pmf):
     """Represents the PMF of outcomes for a die."""
 
-    def __init__(self, sides, name=''):
+    def __init__(self, sides, name=""):
         """Initializes the die.
 
         sides: int number of sides
@@ -59,32 +59,33 @@ def main():
     mix = thinkbayes.MakeMixture(pmf_dice)
 
     thinkplot.Hist(mix, width=0.9)
-    thinkplot.Save(root='dungeons3',
-                   xlabel='Outcome',
-                   ylabel='Probability',
-                   formats=FORMATS)
+    thinkplot.Save(
+        root="dungeons3", xlabel="Outcome", ylabel="Probability", formats=FORMATS
+    )
 
     random.seed(17)
 
-    d6 = Die(6, 'd6')
+    d6 = Die(6, "d6")
 
     dice = [d6] * 3
     three = thinkbayes.SampleSum(dice, 1000)
-    three.name = 'sample'
+    three.name = "sample"
     three.Print()
 
     three_exact = d6 + d6 + d6
-    three_exact.name = 'exact'
+    three_exact.name = "exact"
     three_exact.Print()
 
     thinkplot.PrePlot(num=2)
     thinkplot.Pmf(three)
-    thinkplot.Pmf(three_exact, linestyle='dashed')
-    thinkplot.Save(root='dungeons1',
-                   xlabel='Sum of three d6',
-                   ylabel='Probability',
-                   axis=[2, 19, 0, 0.15],
-                   formats=FORMATS)
+    thinkplot.Pmf(three_exact, linestyle="dashed")
+    thinkplot.Save(
+        root="dungeons1",
+        xlabel="Sum of three d6",
+        ylabel="Probability",
+        axis=[2, 19, 0, 0.15],
+        formats=FORMATS,
+    )
 
     thinkplot.Clf()
     thinkplot.PrePlot(num=1)
@@ -97,17 +98,19 @@ def main():
 
     # and the easy way
     best_attr_cdf = three_exact.Max(6)
-    best_attr_cdf.name = ''
+    best_attr_cdf.name = ""
     best_attr_pmf = thinkbayes.MakePmfFromCdf(best_attr_cdf)
     best_attr_pmf.Print()
 
     thinkplot.Pmf(best_attr_pmf)
-    thinkplot.Save(root='dungeons2',
-                   xlabel='Best of three d6',
-                   ylabel='Probability',
-                   axis=[2, 19, 0, 0.23],
-                   formats=FORMATS)
+    thinkplot.Save(
+        root="dungeons2",
+        xlabel="Best of three d6",
+        ylabel="Probability",
+        axis=[2, 19, 0, 0.23],
+        formats=FORMATS,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

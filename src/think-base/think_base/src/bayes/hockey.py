@@ -18,7 +18,7 @@ USE_SUMMARY_DATA = True
 class Hockey(thinkbayes.Suite):
     """Represents hypotheses about the scoring rate for a team."""
 
-    def __init__(self, name=''):
+    def __init__(self, name=""):
         """Initializes the Hockey object.
 
         name: string
@@ -89,13 +89,14 @@ class Game(object):
 
     Attributes are set in columns.read_csv.
     """
+
     convert = dict()
 
     def clean(self):
         self.goals = self.pd1 + self.pd2 + self.pd3
 
 
-def ReadHockeyData(filename='hockey_data.csv'):
+def ReadHockeyData(filename="hockey_data.csv"):
     """Read game scores from the data file.
 
     filename: string
@@ -150,9 +151,9 @@ def ProcessScoresPairwise(pairs):
     thinkplot.Show()
 
     mu, var = thinkstats.MeanVar(lams)
-    print('mu, sig', mu, math.sqrt(var))
+    print("mu, sig", mu, math.sqrt(var))
 
-    print('BOS v VAN', pairs['BOS', 'VAN'])
+    print("BOS v VAN", pairs["BOS", "VAN"])
 
 
 def ProcessScoresTeamwise(pairs):
@@ -181,26 +182,25 @@ def ProcessScoresTeamwise(pairs):
     thinkplot.Show()
 
     mu, var = thinkstats.MeanVar(lams)
-    print('mu, sig', mu, math.sqrt(var))
+    print("mu, sig", mu, math.sqrt(var))
 
 
 def main():
     # ReadHockeyData()
     # return
 
-    formats = ['pdf', 'eps']
+    formats = ["pdf", "eps"]
 
-    suite1 = Hockey('bruins')
-    suite2 = Hockey('canucks')
+    suite1 = Hockey("bruins")
+    suite2 = Hockey("canucks")
 
     thinkplot.Clf()
     thinkplot.PrePlot(num=2)
     thinkplot.Pmf(suite1)
     thinkplot.Pmf(suite2)
-    thinkplot.Save(root='hockey0',
-                   xlabel='Goals per game',
-                   ylabel='Probability',
-                   formats=formats)
+    thinkplot.Save(
+        root="hockey0", xlabel="Goals per game", ylabel="Probability", formats=formats
+    )
 
     suite1.UpdateSet([0, 2, 8, 4])
     suite2.UpdateSet([1, 3, 1, 0])
@@ -209,10 +209,9 @@ def main():
     thinkplot.PrePlot(num=2)
     thinkplot.Pmf(suite1)
     thinkplot.Pmf(suite2)
-    thinkplot.Save(root='hockey1',
-                   xlabel='Goals per game',
-                   ylabel='Probability',
-                   formats=formats)
+    thinkplot.Save(
+        root="hockey1", xlabel="Goals per game", ylabel="Probability", formats=formats
+    )
 
     goal_dist1 = MakeGoalPmf(suite1)
     goal_dist2 = MakeGoalPmf(suite2)
@@ -221,25 +220,23 @@ def main():
     thinkplot.PrePlot(num=2)
     thinkplot.Pmf(goal_dist1)
     thinkplot.Pmf(goal_dist2)
-    thinkplot.Save(root='hockey2',
-                   xlabel='Goals',
-                   ylabel='Probability',
-                   formats=formats)
+    thinkplot.Save(
+        root="hockey2", xlabel="Goals", ylabel="Probability", formats=formats
+    )
 
     time_dist1 = MakeGoalTimePmf(suite1)
     time_dist2 = MakeGoalTimePmf(suite2)
 
-    print('MLE bruins', suite1.MaximumLikelihood())
-    print('MLE canucks', suite2.MaximumLikelihood())
+    print("MLE bruins", suite1.MaximumLikelihood())
+    print("MLE canucks", suite2.MaximumLikelihood())
 
     thinkplot.Clf()
     thinkplot.PrePlot(num=2)
     thinkplot.Pmf(time_dist1)
     thinkplot.Pmf(time_dist2)
-    thinkplot.Save(root='hockey3',
-                   xlabel='Games until goal',
-                   ylabel='Probability',
-                   formats=formats)
+    thinkplot.Save(
+        root="hockey3", xlabel="Games until goal", ylabel="Probability", formats=formats
+    )
 
     diff = goal_dist1 - goal_dist2
     p_win = diff.ProbGreater(0)
@@ -251,11 +248,11 @@ def main():
     p_overtime = thinkbayes.PmfProbLess(time_dist1, time_dist2)
     p_adjust = thinkbayes.PmfProbEqual(time_dist1, time_dist2)
     p_overtime += p_adjust / 2
-    print('p_overtime', p_overtime)
+    print("p_overtime", p_overtime)
 
     print(p_overtime * p_tie)
     p_win += p_overtime * p_tie
-    print('p_win', p_win)
+    print("p_win", p_win)
 
     # win the next two
     p_series = p_win ** 2
@@ -263,8 +260,8 @@ def main():
     # split the next two, win the third
     p_series += 2 * p_win * (1 - p_win) * p_win
 
-    print('p_series', p_series)
+    print("p_series", p_series)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

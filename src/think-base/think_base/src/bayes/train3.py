@@ -58,16 +58,14 @@ def ComparePriors():
     thinkplot.PrePlot(num=2)
 
     constructors = [Train, Train2]
-    labels = ['uniform', 'power law']
+    labels = ["uniform", "power law"]
 
     for constructor, label in zip(constructors, labels):
         suite = MakePosterior(high, dataset, constructor)
         suite.name = label
         thinkplot.Pmf(suite)
 
-    thinkplot.Save(root='train4',
-                   xlabel='Number of trains',
-                   ylabel='Probability')
+    thinkplot.Save(root="train4", xlabel="Number of trains", ylabel="Probability")
 
 
 def main():
@@ -82,9 +80,7 @@ def main():
         suite = MakePosterior(high, dataset, Train2)
         print(high, suite.Mean())
 
-    thinkplot.Save(root='train3',
-                   xlabel='Number of trains',
-                   ylabel='Probability')
+    thinkplot.Save(root="train3", xlabel="Number of trains", ylabel="Probability")
 
     interval = Percentile(suite, 5), Percentile(suite, 95)
     print(interval)
@@ -94,5 +90,5 @@ def main():
     print(interval)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

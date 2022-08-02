@@ -17,7 +17,7 @@ import thinkbayes
 import thinkplot
 
 INTERVAL = 245 / 365.0
-FORMATS = ['pdf', 'eps']
+FORMATS = ["pdf", "eps"]
 MINSIZE = 0.2
 MAXSIZE = 20
 BUCKET_FACTOR = 10
@@ -44,12 +44,12 @@ def SimpleModel():
     d1 = 15.5
     d0 = d1 / 2.0 ** doublings
 
-    print('interval (days)', interval)
-    print('interval (years)', interval / 365)
-    print('dt', dt)
-    print('doublings', doublings)
-    print('d1', d1)
-    print('d0', d0)
+    print("interval (days)", interval)
+    print("interval (years)", interval / 365)
+    print("dt", dt)
+    print("doublings", doublings)
+    print("d1", d1)
+    print("d0", d0)
 
     # assume an initial linear measure of 0.1 cm
     d0 = 0.1
@@ -61,19 +61,19 @@ def SimpleModel():
     # what linear doubling time does that imply?
     dt = interval / doublings
 
-    print('doublings', doublings)
-    print('dt', dt)
+    print("doublings", doublings)
+    print("dt", dt)
 
     # compute the volumetric doubling time and RDT
     vdt = dt / 3
     rdt = 365 / vdt
 
-    print('vdt', vdt)
-    print('rdt', rdt)
+    print("vdt", vdt)
+    print("rdt", rdt)
 
     cdf = MakeCdf()
     p = cdf.Prob(rdt)
-    print('Prob{RDT > 2.4}', 1 - p)
+    print("Prob{RDT > 2.4}", 1 - p)
 
 
 def MakeCdf():
@@ -97,28 +97,32 @@ def PlotCdf(cdf):
 
     # CCDF on logy scale: shows exponential behavior
     thinkplot.Clf()
-    thinkplot.Plot(xs, cps, 'bo-')
-    thinkplot.Save(root='kidney1',
-                   formats=FORMATS,
-                   xlabel='RDT',
-                   ylabel='CCDF (log scale)',
-                   yscale='log')
+    thinkplot.Plot(xs, cps, "bo-")
+    thinkplot.Save(
+        root="kidney1",
+        formats=FORMATS,
+        xlabel="RDT",
+        ylabel="CCDF (log scale)",
+        yscale="log",
+    )
 
     # CDF, model and data
 
     thinkplot.Clf()
     thinkplot.PrePlot(num=2)
     mxs, mys = ModelCdf()
-    thinkplot.Plot(mxs, mys, label='model', linestyle='dashed')
+    thinkplot.Plot(mxs, mys, label="model", linestyle="dashed")
 
-    thinkplot.Plot(xs, ps, 'gs', label='data')
-    thinkplot.Save(root='kidney2',
-                   formats=FORMATS,
-                   xlabel='RDT (volume doublings per year)',
-                   ylabel='CDF',
-                   title='Distribution of RDT',
-                   axis=[-2, 7, 0, 1],
-                   loc=4)
+    thinkplot.Plot(xs, ps, "gs", label="data")
+    thinkplot.Save(
+        root="kidney2",
+        formats=FORMATS,
+        xlabel="RDT (volume doublings per year)",
+        ylabel="CDF",
+        title="Distribution of RDT",
+        axis=[-2, 7, 0, 1],
+        loc=4,
+    )
 
 
 def QQPlot(cdf, fit):
@@ -129,16 +133,13 @@ def QQPlot(cdf, fit):
     """
     xs = [-1.5, 5.5]
     thinkplot.Clf()
-    thinkplot.Plot(xs, xs, 'b-')
+    thinkplot.Plot(xs, xs, "b-")
 
     xs, ps = cdf.xs, cdf.ps
     fs = [fit.Value(p) for p in ps]
 
-    thinkplot.Plot(xs, fs, 'gs')
-    thinkplot.Save(root='kidney3',
-                   formats=FORMATS,
-                   xlabel='Actual',
-                   ylabel='Model')
+    thinkplot.Plot(xs, fs, "gs")
+    thinkplot.Save(root="kidney3", formats=FORMATS, xlabel="Actual", ylabel="Model")
 
 
 def FitCdf(cdf):
@@ -328,7 +329,7 @@ class Cache(object):
         """Looks up a bucket in the cache."""
         return self.sequences[bucket]
 
-    def ConditionalCdf(self, bucket, name=''):
+    def ConditionalCdf(self, bucket, name=""):
         """Forms the cdf of ages for a given bucket.
 
         bucket: int bucket number
@@ -353,7 +354,7 @@ class Cache(object):
         """Gets the joint distribution of age and size.
 
         Map from (age, log size in cm) to log freq
-        
+
         Returns: new Pmf object
         """
         joint = thinkbayes.Joint()
@@ -426,8 +427,7 @@ class Calculator(object):
 
         return sequences
 
-    def MakeSequence(self, rdt_seq, v0=0.01, interval=INTERVAL,
-                     vmax=Volume(MAXSIZE)):
+    def MakeSequence(self, rdt_seq, v0=0.01, interval=INTERVAL, vmax=Volume(MAXSIZE)):
         """Simulate the growth of a tumor.
 
         rdt_seq: sequence of rdts
@@ -437,7 +437,7 @@ class Calculator(object):
 
         Returns: sequence of volumes
         """
-        seq = v0,
+        seq = (v0,)
         age = 0
 
         for rdt in rdt_seq:
@@ -468,7 +468,7 @@ class Calculator(object):
 
         return final, new_seq
 
-    def PlotBucket(self, bucket, color='blue'):
+    def PlotBucket(self, bucket, color="blue"):
         """Plots the set of sequences for the given bucket.
 
         bucket: int bucket number
@@ -486,19 +486,21 @@ class Calculator(object):
         # 2.01, 4.95 cm, 9.97 cm
         buckets = [7.0, 16.0, 23.0]
         buckets = [23.0]
-        colors = ['blue', 'green', 'red', 'cyan']
+        colors = ["blue", "green", "red", "cyan"]
 
         thinkplot.Clf()
         for bucket, color in zip(buckets, colors):
             self.PlotBucket(bucket, color)
 
-        thinkplot.Save(root='kidney5',
-                       formats=FORMATS,
-                       title='History of simulated tumors',
-                       axis=[-40, 1, MINSIZE, 12],
-                       xlabel='years',
-                       ylabel='diameter (cm, log scale)',
-                       yscale='log')
+        thinkplot.Save(
+            root="kidney5",
+            formats=FORMATS,
+            title="History of simulated tumors",
+            axis=[-40, 1, MINSIZE, 12],
+            xlabel="years",
+            ylabel="diameter (cm, log scale)",
+            yscale="log",
+        )
 
     def PlotJointDist(self):
         """Makes a pcolor plot of the age-size joint distribution."""
@@ -507,18 +509,20 @@ class Calculator(object):
         joint = self.cache.GetDistAgeSize()
         thinkplot.Contour(joint, contour=False, pcolor=True)
 
-        thinkplot.Save(root='kidney8',
-                       formats=FORMATS,
-                       axis=[0, 41, -0.7, 1.31],
-                       yticks=MakeLogTicks([0.2, 0.5, 1, 2, 5, 10, 20]),
-                       xlabel='ages',
-                       ylabel='diameter (cm, log scale)')
+        thinkplot.Save(
+            root="kidney8",
+            formats=FORMATS,
+            axis=[0, 41, -0.7, 1.31],
+            yticks=MakeLogTicks([0.2, 0.5, 1, 2, 5, 10, 20]),
+            xlabel="ages",
+            ylabel="diameter (cm, log scale)",
+        )
 
     def PlotConditionalCdfs(self):
         """Plots the cdf of ages for each bucket."""
         buckets = [7.0, 16.0, 23.0, 27.0]
         # 2.01, 4.95 cm, 9.97 cm, 14.879 cm
-        names = ['2 cm', '5 cm', '10 cm', '15 cm']
+        names = ["2 cm", "5 cm", "10 cm", "15 cm"]
         cdfs = []
 
         for bucket, name in zip(buckets, names):
@@ -528,14 +532,16 @@ class Calculator(object):
         thinkplot.Clf()
         thinkplot.PrePlot(num=len(cdfs))
         thinkplot.Cdfs(cdfs)
-        thinkplot.Save(root='kidney6',
-                       title='Distribution of age for several diameters',
-                       formats=FORMATS,
-                       xlabel='tumor age (years)',
-                       ylabel='CDF',
-                       loc=4)
+        thinkplot.Save(
+            root="kidney6",
+            title="Distribution of age for several diameters",
+            formats=FORMATS,
+            xlabel="tumor age (years)",
+            ylabel="CDF",
+            loc=4,
+        )
 
-    def PlotCredibleIntervals(self, xscale='linear'):
+    def PlotCredibleIntervals(self, xscale="linear"):
         """Plots the confidence interval for each bucket."""
         xs = []
         ts = []
@@ -555,25 +561,30 @@ class Calculator(object):
             ts.append(ps)
 
         # dump the results into a table
-        fp = open('kidney_table.tex', 'w')
+        fp = open("kidney_table.tex", "w")
         PrintTable(fp, xs, ts)
         fp.close()
 
         # make the figure
         linewidths = [1, 2, 3, 2, 1]
         alphas = [0.3, 0.5, 1, 0.5, 0.3]
-        labels = ['95th', '75th', '50th', '25th', '5th']
+        labels = ["95th", "75th", "50th", "25th", "5th"]
 
         # transpose the ts so we have sequences for each percentile rank
         thinkplot.Clf()
         yys = list(zip(*ts))
 
         for ys, linewidth, alpha, label in zip(yys, linewidths, alphas, labels):
-            options = dict(color='blue', linewidth=linewidth,
-                           alpha=alpha, label=label, markersize=2)
+            options = dict(
+                color="blue",
+                linewidth=linewidth,
+                alpha=alpha,
+                label=label,
+                markersize=2,
+            )
 
             # plot the data points
-            thinkplot.Plot(xs, ys, 'bo', **options)
+            thinkplot.Plot(xs, ys, "bo", **options)
 
             # plot the fit lines
             fxs = [min_size, 20.0]
@@ -583,21 +594,27 @@ class Calculator(object):
 
             # put a label at the end of each line
             x, y = fxs[-1], fys[-1]
-            pyplot.text(x * 1.05, y, label, color='blue',
-                        horizontalalignment='left',
-                        verticalalignment='center')
+            pyplot.text(
+                x * 1.05,
+                y,
+                label,
+                color="blue",
+                horizontalalignment="left",
+                verticalalignment="center",
+            )
 
         # make the figure
-        thinkplot.Save(root='kidney7',
-                       formats=FORMATS,
-                       title='Credible interval for age vs diameter',
-                       xlabel='diameter (cm, log scale)',
-                       ylabel='tumor age (years)',
-                       xscale=xscale,
-                       xticks=MakeTicks([0.5, 1, 2, 5, 10, 20]),
-                       axis=[0.25, 35, 0, 45],
-                       legend=False,
-                       )
+        thinkplot.Save(
+            root="kidney7",
+            formats=FORMATS,
+            title="Credible interval for age vs diameter",
+            xlabel="diameter (cm, log scale)",
+            ylabel="tumor age (years)",
+            xscale=xscale,
+            xticks=MakeTicks([0.5, 1, 2, 5, 10, 20]),
+            axis=[0.25, 35, 0, 45],
+            legend=False,
+        )
 
 
 def PlotSequences(sequences):
@@ -607,7 +624,7 @@ def PlotSequences(sequences):
     """
     thinkplot.Clf()
 
-    options = dict(color='gray', linewidth=1, linestyle='dashed')
+    options = dict(color="gray", linewidth=1, linestyle="dashed")
     thinkplot.Plot([0, 40], [10, 10], **options)
 
     for seq in sequences:
@@ -616,17 +633,19 @@ def PlotSequences(sequences):
         ts = numpy.linspace(0, age, n)
         PlotSequence(ts, seq)
 
-    thinkplot.Save(root='kidney4',
-                   formats=FORMATS,
-                   axis=[0, 40, MINSIZE, 20],
-                   title='Simulations of tumor growth',
-                   xlabel='tumor age (years)',
-                   yticks=MakeTicks([0.2, 0.5, 1, 2, 5, 10, 20]),
-                   ylabel='diameter (cm, log scale)',
-                   yscale='log')
+    thinkplot.Save(
+        root="kidney4",
+        formats=FORMATS,
+        axis=[0, 40, MINSIZE, 20],
+        title="Simulations of tumor growth",
+        xlabel="tumor age (years)",
+        yticks=MakeTicks([0.2, 0.5, 1, 2, 5, 10, 20]),
+        ylabel="diameter (cm, log scale)",
+        yscale="log",
+    )
 
 
-def PlotSequence(ts, seq, color='blue'):
+def PlotSequence(ts, seq, color="blue"):
     """Plots a time series of linear measurements.
 
     ts: sequence of times in years
@@ -646,10 +665,10 @@ def PrintCI(fp, cm, ps):
     cm: diameter in cm
     ts: tuples of percentiles
     """
-    fp.write('%0.1f' % round(cm, 1))
+    fp.write("%0.1f" % round(cm, 1))
     for p in reversed(ps):
-        fp.write(' & %0.1f ' % round(p, 1))
-    fp.write(r'\\' '\n')
+        fp.write(" & %0.1f " % round(p, 1))
+    fp.write(r"\\" "\n")
 
 
 def PrintTable(fp, xs, ts):
@@ -659,19 +678,19 @@ def PrintTable(fp, xs, ts):
     xs: diameters in cm
     ts: sequence of tuples of percentiles
     """
-    fp.write(r'\begin{tabular}{|r||r|r|r|r|r|}' '\n')
-    fp.write(r'\hline' '\n')
-    fp.write(r'Diameter   & \multicolumn{5}{c|}{Percentiles of age} \\' '\n')
-    fp.write(r'(cm)   & 5th & 25th & 50th & 75th & 95th \\' '\n')
-    fp.write(r'\hline' '\n')
+    fp.write(r"\begin{tabular}{|r||r|r|r|r|r|}" "\n")
+    fp.write(r"\hline" "\n")
+    fp.write(r"Diameter   & \multicolumn{5}{c|}{Percentiles of age} \\" "\n")
+    fp.write(r"(cm)   & 5th & 25th & 50th & 75th & 95th \\" "\n")
+    fp.write(r"\hline" "\n")
 
     for i, (cm, ps) in enumerate(zip(xs, ts)):
         # print cm, ps
         if i % 3 == 0:
             PrintCI(fp, cm, ps)
 
-    fp.write(r'\hline' '\n')
-    fp.write(r'\end{tabular}' '\n')
+    fp.write(r"\hline" "\n")
+    fp.write(r"\end{tabular}" "\n")
 
 
 def FitLine(xs, ys, fxs):
@@ -738,7 +757,7 @@ def TestCorrelation(cdf):
 def main(script):
     for size in [1, 5, 10]:
         bucket = CmToBucket(size)
-        print('Size, bucket', size, bucket)
+        print("Size, bucket", size, bucket)
 
     SimpleModel()
 
@@ -762,17 +781,17 @@ def main(script):
     calc.PlotBuckets()
 
     _ = calc.MakeSequences(1900, rho, fit)
-    print('V0-RDT correlation', calc.cache.Correlation())
+    print("V0-RDT correlation", calc.cache.Correlation())
 
-    print('15.5 Probability age > 8 year', calc.cache.ProbOlder(15.5, 8))
-    print('6.0 Probability age > 8 year', calc.cache.ProbOlder(6.0, 8))
+    print("15.5 Probability age > 8 year", calc.cache.ProbOlder(15.5, 8))
+    print("6.0 Probability age > 8 year", calc.cache.ProbOlder(6.0, 8))
 
     calc.PlotConditionalCdfs()
 
-    calc.PlotCredibleIntervals(xscale='log')
+    calc.PlotCredibleIntervals(xscale="log")
 
     calc.PlotJointDist()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(*sys.argv)

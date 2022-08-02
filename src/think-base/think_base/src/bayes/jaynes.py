@@ -34,7 +34,7 @@ are emitted?
 
 """
 
-FORMATS = ['pdf', 'eps', 'png']
+FORMATS = ["pdf", "eps", "png"]
 
 
 class Emitter(thinkbayes.Suite):
@@ -73,12 +73,12 @@ class Emitter(thinkbayes.Suite):
         like = detector.SuiteLikelihood(data)
         return like
 
-    def DistOfR(self, name=''):
+    def DistOfR(self, name=""):
         """Returns the PMF of r."""
         items = [(detector.r, prob) for detector, prob in self.Items()]
         return thinkbayes.MakePmfFromItems(items, name=name)
 
-    def DistOfN(self, name=''):
+    def DistOfN(self, name=""):
         """Returns the PMF of n."""
         return thinkbayes.MakeMixture(self, name=name)
 
@@ -107,12 +107,12 @@ class Emitter2(thinkbayes.Suite):
         """
         return hypo.Update(data)
 
-    def DistOfR(self, name=''):
+    def DistOfR(self, name=""):
         """Returns the PMF of r."""
         items = [(detector.r, prob) for detector, prob in self.Items()]
         return thinkbayes.MakePmfFromItems(items, name=name)
 
-    def DistOfN(self, name=''):
+    def DistOfN(self, name=""):
         """Returns the PMF of n."""
         return thinkbayes.MakeMixture(self, name=name)
 
@@ -169,10 +169,9 @@ def main():
         thinkplot.Pmf(suite)
         print(suite.MaximumLikelihood())
 
-    thinkplot.Save(root='jaynes1',
-                   xlabel='Number of particles (n)',
-                   ylabel='PMF',
-                   formats=FORMATS)
+    thinkplot.Save(
+        root="jaynes1", xlabel="Number of particles (n)", ylabel="PMF", formats=FORMATS
+    )
 
     # plot the posterior distributions of r and n
     hypos = list(range(1, 501, 5))
@@ -180,17 +179,16 @@ def main():
     suite.Update(k)
 
     thinkplot.PrePlot(num=2)
-    post_r = suite.DistOfR(name='posterior r')
-    post_n = suite.DistOfN(name='posterior n')
+    post_r = suite.DistOfR(name="posterior r")
+    post_n = suite.DistOfN(name="posterior n")
 
     thinkplot.Pmf(post_r)
     thinkplot.Pmf(post_n)
 
-    thinkplot.Save(root='jaynes2',
-                   xlabel='Emission rate',
-                   ylabel='PMF',
-                   formats=FORMATS)
+    thinkplot.Save(
+        root="jaynes2", xlabel="Emission rate", ylabel="PMF", formats=FORMATS
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

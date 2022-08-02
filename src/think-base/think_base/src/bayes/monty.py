@@ -39,22 +39,22 @@ class Monty(Pmf):
         """
         if hypo == data:
             return 0
-        elif hypo == 'A':
+        elif hypo == "A":
             return 0.5
         else:
             return 1
 
 
 def main():
-    hypos = 'ABC'
+    hypos = "ABC"
     pmf = Monty(hypos)
 
-    data = 'B'
+    data = "B"
     pmf.Update(data)
 
     for hypo, prob in sorted(pmf.Items()):
         print(hypo, prob)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

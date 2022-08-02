@@ -31,36 +31,39 @@ class Brewer(object):
 
     Shades of blue that look good in color and can be distinguished
     in grayscale (up to a point).
-    
+
     Borrowed from http://colorbrewer2.org/
     """
+
     color_iter = None
 
-    colors = ['#081D58',
-              '#253494',
-              '#225EA8',
-              '#1D91C0',
-              '#41B6C4',
-              '#7FCDBB',
-              '#C7E9B4',
-              '#EDF8B1',
-              '#FFFFD9']
+    colors = [
+        "#081D58",
+        "#253494",
+        "#225EA8",
+        "#1D91C0",
+        "#41B6C4",
+        "#7FCDBB",
+        "#C7E9B4",
+        "#EDF8B1",
+        "#FFFFD9",
+    ]
 
     # lists that indicate which colors to use depending on how many are used
-    which_colors = [[],
-                    [1],
-                    [1, 3],
-                    [0, 2, 4],
-                    [0, 2, 4, 6],
-                    [0, 2, 3, 5, 6],
-                    [0, 2, 3, 4, 5, 6],
-                    [0, 1, 2, 3, 4, 5, 6],
-                    ]
+    which_colors = [
+        [],
+        [1],
+        [1, 3],
+        [0, 2, 4],
+        [0, 2, 4, 6],
+        [0, 2, 3, 5, 6],
+        [0, 2, 3, 4, 5, 6],
+        [0, 1, 2, 3, 4, 5, 6],
+    ]
 
     @classmethod
     def Colors(cls):
-        """Returns the list of colors.
-        """
+        """Returns the list of colors."""
         return cls.colors
 
     @classmethod
@@ -71,7 +74,7 @@ class Brewer(object):
         """
         for i in cls.which_colors[n]:
             yield cls.colors[i]
-        raise StopIteration('Ran out of colors in Brewer.ColorGenerator')
+        raise StopIteration("Ran out of colors in Brewer.ColorGenerator")
 
     @classmethod
     def InitializeIter(cls, num):
@@ -162,7 +165,7 @@ def Figure(**options):
     pyplot.figure(**options)
 
 
-def Plot(xs, ys, style='', **options):
+def Plot(xs, ys, style="", **options):
     """Plots a line.
 
     Args:
@@ -177,7 +180,7 @@ def Plot(xs, ys, style='', **options):
         try:
             options = Underride(options, color=next(color_iter))
         except StopIteration:
-            print('Warning: Brewer ran out of colors.')
+            print("Warning: Brewer ran out of colors.")
             Brewer.ClearIter()
 
     options = Underride(options, linewidth=3, alpha=0.8)
@@ -191,8 +194,7 @@ def Scatter(xs, ys, **options):
     ys: y values
     options: options passed to pyplot.scatter
     """
-    options = Underride(options, color='blue', alpha=0.2,
-                        s=30, edgecolors='none')
+    options = Underride(options, color="blue", alpha=0.2, s=30, edgecolors="none")
     pyplot.scatter(xs, ys, **options)
 
 
@@ -214,7 +216,7 @@ def Pmfs(pmfs, **options):
 
     Options are passed along for all PMFs.  If you want different
     options for each pmf, make multiple calls to Pmf.
-    
+
     Args:
       pmfs: sequence of PMF objects
       options: keyword args passed to pyplot.plot
@@ -237,10 +239,7 @@ def Hist(hist, **options):
     if hist.name:
         options = Underride(options, label=hist.name)
 
-    options = Underride(options,
-                        align='center',
-                        linewidth=0,
-                        width=width)
+    options = Underride(options, align="center", linewidth=0, width=width)
 
     pyplot.bar(xs, fs, **options)
 
@@ -286,32 +285,32 @@ def Cdf(cdf, complement=False, transform=None, **options):
       myplot.Save or myplot.Show
     """
     xs, ps = cdf.Render()
-    scale = dict(xscale='linear', yscale='linear')
+    scale = dict(xscale="linear", yscale="linear")
 
-    if transform == 'exponential':
+    if transform == "exponential":
         complement = True
-        scale['yscale'] = 'log'
+        scale["yscale"] = "log"
 
-    if transform == 'pareto':
+    if transform == "pareto":
         complement = True
-        scale['yscale'] = 'log'
-        scale['xscale'] = 'log'
+        scale["yscale"] = "log"
+        scale["xscale"] = "log"
 
     if complement:
         ps = [1.0 - p for p in ps]
 
-    if transform == 'weibull':
+    if transform == "weibull":
         xs.pop()
         ps.pop()
         ps = [-math.log(1.0 - p) for p in ps]
-        scale['xscale'] = 'log'
-        scale['yscale'] = 'log'
+        scale["xscale"] = "log"
+        scale["yscale"] = "log"
 
-    if transform == 'gumbel':
+    if transform == "gumbel":
         xs.pop(0)
         ps.pop(0)
         ps = [-math.log(p) for p in ps]
-        scale['yscale'] = 'log'
+        scale["yscale"] = "log"
 
     if cdf.name:
         options = Underride(options, label=cdf.name)
@@ -322,7 +321,7 @@ def Cdf(cdf, complement=False, transform=None, **options):
 
 def Cdfs(cdfs, complement=False, transform=None, **options):
     """Plots a sequence of CDFs.
-    
+
     cdfs: sequence of CDF objects
     complement: boolean, whether to plot the complementary CDF
     transform: string, one of 'exponential', 'pareto', 'weibull', 'gumbel'
@@ -334,7 +333,7 @@ def Cdfs(cdfs, complement=False, transform=None, **options):
 
 def Contour(obj, pcolor=False, contour=True, imshow=False, **options):
     """Makes a contour plot.
-    
+
     d: map from (x, y) to z, or object that provides GetDict
     pcolor: boolean, whether to make a pseudocolor plot
     contour: boolean, whether to make a contour plot
@@ -373,7 +372,7 @@ def Contour(obj, pcolor=False, contour=True, imshow=False, **options):
 
 def Pcolor(xs, ys, zs, pcolor=True, contour=False, **options):
     """Makes a pseudocolor plot.
-    
+
     xs:
     ys:
     zs:
@@ -405,32 +404,32 @@ def Config(**options):
     title, xlabel, ylabel, xscale, yscale, xticks, yticks, axis, legend,
     and loc.
     """
-    title = options.get('title', '')
+    title = options.get("title", "")
     pyplot.title(title)
 
-    xlabel = options.get('xlabel', '')
+    xlabel = options.get("xlabel", "")
     pyplot.xlabel(xlabel)
 
-    ylabel = options.get('ylabel', '')
+    ylabel = options.get("ylabel", "")
     pyplot.ylabel(ylabel)
 
-    if 'xscale' in options:
-        pyplot.xscale(options['xscale'])
+    if "xscale" in options:
+        pyplot.xscale(options["xscale"])
 
-    if 'xticks' in options:
-        pyplot.xticks(options['xticks'])
+    if "xticks" in options:
+        pyplot.xticks(options["xticks"])
 
-    if 'yscale' in options:
-        pyplot.yscale(options['yscale'])
+    if "yscale" in options:
+        pyplot.yscale(options["yscale"])
 
-    if 'yticks' in options:
-        pyplot.yticks(options['yticks'])
+    if "yticks" in options:
+        pyplot.yticks(options["yticks"])
 
-    if 'axis' in options:
-        pyplot.axis(options['axis'])
+    if "axis" in options:
+        pyplot.axis(options["axis"])
 
-    loc = options.get('loc', 0)
-    legend = options.get('legend', True)
+    loc = options.get("loc", 0)
+    legend = options.get("legend", True)
     if legend:
         pyplot.legend(loc=loc)
 
@@ -460,7 +459,7 @@ def Save(root=None, formats=None, **options):
     Config(**options)
 
     if formats is None:
-        formats = ['pdf', 'eps']
+        formats = ["pdf", "eps"]
 
     if root:
         for fmt in formats:
@@ -468,15 +467,15 @@ def Save(root=None, formats=None, **options):
     Clf()
 
 
-def SaveFormat(root, fmt='eps'):
+def SaveFormat(root, fmt="eps"):
     """Writes the current figure to a file in the given format.
 
     Args:
       root: string filename root
       fmt: string format
     """
-    filename = '%s.%s' % (root, fmt)
-    print('Writing', filename)
+    filename = "%s.%s" % (root, fmt)
+    print("Writing", filename)
     pyplot.savefig(filename, format=fmt, dpi=300)
 
 
@@ -507,5 +506,5 @@ def main():
         print(color)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

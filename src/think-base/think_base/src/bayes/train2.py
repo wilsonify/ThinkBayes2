@@ -40,10 +40,8 @@ def main():
         suite = MakePosterior(high, dataset)
         print(high, suite.Mean())
 
-    thinkplot.Save(root='train2',
-                   xlabel='Number of trains',
-                   ylabel='Probability')
+    thinkplot.Save(root="train2", xlabel="Number of trains", ylabel="Probability")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
