@@ -1,0 +1,22 @@
+from setuptools import setup, find_packages
+
+
+def readme():
+    try:
+        with open("README.md") as f:
+            return f.read()
+    except IOError:
+        return ""
+
+
+setup(
+    name="bayes",
+    version="1.0.0",
+    author="Allen B. Downey",
+    author_email="downey@allendowney.com",
+    packages=find_packages(),
+    url="https://github.com/AllenDowney/thinkbayes",
+    license="LICENSE.txt",
+    description="Supporting code for the book Think Bayes 2e.",
+    long_description=readme(),
+)
