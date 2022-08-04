@@ -1,11 +1,10 @@
 """
 This notebook presents example code and exercise solutions for Think Bayes.
 """
+import os.path
 
 import numpy as np
 import pandas as pd
-
-from receive_bayes.conf import DATADIR
 
 from thinkbayes.c01_probability import (
     values,
@@ -17,9 +16,59 @@ from thinkbayes.c01_probability import (
 )
 
 
-def total_strategy(self, body):
+def prob_strategy(self, body):
+    a = pd.Series(body["a"]).astype(bool)
+    return prob(a)
 
+
+def conjunction_strategy(self, body):
+    a = pd.Series(body["a"]).astype(bool)
+    b = pd.Series(body["b"]).astype(bool)
+    return conjunction(a, b)
+
+
+def conditional_strategy(self, body):
+    a = pd.Series(body["a"]).astype(bool)
+    b = pd.Series(body["b"]).astype(bool)
+    return conditional(a, b)
+
+
+def bayes_strategy(self, body):
+    a = pd.Series(body["a"]).astype(bool)
+    b = pd.Series(body["b"]).astype(bool)
+    return bayes_theorem(a, b)
+
+
+def total_strategy(self, body):
+    DATADIR = os.path.abspath(__file__)
     gss = pd.read_csv(f'{DATADIR}/gss_bayes.csv', index_col=0)
+    """
+    • caseid : Respondent id (which is the index of the table).
+    • year : Year when the respondent was surveyed.
+    • age : Respondent’s age when surveyed.
+    • sex : Male or female.
+    • polviews : Political views on a range from liberal to conservative.
+    The values of polviews are on a seven-point scale:
+        1: Extremely liberal
+        2: Liberal
+        3: Slightly liberal
+        4: Moderate
+        5: Slightly conservative
+        6: Conservative
+        7: Extremely conservative
+    • partyid : Political party affiliation: Democratic, Republican, or independent.
+    The values of partyid are encoded like this:
+        0: Strong democrat
+        1: Not strong democrat
+        2: Independent, near democrat
+        3: Independent
+        4: Independent, near republican
+        5: Not strong republican
+        6: Strong republican
+        7: Other party
+    • indus10 : Code for the industry the respondent works in.    
+    """
+
     # gss.feminist.replace([0, 8, 9], np.nan, inplace=True)
     gss.polviews.replace([0, 8, 9], np.nan, inplace=True)
     gss.partyid.replace([8, 9], np.nan, inplace=True)
@@ -40,67 +89,49 @@ def total_strategy(self, body):
     assert subset.shape == (49290, 6)
 
     female = gss.sex == 2
-    values(female)
 
     liberal = gss.polviews <= 2
-    values(liberal)
 
     democrat = gss.partyid <= 1
-    values(democrat)
 
     banker = gss.indus10 == 6870
-    values(banker)
 
-    total = 0
-    for x in banker:
-        if x is True:
-            total += 1
-
-    print(total / len(banker))
-
-    prob(female)
-
-    prob(liberal)
-
-    prob(democrat)
-
-    prob(banker)
-
-    prob(democrat & liberal)
-
+    total = banker.astype(float).sum()
     count(banker[female])
 
+    prob(female)
+    prob(liberal)
+    prob(democrat)
+    prob(banker)
+
     prob(banker[female])
-
+    prob(democrat & liberal)
     prob(female & banker)
-
-    banker_given_female = prob(banker & female) / prob(female)
-    print(banker_given_female)
-
+    prob(liberal & democrat)
     conditional(banker, female)
-
     conditional(liberal, democrat)
-
     conditional(democrat, liberal)
-
     conditional(democrat, female)
 
-    prob(liberal & democrat)
-
     conjunction(liberal, democrat)
-
-    liberal_and_democrat = prob(liberal) * prob(democrat)
-    print(liberal_and_democrat)
-
     conjunction(democrat, liberal)
-    female_given_banker = conditional(female, banker)
-    banker_given_female = prob(banker) * female_given_banker / prob(female)
-    print(banker_given_female)
+    liberal_and_democrat = prob(liberal) * prob(democrat)
 
-    bayes_theorem(democrat, liberal)
+    female_given_banker = conditional(female, banker)
+    banker_given_female1 = prob(banker & female) / prob(female)
+    banker_given_female2 = prob(banker) * female_given_banker / prob(female)
 
     conditional(banker, female)
-
     conditional(banker, female & liberal)
-
     conditional(banker & democrat, female & liberal)
+
+    values(female)
+    values(liberal)
+    values(democrat)
+    values(banker)
+    print(total / len(banker))
+    print(banker_given_female1)
+    print(banker_given_female2)
+    print(liberal_and_democrat)
+    assert banker_given_female1 == banker_given_female2
+    bayes_theorem(democrat, liberal)

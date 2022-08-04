@@ -26,14 +26,17 @@ setup(
     author_email="apiteam@swagger.io",
     url="",
     keywords=["OpenAPI", "Swagger Petstore"],
-    install_requires=REQUIRES,
+    #install_requires=REQUIRES,
     packages=find_packages(),
     package_data={'': ['openapi/openapi.yaml']},
     include_package_data=True,
     entry_points={
         'console_scripts': ['rest_bayes=rest_bayes.__main__:main']},
     long_description="""\
-    This is a sample server Petstore server.  You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For this sample, you can use the api key &#x60;special-key&#x60; to test the authorization     filters.
+    This is a sample server Petstore server.  
+    You can find out more about     
+    Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      
+    For this sample, you can use the api key &#x60;special-key&#x60; to test the authorization filters.
     """
 )
 

@@ -1,41 +1,29 @@
-import connexion
-import six
-from typing import Dict
 from typing import Tuple
-from typing import Union
 
-from rest_bayes.models.sqrt_input import SqrtInput  # noqa: E501
-from rest_bayes.models.sqrt_output import SqrtOutput  # noqa: E501
-from rest_bayes.models.strength_input import StrengthInput  # noqa: E501
-from rest_bayes.models.strength_output import StrengthOutput  # noqa: E501
-from rest_bayes import util
+from rest_bayes.rpc import RemoteProcedure
 
 
-def sqrt(sqrt_input=None):  # noqa: E501
-    """sqrt
-
-    Description of the endpoint # noqa: E501
-
-    :param sqrt_input: 
-    :type sqrt_input: dict | bytes
-
-    :rtype: Union[SqrtOutput, Tuple[SqrtOutput, int], Tuple[SqrtOutput, int, Dict[str, str]]
-    """
-    if connexion.request.is_json:
-        sqrt_input = SqrtInput.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+def sqrt(body) -> Tuple[dict, int]:
+    body['strategy'] = "sqrt"
+    rpc = RemoteProcedure(routing_key='think-bayes')
+    response_body, status_code = rpc.call(body)
+    out_dict = response_body
+    print(f"out_dict = {out_dict}")
+    print(f"status_code = {status_code}")
+    return out_dict
 
 
-def strength(strength_input=None):  # noqa: E501
-    """strength
+def strength(body: dict) -> Tuple[dict, int]:
+    body['strategy'] = "strength"
+    rpc = RemoteProcedure(routing_key='think-bayes')
+    response_body, status_code = rpc.call(body)
+    out_dict = response_body
+    return out_dict, status_code
 
-    Description of the endpoint # noqa: E501
 
-    :param strength_input: 
-    :type strength_input: dict | bytes
-
-    :rtype: Union[StrengthOutput, Tuple[StrengthOutput, int], Tuple[StrengthOutput, int, Dict[str, str]]
-    """
-    if connexion.request.is_json:
-        strength_input = StrengthInput.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+def conjunction(body):
+    body['strategy'] = "conjunction"
+    rpc = RemoteProcedure(routing_key='think-bayes')
+    response_body, status_code = rpc.call(body)
+    out_dict = response_body
+    return out_dict, status_code

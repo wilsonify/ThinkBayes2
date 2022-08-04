@@ -5,7 +5,7 @@ def strength(actual, expected):
     return binom.cdf(actual, expected, 0.5)
 
 
-def mystrength_strategy(self, body: dict):  # noqa: E501
+def strength_strategy(self, body: dict):  # noqa: E501
     """ signal strength """
     actual = body["actual"]
     expected = body["expected"]

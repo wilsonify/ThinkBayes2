@@ -7,9 +7,22 @@ from logging.config import dictConfig
 
 import pika
 
-
-from receive_bayes import routing_key, try_exchange, done_exchange, fail_exchange, connection_parameters, echo, mysqrt
-from receive_bayes.mystrength import strength
+from receive_bayes import (
+    routing_key,
+    try_exchange,
+    done_exchange,
+    fail_exchange,
+    connection_parameters,
+)
+from receive_bayes.abstract import Strategy
+from receive_bayes.chap01 import (
+    conditional_strategy,
+    conjunction_strategy,
+    bayes_strategy
+)
+from receive_bayes.echo import echo_strategy
+from receive_bayes.mysqrt import sqrt_strategy
+from receive_bayes.mystrength import strength_strategy
 
 logging_config_dict = dict(
     version=1,
@@ -23,9 +36,12 @@ logging_config_dict = dict(
 )
 
 available_strategies = dict(
-    echo=echo,
-    sqrt=mysqrt,
-    strength=strength,
+    echo=echo_strategy,
+    sqrt=sqrt_strategy,
+    strength=strength_strategy,
+    conditional=conditional_strategy,
+    conjunction=conjunction_strategy,
+    bayes=bayes_strategy
 
 )
 
@@ -34,7 +50,7 @@ def route_callback(ch, method, properties, body):
     logging.info("route_callback")
     logging.debug("%r", "ch={}".format(ch))
     logging.debug("%r", "properties={}".format(properties))
-    logging.debug("%r", "key={}".format(data_science_from_scratch.routing_key))
+    logging.debug("%r", "key={}".format(routing_key))
     logging.debug("%r", "body={}".format(body))
     logging.debug("%r", "body has type {}".format(type(body)))
     payload = json.loads(body.decode("utf-8"))
@@ -117,7 +133,7 @@ def main():
     )
     logging.info("done setting callback")
 
-    logging.info("python-consumer is waiting for messages")
+    logging.info("think-bayes-consumer is waiting for messages")
     channel.start_consuming()
 
 
