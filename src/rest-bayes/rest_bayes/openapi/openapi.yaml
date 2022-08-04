@@ -26,6 +26,8 @@ paths:
     $ref: "sqrt/sqrt.yaml"
   /strength:
     $ref: "strength/strength.yaml"
+  /conjunction:
+    $ref: "conjunction/conjunction.yaml"
 components:
   securitySchemes:
     petstore_auth:
