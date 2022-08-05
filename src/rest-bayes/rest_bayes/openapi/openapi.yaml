@@ -32,6 +32,12 @@ paths:
     $ref: "conditional/conditional.yaml"
   /bayes:
     $ref: "bayes/bayes.yaml"
+  /cookie:
+    $ref: "cookie/cookie.yaml"
+  /monty:
+    $ref: "monty/monty.yaml"
+  /mandm:
+    $ref: "mandm/mandm.yaml"
 
 components:
   securitySchemes:

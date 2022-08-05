@@ -20,6 +20,11 @@ from receive_bayes.chap01 import (
     conjunction_strategy,
     bayes_strategy
 )
+from receive_bayes.chap02 import (
+    cookie_bowl_strategy,
+    monty_hall_strategy,
+    m_and_m_strategy
+)
 from receive_bayes.echo import echo_strategy
 from receive_bayes.mysqrt import sqrt_strategy
 from receive_bayes.mystrength import strength_strategy
@@ -41,7 +46,10 @@ available_strategies = dict(
     strength=strength_strategy,
     conditional=conditional_strategy,
     conjunction=conjunction_strategy,
-    bayes=bayes_strategy
+    bayes=bayes_strategy,
+    cookie=cookie_bowl_strategy,
+    monty=monty_hall_strategy,
+    mandm=m_and_m_strategy
 
 )
 

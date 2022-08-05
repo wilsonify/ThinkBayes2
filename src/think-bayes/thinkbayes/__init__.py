@@ -442,8 +442,8 @@ class Hist(_DictWrapper):
 
 
 class Pmf(_DictWrapper):
-    """Represents a probability mass function.
-
+    """
+    Represents a probability mass function.
     Values can be any hashable type; probabilities are floating-point.
     Pmfs are not necessarily normalized.
     """

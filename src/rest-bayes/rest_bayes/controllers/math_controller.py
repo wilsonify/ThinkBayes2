@@ -43,3 +43,27 @@ def bayes(body):
     response_body, status_code = rpc.call(body)
     out_dict = response_body
     return out_dict, status_code
+
+
+def cookie(body):
+    body['strategy'] = "cookie"
+    rpc = RemoteProcedure(routing_key='think-bayes')
+    response_body, status_code = rpc.call(body)
+    out_dict = response_body
+    return out_dict, status_code
+
+
+def monty(body):
+    body['strategy'] = "monty"
+    rpc = RemoteProcedure(routing_key='think-bayes')
+    response_body, status_code = rpc.call(body)
+    out_dict = response_body
+    return out_dict, status_code
+
+
+def mandm(body):
+    body['strategy'] = "mandm"
+    rpc = RemoteProcedure(routing_key='think-bayes')
+    response_body, status_code = rpc.call(body)
+    out_dict = response_body
+    return out_dict, status_code

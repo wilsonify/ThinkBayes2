@@ -26,8 +26,7 @@ connection_parameters = pika.ConnectionParameters(
 
 from receive_bayes.abstract import Strategy
 from receive_bayes.chap02 import (
-    cookie_strategy,
-    cookie_update_strategy,
+    cookie_bowl_strategy,
     monty_hall_strategy,
     m_and_m_strategy
 )
