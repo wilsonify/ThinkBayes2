@@ -124,4 +124,4 @@ class RemoteProcedure:
         logging.debug("waiting for response")
         while self.response is None:
             self.connection.process_data_events()
-        return self.response, self.status_code
+        return self.response, int(self.status_code)

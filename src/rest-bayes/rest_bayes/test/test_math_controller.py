@@ -1,15 +1,11 @@
 # coding: utf-8
 
 from __future__ import absolute_import
+
 import unittest
 
 from flask import json
-from six import BytesIO
 
-from rest_bayes.models.sqrt_input import SqrtInput  # noqa: E501
-from rest_bayes.models.sqrt_output import SqrtOutput  # noqa: E501
-from rest_bayes.models.strength_input import StrengthInput  # noqa: E501
-from rest_bayes.models.strength_output import StrengthOutput  # noqa: E501
 from rest_bayes.test import BaseTestCase
 
 
@@ -17,12 +13,9 @@ class TestMathController(BaseTestCase):
     """MathController integration test stubs"""
 
     def test_sqrt(self):
-        """Test case for sqrt
-
-        
-        """
-        sqrt_input = rest_bayes.SqrtInput()
-        headers = { 
+        """Test case for sqrt"""
+        sqrt_input = {"x": 0}
+        headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         }
@@ -36,12 +29,9 @@ class TestMathController(BaseTestCase):
                        'Response body is : ' + response.data.decode('utf-8'))
 
     def test_strength(self):
-        """Test case for strength
-
-        
-        """
-        strength_input = rest_bayes.StrengthInput()
-        headers = { 
+        """Test case for strength"""
+        strength_input = {"actual": 60, "expected": 100}
+        headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         }
@@ -50,6 +40,25 @@ class TestMathController(BaseTestCase):
             method='POST',
             headers=headers,
             data=json.dumps(strength_input),
+            content_type='application/json')
+        self.assert200(response,
+                       'Response body is : ' + response.data.decode('utf-8'))
+
+    def test_conjunction(self):
+        """Test case for conjunction"""
+        conjunction_input = {
+            "a": [0, 0, 0, 0, 1, 0, 1, 0],
+            "b": [0, 0, 0, 0, 1, 0, 0, 1]
+        }
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+        response = self.client.open(
+            '/v2/conjunction',
+            method='POST',
+            headers=headers,
+            data=json.dumps(conjunction_input),
             content_type='application/json')
         self.assert200(response,
                        'Response body is : ' + response.data.decode('utf-8'))

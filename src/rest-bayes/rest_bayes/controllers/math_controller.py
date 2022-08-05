@@ -10,7 +10,7 @@ def sqrt(body) -> Tuple[dict, int]:
     out_dict = response_body
     print(f"out_dict = {out_dict}")
     print(f"status_code = {status_code}")
-    return out_dict
+    return out_dict, status_code
 
 
 def strength(body: dict) -> Tuple[dict, int]:
