@@ -71,7 +71,7 @@ class TestMathController(BaseTestCase):
 
     def test_conditional(self):
         """Test case for conditional"""
-        conjunction_input = {
+        conditional_input = {
             "a": [0, 0, 0, 0, 1, 0, 1, 0],
             "b": [0, 0, 0, 0, 1, 0, 0, 1]
         }
@@ -83,7 +83,7 @@ class TestMathController(BaseTestCase):
             '/v2/conditional',
             method='POST',
             headers=headers,
-            data=json.dumps(conjunction_input),
+            data=json.dumps(conditional_input),
             content_type='application/json')
         self.assert200(
             response=response,
@@ -92,7 +92,7 @@ class TestMathController(BaseTestCase):
 
     def test_bayes(self):
         """Test case for bayes"""
-        conjunction_input = {
+        bayes_input = {
             "a": [0, 0, 0, 0, 1, 0, 1, 0],
             "b": [0, 0, 0, 0, 1, 0, 0, 1]
         }
@@ -104,7 +104,7 @@ class TestMathController(BaseTestCase):
             '/v2/bayes',
             method='POST',
             headers=headers,
-            data=json.dumps(conjunction_input),
+            data=json.dumps(bayes_input),
             content_type='application/json')
         self.assert200(
             response=response,
