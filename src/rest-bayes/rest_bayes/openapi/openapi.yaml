@@ -28,6 +28,11 @@ paths:
     $ref: "strength/strength.yaml"
   /conjunction:
     $ref: "conjunction/conjunction.yaml"
+  /conditional:
+    $ref: "conditional/conditional.yaml"
+  /bayes:
+    $ref: "bayes/bayes.yaml"
+
 components:
   securitySchemes:
     petstore_auth:

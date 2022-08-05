@@ -25,8 +25,10 @@ class TestMathController(BaseTestCase):
             headers=headers,
             data=json.dumps(sqrt_input),
             content_type='application/json')
-        self.assert200(response,
-                       'Response body is : ' + response.data.decode('utf-8'))
+        self.assert200(
+            response=response,
+            message='Response body is : ' + response.data.decode('utf-8')
+        )
 
     def test_strength(self):
         """Test case for strength"""
@@ -41,8 +43,10 @@ class TestMathController(BaseTestCase):
             headers=headers,
             data=json.dumps(strength_input),
             content_type='application/json')
-        self.assert200(response,
-                       'Response body is : ' + response.data.decode('utf-8'))
+        self.assert200(
+            response=response,
+            message='Response body is : ' + response.data.decode('utf-8')
+        )
 
     def test_conjunction(self):
         """Test case for conjunction"""
@@ -60,8 +64,52 @@ class TestMathController(BaseTestCase):
             headers=headers,
             data=json.dumps(conjunction_input),
             content_type='application/json')
-        self.assert200(response,
-                       'Response body is : ' + response.data.decode('utf-8'))
+        self.assert200(
+            response=response,
+            message='Response body is : ' + response.data.decode('utf-8')
+        )
+
+    def test_conditional(self):
+        """Test case for conditional"""
+        conjunction_input = {
+            "a": [0, 0, 0, 0, 1, 0, 1, 0],
+            "b": [0, 0, 0, 0, 1, 0, 0, 1]
+        }
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+        response = self.client.open(
+            '/v2/conditional',
+            method='POST',
+            headers=headers,
+            data=json.dumps(conjunction_input),
+            content_type='application/json')
+        self.assert200(
+            response=response,
+            message='Response body is : ' + response.data.decode('utf-8')
+        )
+
+    def test_bayes(self):
+        """Test case for bayes"""
+        conjunction_input = {
+            "a": [0, 0, 0, 0, 1, 0, 1, 0],
+            "b": [0, 0, 0, 0, 1, 0, 0, 1]
+        }
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+        response = self.client.open(
+            '/v2/bayes',
+            method='POST',
+            headers=headers,
+            data=json.dumps(conjunction_input),
+            content_type='application/json')
+        self.assert200(
+            response=response,
+            message='Response body is : ' + response.data.decode('utf-8')
+        )
 
 
 if __name__ == '__main__':

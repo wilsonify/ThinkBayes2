@@ -27,3 +27,19 @@ def conjunction(body):
     response_body, status_code = rpc.call(body)
     out_dict = response_body
     return out_dict, status_code
+
+
+def conditional(body):
+    body['strategy'] = "conditional"
+    rpc = RemoteProcedure(routing_key='think-bayes')
+    response_body, status_code = rpc.call(body)
+    out_dict = response_body
+    return out_dict, status_code
+
+
+def bayes(body):
+    body['strategy'] = "bayes"
+    rpc = RemoteProcedure(routing_key='think-bayes')
+    response_body, status_code = rpc.call(body)
+    out_dict = response_body
+    return out_dict, status_code

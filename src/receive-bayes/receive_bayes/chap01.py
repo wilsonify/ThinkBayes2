@@ -19,7 +19,8 @@ from thinkbayes.c01_probability import (
 
 def prob_strategy(self, body):
     a = pd.Series(body["a"]).astype(bool)
-    return prob(a)
+    result = prob(a)
+    self.publish(result)
 
 
 def conjunction_strategy(self, body):
@@ -35,13 +36,15 @@ def conjunction_strategy(self, body):
 def conditional_strategy(self, body):
     a = pd.Series(body["a"]).astype(bool)
     b = pd.Series(body["b"]).astype(bool)
-    return conditional(a, b)
+    result = conditional(a, b)
+    self.publish(result)
 
 
 def bayes_strategy(self, body):
     a = pd.Series(body["a"]).astype(bool)
     b = pd.Series(body["b"]).astype(bool)
-    return bayes_theorem(a, b)
+    result = bayes_theorem(a, b)
+    self.publish(result)
 
 
 def total_strategy(self, body):

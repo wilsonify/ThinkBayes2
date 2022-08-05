@@ -1,0 +1,11 @@
+type: object
+properties:
+  a:
+    type: array
+    items:
+      type: number
+  b:
+    type: array
+    items:
+      type: number
+example: { "a": [ 0,0,0,0,1,0,1,0 ],"b": [ 0,0,0,0,1,0,0,1 ] }

@@ -2,26 +2,26 @@ def values(series):
     return series.value_counts().sort_index()
 
 
-def prob(A):
+def prob(a):
     """Probability of A"""
-    return A.mean()
+    return a.mean()
 
 
-def count(A):
+def count(a):
     """Number of instances of A"""
-    return A.sum()
+    return a.sum()
 
 
-def conditional(A, B):
+def conditional(a, b):
     """Conditional probability of A given B"""
-    return prob(A[B])
+    return prob(a[b])
 
 
-def conjunction(A, B):
+def conjunction(a, b):
     """Probability of both A and B"""
-    return prob(A) * conditional(A=B, B=A)
+    return prob(a) * conditional(a=b, b=a)
 
 
-def bayes_theorem(A, B):
+def bayes_theorem(a, b):
     """Conditional probability of A given B, using Bayes's theorem"""
-    return prob(A) * conditional(A=B, B=A) / prob(B)
+    return prob(a) * conditional(a=b, b=a) / prob(b)
