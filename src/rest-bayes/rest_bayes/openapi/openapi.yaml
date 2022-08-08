@@ -38,6 +38,8 @@ paths:
     $ref: "monty/monty.yaml"
   /mandm:
     $ref: "mandm/mandm.yaml"
+  /euro:
+    $ref: "euro/euro.yaml"
 
 components:
   securitySchemes:

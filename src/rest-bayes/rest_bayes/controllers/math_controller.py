@@ -67,3 +67,11 @@ def mandm(body):
     response_body, status_code = rpc.call(body)
     out_dict = response_body
     return out_dict, status_code
+
+
+def euro(body):
+    body['strategy'] = "euro"
+    rpc = RemoteProcedure(routing_key='think-bayes')
+    response_body, status_code = rpc.call(body)
+    out_dict = response_body
+    return out_dict, status_code

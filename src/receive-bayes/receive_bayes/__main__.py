@@ -12,7 +12,7 @@ from receive_bayes import (
     try_exchange,
     done_exchange,
     fail_exchange,
-    connection_parameters,
+    connection_parameters
 )
 from receive_bayes.abstract import Strategy
 from receive_bayes.chap01 import (
@@ -25,6 +25,7 @@ from receive_bayes.chap02 import (
     monty_hall_strategy,
     m_and_m_strategy
 )
+from receive_bayes.chap04 import euro_strategy
 from receive_bayes.echo import echo_strategy
 from receive_bayes.mysqrt import sqrt_strategy
 from receive_bayes.mystrength import strength_strategy
@@ -49,8 +50,8 @@ available_strategies = dict(
     bayes=bayes_strategy,
     cookie=cookie_bowl_strategy,
     monty=monty_hall_strategy,
-    mandm=m_and_m_strategy
-
+    mandm=m_and_m_strategy,
+    euro=euro_strategy
 )
 
 
