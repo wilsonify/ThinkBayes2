@@ -88,9 +88,12 @@ class Euro2(Suite):
 class Beta:
     """
     The Beta distribution
-
-    The Beta distribution is a conjugate prior for the binomial likelihood function, which means that if you start with a Beta distribution and update with a binomial likelihood, the posterior is also Beta.
-    Also, given the parameters of the prior and the data, we can compute the parameters of the posterior directly.  The following class represents a Beta distribution and provides a constant-time Update method.
+    The Beta distribution is a conjugate prior for the binomial likelihood function,
+    which means that if you start with a Beta distribution and update with a binomial likelihood,
+    the posterior is also Beta.
+    Also, given the parameters of the prior and the data,
+    we can compute the parameters of the posterior directly.
+    The following class represents a Beta distribution and provides a constant-time Update method.
 
     Represents a Beta distribution.
 
