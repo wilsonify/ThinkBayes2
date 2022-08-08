@@ -4,12 +4,12 @@ This notebook presents solutions to exercises in Think Bayes.
 Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
+import logging
 
 from thinkbayes.c04_proportions import (
-    Euro,
     TrianglePrior,
     Beta2,
-    Euro2
+    Euro
 )
 
 
@@ -25,18 +25,19 @@ def euro_strategy(self, body: dict):
     if prior_str == 'triangle':
         prior = TrianglePrior()
 
-    suite = Euro2(prior)
-    heads = body['heads']
-    tails = body['tails']
+    suite = Euro(prior)
+    heads = int(body['heads'])
+    tails = int(body['tails'])
     dataset = "H" * heads + "T" * tails
     for data in dataset:
         suite.Update(data)
     low, high = suite.CredibleInterval(90)
     result = dict(
-        mean=suite.Mean(),
-        median=suite.Percentile(50),
-        maximum_aposteori_probability=suite.MAP(),  # The peak of the posterior
-        creditable_low=low,
-        creditable_high=high
+        mean=int(suite.Mean()),
+        median=int(suite.Percentile(50)),
+        maximum_aposteori_probability=int(suite.MAP()),  # The peak of the posterior
+        creditable_low=int(low),
+        creditable_high=int(high)
     )
+    logging.debug(f"result = {result}")
     self.publish(result)

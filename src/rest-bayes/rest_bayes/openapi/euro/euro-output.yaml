@@ -1,7 +1,13 @@
 type: object
 properties:
-  bowl1:
+  mean:
     type: number
-  bowl2:
+  median:
     type: number
-example: { "Bowl1": 0.5294, "Bowl2": 0.4706 }
+  maximum_aposteori_probability:
+    type: number
+  creditable_low:
+    type: number
+  creditable_high:
+    type: number
+example: { "mean": 10, "median": 10, "maximum_aposteori_probability": 10, "creditable_low": 9, "creditable_high": 11 }

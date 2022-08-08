@@ -7,4 +7,4 @@ properties:
   prior:
     type: string
     enum: [ "uniform", "triangle", "beta" ]
-example: { "heads": 140, "tails": 110 }
+example: { "heads": 140, "tails": 110, "prior": "uniform" }

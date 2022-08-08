@@ -33,19 +33,10 @@ from receive_bayes.chap02 import (
 
 from receive_bayes.chap03 import (
     dice_strategy,
-    hypos_strategy,
-    MakePosterior_strategy,
-    Train2_strategy,
-    dice_problem_strategy,
-    train_problem_strategy,
-    sensitivity_strategy,
-    exercise_strategy
+    train_strategy
 )
 from receive_bayes.chap04 import (
-    uniform_strategy,
-    priors_strategy,
-    euro2_strategy,
-    beta_strategy
+    euro_strategy
 )
 from receive_bayes.chap05 import (
     Probability_strategy,
