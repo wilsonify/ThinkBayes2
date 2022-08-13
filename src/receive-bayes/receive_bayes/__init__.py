@@ -39,9 +39,9 @@ from receive_bayes.chap04 import (
     euro_strategy
 )
 from receive_bayes.chap05 import (
-    Probability_strategy,
-    odds_strategy,
-    Oliver_strategy
+    odds_to_probability_strategy,
+    probability_to_odds_strategy,
+    oliver_blood_strategy
 )
 from receive_bayes.chap09 import (
     paintball_strategy,

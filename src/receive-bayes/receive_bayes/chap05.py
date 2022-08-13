@@ -25,7 +25,7 @@ def odds_to_probability_strategy(self, body: dict):
     self.publish(result)
 
 
-def cookie_strategy(self, body: dict):
+def cookie_likelihood_strategy(self, body: dict):
     # We can use the odds form of Bayes's theorem to solve the cookie problem:
     prior_odds = 1
     likelihood_ratio = 0.75 / 0.5

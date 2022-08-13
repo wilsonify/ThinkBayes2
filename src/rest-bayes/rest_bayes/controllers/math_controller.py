@@ -75,3 +75,27 @@ def euro(body):
     response_body, status_code = rpc.call(body)
     out_dict = response_body
     return out_dict, status_code
+
+
+def odds_to_probability(body):
+    body['strategy'] = "odds_to_probability"
+    rpc = RemoteProcedure(routing_key='think-bayes')
+    response_body, status_code = rpc.call(body)
+    out_dict = response_body
+    return out_dict, status_code
+
+
+def probability_to_odds(body):
+    body['strategy'] = "probability_to_odds"
+    rpc = RemoteProcedure(routing_key='think-bayes')
+    response_body, status_code = rpc.call(body)
+    out_dict = response_body
+    return out_dict, status_code
+
+
+def blood(body):
+    body['strategy'] = "blood"
+    rpc = RemoteProcedure(routing_key='think-bayes')
+    response_body, status_code = rpc.call(body)
+    out_dict = response_body
+    return out_dict, status_code
