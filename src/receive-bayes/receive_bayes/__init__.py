@@ -43,6 +43,13 @@ from receive_bayes.chap05 import (
     probability_to_odds_strategy,
     oliver_blood_strategy
 )
+from receive_bayes.chap07 import (
+    hockey_strategy,
+    overtime_strategy,
+    overtime2_strategy,
+    shut_out_strategy,
+    soccer_strategy
+)
 from receive_bayes.chap09 import (
     paintball_strategy,
     paintballing_strategy,
