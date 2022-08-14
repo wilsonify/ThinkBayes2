@@ -56,20 +56,22 @@ def first_goal_strategy(self, body: dict):
     # Hint: `thinkbayes2` provides `MakeExponentialPmf` and `EvalExponentialCdf`.
     pmf = MakeExponentialPmf(lam=2.6, high=2.5)
     expon.cdf(1 / 3, scale=1 / 2.6)
-    EvalExponentialCdf(1 / 3, 2.6)
+    result = EvalExponentialCdf(1 / 3, 2.6)
+    self.publish(result)
 
 
-def shut_out_strategy():
+def shut_out_strategy(self, body):
     # Assuming again that the goal scoring rate is 2.8,
     # what is the probability that the Canucks get shut out
     # (that is, don't score for an entire game)?
     # Answer this question two ways,
     # using the CDF of the exponential distribution and the PMF of the Poisson distribution.
     logging.info("%r", f"1 - EvalExponentialCdf(1, 2.6) = {1 - EvalExponentialCdf(1, 2.6)}")
-    EvalPoissonPmf(0, 2.6)
+    result = EvalPoissonPmf(0, 2.6)
+    self.publish(result)
 
 
-def hockey_strategy():
+def hockey_strategy(self, body):
     # ## The Boston Bruins problem
     # The `Hockey` suite contains hypotheses about the goal scoring rate for one team against the other.
     # The prior is Gaussian, with mean and variance based on previous games in the league.
@@ -101,14 +103,15 @@ def hockey_strategy():
     p_loss = diff.ProbLess(0)
     p_tie = diff.Prob(0)
 
-    print(dict(
+    result = dict(
         win_p=p_win,
         tie_p=p_tie,
         loss_p=p_loss
-    ))
+    )
+    self.publish(result)
 
 
-def overtime_strategy():
+def overtime_strategy(self, body):
     # If the game goes into overtime,
     # we have to compute the distribution of `t`,
     # the time until the first goal, for each team.
@@ -130,22 +133,21 @@ def overtime_strategy():
     time_dist2 = MakeGoalTimePmf2(suite2)
     logging.info("%r", f"time_dist1.Mean() = {time_dist1.Mean()}")
     logging.info("%r", f"time_dist2.Mean() = {time_dist2.Mean()}")
-
     # In overtime the first team to score wins,
     # so the probability of winning is the probability of generating a smaller value of `t`:
-
     p_win_in_overtime = time_dist1.ProbLess(time_dist2)
     p_adjust = time_dist1.ProbEqual(time_dist2)
     p_win_in_overtime += p_adjust / 2
-    print("p_win_in_overtime", p_win_in_overtime)
-
     # Finally, we can compute the overall chance that the Bruins win, either in regulation or overtime.
-
     p_win_overall = p_win + p_tie * p_win_in_overtime
-    print("p_win_overall", p_win_overall)
+    result = dict(
+        p_win_in_overtime=p_win_in_overtime,
+        p_win_overall=p_win_overall
+    )
+    self.publish(result)
 
 
-def overtime2_strategy():
+def overtime2_strategy(self, body):
     # To make the model of overtime more correct,
     # we could update both suites with 0 goals in one game,
     # before computing the predictive distribution of `t`.
@@ -170,12 +172,15 @@ def overtime2_strategy():
     p_win_in_overtime = time_dist1.ProbLess(time_dist2)
     p_adjust = time_dist1.ProbEqual(time_dist2)
     p_win_in_overtime += p_adjust / 2
-    print("p_win_in_overtime", p_win_in_overtime)
     p_win_overall = p_win + p_tie * p_win_in_overtime
-    print("p_win_overall", p_win_overall)
+    result = dict(
+        p_win_in_overtime=p_win_in_overtime,
+        p_win_overall=p_win_overall
+    )
+    self.publish(result)
 
 
-def soccer_strategy():
+def soccer_strategy(self, body):
     # In the final match of the 2014 FIFA World Cup,
     # Germany defeated Argentina 1-0.
     # What is the probability that Germany had the better team?
@@ -183,4 +188,5 @@ def soccer_strategy():
     # For a prior distribution on the goal-scoring rate for each team, use a gamma distribution with parameter 1.3.
     xs = np.linspace(0, 8, 101)
     pmf = MakeGammaPmf(xs, 1.3)
-    pmf.Mean()
+    result = pmf.Mean()
+    self.publish(result)
