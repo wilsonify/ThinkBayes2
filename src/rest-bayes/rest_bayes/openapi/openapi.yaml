@@ -41,6 +41,16 @@ paths:
     $ref: "odds-to-probability/odds-to-probability.yaml"
   /blood:
     $ref: "blood/blood.yaml"
+  /hockey:
+    $ref: "hockey/hockey.yaml"
+  /overtime:
+    $ref: "overtime/overtime.yaml"
+  /overtime2:
+    $ref: "overtime2/overtime2.yaml"
+  /shut_out:
+    $ref: "shut-out/shut-out.yaml"
+  /soccer:
+    $ref: "soccer/soccer.yaml"
 
 components:
   securitySchemes:

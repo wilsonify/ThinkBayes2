@@ -12,7 +12,6 @@ from scipy.stats import expon
 
 from thinkbayes import EvalExponentialCdf
 from thinkbayes import EvalPoissonPmf
-from thinkbayes import MakeExponentialPmf
 from thinkbayes import MakeGammaPmf
 from thinkbayes import MakePoissonPmf
 from thinkbayes.c07_mixture import Hockey2, MakeGoalPmf2, MakeGoalTimePmf2
@@ -23,7 +22,7 @@ def single_game_goals_strategy(self, body: dict):
     # and that the long-run goal-scoring rate of the Boston Bruins against the Vancouver Canucks is 2.9 goals per game.
     # In their next game, what is the probability that the Bruins score exactly 3 goals?
     # Plot the PMF of `k`, the number of goals they score in a game.
-    long_run_goal_scoring_rate = body['long_run_goal_scoring_rate_of_Boston_Bruins']
+    long_run_goal_scoring_rate = body['long_run_goal_scoring_rate']
     single_game_goals = body['single_game_goals']
     result = EvalPoissonPmf(single_game_goals, long_run_goal_scoring_rate)
     self.publish(result)
@@ -38,7 +37,7 @@ def multiple_game_goals_strategy(self, body: dict):
     # 2.  Use the Poisson PMF with parameter $\lambda t$,
     # where $\lambda$ is the rate in goals per game
     # and $t$ is the duration in games.
-    long_run_goal_scoring_rate = body['long_run_goal_scoring_rate_of_Boston_Bruins']
+    long_run_goal_scoring_rate = body['long_run_goal_scoring_rate']
     multiple_game_goals = body['multiple_game_goals']
     ngames = body['ngames']
     pmf = MakePoissonPmf(long_run_goal_scoring_rate, high=ngames * 10)
@@ -54,9 +53,9 @@ def first_goal_strategy(self, body: dict):
     # In their next game, what is the probability that the Canucks score
     # during the first period (that is, the first third of the game)?
     # Hint: `thinkbayes2` provides `MakeExponentialPmf` and `EvalExponentialCdf`.
-    pmf = MakeExponentialPmf(lam=2.6, high=2.5)
-    expon.cdf(1 / 3, scale=1 / 2.6)
-    result = EvalExponentialCdf(1 / 3, 2.6)
+    long_run_goal_scoring_rate = body['long_run_goal_scoring_rate']
+    expon.cdf(1 / 3, scale=1 / long_run_goal_scoring_rate)
+    result = EvalExponentialCdf(1 / 3, long_run_goal_scoring_rate)
     self.publish(result)
 
 

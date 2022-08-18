@@ -1,13 +1,2 @@
-type: object
-properties:
-  mean:
-    type: number
-  median:
-    type: number
-  maximum_aposteori_probability:
-    type: number
-  creditable_low:
-    type: number
-  creditable_high:
-    type: number
-example: { "mean": 10, "median": 10, "maximum_aposteori_probability": 10, "creditable_low": 9, "creditable_high": 11 }
+type: number
+example: 1

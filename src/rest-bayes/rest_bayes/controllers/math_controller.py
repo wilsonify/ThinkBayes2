@@ -99,3 +99,43 @@ def blood(body):
     response_body, status_code = rpc.call(body)
     out_dict = response_body
     return out_dict, status_code
+
+
+def hockey(body):
+    body['strategy'] = "hockey"
+    rpc = RemoteProcedure(routing_key='think-bayes')
+    response_body, status_code = rpc.call(body)
+    out_dict = response_body
+    return out_dict, status_code
+
+
+def overtime(body):
+    body['strategy'] = "overtime"
+    rpc = RemoteProcedure(routing_key='think-bayes')
+    response_body, status_code = rpc.call(body)
+    out_dict = response_body
+    return out_dict, status_code
+
+
+def overtime2(body):
+    body['strategy'] = "overtime2"
+    rpc = RemoteProcedure(routing_key='think-bayes')
+    response_body, status_code = rpc.call(body)
+    out_dict = response_body
+    return out_dict, status_code
+
+
+def shut_out(body):
+    body['strategy'] = "shut_out"
+    rpc = RemoteProcedure(routing_key='think-bayes')
+    response_body, status_code = rpc.call(body)
+    out_dict = response_body
+    return out_dict, status_code
+
+
+def soccer(body):
+    body['strategy'] = "soccer"
+    rpc = RemoteProcedure(routing_key='think-bayes')
+    response_body, status_code = rpc.call(body)
+    out_dict = response_body
+    return out_dict, status_code

@@ -1,10 +1,2 @@
-type: object
-properties:
-  heads:
-    type: number
-  tails:
-    type: number
-  prior:
-    type: string
-    enum: [ "uniform", "triangle", "beta" ]
-example: { "heads": 140, "tails": 110, "prior": "uniform" }
+type: number
+example: 0.5

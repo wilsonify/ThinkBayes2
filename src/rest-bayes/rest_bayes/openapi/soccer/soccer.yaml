@@ -1,17 +1,17 @@
 post:
   tags: [counts]
-  operationId: odds_to_probability
+  operationId: soccer
   x-openapi-router-controller: rest_bayes.controllers.math_controller
-  description: "convert odds ratio to probability"
+  description: "posterior of a coin"
   requestBody:
     content:
       application/json:
         schema:
-          $ref: "odds-to-probability-input.yaml"
+          $ref: "blood-input.yaml"
   responses:
     "200":
       description: "Description of this response."
       content:
         application/json:
           schema:
-            $ref: "odds-to-probability-output.yaml"
+            $ref: "blood-output.yaml"
