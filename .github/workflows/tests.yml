@@ -36,4 +36,4 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Run tests
-        run: make all
+        run: make test
