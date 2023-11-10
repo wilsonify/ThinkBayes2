@@ -1,0 +1,26 @@
+# Book settings
+title: Think Bayes
+author: Allen B. Downey
+
+latex:
+  latex_documents:
+    targetname: book.tex
+
+execute:
+  execute_notebooks: 'off'
+
+repository:
+  url: https://github.com/AllenDowney/ThinkBayes2
+html:
+  use_repository_button: true
+
+parse:
+  myst_extended_syntax: true
+
+sphinx:
+  config:
+    mathjax_path: https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+    mathjax_config:
+      tex2jax:
+        inlineMath: [["$","$"], ["\\(", "\\)"]]
+    myst_update_mathjax: false
