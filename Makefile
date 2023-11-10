@@ -1,6 +1,6 @@
 PROJECT_NAME = ThinkBayes2
 PYTHON_VERSION = 3.10
-PYTHON_INTERPRETER = /mnt/SSD1/venvs/ThinkBayes38/bin/python
+PYTHON_INTERPRETER = /usr/bin/python
 
 all: clean test
 
