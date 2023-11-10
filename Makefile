@@ -1,6 +1,6 @@
 PROJECT_NAME = ThinkBayes2
 PYTHON_VERSION = 3.10
-PYTHON_INTERPRETER = /usr/bin/python
+PYTHON_INTERPRETER = python
 
 all: clean test
 
