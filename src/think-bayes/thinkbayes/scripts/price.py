@@ -11,7 +11,8 @@ import logging
 import matplotlib.pyplot as pyplot
 import numpy as np
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkbayes.c01_probability
+import thinkplot
 
 FORMATS = ["png", "pdf", "eps"]
 
@@ -55,7 +56,7 @@ class Price(thinkbayes.Suite):
         thinkbayes.Suite.__init__(self, pmf, label=label)
         self.player = player
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: actual price
@@ -187,14 +188,14 @@ class Player(object):
     def prob_overbid(self):
         """Returns the probability this player overbids.
         """
-        return self.cdf_diff.prob(-1)
+        return thinkbayes.c01_probability.prob(-1)
 
     def prob_worse_than(self, diff):
         """Probability this player's diff is greater than the given diff.
 
         diff: how much the oppenent is off by (always positive)
         """
-        return 1 - self.cdf_diff.prob(diff)
+        return 1 - thinkbayes.c01_probability.prob(diff)
 
     def make_beliefs(self, guess):
         """Makes a posterior distribution based on estimated price.
@@ -228,7 +229,7 @@ class Player(object):
         root: string filename root for saved figure
         """
         thinkplot.clear_figure()
-        thinkplot.pre_plot(num=2)
+        thinkplot.PrePlot(num=2)
         thinkplot.plot_pdfs([self.prior, self.posterior])
         thinkplot.save_plot(root=root, xlabel="price ($)", ylabel="PMF", formats=FORMATS)
 
@@ -242,7 +243,7 @@ def make_plots(player1, player2):
 
     # plot the prior distribution of price for both players
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=2)
+    thinkplot.PrePlot(num=2)
     pmf1 = player1.pmf_price()
     pmf1.label = "showcase 1"
     pmf2 = player2.pmf_price()
@@ -252,7 +253,7 @@ def make_plots(player1, player2):
 
     # plot the historical distribution of underness for both players
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=2)
+    thinkplot.PrePlot(num=2)
     cdf1 = player1.cdf_diff()
     cdf1.label = "player 1"
     cdf2 = player2.cdf_diff()
@@ -311,7 +312,7 @@ def plot_expected_gains(guess1=20000, guess2=40000):
     calc2 = GainCalculator(player2, player1)
 
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=2)
+    thinkplot.PrePlot(num=2)
 
     bids, gains = calc1.expected_gains()
     thinkplot.plot_line(bids, gains, label="Player 1")
@@ -347,7 +348,7 @@ def plot_optimal_bid():
 
     guesses, means, _mles, gains, bids = zip(*res)
 
-    thinkplot.pre_plot(num=3)
+    thinkplot.PrePlot(num=3)
     pyplot.plot([15000, 60000], [15000, 60000], color="gray")
     thinkplot.plot_line(guesses, means, label="mean")
     # thinkplot.Plot(guesses, mles, label='MLE')

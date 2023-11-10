@@ -1,0 +1,7 @@
+type: object
+properties:
+  bowl1:
+    type: number
+  bowl2:
+    type: number
+example: { "Bowl1": 0.5294, "Bowl2": 0.4706 }

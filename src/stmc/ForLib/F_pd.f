@@ -1,7 +1,7 @@
       FUNCTION F_PD(F)
 C Variance ratio probability density.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       COMMON /PARFT/ NF1,NF2
       F1H=HALF*NF1
       F2H=HALF*NF2

@@ -11,7 +11,7 @@ import sys
 import numpy as np
 import pandas
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 
 def summarize(df, column, title):
@@ -120,7 +120,7 @@ def make_figures(df):
     log_weights = np.log10(weights)
 
     # plot weights on linear and log scales
-    thinkplot.pre_plot(cols=2)
+    thinkplot.PrePlot(cols=2)
     make_normal_model(weights)
     thinkplot.config_plot(xlabel="adult weight (kg)", ylabel="CDF")
 
@@ -131,7 +131,7 @@ def make_figures(df):
     thinkplot.save_plot(root="brfss_weight")
 
     # make normal probability plots on linear and log scales
-    thinkplot.pre_plot(cols=2)
+    thinkplot.PrePlot(cols=2)
     make_normal_plot(weights)
     thinkplot.config_plot(xlabel="z", ylabel="weights (kg)")
 

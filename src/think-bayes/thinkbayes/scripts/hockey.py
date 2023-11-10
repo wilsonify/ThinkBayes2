@@ -8,7 +8,8 @@ MIT License: https://opensource.org/licenses/MIT
 import math
 
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkbayes.c01_probability
+import thinkplot
 from thinkbayes.scripts import columns
 
 USE_SUMMARY_DATA = True
@@ -31,10 +32,10 @@ class Hockey(thinkbayes.Suite):
             mu = 2.8
             sigma = 0.85
 
-        pmf = thinkbayes.make_normal_pmf(mu, sigma, 4)
+        pmf = thinkbayes.MakeNormalPmf(mu, sigma, 4)
         thinkbayes.Suite.__init__(self, pmf, label=label)
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         Evaluates the Poisson PMF for lambda and k.
@@ -44,7 +45,7 @@ class Hockey(thinkbayes.Suite):
         """
         lam = hypo
         k = data
-        like = thinkbayes.eval_poisson_pmf(k, lam)
+        like = thinkbayes.EvalPoissonPmf(k, lam)
         return like
 
 
@@ -198,7 +199,7 @@ def main():
     suite2 = Hockey("canucks")
 
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=2)
+    thinkplot.PrePlot(num=2)
     thinkplot.plot_pmf_line(suite1)
     thinkplot.plot_pmf_line(suite2)
 
@@ -210,7 +211,7 @@ def main():
     suite2.update_set([1, 3, 1, 0])
 
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=2)
+    thinkplot.PrePlot(num=2)
     thinkplot.plot_pmf_line(suite1)
     thinkplot.plot_pmf_line(suite2)
     thinkplot.save_plot(
@@ -221,7 +222,7 @@ def main():
     goal_dist2 = make_goal_pmf(suite2)
 
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=2)
+    thinkplot.PrePlot(num=2)
     thinkplot.plot_pmf_line(goal_dist1)
     thinkplot.plot_pmf_line(goal_dist2)
     thinkplot.save_plot(
@@ -235,7 +236,7 @@ def main():
     print("MLE canucks", suite2.MaximumLikelihood())
 
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=2)
+    thinkplot.PrePlot(num=2)
     thinkplot.plot_pmf_line(time_dist1)
     thinkplot.plot_pmf_line(time_dist2)
     thinkplot.save_plot(
@@ -245,7 +246,7 @@ def main():
     diff = goal_dist1 - goal_dist2
     p_win = diff.prob_greater(0)
     p_loss = diff.prob_less(0)
-    p_tie = diff.prob(0)
+    p_tie = thinkbayes.c01_probability.prob(0)
 
     print(p_win, p_loss, p_tie)
 

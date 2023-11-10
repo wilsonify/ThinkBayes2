@@ -19,13 +19,13 @@ C
       write(iuo,*) 'Results: iequi,es,act on potts_ts.d.'
       open(iud1,file='potts_ts.d',form='formatted',status='unknown')
       do irpt=1,2
-        if(irpt.eq.2) call potts_order(ista,iact,nd,ns,1)
+        if(irpt==2) call potts_order(ista,iact,nd,ns,1)
 c       if(irpt.eq.2) call potts_act(ista,ipf,idel,ns,nqm1,nd,iact)
         do iequi=0,nequi
-          if(iequi.ge.1) call potts_met
+          if(iequi>=1) call potts_met
           act(iequi,irpt)=(iact*one)/(nlink*one)
           es_ts(iequi,irpt)=two*nd/(one*nq)-two*nd*act(iequi,irpt)
-          if(irpt.eq.2) write(iud1,'(1I10,4F15.6)') 
+          if(irpt==2) write(iud1,'(1I10,4F15.6)')
      &      iequi,(es_ts(iequi,i),i=1,2),(act(iequi,i),i=1,2)
         end do
       end do

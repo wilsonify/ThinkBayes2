@@ -18,13 +18,13 @@ C
       write(iuo,*) 'Results: iequi,iact,iE,es on potts_tscl.d.'
       open(iud1,file='potts_tscl.d',form='formatted',status='unknown')
       do irpt=1,2
-        if(irpt.eq.2) call potts_order(ista,iact,nd,ns,1)
-        if(irpt.eq.2) call potts_act(ista,ipf,idel,ns,nqm1,nd,iact)
+        if(irpt==2) call potts_order(ista,iact,nd,ns,1)
+        if(irpt==2) call potts_act(ista,ipf,idel,ns,nqm1,nd,iact)
         do iequi=0,nequi
-          if(iequi.ge.1) call potts_cl(ncl)
+          if(iequi>=1) call potts_cl(ncl)
           iE=-2*iact+nlink
           es_ts(iequi,irpt)=(iE*ONE)/(ns*ONE)
-          if(irpt.eq.2)
+          if(irpt==2)
      &    write(iud1,'(1I10,2G18.6)') iequi,(es_ts(iequi,i),i=1,2)
         end do
       end do

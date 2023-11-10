@@ -29,7 +29,7 @@ C
       open(iud1,file="h"//cd//"d"//cq//"q"//cl//".d",
      & form="formatted",status="unknown")
       do ilink=0,nlink
-        if(ham(ilink).gt.(half/nrpt)) then
+        if(ham(ilink)>(half/nrpt)) then
           actm=ilink/(nlink*one)
           em=nd*two*((one/nq)-actm) ! Internal energy per site.
           write(iud1,'(I10,4G15.6)') ilink,actm,em,ham(ilink),hae(ilink)

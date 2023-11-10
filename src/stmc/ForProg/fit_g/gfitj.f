@@ -22,21 +22,21 @@ C
 
       LPRI=.TRUE.
       DO IBIN=0,NBINS
-        IF(IBIN.GE.1) LPRI=.FALSE.
+        IF(IBIN>=1) LPRI=.FALSE.
         WRITE(CBIN,'(I2.2)') IBIN
 C
 C READ DATA:
 C ==========
         OPEN(IUD,FILE="datj"//CBIN//".d",FORM='FORMATTED',STATUS='OLD')
-        IF(IBIN.EQ.0) THEN
+        IF(IBIN==0) THEN
           READ(IUD,*) NBINS_IN,NDAT,(AM(I),I=1,NFIT)
-          IF(NBINS_IN.NE.NBINS) STOP "GFIT: NBINS_IN.NE.NBINS."
+          IF(NBINS_IN/=NBINS) STOP "GFIT: NBINS_IN.NE.NBINS."
           WRITE(IUO,'(/," NUMBER OF DATA:",I12)') NDAT
-          IF(NDAT.GT.MDAT) STOP "GFIT: MDAT too small."
+          IF(NDAT>MDAT) STOP "GFIT: MDAT too small."
           WRITE(IUO,'(/," INITIAL GUESS FOR THE FIT PARAMETERS:")')
         END IF
         DO I=1,NFIT
-          IF(IBIN.EQ.0) WRITE(IUO,'(" I,A(I):",I6,G18.7)') I,AM(I)
+          IF(IBIN==0) WRITE(IUO,'(" I,A(I):",I6,G18.7)') I,AM(I)
         END DO
         DO I=1,NDAT
           READ(IUD,*)           X(I),Y(I),YE(I)
@@ -48,7 +48,7 @@ C PERFORM FIT:
 C ============
         CALL FIT_G(NDAT,X,Y,YE,NFIT,AM,COVA,AMAT,CHI2,Q,SUBG,LPRI)
 C
-        IF(IBIN.EQ.0)
+        IF(IBIN==0)
      &    WRITE(IUO,'(/," RESULTS FOR THE FIT PARAMETERS:")')
         WRITE(IUO,'(" IBIN =",I6,":")') IBIN
         DO I=1,NFIT

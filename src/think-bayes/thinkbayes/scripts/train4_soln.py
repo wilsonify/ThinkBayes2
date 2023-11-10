@@ -5,7 +5,7 @@ Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from thinkbayes import thinkplot
+import thinkplot
 from thinkbayes.scripts.dice import Dice
 NTRAINS_LABEL = "Number of trains"
 
@@ -16,7 +16,7 @@ class Train(Dice):
     for the Dice problem.
     """
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         sample_size = hypo
         k, m = data
         if sample_size < m:

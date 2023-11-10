@@ -41,7 +41,7 @@ C
         WRITE(IUD,'(1I6,3F14.8,1F14.4)') IT,ACOR(IT),ACM,ACE,ABIAS
         ACM_s=FIVE/TEN+50*ACM
         ACE_s=50*ACE 
-        IF(IT.GE.11) WRITE(IUD1,'(1I6,2F14.8)') IT,ACM_s,ACE_s
+        IF(IT>=11) WRITE(IUD1,'(1I6,2F14.8)') IT,ACM_s,ACE_s
       END DO
       CLOSE(IUD)
       CLOSE(IUD1)

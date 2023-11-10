@@ -7,3 +7,11 @@ xlrd
 html5lib
 tables
 empiricaldist
+pandas
+scipy
+arviz
+pymc
+pytest
+
+setuptools~=60.2.0
+pika~=1.3.0

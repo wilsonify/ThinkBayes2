@@ -17,10 +17,10 @@ C
         xr=Pmove*rmafun()
         Prob=Pcase(1)
         icase=1
-        if(xr.le.Prob) go to 1
+        if(xr<=Prob) go to 1
         do icase=2,mcam1
           Prob=Prob+Pcase(icase)
-          if(xr.le.Prob) go to 1
+          if(xr<=Prob) go to 1
         end do
         icase=mcase
 1       continue
@@ -39,7 +39,7 @@ C
           ifct=nq2*ifct
         end do
         iconf=jconf+iq_in*nconf0
-        if(icase.ne.IAcase(iconf)) then
+        if(icase/=IAcase(iconf)) then
           print'(" is,iq_in,nqa:",2I4,6X,6I3)',icase,is,iq_in,nqa
           print*,"icase,IAcase(iconf),iconf:",icase,IAcase(iconf),iconf
           stop "p_e_mc at 0: icase-iconf mismatch!"
@@ -47,13 +47,13 @@ C
 C q-state update:
         Prob=zero
         do iq=0,nqm1
-          if(iq.ne.iq_in) then
+          if(iq/=iq_in) then
             ia=0
             do id=1,n2d
               ia=ia+idel(nqa(id),iq)
             end do
             Prob=Prob+Peds1(ia,icase)
-            if(xr.le.Prob) go to 2
+            if(xr<=Prob) go to 2
           end if
         end do
         write(iuo,*) "Error: iq,xr,Prob =",iq,xr,Prob
@@ -63,14 +63,14 @@ C q-state update:
 C Table updates:
         jconf=jconf+iq*nconf0
         jcase=IAcase(jconf)
-        if(icase.ne.jcase) then
+        if(icase/=jcase) then
           iact=iact+ia-ia_array(icase) ! Action change.
-          if(iact.lt.0.or.iact.gt.nlink) stop "p_e_mc: iact false!"
+          if(iact<0.or.iact>nlink) stop "p_e_mc: iact false!"
           iamin=min(iact,iamin)
           iamax=max(iact,iamax)
           call p_etabs_update(icase,jcase,is,is1)
         end if
-        if(jcase.ne.IAcase(jconf)) then
+        if(jcase/=IAcase(jconf)) then
           print*,"jcase,IAcase(jconf),jconf:",jcase,IAcase(jconf),jconf
           stop "p_e_mc at 0: jcase-jconf mismatch!"
         end if
@@ -86,13 +86,13 @@ C
             ifct=nq2*ifct
           end do
           jcase=IAcase(jconf)
-          if(icase.ne.jcase) then
+          if(icase/=jcase) then
             is1=Index(is0,mcap1)
-            if(Index(is1,icase).ne.is0) stop "p_e_mc.f: Index mismatch."
+            if(Index(is1,icase)/=is0) stop "p_e_mc.f: Index mismatch."
             call p_etabs_update(icase,jcase,is0,is1)
           end if
         end do
-        if(jcase.ne.IAcase(jconf)) then
+        if(jcase/=IAcase(jconf)) then
           print*,"jcase,IAcase(jconf),jconf:",jcase,IAcase(jconf),jconf
           stop "p_e_mc at 1: jcase-jconf mismatch!"
         end if
@@ -108,13 +108,13 @@ C
             ifct=nq2*ifct
           end do
           jcase=IAcase(jconf)
-          if(icase.ne.jcase) then
+          if(icase/=jcase) then
             is1=Index(is0,mcap1)
-            if(Index(is1,icase).ne.is0) stop "p_e_mc: Index mismatch."
+            if(Index(is1,icase)/=is0) stop "p_e_mc: Index mismatch."
 	    call p_etabs_update(icase,jcase,is0,is1)
           end if
         end do	    
-	if(jcase.ne.IAcase(jconf)) then
+	if(jcase/=IAcase(jconf)) then
 	  print*,"jcase,IAcase(jconf),jconf:",jcase,IAcase(jconf),jconf
 	  stop "p_e_mc at 2: jcase-jconf mismatch!"
         end if

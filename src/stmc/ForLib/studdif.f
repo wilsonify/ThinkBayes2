@@ -2,8 +2,8 @@
 C
 C Q: STUDENT'S DIFFERENCE TEST: COMPARISION OF TWO MEANS.
 C
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       COMMON /PARSTUD/ NF
       COMMON /PARFT/   NF1,NF2
 C

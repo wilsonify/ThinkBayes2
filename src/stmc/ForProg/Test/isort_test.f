@@ -27,8 +27,8 @@ c         print'(" jdat,sort:",I9,F18.2)',jdat,sort(jdat)
       end if
 
       do idat=1,ndat
-        if(nint(adat(idat)).ne.iadat(idat)) stop "Error!"
-        if(lper.and.iper(idat).ne.iiper(idat)) stop "Error iper!"
+        if(nint(adat(idat))/=iadat(idat)) stop "Error!"
+        if(lper.and.iper(idat)/=iiper(idat)) stop "Error iper!"
       end do
       print'(/,"  isort_test: completed with agreement.")'
 
@@ -55,8 +55,8 @@ C Read data:
       write(iuo,'(" ndat =",I10,/)') ndat
       do idat=1,ndat
         read(iud0,*) iadat(idat)
-        if(iadat(idat).eq.-1) iadat(idat)=3
-        if(iadat(idat).eq.-2) iadat(idat)=4
+        if(iadat(idat)==-1) iadat(idat)=3
+        if(iadat(idat)==-2) iadat(idat)=4
         prob(iadat(idat))= prob(iadat(idat))+one
       end do
       write(iuo,'(" prob:",4G16.8)') (prob(i),i=1,4)

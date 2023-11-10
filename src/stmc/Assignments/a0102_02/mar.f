@@ -15,13 +15,13 @@ C
       parameter(iuo=6,iud=10,iseed1=1,iseed2=0,ndat=004)
 c
       inquire(file='ranmar.d',exist=lexist)
-      if(.not.lexist .and. iseed1.eq.1 .and. iseed2.eq.0) then
+      if(.not.lexist .and. iseed1==1 .and. iseed2==0) then
         write(iuo,*) '  '
         call rmaset(iuo,iud,iseed1,iseed2,'ranmar.d')
         write(iuo,*) 'Table of Marsaglia et al.:'
         DO II=1,20005
           CALL RANMAR(XR)
-          IF(II.GT.20000)
+          IF(II>20000)
      &      WRITE(IUO,'(2X,7I3)') (MOD(INT(XR*16.**I),16),I=1,7)
         END DO
       end if

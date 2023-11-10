@@ -10,7 +10,8 @@ import math
 
 import numpy
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkbayes.c01_probability
+import thinkplot
 
 
 def prob_correct(efficacy, difficulty, a=1):
@@ -28,7 +29,7 @@ def prob_correct(efficacy, difficulty, a=1):
 class Sat(thinkbayes.Suite, thinkbayes.Joint):
     """Represents the distribution of p_correct for a test-taker."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of data under hypo.
 
         data: boolean, whether the answer is correct
@@ -54,14 +55,14 @@ class Sat3(thinkbayes.Suite):
         # update based on an exam score
         self.update(score)
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of a test score, given efficacy."""
         p_correct = hypo
         score = data
 
         k = self.exam.reverse(score)
         n = self.exam.max_score
-        like = thinkbayes.eval_binomial_pmf(k, n, p_correct)
+        like = thinkbayes.EvalBinomialPmf(k, n, p_correct)
         return like
 
     def plot_posteriors(self, other):
@@ -70,7 +71,7 @@ class Sat3(thinkbayes.Suite):
         self, other: Sat objects.
         """
         thinkplot.clear_figure()
-        thinkplot.pre_plot(num=2)
+        thinkplot.PrePlot(num=2)
 
         cdf1 = thinkbayes.Cdf(self, label=f"posterior {self.score}")
         cdf2 = thinkbayes.Cdf(other, label=f"posterior {other.score}")
@@ -168,7 +169,7 @@ def divide_values(pmf, denom):
     """
     new = thinkbayes.Pmf()
     denom = float(denom)
-    for val, prob in pmf.items():
+    for val, prob in pmf.Items():
         x = val / denom
         new.set(x, prob)
     return new
@@ -239,12 +240,12 @@ class Exam(object):
     def calibrate_difficulty(self):
         """Make a plot showing the model distribution of raw scores."""
         thinkplot.clear_figure()
-        thinkplot.pre_plot(num=2)
+        thinkplot.PrePlot(num=2)
 
         cdf = thinkbayes.Cdf(self.raw, label="data")
         thinkplot.plot_cdf_line(cdf)
 
-        efficacies = thinkbayes.make_normal_pmf(0, 1.5, 3)
+        efficacies = thinkbayes.MakeNormalPmf(0, 1.5, 3)
         pmf = self.make_raw_score_dist(efficacies)
         cdf = thinkbayes.Cdf(pmf, label="model")
         thinkplot.plot_cdf_line(cdf)
@@ -286,7 +287,7 @@ class Exam(object):
             new Pmf
         """
         new = thinkbayes.Pmf()
-        for val, prob in pmf.items():
+        for val, prob in pmf.Items():
             raw = self.reverse(val)
             new.incr(raw, prob)
         return new
@@ -300,20 +301,20 @@ class Sat2(thinkbayes.Suite):
         self.score = score
 
         # start with the Normal prior
-        efficacies = thinkbayes.make_normal_pmf(0, 1.5, 3)
+        efficacies = thinkbayes.MakeNormalPmf(0, 1.5, 3)
         thinkbayes.Suite.__init__(self, efficacies)
 
         # update based on an exam score
         self.update(score)
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of a test score, given efficacy."""
         efficacy = hypo
         score = data
         raw = self.exam.reverse(score)
 
         pmf = self.exam.pmf_correct(efficacy)
-        like = pmf.prob(raw)
+        like = thinkbayes.c01_probability.prob(raw)
         return like
 
     def make_predictive_dist(self):
@@ -327,7 +328,7 @@ class Sat2(thinkbayes.Suite):
         self, other: Sat objects.
         """
         thinkplot.clear_figure()
-        thinkplot.pre_plot(num=2)
+        thinkplot.PrePlot(num=2)
 
         cdf1 = thinkbayes.Cdf(self, label=f"posterior {self.score}")
         cdf2 = thinkbayes.Cdf(other, label=f"posterior {other.score}")
@@ -351,7 +352,7 @@ def plot_joint_dist(pmf1, pmf2, thresh=0.8):
 
     def clean(probability_mass_function):
         """Removes values below thresh."""
-        vals = [val for val in probability_mass_function.values() if val < thresh]
+        vals = [val for val in thinkbayes.c01_probability.values() if val < thresh]
         for val in vals:
             probability_mass_function.remove(val)
 
@@ -402,7 +403,7 @@ def plot_prior_dist(pmf):
     pmf: prior
     """
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=1)
+    thinkplot.PrePlot(num=1)
 
     cdf1 = thinkbayes.Cdf(pmf, label="prior")
 
@@ -487,11 +488,11 @@ def prob_correct_table():
 
 
 def main():
-    p1 = thinkbayes.make_normal_pmf(0, 1, 3, n=101)
+    p1 = thinkbayes.MakeNormalPmf(0, 1, 3, n=101)
     p1.label = "p1"
     p2 = p1.copy(label="p2")
 
-    q1 = thinkbayes.make_normal_pmf(-1, 1, 3, n=101)
+    q1 = thinkbayes.MakeNormalPmf(-1, 1, 3, n=101)
     q1.label = "q1"
     q2 = q1.copy(label="q2")
 
@@ -500,7 +501,7 @@ def main():
     p2, q1 = update_p_q(p2, q1, True)
     p2, q2 = update_p_q(p2, q2, False)
 
-    thinkplot.pre_plot(num=4, rows=2)
+    thinkplot.PrePlot(num=4, rows=2)
     thinkplot.plot_pmfs([p1, p2])
     thinkplot.config_plot(legend=True)
 
@@ -511,11 +512,11 @@ def main():
     print("Prob p1 > p2", p1 > p2)
     print("Prob q1 > q2", q1 > q2)
 
-    p1 = thinkbayes.make_normal_pmf(0, 1, 3, n=101)
+    p1 = thinkbayes.MakeNormalPmf(0, 1, 3, n=101)
     p1.label = "p1"
     p2 = p1.copy(label="p2")
 
-    q1 = thinkbayes.make_normal_pmf(0, 1, 3, n=101)
+    q1 = thinkbayes.MakeNormalPmf(0, 1, 3, n=101)
     q1.label = "q1"
     q2 = q1.copy(label="q2")
 
@@ -524,7 +525,7 @@ def main():
     p2, q1 = update_p_q(p2, q1, True)
     p2, q2 = update_p_q(p2, q2, False)
 
-    thinkplot.pre_plot(num=4, rows=2)
+    thinkplot.PrePlot(num=4, rows=2)
     thinkplot.plot_pmfs([p1, p2])
     thinkplot.config_plot(legend=True)
 

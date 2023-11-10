@@ -30,8 +30,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pytest
 from numpy.fft import fft, ifft
+
 from thinkbayes import Pmf, Cdf
-from thinkbayes import thinkplot
 
 
 def show_code(func):
@@ -41,7 +41,7 @@ def show_code(func):
 
 
 def iqr(cdf):
-    values = cdf.values((0.25, 0.75))
+    values = cdf.Values((0.25, 0.75))
     return np.diff(values)[0]
 
 
@@ -95,7 +95,7 @@ class CharFunc:
         """Computes the elementwise product of two CFs."""
         return CharFunc(self.hs * other.hs)
 
-    def make_pmf(self, thresh=1e-11):
+    def MakePmf(self, thresh=1e-11):
         """Converts a CF to a PMF.
 
         Values with probabilities below `thresh` are dropped.
@@ -161,7 +161,7 @@ class Dist(Pmf, Cdf, CharFunc):
     def __mul__(self, other):
         """Computes the distribution of the sum using CharFunc.__mul__.
         """
-        pmf = CharFunc.__mul__(self, other).make_pmf()
+        pmf = CharFunc.__mul__(self, other).MakePmf()
         return Dist(pmf.d)
 
 
@@ -192,7 +192,7 @@ def test_norm(d6):
     The result is a `Pmf` with probabilities that add to 1.
     """
 
-    d6.normalize()
+    d6.Normalize()
     assert d6.d == {
         1: 0.16666666666666669,
         2: 0.16666666666666669,
@@ -228,8 +228,8 @@ def test_exercise(d6):
     # Solution
 
     die = Pmf(dict(red=2, blue=4))
-    die.normalize()
-    die.print()
+    die.Normalize()
+    die.Print()
 
 
 def test_moments_expecations(d6):
@@ -280,7 +280,7 @@ def test_moments_expecations(d6):
     and add up the product of `p` and some function of `x`.
 
     """
-    d6.mean(), d6.var()
+    d6.Mean(), d6.Var()
 
 
 def test_third_central_moment(d6):
@@ -292,8 +292,8 @@ def test_third_central_moment(d6):
     As an example, we can use `Expect` to compute the third central moment of the distribution:
     Because the distribution is symmetric, the third central moment is 0.
     """
-    mu = d6.mean()
-    result = d6.expect(lambda x: (x - mu) ** 3)
+    mu = d6.Mean()
+    result = d6.Expect(lambda x: (x - mu) ** 3)
     assert result == 0
 
 
@@ -322,9 +322,7 @@ def test_addition(d6):
     Here's the `Pmf` that represents the sum of two dice:
     """
 
-    thinkplot.plot_pdf_line(d6)
     twice = d6 + d6
-    thinkplot.plot_pdf_line(twice, color="green")
 
 
 def test_threedice(d6):
@@ -334,9 +332,6 @@ def test_threedice(d6):
     """
     twice = d6 + d6
     thrice = twice + d6
-    thinkplot.plot_pdf_line(d6)
-    thinkplot.plot_pdf_line(twice, color="green")
-    thinkplot.plot_pdf_line(thrice, color="red")
 
 
 def test_ex(d6):
@@ -387,8 +382,7 @@ def test_cumulative_probabilities(d6):
     twice = d6 + d6
     thrice = twice + d6
     cdf = Cdf(thrice)
-    cdf.print()
-    thinkplot.plot_cdf_line(cdf)
+    cdf.Print()
 
 
 def test_cdf5(d6):
@@ -410,7 +404,7 @@ def test_cdf5(d6):
     twice = d6 + d6
     thrice = twice + d6
     cdf = Cdf(thrice)
-    cdf.probs((2, 10, 18))
+    cdf.Probs((2, 10, 18))
     assert cdf[5] == pytest.approx(0.05, abs=0.01)
 
 
@@ -443,7 +437,7 @@ def test_reverse_lookup(d6):
     thrice = twice + d6
     cdf = Cdf(thrice)
 
-    cdf.values((0.1, 0.5, 0.9))
+    cdf.Values((0.1, 0.5, 0.9))
 
 
 def test_sample1(d6):
@@ -455,9 +449,9 @@ def test_sample1(d6):
     twice = d6 + d6
     thrice = twice + d6
     cdf = Cdf(thrice)
-    cdf.sample(1)
-    cdf.sample(6)
-    cdf.sample((2, 2))
+    cdf.Sample(1)
+    cdf.Sample(6)
+    cdf.Sample((2, 2))
 
 
 def test_ex_irq(d6):
@@ -502,8 +496,7 @@ def test_max_min(d6):
     twice = d6 + d6
     thrice = twice + d6
     cdf = Cdf(thrice)
-    best = cdf.max(6)
-    thinkplot.plot_cdf_line(best)
+    best = cdf.Max(6)
     assert best[10] == pytest.approx(0.0156, abs=0.001)
 
 
@@ -517,7 +510,6 @@ def test_ex_min(d6):
     thrice = twice + d6
     cdf = Cdf(thrice)
     worst = find_min(cdf, 6)
-    thinkplot.plot_cdf_line(worst)
 
 
 def test_fft(d6):
@@ -540,7 +532,7 @@ def test_characteristic(d6):
     but it is encoded in a form that is hard to interpret.
     However, if we are given a characteristic function, we can find the corresponding `Pmf`.
 
-    `CharFunc` provides `make_pmf`, which uses the inverse FFT to get back to the `Pmf` representation.
+    `CharFunc` provides `MakePmf`, which uses the inverse FFT to get back to the `Pmf` representation.
 
 
     Now we can use the characteristic function to compute a convolution.
@@ -551,9 +543,7 @@ def test_characteristic(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    thinkplot.plot_pdf_line(cf.make_pmf())
-    sixth = (cf * cf).make_pmf()
-    thinkplot.plot_pdf_line(sixth)
+    sixth = (cf * cf).MakePmf()
 
 
 def test_sixth(d6):
@@ -569,9 +559,10 @@ def test_sixth(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    sixth = (cf * cf).make_pmf()
-    sixth.print()
-    sixth.mean(), sixth.var()
+    sixth = (cf * cf).MakePmf()
+    sixth.Print()
+    sixth.Mean()
+    sixth.Var()
 
 
 def test_mags(d6):
@@ -605,9 +596,8 @@ def test_dist(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    sixth = (cf * cf).make_pmf()
+    sixth = (cf * cf).MakePmf()
     dist = Dist(sixth.d)
-    thinkplot.plot_pdf_line(dist)
     assert dist[21] == pytest.approx(0.0928, abs=0.01)
 
 
@@ -619,9 +609,9 @@ def test_meanvar(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    sixth = (cf * cf).make_pmf()
+    sixth = (cf * cf).MakePmf()
     dist = Dist(sixth.d)
-    dist.mean(), dist.var()
+    dist.Mean(), dist.Var()
 
 
 def test_value_array(d6):
@@ -632,7 +622,7 @@ def test_value_array(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    sixth = (cf * cf).make_pmf()
+    sixth = (cf * cf).MakePmf()
     dist = Dist(sixth.d)
     dist.ValueArray((0.25, 0.5, 0.75))
 
@@ -642,9 +632,9 @@ def test_probs(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    sixth = (cf * cf).make_pmf()
+    sixth = (cf * cf).MakePmf()
     dist = Dist(sixth.d)
-    dist.probs((18, 21, 24))
+    dist.Probs((18, 21, 24))
 
 
 def test_sample(d6):
@@ -652,10 +642,9 @@ def test_sample(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    sixth = (cf * cf).make_pmf()
+    sixth = (cf * cf).MakePmf()
     dist = Dist(sixth.d)
-    dist.sample(10)
-    thinkplot.plot_cdf_line(dist.max(6))
+    dist.Sample(10)
 
 
 def test_slow(d6):
@@ -667,11 +656,10 @@ def test_slow(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    sixth = (cf * cf).make_pmf()
+    sixth = (cf * cf).MakePmf()
     dist = Dist(sixth.d)
     twelfth = dist + dist
-    thinkplot.plot_pdf_line(twelfth)
-    twelfth.mean()
+    twelfth.Mean()
 
 
 def test_mul(d6):
@@ -683,8 +671,7 @@ def test_mul(d6):
     thrice = twice + d6
     hs = compute_fft(thrice.d)
     cf = CharFunc(hs)
-    sixth = (cf * cf).make_pmf()
+    sixth = (cf * cf).MakePmf()
     dist = Dist(sixth.d)
     twelfth_fft = dist * dist
-    thinkplot.plot_pdf_line(twelfth_fft)
-    twelfth_fft.mean()
+    twelfth_fft.Mean()

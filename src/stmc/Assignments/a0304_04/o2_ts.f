@@ -10,7 +10,7 @@ C MC prodcution run to create energy (action variable) time series.
       include '../../ForLib/lat.com'
       include '../../ForLib/on.com'
       include 'lat.dat'
-      if(n.ne.2) stop "o2_ts: set n=2 in on.par (for ana_tson.f)!"
+      if(n/=2) stop "o2_ts: set n=2 in on.par (for ana_tson.f)!"
 C
       write(iuo,'(/," o2_ts.f:")')
       call on_init(.true.) ! Initialize O2 Metropolis MC.

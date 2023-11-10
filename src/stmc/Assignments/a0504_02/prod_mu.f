@@ -18,9 +18,9 @@ C Potts muca with Metropolis updating.
       ltest=.true.
       ltest=.false.
       if(ltest) stop "ltest."
-      if(nb_swp.gt.nmeas) write(iuo,'(/," nb_swp =",I12,/,1X,
+      if(nb_swp>nmeas) write(iuo,'(/," nb_swp =",I12,/,1X,
      & "WARNING MEASURMENT BACKUPS require nb_swp.ge.nmeas!",/)') nb_swp
-      if(nb_swp.gt.nmeas) stop "BACKUPS require nb_swp.ge.nmeas."
+      if(nb_swp>nmeas) stop "BACKUPS require nb_swp.ge.nmeas."
 C
       write(cd,'(I1.1)') nd
       write(cq,'(I2.2)') nq
@@ -35,7 +35,7 @@ C Initialize Potts Metropolis MC:
       if(lexist) call read_bak(cbak,irec,irec1,mu_swp,na_swp,
      &           ntun,ntun_old,ltun0, iequ1,irp1,imea1,ntu_m)
       if(.not.lexist) call potts_act(ista,ipf,idel,ns,nqm1,nd,iact)
-      if(ntun.ge.maxtun) go to 3
+      if(ntun>=maxtun) go to 3
 c
       write(iuo,*) '   '
       write(iuo,'(" MUCA Recursion:",)')
@@ -47,19 +47,19 @@ c
         if(.not.lexist) acpt=zero
         if(.not.lexist) na_swp=0
 1       continue
-          if(mu_swp.gt.0.and.mod(mu_swp,nb_swp).eq.0) call write_bak
+          if(mu_swp>0.and.mod(mu_swp,nb_swp)==0) call write_bak
      &      (cbak,irec,mu_swp,na_swp,ntun,ltun0,iequi,irpt,imeas,ntu_m)
           mu_swp=mu_swp+1
           na_swp=na_swp+1
           call potts_met
           call tun_cnt(namin,namax,iamin,iamax,ntun,ltun0)
-          if(ntun.gt.ntun_old) then
+          if(ntun>ntun_old) then
             write(iuo,'(" ntun,irec,mu_swp,acpt:",I6,I9,I12,F9.3)')
      &      ntun,irec,mu_swp,((nmucasw*irec*one)/(mu_swp*one))
             ntun_old=ntun
-          if(ntun.ge.maxtun) go to 2
+          if(ntun>=maxtun) go to 2
           end if
-        if((acpt/ns).lt.(nmucasw*one)) go to 1 !
+        if((acpt/ns)<(nmucasw*one)) go to 1 !
 C The next MUCA recursion is done, when acpt was  big enough:
         call p_mu_rec
         acpt=acpt/(ns*na_swp)
@@ -68,7 +68,7 @@ C The next MUCA recursion is done, when acpt was  big enough:
       STOP         "Muca recursion   n o t   finished."
 2     write(iuo,*) "Muca recursions done."
 3     continue
-      if(irp1.eq.1) then
+      if(irp1==1) then
         write(iuo,'(/," Data file ",A14," created.")') cdat
         open(iud2,file=cdat,form="unformatted",status="unknown")
         write(iud2) nd,ml,nla,nq,namin,namax,irec,nrec_max,nmucasw,
@@ -77,13 +77,13 @@ C The next MUCA recursion is done, when acpt was  big enough:
         close(iud2)
       end if
 C
-      if(nequi.ge.iequ1) then
+      if(nequi>=iequ1) then
       write(iuo,*) "  "
       write(iuo,'(I12," sweeps for reaching equilibrium.")') nequi
-        if(iequ1.eq.1) acpt=zero
+        if(iequ1==1) acpt=zero
         do iequi=iequ1,nequi
           call potts_met
-          if(mod(iequi,nb_swp).eq.0) call write_bak(cbak,irec,
+          if(mod(iequi,nb_swp)==0) call write_bak(cbak,irec,
      &      mu_swp,na_swp,ntun,ltun0, iequi,irpt,imeas,ntu_m)
         end do
         write(iuo,'(" ia_min,ia_max, acpt rate:",2I9,F9.3)')
@@ -92,21 +92,21 @@ C
 C
       write(iuo,'(/,I9," times",I12," sweeps with measurements.")')
      & nrpt,nmeas
-      if(nrpt.gt.0.and.nmeas.gt.0) then
+      if(nrpt>0.and.nmeas>0) then
         do irpt=irp1,nrpt
           call razero(ha,0,nlink)
-          if(imea1.eq.1) acpt=zero
+          if(imea1==1) acpt=zero
           do imeas=imea1,nmeas
             call potts_met
             call tun_cnt(namin,namax,iamin,iamax,ntu_m,ltun0)
-            if(mod(imeas,nb_swp).eq.0) call write_bak(cbak,irec,
+            if(mod(imeas,nb_swp)==0) call write_bak(cbak,irec,
      &        mu_swp,na_swp,ntun,ltun0, nequi,irpt,imeas,ntu_m)
           end do
           acpt=acpt/(nmeas*ns)
           write(iuo,'(" irpt,ntu_m,acpt:",2I10,F9.3)') irpt,ntu_m,acpt
           open(iud2,file=cdat,form="unformatted",
      &              status="old",access="append")
-          if(imea1.le.nmeas) write(iud2) ha,acpt,irpt,ntu_m
+          if(imea1<=nmeas) write(iud2) ha,acpt,irpt,ntu_m
           close(iud2)
           imea1=1
         end do

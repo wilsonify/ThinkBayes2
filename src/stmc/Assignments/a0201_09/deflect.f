@@ -46,14 +46,14 @@ C
           IF(LTEST) WRITE(IUO,'(I10,F10.4,4F8.2)') I,Q,XM1,EB1,XM,XE
           DAT(I)=XM1
           EB(I)=EB1 
-          IF(Q.LT.Qmin) THEN
+          IF(Q<Qmin) THEN
             Qmin=Q
             Imin=I
           END IF
         END DO
       WRITE(IUO,*) " "
       WRITE(IUO,'(3X,"N,Qcut,Qmin =",I3,F8.4,G10.2,":")') N,Qcut,Qmin
-      IF(Qmin.LE.Qcut) THEN
+      IF(Qmin<=Qcut) THEN
         WRITE(IUO,'(3X,"Imin =",I3,", i.e. XM =",F6.3," +/-",F6.3,
      &        " eliminated.")') Imin,DAT(Imin),EB(Imin)
         DAT(Imin)=DAT(N)

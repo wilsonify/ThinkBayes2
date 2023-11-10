@@ -12,7 +12,7 @@ C
       WGHT(1)=-ONE
       DO K=1,KMAX
         NDAT=2**K
-        IF(K.EQ.KMAX) NDAT=2
+        IF(K==KMAX) NDAT=2
         DO N=1,NDAT
           CALL RANMAR(DAT1(N))
         END DO

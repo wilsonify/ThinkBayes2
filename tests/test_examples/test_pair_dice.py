@@ -8,35 +8,37 @@ import logging
 import numpy as np
 import pandas as pd
 from thinkbayes import Pmf, Suite
-from thinkbayes import thinkplot
 
+
+
+class BayesTable(pd.DataFrame):
+    def __init__(self, hypo, prior=1, **options):
+        columns = ["hypo", "prior", "likelihood", "unnorm", "posterior"]
+        super().__init__(columns=columns, **options)
+        self.hypo = hypo
+        self.prior = prior
+
+    def Mult(self):
+        self.unnorm = self.prior * self.likelihood
+
+    def Norm(self):
+        nc = np.sum(self.unnorm)
+        self.posterior = self.unnorm / nc
+        return nc
+
+    def Update(self):
+        self.Mult()
+        return self.Norm()
+
+    def Reset(self):
+        return BayesTable(self.hypo, self.posterior)
 
 def test_BayesTable():
     # ### The BayesTable class
     #
     # Here's the class that represents a Bayesian table.
 
-    class BayesTable(pd.DataFrame):
-        def __init__(self, hypo, prior=1, **options):
-            columns = ["hypo", "prior", "likelihood", "unnorm", "posterior"]
-            super().__init__(columns=columns, **options)
-            self.hypo = hypo
-            self.prior = prior
 
-        def mult(self):
-            self.unnorm = self.prior * self.likelihood
-
-        def norm(self):
-            nc = np.sum(self.unnorm)
-            self.posterior = self.unnorm / nc
-            return nc
-
-        def update(self):
-            self.mult()
-            return self.norm()
-
-        def reset(self):
-            return BayesTable(self.hypo, self.posterior)
 
     # ### The pair of dice problem
     #
@@ -84,7 +86,7 @@ def test_BayesTable():
 
     # Now we can use `update` to compute the posterior probabilities:
 
-    table.update()
+    table.Update()
     logging.info("%r", f"table = {table}")
 
 
@@ -100,7 +102,7 @@ def test_BayesTable():
     d1 = Pmf(range(1, n1 + 1))
     d2 = Pmf(range(1, n2 + 1))
     total = d1 + d2
-    thinkplot.plot_hist_bar(total)
+
 
     # And here's the general function:
 
@@ -142,7 +144,7 @@ def test_BayesTable():
     #
     # 3) Computing the normalizing constant.
 
-    table2 = table.reset()
+    table2 = table.Reset()
     for i, row in table2.iterrows():
         n1, n2 = row.hypo
         table2.loc[i, "likelihood"] = prob_total(11, n1, n2)
@@ -150,7 +152,7 @@ def test_BayesTable():
     logging.info("%r", f"table2 = {table2}")
 
 
-    table2.update()
+    table2.Update()
 
     logging.info("%r", f"table2 = {table2}")
 
@@ -176,7 +178,7 @@ def test_BayesTable():
     # Here's a `Dice` class that implements `Likelihood` by looking up the data, `k`, in the `Pmf` that corresponds to `hypo`:
 
     class Dice(Suite):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """Likelihood of the data given the hypothesis.
 
             data: total of two dice
@@ -189,13 +191,13 @@ def test_BayesTable():
     # Here's the prior:
 
     suite = Dice(pairs.keys())
-    suite.print()
+    suite.Print()
 
     # And the posterior:
 
-    suite.update(3)
-    suite.print()
+    suite.Update(3)
+    suite.Print()
 
     # And the posterior probability of getting `11` on the next roll.
 
-    suite.update(11)
+    suite.Update(11)

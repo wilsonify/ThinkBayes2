@@ -8,13 +8,13 @@ MIT License: https://opensource.org/licenses/MIT
 import numpy
 
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 
 class Soccer(thinkbayes.Suite):
     """Represents hypotheses about."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: goal rate in goals per game
@@ -22,7 +22,7 @@ class Soccer(thinkbayes.Suite):
         """
         goals = data
         lam = hypo
-        like = thinkbayes.eval_poisson_pmf(goals, lam)
+        like = thinkbayes.EvalPoissonPmf(goals, lam)
         return like
 
     def predictive_dist(self, label="pred"):
@@ -56,7 +56,7 @@ def main():
     print("posterior mean Argentina", suite2.mean())
 
     # plot the posteriors
-    thinkplot.pre_plot(2)
+    thinkplot.PrePlot(2)
     thinkplot.plot_pdfs([suite1, suite2])
     thinkplot.show_plot()
 
@@ -74,7 +74,7 @@ def main():
     pred2 = suite2.predictive_dist(label="Argentina")
 
     # plot the predictive distributions
-    thinkplot.pre_plot(2)
+    thinkplot.PrePlot(2)
     thinkplot.plot_pdfs([pred1, pred2])
     thinkplot.show_plot()
 

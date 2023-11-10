@@ -8,14 +8,17 @@ import logging
 import os
 
 import numpy as np
+import pytest
 
 from thinkbayes import Cdf, Suite, Joint
-from thinkbayes import thinkplot
+import pymc3 as pm
 
 CURTESTDIR = os.path.abspath(os.path.dirname(__file__))
 TESTDIR = os.path.abspath(os.path.join(CURTESTDIR, os.pardir))
 DATADIR = os.path.join(TESTDIR, "data")
 
+
+@pytest.mark.skip(reason="pymc3 version issue")
 def test_flea_beetle_problem():
     # ### The flea beetle problem
     #
@@ -62,9 +65,6 @@ def test_flea_beetle_problem():
     def plot_cdfs(df, col):
         for name, group in df.groupby("Species"):
             cdf = Cdf(group[col], label=name)
-            thinkplot.plot_cdf_line(cdf)
-
-        thinkplot.config_plot(xlabel=col, legend=True, loc="lower right")
 
     plot_cdfs(df, "Width")
 
@@ -73,16 +73,16 @@ def test_flea_beetle_problem():
     # The following class estimates the mean and standard deviation of a normal distribution, given the data:
 
     from scipy.stats import norm
-    from thinkbayes import eval_normal_pdf
+    from thinkbayes import EvalNormalPdf
 
     class Beetle(Suite, Joint):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """
             data: sequence of measurements
             hypo: mu, sigma
             """
             mu, sigma = hypo
-            likes = eval_normal_pdf(data, mu, sigma)
+            likes = EvalNormalPdf(data, mu, sigma)
             return np.prod(likes)
 
         def PredictiveProb(self, data):
@@ -91,7 +91,7 @@ def test_flea_beetle_problem():
             data: sequence of measurements
             """
             total = 0
-            for (mu, sigma), prob in self.items():
+            for (mu, sigma), prob in self.Items():
                 likes = norm.pdf(data, mu, sigma)
                 total += prob * np.prod(likes)
             return total
@@ -104,7 +104,7 @@ def test_flea_beetle_problem():
         mus = np.linspace(115, 160, 51)
         sigmas = np.linspace(1, 10, 51)
         suite = Beetle(product(mus, sigmas))
-        suite.update(data)
+        suite.Update(data)
         return suite
 
     groups = df.groupby("Species")
@@ -113,7 +113,7 @@ def test_flea_beetle_problem():
 
     for name, group in groups:
         suite = MakeWidthSuite(group.Width)
-        thinkplot.contour_plot(suite)
+
         print(name, suite.PredictiveProb(140))
 
     # Now we can do the same thing for the angles.
@@ -122,12 +122,11 @@ def test_flea_beetle_problem():
         mus = np.linspace(8, 16, 101)
         sigmas = np.linspace(0.1, 2, 101)
         suite = Beetle(product(mus, sigmas))
-        suite.update(data)
+        suite.Update(data)
         return suite
 
     for name, group in groups:
         suite = MakeAngleSuite(group.Angle)
-        thinkplot.contour_plot(suite)
         print(name, suite.PredictiveProb(15))
 
     # These posterior distributions are used to compute the likelihoods of the measurements.
@@ -161,15 +160,15 @@ def test_flea_beetle_problem():
     # Now we can make a `Classifier` that uses the `Species` objects as hypotheses.
 
     class Classifier(Suite):
-        def likelihood(self, data, hypo):
-            return hypo.likelihood(data)
+        def Likelihood(self, data, hypo):
+            return hypo.Likelihood(data)
 
     suite = Classifier(species.values())
-    for hypo, prob in suite.items():
+    for hypo, prob in suite.Items():
         print(hypo, prob)
 
-    suite.update(measurements)
-    for hypo, prob in suite.items():
+    suite.Update(measurements)
+    for hypo, prob in suite.Items():
         print(hypo, prob)
 
     # ## Now with MCMC
@@ -180,14 +179,14 @@ def test_flea_beetle_problem():
 
     simplefilter("ignore", FutureWarning)
 
-    import pymc3 as pm
+
 
     N = 10000
 
-    μ_actual = np.array([1, -2])
-    Σ_actual = np.array([[0.5, -0.3], [-0.3, 1.0]])
+    mu_actual = np.array([1, -2])
+    sigma_actual = np.array([[0.5, -0.3], [-0.3, 1.0]])
 
-    x = np.random.multivariate_normal(μ_actual, Σ_actual, size=N)
+    x = np.random.multivariate_normal(mu_actual, sigma_actual, size=N)
 
     df["Width10"] = df.Width / 10
 
@@ -206,32 +205,32 @@ def test_flea_beetle_problem():
 
     with model:
         L = pm.expand_packed_triangular(2, packed_L)
-        Σ = pm.Deterministic("Σ", L.dot(L.T))
+        sigma = pm.Deterministic("sigma", L.dot(L.T))
 
     with model:
-        μ = pm.Normal("μ", 0.0, 10.0, shape=2, testval=x.mean(axis=0))
-        obs = pm.MvNormal("obs", μ, chol=L, observed=x)
+        mu = pm.Normal("mu", 0.0, 10.0, shape=2, testval=x.mean(axis=0))
+        obs = pm.MvNormal("obs", mu, chol=L, observed=x)
 
     with model:
         trace = pm.sample(1000)
 
     pm.traceplot(trace)
 
-    μ_post = trace["μ"].mean(axis=0)
+    mu_post = trace["mu"].mean(axis=0)
 
-    Σ_post = trace["Σ"].mean(axis=0)
+    sigma_post = trace["sigma"].mean(axis=0)
 
     from statsmodels.stats.moment_helpers import cov2corr
 
     from scipy.stats import multivariate_normal
 
-    cov2corr(Σ_post)
+    cov2corr(sigma_post)
 
     measured = (14, 15)
 
     total = 0
     for row in trace:
-        total += multivariate_normal.pdf(measured, mean=row["μ"], cov=row["Σ"])
+        total += multivariate_normal.pdf(measured, mean=row["mu"], cov=row["sigma"])
 
     logging.info("%r", f"total / len(trace) = {total / len(trace)}")
 
@@ -243,14 +242,14 @@ def test_flea_beetle_problem():
                 "packed_L", n=2, eta=2, sd_dist=pm.HalfCauchy.dist(2.5)
             )
             L = pm.expand_packed_triangular(2, packed_L)
-            Σ = pm.Deterministic("Σ", L.dot(L.T))
-            μ = pm.Normal("μ", 0.0, 10.0, shape=2, testval=x.mean(axis=0))
-            obs = pm.MvNormal("obs", μ, chol=L, observed=x)
+            sigma = pm.Deterministic("sigma", L.dot(L.T))
+            mu = pm.Normal("mu", 0.0, 10.0, shape=2, testval=x.mean(axis=0))
+            obs = pm.MvNormal("obs", mu, chol=L, observed=x)
             trace = pm.sample(1000)
 
         total = 0
         for row in trace:
-            total += multivariate_normal.pdf(measured, mean=row["μ"], cov=row["Σ"])
+            total += multivariate_normal.pdf(measured, mean=row["mu"], cov=row["sigma"])
 
         return total / len(trace)
 
@@ -261,6 +260,6 @@ def test_flea_beetle_problem():
         print(hypo, like)
         suite[hypo] *= like
 
-    suite.normalize()
+    suite.Normalize()
 
-    suite.print()
+    suite.Print()

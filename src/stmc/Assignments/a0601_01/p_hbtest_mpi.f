@@ -16,7 +16,7 @@ C
       CALL MPI_INIT(IERR)
       CALL MPI_COMM_RANK(MPI_COMM_WORLD,MY_ID,IERR)
       CALL MPI_COMM_SIZE(MPI_COMM_WORLD,N_PROC,IERR)
-      IF(MY_ID.EQ.0) WRITE(IUO,'(/," MPI: N_PROC =",I5)') N_PROC
+      IF(MY_ID==0) WRITE(IUO,'(/," MPI: N_PROC =",I5)') N_PROC
       MY_B=MY_ID
       NEIGH(1)=MY_ID-1
       NEIGH(2)=MY_ID+1
@@ -33,8 +33,8 @@ C
       NSEND(5)=iact
 C
 C Print some results in a specified order:
-      IF(MY_ID.EQ.0) WRITE(IUO,'(30X,"     iact             ")')
-      IF(MY_ID.EQ.0) WRITE(IUO,
+      IF(MY_ID==0) WRITE(IUO,'(30X,"     iact             ")')
+      IF(MY_ID==0) WRITE(IUO,
      & '(/,"    MY_ID  MY_B      NEIGH    (start) (equilibrium) ")')
       itag=0 
       CALL WRITE_MPI_I(NSEND,NRECV,5,IUO,itag)

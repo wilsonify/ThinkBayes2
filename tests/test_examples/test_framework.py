@@ -25,7 +25,7 @@ and includes functions like `Pdf` that known how to plot `Suites` and other obje
 """
 
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 
 class Coin(thinkbayes.Suite):
@@ -35,7 +35,7 @@ class Coin(thinkbayes.Suite):
     You might want to estimate the probability of landing "heads" up, which I'll call $x$.
     """
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         x = hypo / 100
         if data == "H":
             return x
@@ -53,7 +53,6 @@ def test_coin():
     As expected, the prior is uniform.
     """
     suite = Coin(range(0, 101))
-    thinkplot.plot_pdf_line(suite)
 
 
 def test_update():
@@ -68,9 +67,8 @@ def test_update():
     and the hypothesis that $x=0$ has been eliminated.
     """
     suite = Coin(range(0, 101))
-    posterior = suite.copy()
-    posterior.update("H")
-    thinkplot.plot_pdf_line(posterior)
+    posterior = suite.Copy()
+    posterior.Update("H")
 
 
 def test_additional():
@@ -81,8 +79,7 @@ def test_additional():
     (based on the assumption of a uniform prior).
     """
     suite = Coin(range(0, 101))
-    posterior = suite.copy()
+    posterior = suite.Copy()
     results = "HTHHTHHHTTHHHTH"
     for data in results:
-        posterior.update(data)
-    thinkplot.plot_pdf_line(posterior)
+        posterior.Update(data)

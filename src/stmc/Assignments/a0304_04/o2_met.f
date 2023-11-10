@@ -15,7 +15,7 @@ C XY model: Sequential Metropolis updating.
           xnew=two*(rmafun()-half)
           ynew=two*(rmafun()-half)
 	  sum=xnew**2+ynew**2
-	if(sum.gt.one) go to 2 ! xnew**2+ynew**2 inside the unit circle.
+	if(sum>one) go to 2 ! xnew**2+ynew**2 inside the unit circle.
 	fn=one/sqrt(sum)
 	xnew=fn*xnew
 	ynew=fn*ynew
@@ -26,8 +26,8 @@ C XY model: Sequential Metropolis updating.
           dact=dact+sta(1,ipf(id,is))*dx+sta(2,ipf(id,is))*dy
           dact=dact+sta(1,ipb(id,is))*dx+sta(2,ipb(id,is))*dy
         end do
-        if(dact.lt.zero) then
-        if(rmafun().ge.exp(beta*dact)) go to 1
+        if(dact<zero) then
+        if(rmafun()>=exp(beta*dact)) go to 1
         end if
           sta(1,is)=xnew
           sta(2,is)=ynew

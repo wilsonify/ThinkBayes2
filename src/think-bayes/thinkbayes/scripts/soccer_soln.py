@@ -8,13 +8,13 @@ MIT License: https://opensource.org/licenses/MIT
 import numpy
 
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 
 class Soccer(thinkbayes.Suite):
     """Represents hypotheses about."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: goal rate in goals per game
@@ -22,7 +22,7 @@ class Soccer(thinkbayes.Suite):
         """
         x = data
         lam = hypo / 90
-        like = thinkbayes.eval_exponential_pdf(x, lam)
+        like = thinkbayes.EvalExponentialPdf(x, lam)
         return like
 
     def pred_remaining(self, rem_time, score):

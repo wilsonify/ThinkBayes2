@@ -8,7 +8,7 @@ C Copyright, Bernd Berg, Mar 1 2002.  Test for rounding issues.
       include '../../ForLib/lat.com'
       include '../../ForLib/on.com'
       include 'lat.dat'
-      if(n.ne.2) stop "XY_ts0: set n=2 in on.par (for ana_tson.f)!"
+      if(n/=2) stop "XY_ts0: set n=2 in on.par (for ana_tson.f)!"
 C
       write(iuo,'(/," XY_ts0.f:")')
       call XY_init(.true.) ! Initialize XY Metropolis MC.
@@ -16,7 +16,7 @@ C
 C
       do iequi=1,nequi        ! Sweeps for reaching equilibrium.
         call XY_mtest(iequi)
-        if(iequi.ge.3700 .and. iequi.le.3707) 
+        if(iequi>=3700 .and. iequi<=3707)
      & 	  write(iuo,'(" iequi,act:",I6,G24.16)') iequi,act
       end do
 C

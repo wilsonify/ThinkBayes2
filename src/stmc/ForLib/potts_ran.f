@@ -1,8 +1,8 @@
       subroutine potts_ran(ista,ns,nq)
 C Copyright, Bernd Berg, Nov 10 2000.
 C Assigns random (i.e. beta=0) values 0,..,nq-1 to the states ista(is).
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       dimension ista(ns)
       q=one*nq
       do is=1,ns

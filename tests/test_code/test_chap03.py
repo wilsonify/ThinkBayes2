@@ -4,71 +4,29 @@ This is based on a notebook of example code from Think Bayes.
 import logging
 
 from thinkbayes import Cdf
-from thinkbayes import thinkplot
+from thinkbayes.c03_distributions import Mean, MakePosterior, Train2
 from thinkbayes.scripts.dice import Dice
-from thinkbayes.scripts.train import Train, NTRAINS_LABEL
-
-
-def Mean(suite):
-    total = 0
-    for hypo, prob in suite.items():
-        total += hypo * prob
-    return total
-
-
-def MakePosterior(high, dataset, constructor=Train):
-    """Solves the train problem.
-
-    Sensitivity to the prior
-    Here's a function that solves the train problem for different priors and data
-
-
-    high: int maximum number of trains
-    dataset: sequence of observed train numbers
-    constructor: function used to construct the Train object
-
-    returns: Train object representing the posterior suite
-    """
-    hypos = range(1, high + 1)
-    suite = constructor(hypos)
-
-    for data in dataset:
-        suite.update(data)
-
-    return suite
-
-
-class Train2(Train):
-    # The results are quite sensitive to the prior, even with several observations.
-    # ## Power law prior
-    # Now let's try it with a power law prior.
-
-    def __init__(self, hypos, alpha=1.0):
-        super().__init__(self)
-        for hypo in hypos:
-            self[hypo] = hypo ** (-alpha)
-        self.normalize()
+from thinkbayes.scripts.train import Train
 
 
 def test_dice():
     # Here's what the update looks like:
 
     suite = Dice([4, 6, 8, 12, 20])
-    suite.update(6)
-    suite.print()
+    suite.Update(6)
+    suite.Print()
     # And here's what it looks like after more data:
     for roll in [6, 8, 7, 7, 5, 4]:
-        suite.update(roll)
-    suite.print()
+        suite.Update(roll)
+    suite.Print()
 
 
 def test_hypos():
     hypos = range(1, 1001)  # But there are many more hypotheses
     suite = Train(hypos)
-    suite.update(60)
-    thinkplot.plot_pdf_line(suite)  # Here's what the posterior looks like
+    suite.Update(60)
     Mean(suite)  # And here's how we can compute the posterior mean
-    suite.mean()  # Or we can just use the method
+    suite.Mean()  # Or we can just use the method
 
 
 def test_MakePosterior():
@@ -76,7 +34,7 @@ def test_MakePosterior():
     dataset = [30, 60, 90]
     for high in [500, 1000, 2000]:
         suite = MakePosterior(high, dataset)
-        print(high, suite.mean())
+        print(high, suite.Mean())
 
 
 def test_Train2():
@@ -84,13 +42,9 @@ def test_Train2():
     hypos = range(1, high + 1)
     suite1 = Train(hypos)  # uniform prior
     suite2 = Train2(hypos)  # power law prior
-    thinkplot.plot_pdf_line(suite1)
-    thinkplot.plot_pdf_line(suite2)
 
     dataset = [60]
     high = 1000
-
-    thinkplot.pre_plot(num=2)
 
     constructors = [Train, Train2]
     labels = ["uniform", "power law"]
@@ -98,9 +52,6 @@ def test_Train2():
     for constructor, label in zip(constructors, labels):
         suite = MakePosterior(high, dataset, constructor)
         suite.label = label
-        thinkplot.plot_pmf_line(suite)
-
-    thinkplot.config_plot(xlabel=NTRAINS_LABEL, ylabel="Probability")
 
     # The power law gives less prior probability to high values,
     # which yields lower posterior means, and less sensitivity to the upper bound.
@@ -109,7 +60,7 @@ def test_Train2():
 
     for high in [500, 1000, 2000]:
         suite = MakePosterior(high, dataset, Train2)
-        print(high, suite.mean())
+        print(high, suite.Mean())
 
     # ## Credible intervals
     # To compute credible intervals, we can use the `Percentile` method on the posterior.
@@ -118,18 +69,14 @@ def test_Train2():
 
     hypos = range(1, 1001)
     suite = Train(hypos)
-    suite.update(60)
-    logging.info("%r", f"suite.percentile(5) = {suite.percentile(5)}")
-    logging.info("%r", f"suite.percentile(95) = {suite.percentile(95)}")
+    suite.Update(60)
+    logging.info("%r", f"suite.percentile(5) = {suite.Percentile(5)}")
+    logging.info("%r", f"suite.percentile(95) = {suite.Percentile(95)}")
 
     cdf = Cdf(suite)
-    thinkplot.plot_cdf_line(cdf)
-    thinkplot.config_plot(
-        xlabel=NTRAINS_LABEL, ylabel="Cumulative Probability", legend=False
-    )
 
-    logging.info("%r", f"cdf.percentile(5) = {cdf.percentile(5)}")
-    logging.info("%r", f"cdf.percentile(95) = {cdf.percentile(95)}")
+    logging.info("%r", f"cdf.percentile(5) = {cdf.Percentile(5)}")
+    logging.info("%r", f"cdf.percentile(95) = {cdf.Percentile(95)}")
 
 
 def test_dice_problem():
@@ -144,13 +91,13 @@ def test_dice_problem():
     The `Dice` class inherits `Update` and provides `Likelihood`
     """
     suite = Dice([4, 6, 8, 12, 20])
-    suite.update(6)
-    suite.print()
+    suite.Update(6)
+    suite.Print()
 
     for roll in [6, 8, 7, 7, 5, 4]:  # after more data
-        suite.update(roll)
+        suite.Update(roll)
 
-    suite.print()
+    suite.Print()
 
 
 def test_train_problem():
@@ -161,11 +108,10 @@ def test_train_problem():
     """
     hypos = range(1, 1001)
     suite = Train(hypos)
-    suite.update(60)
+    suite.Update(60)
 
-    thinkplot.plot_pdf_line(suite)  # posterior
     Mean(suite)  # posterior mean
-    suite.mean()  # Or we can just use the method
+    suite.Mean()  # Or we can just use the method
 
 
 def test_sensitivity():
@@ -179,14 +125,12 @@ def test_sensitivity():
 
     for high in [500, 1000, 2000]:
         suite = MakePosterior(high, dataset)
-        print(high, suite.mean())
+        print(high, suite.Mean())
 
     ## Power law prior
 
     dataset = [60]
     high = 1000
-
-    thinkplot.pre_plot(num=2)
 
     constructors = [Train, Train2]  # Now let's see what the posteriors look like after observing one train.
     labels = ["uniform", "power law"]
@@ -194,31 +138,24 @@ def test_sensitivity():
     for constructor, label in zip(constructors, labels):
         suite = MakePosterior(high, dataset, constructor)
         suite.label = label
-        thinkplot.plot_pmf_line(suite)
-
-    thinkplot.config_plot(xlabel=NTRAINS_LABEL, ylabel="Probability")
 
     dataset = [30, 60, 90]
 
     for high in [500, 1000, 2000]:
         suite = MakePosterior(high, dataset, Train2)
-        print(high, suite.mean())
+        print(high, suite.Mean())
 
     hypos = range(1, 1001)
     suite = Train(hypos)
-    suite.update(60)
+    suite.Update(60)
 
-    logging.info("%r", f"suite.percentile(5) = {suite.percentile(5)}")
-    logging.info("%r", f"suite.percentile(95) = {suite.percentile(95)}")
+    logging.info("%r", f"suite.percentile(5) = {suite.Percentile(5)}")
+    logging.info("%r", f"suite.percentile(95) = {suite.Percentile(95)}")
 
     cdf = Cdf(suite)
-    thinkplot.plot_cdf_line(cdf)
-    thinkplot.config_plot(
-        xlabel=NTRAINS_LABEL, ylabel="Cumulative Probability", legend=False
-    )
 
-    logging.info("%r", f"cdf.percentile(5) = {cdf.percentile(5)}")
-    logging.info("%r", f"cdf.percentile(95) = {cdf.percentile(95)}")
+    logging.info("%r", f"cdf.percentile(5) = {cdf.Percentile(5)}")
+    logging.info("%r", f"cdf.percentile(95) = {cdf.Percentile(95)}")
 
 
 def test_exercise():

@@ -24,14 +24,14 @@ C extreme values (the range) of the Marsaglia random number generator.
       write(iud,'(/," xiter, xr and xr at xiter+1:",/)')
 1     xiter=xiter+one
         call ranmar(xr)
-        if(xr.gt.xlarge) then
+        if(xr>xlarge) then
           xlarge=xr
           xiter1=zero
         end if
-        if(xr.eq.xsmall .or. xr.eq.xlarge) then
+        if(xr==xsmall .or. xr==xlarge) then
           x=xr
           call ranmar(xr)
-          if(x.lt.half) then
+          if(x<half) then
             xiter0=xiter0+one
             write(iud,'(F6.0,F14.0,2G22.16)') xiter0,xiter,x,xr
           else
@@ -40,7 +40,7 @@ C extreme values (the range) of the Marsaglia random number generator.
           end if
           xiter=xiter+one
         end if 
-      if(xiter.lt.xitmax) go to 1
+      if(xiter<xitmax) go to 1
       write(iud,'(/," xiter = ",F14.0," done.")') xiter
       write(iud,'(" xsmall,xlarge:",2G22.16)') xsmall,xlarge
       xl_log2=log(one-xlarge)/log(two)

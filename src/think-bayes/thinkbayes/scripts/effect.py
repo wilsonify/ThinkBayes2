@@ -7,7 +7,7 @@ MIT License: https://opensource.org/licenses/MIT
 from random import random
 
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 from thinkbayes.scripts.variability import update_suite5, Height, find_prior_ranges, summarize, read_heights
 
 

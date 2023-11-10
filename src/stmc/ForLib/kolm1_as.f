@@ -2,13 +2,13 @@
 C Copyright, Bernd Berg, Apr 3, 2001.
 C Asymptotic one-sided Kolmogorov tests, implementing Smirnov's
 C equation, see van der Waerden, Mathematical Statistics, Springer 1969.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION Fxct(N)
 C
       DO J=1,2
         EPS=ZERO
-        IF(J.EQ.1) THEN
+        IF(J==1) THEN
           DO I=1,N
             Femp=(ONE*(I-1))/N
             EPS=MAX(EPS,Fxct(I)-Femp)

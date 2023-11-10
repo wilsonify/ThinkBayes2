@@ -5,45 +5,52 @@ Copyright 2016 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from thinkbayes import Pmf, Suite
+from thinkbayes import Pmf
+from thinkbayes.c02_bayes_theorem import (
+    Cookie2, Monty2, Monty3, M_and_M2
+)
 
 
 def test_pmf_class():
     # ## The Pmf class
-    #
-    # I'll start by making a Pmf that represents the outcome of a six-sided die.  Initially there are 6 values with equal probability.
+    # I'll start by making a Pmf that represents the outcome of a six-sided die.
+    # Initially there are 6 values with equal probability.
 
     pmf = Pmf()
     for x in [1, 2, 3, 4, 5, 6]:
         pmf[x] = 1
 
-    pmf.print()
+    pmf.Print()
 
-    # To be true probabilities, they have to add up to 1.  So we can normalize the Pmf:
+    # To be true probabilities, they have to add up to 1.
+    # So we can normalize the Pmf:
 
-    pmf.normalize()
+    pmf.Normalize()
 
     # The return value from `Normalize` is the sum of the probabilities before normalizing.
 
-    pmf.print()
+    pmf.Print()
 
-    # A faster way to make a Pmf is to provide a sequence of values.  The constructor adds the values to the Pmf and then normalizes:
+    # A faster way to make a Pmf is to provide a sequence of values.
+    # The constructor adds the values to the Pmf and then normalizes:
 
     pmf = Pmf([1, 2, 3, 4, 5, 6])
-    pmf.print()
+    pmf.Print()
 
     # To extract a value from a Pmf, you can use `Prob`
 
-    pmf.prob(1)
+    pmf.Prob(1)
 
     # Or you can use the bracket operator.
 
     print(pmf[1])
 
-    #   Either way, if you ask for the probability of something that's not in the Pmf, the result is 0.
+    # Either way, if you ask for the probability of something that's not in the Pmf, the result is 0.
 
     print(pmf[7])
 
+
+def test_cookie():
     # ## The cookie problem
     #
     # Here's a Pmf that represents the prior distribution.
@@ -51,76 +58,39 @@ def test_pmf_class():
     pmf = Pmf()
     pmf["Bowl1"] = 0.5
     pmf["Bowl2"] = 0.5
-    pmf.print()
+    pmf.Print()
 
     # And we can update it using `Mult`
 
-    pmf.mult("Bowl1", 0.75)
-    pmf.mult("Bowl2", 0.5)
-    pmf.print()
+    pmf.Mult("Bowl1", 0.75)
+    pmf.Mult("Bowl2", 0.5)
+    pmf.Print()
 
     # Or here's the shorter way to construct the prior.
 
     pmf = Pmf(["Bowl1", "Bowl2"])
-    pmf.print()
+    pmf.Print()
 
     # And we can use `*=` for the update.
 
     pmf["Bowl1"] *= 0.75
     pmf["Bowl2"] *= 0.5
-    pmf.print()
+    pmf.Print()
 
     # Either way, we have to normalize the posterior distribution.
 
-    pmf.normalize()
-    pmf.print()
+    pmf.Normalize()
+    pmf.Print()
 
     # ## The Bayesian framework
     #
     # Here's the same computation encapsulated in a class.
 
-    class Cookie(Pmf):
-        """A map from string bowl ID to probablity."""
-
-        def __init__(self, hypos):
-            """Initialize self.
-
-            hypos: sequence of string bowl IDs
-            """
-            Pmf.__init__(self)
-            for hypo in hypos:
-                self.set(hypo, 1)
-            self.normalize()
-
-        def Update(self, data):
-            """Updates the PMF with new data.
-
-            data: string cookie type
-            """
-            for hypo in self.values():
-                self[hypo] *= self.Likelihood(data, hypo)
-            self.normalize()
-
-        mixes = {
-            "Bowl1": dict(vanilla=0.75, chocolate=0.25),
-            "Bowl2": dict(vanilla=0.5, chocolate=0.5),
-        }
-
-        def Likelihood(self, data, hypo):
-            """The likelihood of the data under the hypothesis.
-
-            data: string cookie type
-            hypo: string bowl ID
-            """
-            mix = self.mixes[hypo]
-            like = mix[data]
-            return like
-
     # We can confirm that we get the same result.
 
-    pmf = Cookie(["Bowl1", "Bowl2"])
+    pmf = Cookie2(["Bowl1", "Bowl2"])
     pmf.Update("vanilla")
-    pmf.print()
+    pmf.Print()
 
     # But this implementation is more general; it can handle any sequence of data.
 
@@ -128,8 +98,10 @@ def test_pmf_class():
     for data in dataset:
         pmf.Update(data)
 
-    pmf.print()
+    pmf.Print()
 
+
+def test_mhp():
     # ## The Monty Hall problem
     #
     # The Monty Hall problem might be the most contentious question in
@@ -174,50 +146,16 @@ def test_pmf_class():
     #
     # Here's a class that solves the Monty Hall problem.
 
-    class Monty(Pmf):
-        """Map from string location of car to probability"""
-
-        def __init__(self, hypos):
-            """Initialize the distribution.
-
-            hypos: sequence of hypotheses
-            """
-            Pmf.__init__(self)
-            for hypo in hypos:
-                self.set(hypo, 1)
-            self.normalize()
-
-        def Update(self, data):
-            """Updates each hypothesis based on the data.
-
-            data: string 'A', 'B', or 'C'
-            """
-            for hypo in self.values():
-                self[hypo] *= self.Likelihood(data, hypo)
-            self.normalize()
-
-        def Likelihood(self, data, hypo):
-            """Compute the likelihood of the data under the hypothesis.
-
-            hypo: string name of the door where the prize is
-            data: string name of the door Monty opened
-            """
-            if hypo == data:
-                return 0
-            elif hypo == "A":
-                return 0.5
-            else:
-                return 1
-
     # And here's how we use it.
 
-    pmf = Monty("ABC")
+    pmf = Monty2("ABC")
     pmf.Update("B")
-    pmf.print()
+    pmf.Print()
 
     # ## The Suite class
     #
-    # Most Bayesian updates look pretty much the same, especially the `Update` method.  So we can encapsulate the framework in a class, `Suite`, and create new classes that extend it.
+    # Most Bayesian updates look pretty much the same, especially the `Update` method.
+    # So we can encapsulate the framework in a class, `Suite`, and create new classes that extend it.
     #
 
     # %psource Suite
@@ -226,20 +164,11 @@ def test_pmf_class():
     #
     # So here's the short version of `Monty`
 
-    class Monty(Suite):
-        def likelihood(self, data, hypo):
-            if hypo == data:
-                return 0
-            elif hypo == "A":
-                return 0.5
-            else:
-                return 1
-
     # And it works.
 
-    pmf = Monty("ABC")
-    pmf.update("B")
-    pmf.print()
+    pmf = Monty3("ABC")
+    pmf.Update("B")
+    pmf.Print()
 
     # ## The M&M problem
     #
@@ -260,42 +189,25 @@ def test_pmf_class():
     #
     # Here's a solution:
 
-    class M_and_M(Suite):
-        """Map from hypothesis (A or B) to probability."""
-
-        mix94 = dict(brown=30, yellow=20, red=20, green=10, orange=10, tan=10, blue=0)
-
-        mix96 = dict(blue=24, green=20, orange=16, yellow=14, red=13, brown=13, tan=0)
-
-        hypoA = dict(bag1=mix94, bag2=mix96)
-        hypoB = dict(bag1=mix96, bag2=mix94)
-
-        hypotheses = dict(A=hypoA, B=hypoB)
-
-        def likelihood(self, data, hypo):
-            """Computes the likelihood of the data under the hypothesis.
-
-            hypo: string hypothesis (A or B)
-            data: tuple of string bag, string color
-            """
-            bag, color = data
-            mix = self.hypotheses[hypo][bag]
-            like = mix[color]
-            return like
-
     # And here's an update:
 
-    suite = M_and_M("AB")
-    suite.update(("bag1", "yellow"))
-    suite.update(("bag2", "green"))
-    suite.print()
+    suite = M_and_M2("AB")
+    suite.Update(("bag1", "yellow"))
+    suite.Update(("bag2", "green"))
+    suite.Print()
 
-    # **Exercise:**  Suppose you draw another M&M from `bag1` and it's blue.  What can you conclude?  Run the update to confirm your intuition.
+    # **Exercise:**
+    # Suppose you draw another M&M from `bag1` and it's blue.
+    # What can you conclude?
+    # Run the update to confirm your intuition.
 
-    suite.update(("bag1", "blue"))
-    suite.print()
+    suite.Update(("bag1", "blue"))
+    suite.Print()
 
-    # **Exercise:**  Now suppose you draw an M&M from `bag2` and it's blue.  What does that mean?  Run the update to see what happens.
+    # **Exercise:**
+    # Now suppose you draw an M&M from `bag2` and it's blue.
+    # What does that mean?
+    # Run the update to see what happens.
 
     # Solution
 

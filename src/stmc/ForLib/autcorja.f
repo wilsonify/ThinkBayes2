@@ -1,8 +1,8 @@
       SUBROUTINE AUTCORJA(NT,NDAT,NBINS,DATA,WORK,ACORJ,LMEAN)
 C Copyright, Bernd Berg, Apr 20 2002.
 C Jackknife array of autocorrelation at IT (0\le IT).
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION DATA(NDAT),WORK(NBINS,0:NT),ACORJ(NBINS,0:NT)
 c
       DMEAN=ZERO
@@ -14,8 +14,8 @@ c
 c
       NBIN=NN/NBINS
       NNJ=NBINS*NBIN-NBIN
-      IF(NBIN.LE.1)   STOP "AUTCORJ: NBIN.LE.1!"
-      IF(NNJ.LE.IT) STOP "AUTCORJ: NNJ.LE.IT!"
+      IF(NBIN<=1)   STOP "AUTCORJ: NBIN.LE.1!"
+      IF(NNJ<=IT) STOP "AUTCORJ: NNJ.LE.IT!"
       DO IBINS=1,NBINS
         WORK2(IBINS)=ZERO
         I1=1+(IBINS-1)*NBIN

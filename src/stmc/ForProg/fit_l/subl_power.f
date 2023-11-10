@@ -57,7 +57,7 @@ C
       CHI2pdf=CHI2/(N-2)
       WRITE(IUO,*) 'CHI2 and CHI2 per d.g.f. =',CHI2,CHI2/(N-2)
       Q=0
-      IF(N.GT.2.AND.CHI2pdf.LT.TEN) Q=ONE-GAMMA_P(HALF*(N-2),HALF*CHI2)    
+      IF(N>2.AND.CHI2pdf<TEN) Q=ONE-GAMMA_P(HALF*(N-2),HALF*CHI2)
       WRITE(IUO,*) 'Goodness of fit =         ',Q
       WRITE(IUO,*) '  '
       RETURN

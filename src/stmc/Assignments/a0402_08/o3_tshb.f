@@ -13,7 +13,7 @@ C MC prodcution run to create energy (action variable) time series.
       ltest=.true.
       ltest=.false.
       if(ltest) stop "O3_ts: ltest."
-      if(n.ne.3) stop "O3_tshb: set n=3 in on.par (for ana_tson.f)!"
+      if(n/=3) stop "O3_tshb: set n=3 in on.par (for ana_tson.f)!"
 C
       call O3_init(.true.) ! Initialize XY Metropolis MC.
 C

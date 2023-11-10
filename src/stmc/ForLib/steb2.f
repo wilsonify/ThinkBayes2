@@ -6,14 +6,14 @@ C           W(1) < 0  AND WEIGHT FACTORS WILL WE CALCULATED
 C           FROM THE ERROR BARS EB.)
 C  OUTPUT:  MEAN VALUE XM AND ITS ERROR BAR XE.
 C           WEIGHT FACTORS ARE RETURNED NORMALIZED TO ONE.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION DAT(N),EB(N),W(N)
 C
 C CALCULATION OF WEIGHTS FROM ERROR BARS 
 C (IF WEIGHTS ARE NOT EXPLICITLY GIVEN)
 C
-      IF(W(1).LE.ZERO) THEN
+      IF(W(1)<=ZERO) THEN
       DO I=1,N
         W(I)=ONE/EB(I)**2
       END DO

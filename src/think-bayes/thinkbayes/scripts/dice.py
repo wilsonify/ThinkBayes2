@@ -11,7 +11,7 @@ from thinkbayes import Suite
 class Dice(Suite):
     """Represents hypotheses about which die was rolled."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: integer number of sides on the die

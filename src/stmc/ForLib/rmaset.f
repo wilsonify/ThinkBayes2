@@ -4,8 +4,8 @@ C INITIALIZING ROUTINE FOR RANMAR OR RAVMAR, MUST BE CALLED
 C BEFORE GENERATING PSEUDORANDOM NUMBERS WITH RANMAR (RAVMAR).
 C RANGES: 0 <= IJ <= 31328  AND  0 <= KL <= 30081.
 C FOR IUO<=5 THE INFORMATIVE MESSAGES ARE OFF.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       character*(*) cfile
       logical lexist
       COMMON/RASET1/U(97),C,CD,CM,I,J
@@ -18,7 +18,7 @@ C
         J=MOD(IJ,     177)+2
         K=MOD(KL/169, 178)+1 ! K=0 for KL=0 and KL=30082.
         M=MOD(KL,     169)
-        IF(IUO.GT.5) WRITE(IUO,*) 'RANMAR INITIALIZED.'
+        IF(IUO>5) WRITE(IUO,*) 'RANMAR INITIALIZED.'
 C
         DO II=1,97
           S=ZERO
@@ -29,7 +29,7 @@ C
             J=K
             K=N
             M=MOD(53*M+1, 169)
-            IF(MOD(M*N,64).GE.32) S=S+T
+            IF(MOD(M*N,64)>=32) S=S+T
             T=HALF*T
           END DO
           U(II)=S
@@ -44,7 +44,7 @@ C
 C
       ELSE
 C
-        IF(IUO.GT.5) WRITE(IUO,*) 'MARSAGLIA CONTINUATION.'
+        IF(IUO>5) WRITE(IUO,*) 'MARSAGLIA CONTINUATION.'
         OPEN(UNIT=IUD,FILE=cfile,STATUS='UNKNOWN',FORM='UNFORMATTED')
         REWIND IUD
         READ(IUD) U,C,CD,CM,I,J

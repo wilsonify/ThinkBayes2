@@ -26,7 +26,7 @@ C Faster when the magnetization measurements are eliminated!
         end do
         do iq=0,nqm2
           ptest=prob_hb(iq)/prob_hb(nqm1) ! Heat bath probabilities.
-        if(xr.lt.ptest) go to 1
+        if(xr<ptest) go to 1
         end do
         iq=nqm1
 1       iqnew=iq

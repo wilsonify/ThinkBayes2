@@ -1,0 +1,17 @@
+post:
+  tags: [mixture]
+  operationId: shut_out
+  x-openapi-router-controller: rest_bayes.controllers.math_controller
+  description: "posterior of a coin"
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "shut-out-input.yaml"
+  responses:
+    "200":
+      description: "Description of this response."
+      content:
+        application/json:
+          schema:
+            $ref: "shut-out-output.yaml"

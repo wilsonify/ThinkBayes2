@@ -34,7 +34,7 @@ C
         open(iud1,file="m"//cd//"d"//cq//"q"//cl//"_"//ciq//".d",
      &   form="formatted",status="unknown")
         do is=0,ns
-        if(hmm(is,iq).gt.half) then
+        if(hmm(is,iq)>half) then
           xiqm=is/(ns*one)
           write(iud1,'(I10,3G15.6)') is,xiqm,hmm(is,iq),hme(is,iq)
         end if

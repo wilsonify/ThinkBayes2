@@ -1,0 +1,17 @@
+post:
+  tags: [counts]
+  operationId: odds_to_probability
+  x-openapi-router-controller: rest_bayes.controllers.math_controller
+  description: "convert odds ratio to probability"
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "odds-to-probability-input.yaml"
+  responses:
+    "200":
+      description: "Description of this response."
+      content:
+        application/json:
+          schema:
+            $ref: "odds-to-probability-output.yaml"

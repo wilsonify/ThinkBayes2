@@ -1,8 +1,8 @@
       subroutine o3_act(sta,ipf,ns,nd,act)
 C Copyright, Bernd Berg, Feb 20 2002.
 C Calculates action value iact of potts.com.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       dimension sta(3,ns),ipf(nd,ns)
       act=zero
       do is=1,ns        

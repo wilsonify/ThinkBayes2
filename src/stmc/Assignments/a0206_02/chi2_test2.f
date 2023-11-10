@@ -32,7 +32,7 @@ c       WRITE(IUO,'(6F10.0)') HIST
         CHI2=ZERO
         DO IHIST=1,NHIST
           SUM=HIST1(IHIST)+RATIO**2*HIST2(IHIST)
-          IF(SUM.LT.HALF) STOP "CHI2_TEST: Singular, no event."
+          IF(SUM<HALF) STOP "CHI2_TEST: Singular, no event."
           CHI2=CHI2+(HIST1(IHIST)-RATIO*HIST2(IHIST))**2/SUM 
         END DO 
         Q(IRPT)=1-CHI2_DF(CHI2)
@@ -43,7 +43,7 @@ C
       OPEN(IUD,FILE="chi2_2.d",form="formatted",status="unknown")
       DO IRPT=1,NRPT
         F=(ONE*IRPT)/(NRPT+1)
-        IF(F.GT.HALF) F=ONE-F
+        IF(F>HALF) F=ONE-F
         WRITE(IUD,'(4F11.5)') Q(IRPT),F
       END DO
       CLOSE(IUD)

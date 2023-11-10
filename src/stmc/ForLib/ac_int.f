@@ -2,8 +2,8 @@
 C Copyright, Bernd Berg, Feb 11 2001.
 C Input:  Array of autocorrelations ACOR.
 C Output: Array of integrated autocorrelation times ACINT.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION ACOR(0:NT),ACINT(0:NT)
       ACINT(0)=ONE
       DO IT=1,NT

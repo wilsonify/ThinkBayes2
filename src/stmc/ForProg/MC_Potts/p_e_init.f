@@ -72,14 +72,14 @@ C
           do iq=0,nqm1
             ia=0
             do id=1,n2d
-              if(iq.eq.iqarray(id)) ia=ia+1
+              if(iq==iqarray(id)) ia=ia+1
             end do
-            if(iq.ne.iq0) nact_new(ia)=nact_new(ia)+1
-            if(iq.eq.iq0) nact_new(n2dp1)=ia
+            if(iq/=iq0) nact_new(ia)=nact_new(ia)+1
+            if(iq==iq0) nact_new(n2dp1)=ia
           end do
           call p_e_compare(nact_old,nact_new,n2d,mcase,ncase,icase)
-          if(ncase.gt.mcase) stop "p_e_tabs: enlarge mcase!"
-	  if(icase.gt.ncase) then
+          if(ncase>mcase) stop "p_e_tabs: enlarge mcase!"
+	  if(icase>ncase) then
 	    icase=ncase
             Peds0=exp(2*nact_new(n2dp1)*beta)
             Psum=Peds0
@@ -96,7 +96,7 @@ C
         end do
       end do
 C
-      if(ncase.ne.mcase) then
+      if(ncase/=mcase) then
         write(iuo,*) "p_e_init->p_e_tabs:"
         write(iuo,'(" Re-run with mcase = ncase =",I6,".")') ncase
         stop "p_e_tabs: mcase.ne.ncase - change in p_e.par."

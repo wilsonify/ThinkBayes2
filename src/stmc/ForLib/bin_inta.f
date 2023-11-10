@@ -4,8 +4,8 @@ C Caculation of the integrated autocorrelation time tau_int via the
 C bining procedure: The variance ratio RAT converges towards tau_int.  
 C RUP and RDO are analytic upper and lower confidence limits which
 C converge toward the one error bar range.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION DATA(2**K),DATB(2**K)
       DIMENSION DBE(0:KBMAX),RUP(0:KBMAX),RDO(0:KBMAX),RAT(0:KBMAX)
       NDAT=2**K

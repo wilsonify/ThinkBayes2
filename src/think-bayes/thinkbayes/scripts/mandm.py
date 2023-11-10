@@ -20,7 +20,7 @@ class MAndM(Suite):
 
     hypotheses = dict(A=hypoA, B=hypoB)
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: string hypothesis (A or B)

@@ -8,13 +8,13 @@ MIT License: https://opensource.org/licenses/MIT
 import numpy
 
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 
 class Electorate(thinkbayes.Suite):
     """Represents hypotheses about the state of the electorate."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: 

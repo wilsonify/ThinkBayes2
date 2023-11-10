@@ -6,13 +6,13 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkplot
 
 
 class Electorate(thinkbayes.Suite):
     """Represents hypotheses about the state of the electorate."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: fraction of the population that supports your candidate
@@ -20,7 +20,7 @@ class Electorate(thinkbayes.Suite):
         """
         bias, std, result = data
         error = result - hypo
-        like = thinkbayes.eval_normal_pdf(error, bias, std)
+        like = thinkbayes.EvalNormalPdf(error, bias, std)
         return like
 
 
@@ -28,7 +28,7 @@ def main():
     hypos = range(0, 101)
     suite = Electorate(hypos)
 
-    thinkplot.pre_plot(3)
+    thinkplot.PrePlot(3)
     thinkplot.plot_pdf_line(suite, label="prior")
 
     data = 1.1, 3.7, 53

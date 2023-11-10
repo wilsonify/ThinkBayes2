@@ -8,7 +8,7 @@ MIT License: https://opensource.org/licenses/MIT
 import numpy as np
 
 from thinkbayes import Suite
-from thinkbayes import thinkplot
+import thinkplot
 
 
 def test_bandit():
@@ -20,7 +20,7 @@ def test_bandit():
     # Note that `hypo` is in the range 0 to 100.
 
     class Bandit(Suite):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """
             hypo is the prob of win (0-100)
             data is a string, either 'W' or 'L'
@@ -34,40 +34,35 @@ def test_bandit():
     # We'll start with a uniform distribution from 0 to 100.
 
     bandit = Bandit(range(101))
-    thinkplot.plot_pdf_line(bandit)
-    thinkplot.config_plot(xlabel="x", ylabel="Probability")
+
 
     # Now we can update with a single loss:
 
-    bandit.update("L")
-    thinkplot.plot_pdf_line(bandit)
-    thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
+    bandit.Update("L")
+
 
     # Another loss:
 
-    bandit.update("L")
-    thinkplot.plot_pdf_line(bandit)
-    thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
+    bandit.Update("L")
+
 
     # And a win:
 
-    bandit.update("W")
-    thinkplot.plot_pdf_line(bandit)
-    thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
+    bandit.Update("W")
+
 
     # Starting over, here's what it looks like after 1 win and 9 losses.
 
     bandit = Bandit(range(101))
 
     for outcome in "WLLLLLLLLL":
-        bandit.update(outcome)
+        bandit.Update(outcome)
 
-    thinkplot.plot_pdf_line(bandit)
-    thinkplot.config_plot(xlabel="x", ylabel="Probability", legend=False)
+
 
     # The posterior mean is about 17%
 
-    bandit.mean()
+    bandit.Mean()
 
     # The most likely value is the observed proportion 1/10
 
@@ -75,7 +70,7 @@ def test_bandit():
 
     # The posterior credible interval has a 90% chance of containing the true value (provided that the prior distribution truly represents our background knowledge).
 
-    bandit.credible_interval(90)
+    bandit.CredibleInterval(90)
 
     # ## Multiple bandits
 
@@ -121,15 +116,14 @@ def test_bandit():
         thinkplot.preplot(rows=2, cols=2)
         for i, b in enumerate(beliefs):
             thinkplot.subplot(i + 1)
-            thinkplot.plot_pdf_line(b, label=i)
-            thinkplot.config_plot(**options)
+
 
     plot(beliefs, legend=True)
 
     # Now suppose we play each machine 10 times.  This function updates our beliefs about one of the machines based on one outcome.
 
     def update(beliefs, i, outcome):
-        beliefs[i].update(outcome)
+        beliefs[i].Update(outcome)
 
     for i in range(4):
         for _ in range(10):
@@ -140,7 +134,7 @@ def test_bandit():
 
     # After playing each machine 10 times, we have some information about their probabilies:
 
-    [belief.mean() for belief in beliefs]
+    [belief.Mean() for belief in beliefs]
 
     # ## Bayesian Bandits
     #
@@ -153,7 +147,7 @@ def test_bandit():
     # `argmax` returns the index of the machine that chose the highest value.
 
     def choose(beliefs):
-        ps = [b.random() for b in beliefs]
+        ps = [b.Random() for b in beliefs]
         return np.argmax(ps)
 
     # Here's an example.
@@ -167,7 +161,7 @@ def test_bandit():
         outcome = play(i)
         update(beliefs, i, outcome)
         if verbose:
-            print(i, outcome, beliefs[i].mean())
+            print(i, outcome, beliefs[i].Mean())
 
     # Here's an example
 
@@ -192,7 +186,7 @@ def test_bandit():
     # We can summarize `beliefs` by printing the posterior mean and credible interval:
 
     for i, b in enumerate(beliefs):
-        print(b.mean(), b.credible_interval(90))
+        print(b.Mean(), b.CredibleInterval(90))
 
     # The credible intervals usually contain the true values (10, 20, 30, and 40).
     #

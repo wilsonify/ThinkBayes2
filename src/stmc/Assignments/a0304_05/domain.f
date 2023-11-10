@@ -11,7 +11,7 @@ C Prepares picture of a frozen O(2) domain wall configuration.
       include '../../ForLib/on.com'
       dimension ix(nd)
       include 'lat.dat'
-      if(n.ne.2) stop "XY_ts0: set n=2 in on.par (for ana_tson.f)!"
+      if(n/=2) stop "XY_ts0: set n=2 in on.par (for ana_tson.f)!"
       ltest=.true.
 C
       write(iuo,'(/," domain.f:")')

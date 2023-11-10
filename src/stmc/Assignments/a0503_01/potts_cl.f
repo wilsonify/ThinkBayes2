@@ -19,7 +19,7 @@ c
       ncl=0 ! Number of clusters.
       icl=0 ! Temporary cluster label.
       do is=1,ns ! Loop over all sites.
-        if(iacl(is).eq.-1) then
+        if(iacl(is)==-1) then
           ncl=ncl+1
           icl=icl+1
           inew=icl
@@ -27,7 +27,7 @@ c
           iacl(is)=icl    ! Initial cluster label at is.
         else
           inew=iacl(is)                ! Cluster label found for is.
-2         if(inew.ne.ianew(inew)) then ! Iterate down to
+2         if(inew/=ianew(inew)) then ! Iterate down to
              inew=ianew(inew)          ! a smaller label.
              go to 2
           end if
@@ -35,20 +35,20 @@ c
         do id=1,nd       ! Loop over all directions.
           lbond=.false.  ! Initialize the bond variable.
           isf=ipf(id,is) ! Forward directions as we cover all sites.
-          if(ista(is).eq.ista(isf)) then  ! The site may be joined.
+          if(ista(is)==ista(isf)) then  ! The site may be joined.
             call ranmar(xr)
-            if(xr.lt.boltz1) lbond=.true. ! If true, the site is joined.
+            if(xr<boltz1) lbond=.true. ! If true, the site is joined.
           endif
           if(lbond) then ! If needed use a bond array.
             iclf=iacl(isf)
-            if(iclf.eq.-1) then
+            if(iclf==-1) then
               iacl(isf)=inew ! Intial cluster label at isf set.
             else
-3             if(iclf.ne.ianew(iclf)) then ! Iterate down to
+3             if(iclf/=ianew(iclf)) then ! Iterate down to
                  iclf=ianew(iclf)          ! a smaller label.
                  go to 3
               end if
-              if(inew.ne.iclf) then ! Identify inew or iclf
+              if(inew/=iclf) then ! Identify inew or iclf
                 ncl=ncl-1           ! with a smaller cluster label.
                 imin=min(inew,iclf)
                 ianew(max(inew,iclf))=imin
@@ -64,7 +64,7 @@ c Create final cluster labelling:
       do is=1,ns ! Loop over all sites again.
         icl=iacl(is)
 1       inew=ianew(icl)
-        if(inew.ne.icl) then ! Iterate down to the smallest label.
+        if(inew/=icl) then ! Iterate down to the smallest label.
           icl=inew
           go to 1
         end if
@@ -74,7 +74,7 @@ c
       ndif=0
       do icl=1,icl1          ! Reduce the set of cluster labels to a
         inew=ianew(icl)      ! permutation of the numbers 1,...,ncl.
-        if(inew.ne.icl) then
+        if(inew/=icl) then
           ndif=ndif+1
         else
           ianew(icl)=inew-ndif

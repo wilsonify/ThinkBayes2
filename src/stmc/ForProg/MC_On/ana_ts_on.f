@@ -32,9 +32,9 @@ C
      &                beta,nlink,nd_in,nla
       write(iuo,'(" nequi,nrpt,nmeas: ",I15,2I10)')
      &              nequi_in,nrpt_in,nmeas_in
-      if(nequi.ne.nequi_in) stop "nequi.ne.nequi_in."
-      if(nrpt.ne.nrpt_in) stop "nrpt.ne.nrpt_in."
-      if(nmeas.ne.nmeas_in) stop "nmeas.ne.nmeas_in."
+      if(nequi/=nequi_in) stop "nequi.ne.nequi_in."
+      if(nrpt/=nrpt_in) stop "nrpt.ne.nrpt_in."
+      if(nmeas/=nmeas_in) stop "nmeas.ne.nmeas_in."
       do irpt=1,nrpt
         read(iud1) TSA,acpt,i_in
         act(irpt)=stmean(nmeas,TSA)

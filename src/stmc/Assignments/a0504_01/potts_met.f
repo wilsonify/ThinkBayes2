@@ -14,7 +14,7 @@ C Metropolis updating with sequential spin choice.
         istaold=ista(is)
         call ranmar(xr)
         istanew=int(q*xr)
-        if(istanew.ne.istaold) then
+        if(istanew/=istaold) then
           idact=0
           do id=1,nd
             ista2=ista(ipf(id,is))
@@ -22,9 +22,9 @@ C Metropolis updating with sequential spin choice.
             ista2=ista(ipb(id,is))
             idact=idact+idel(ista2,istanew)-idel(ista2,istaold)
           end do
-          if(idact.ne.0) then
+          if(idact/=0) then
             call ranmar(xr)
-            if(xr.lt.wrat(idact,iact)) then
+            if(xr<wrat(idact,iact)) then
               ista(is)=istanew
               iact=iact+idact
               acpt=acpt+one

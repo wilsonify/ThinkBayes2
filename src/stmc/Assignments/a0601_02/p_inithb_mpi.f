@@ -23,8 +23,8 @@ C Initialize:
       NSEND(1)=MY_B
       NSEND(2)=NEIGH(1)
       NSEND(3)=NEIGH(2)
-      IF(MPM1.LT.N_PROC-1) STOP "p_inithb_mpi: MPM1 - N_PROC mismatch."
-      IF(N_PROC.eq.1) THEN
+      IF(MPM1<N_PROC-1) STOP "p_inithb_mpi: MPM1 - N_PROC mismatch."
+      IF(N_PROC==1) THEN
         BA(0)=half*(beta_min+beta_max)
       ELSE
         del_beta=(beta_max-beta_min)/(N_PROC-1)

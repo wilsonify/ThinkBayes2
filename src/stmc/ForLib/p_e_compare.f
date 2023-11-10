@@ -5,11 +5,11 @@ C Purpose: Count distinct local energy distributions as needed for EDS.
       dimension nact_old(0:n2d+1,mcase),nact_new(0:n2d+1)
 c
       n2dp1=n2d+1
-      if(ncase.ge.1) then
+      if(ncase>=1) then
         do icase=1,ncase
           lold=.true.
           do id=0,n2dp1
-            if(nact_old(id,icase).ne.nact_new(id)) lold=.false.
+            if(nact_old(id,icase)/=nact_new(id)) lold=.false.
           end do
           if(lold) return
         end do

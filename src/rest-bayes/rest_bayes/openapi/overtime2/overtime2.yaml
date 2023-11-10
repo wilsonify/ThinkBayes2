@@ -1,0 +1,17 @@
+post:
+  tags: [mixture]
+  operationId: overtime2
+  x-openapi-router-controller: rest_bayes.controllers.math_controller
+  description: "posterior of a coin"
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "overtime2-input.yaml"
+  responses:
+    "200":
+      description: "Description of this response."
+      content:
+        application/json:
+          schema:
+            $ref: "overtime2-output.yaml"

@@ -34,9 +34,9 @@ c     PARAMETER(NT=256,NBINS=32,NSTEP=8,LMEAN=.TRUE.)
      &                beta,nlink,nd_in,nla
       write(iuo,'(" nequi,nrpt,nmeas: ",I15,2I10)')
      &              nequi_in,nrpt_in,nmeas_in
-      if(nequi.ne.nequi_in) stop "nequi.ne.nequi_in."
-      if(nrpt.ne.nrpt_in) stop "nrpt.ne.nrpt_in."
-      if(nmeas.ne.nmeas_in) stop "nmeas.ne.nmeas_in."
+      if(nequi/=nequi_in) stop "nequi.ne.nequi_in."
+      if(nrpt/=nrpt_in) stop "nrpt.ne.nrpt_in."
+      if(nmeas/=nmeas_in) stop "nmeas.ne.nmeas_in."
       idat=0
       do irpt=1,nrpt
         read(iud1) tsa,acpt,i_in
@@ -55,7 +55,7 @@ c     PARAMETER(NT=256,NBINS=32,NSTEP=8,LMEAN=.TRUE.)
         CALL AUTCORJ(IT,nmeas,NBINS,DATA,WORK,ACORJ(1,IT),LMEAN)
         CALL STEBJ0(NBINS,ACORJ(1,IT),ACM(IT),ACV,ACE(IT))
         DO IBIN=1,NBINS
-          IF(ACORJ(IBIN,IT)-ACE(IT).LE.ZERO) THEN
+          IF(ACORJ(IBIN,IT)-ACE(IT)<=ZERO) THEN
             WRITE(IUO,'("IT,IBIN =",2I9," use smaller NT!")') IT,IBIN
             STOP "ANA_TS_AC: ACORJ consistent with zero."
           END IF
@@ -69,7 +69,7 @@ c     PARAMETER(NT=256,NBINS=32,NSTEP=8,LMEAN=.TRUE.)
         WRITE(CBIN,'(I2.2)') IBIN
         OPEN(iud1,FILE="datj"//Cbin//".d",FORM='FORMATTED',
      &           STATUS='UNKNOWN')
-        IF(IBIN.EQ.0) WRITE(iud1,'(2I9,4G16.6)') 
+        IF(IBIN==0) WRITE(iud1,'(2I9,4G16.6)')
      &     NBINS,(NT+1),0.005D00,-0.05D00,0.002D00,-0.1D00 
         DO IT=0,NT
           WRITE(iud1,'(F10.0,2F14.8)') (IT*ONE),ACORJ(IBIN,IT),ACE(IT)

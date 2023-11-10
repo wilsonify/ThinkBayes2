@@ -1,8 +1,8 @@
       subroutine O3_ran(sta,ns)
 C Copyright, Bernd Berg, Jan 13 2002.
 C Assigns random (i.e. beta=0) values to the states sta(3,is).
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       dimension sta(3,ns)
       do is=1,ns
         z=two*(rmafun()-half)  ! z=cos(theta) uniform in (-1,1).

@@ -20,7 +20,7 @@ C READ DATA:
 C ==========
       READ(IUD,*) NDAT,(A(I),I=1,NFIT)
       WRITE(IUO,'(/," NUMBER OF DATA:",I12)') NDAT
-      IF(NDAT.GT.MDAT) STOP "GFIT: MDAT too small."
+      IF(NDAT>MDAT) STOP "GFIT: MDAT too small."
       WRITE(IUO,'(/," INITIAL GUESS FOR THE FIT PARAMETERS:")')
       DO I=1,NFIT
         WRITE(IUO,'(" I,A(I):",I6,G18.7)') I,A(I)
@@ -42,7 +42,7 @@ C
       END DO
       WRITE(IUO,'("  CHI2    OF THE FIT:",G16.7)') CHI2
       WRITE(IUO,'("  PROB. Q OF THE FIT:",G16.7)') Q
-      IF(NDAT.GT.NFIT) WRITE(IUO,'("  CHI2 p.d.f.:",7X,G16.7)') 
+      IF(NDAT>NFIT) WRITE(IUO,'("  CHI2 p.d.f.:",7X,G16.7)')
      &                                CHI2/(NDAT-NFIT)
       WRITE(IUO,*) '     '
 C

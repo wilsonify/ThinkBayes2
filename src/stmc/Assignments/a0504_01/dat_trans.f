@@ -16,7 +16,7 @@ c Fix screw up.
       ltest=.true.
       ltest=.false.
       if(ltest) stop "ltest."
-      if(nb_swp.gt.nmeas) write(iuo,'(/," nb_swp =",I12,/,1X,
+      if(nb_swp>nmeas) write(iuo,'(/," nb_swp =",I12,/,1X,
      & "WARNING MEASURMENT BACKUPS require nb_swp.ge.nmeas!",/)') nb_swp
 C
       write(cd,'(I1.1)') nd

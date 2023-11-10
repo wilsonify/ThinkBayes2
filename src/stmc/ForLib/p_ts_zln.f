@@ -2,8 +2,8 @@
      &                    XM2ln,nstate) ! TEST ONLY!
 C Copyright Bernd Berg, Jul 10 2002. Potts model: ln of the partition 
 C function Z and related variables from time series fragments.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       dimension b(0:nlink),a(0:nlink),tsa(nmeas,0:nq)
       dimension nstate(0:nq-1)
 C
@@ -15,7 +15,7 @@ C
 c         if(iq.eq.0) nstate(iq)=nlink/2 ! Test purposes.
 c         if(iq.ne.0) nstate(iq)=0
         end do
-        if(imeas.eq.1) then
+        if(imeas==1) then
           Zln=two*((beta0-b(iact))*iact+a(iact))
           Aln=Zln+log(iact*one)
           A2ln=Zln+two*log(iact*one)

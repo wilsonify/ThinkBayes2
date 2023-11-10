@@ -9,7 +9,8 @@ import math
 import sys
 
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkbayes.c01_probability
+import thinkplot
 
 FORMATS = ["pdf", "eps", "png"]
 
@@ -66,7 +67,7 @@ class Paintball(thinkbayes.Suite, thinkbayes.Joint):
         pairs = [(alpha, beta) for alpha in alphas for beta in betas]
         thinkbayes.Suite.__init__(self, pairs)
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         hypo: pair of alpha, beta
@@ -86,7 +87,7 @@ def make_pmf_plot(alpha=10):
     locations = range(0, 31)
 
     betas = [10, 20, 40]
-    thinkplot.pre_plot(num=len(betas))
+    thinkplot.PrePlot(num=len(betas))
 
     for beta in betas:
         pmf = make_location_pmf(alpha, beta, locations)
@@ -106,10 +107,10 @@ def make_posterior_plot(suite):
     marginal_beta = suite.marginal(1)
     marginal_beta.name = "beta"
 
-    print("alpha CI", marginal_alpha.credible_interval(50))
-    print("beta CI", marginal_beta.credible_interval(50))
+    print("alpha CI", marginal_alpha.CredibleInterval(50))
+    print("beta CI", marginal_beta.CredibleInterval(50))
 
-    thinkplot.pre_plot(num=2)
+    thinkplot.PrePlot(num=2)
 
     # thinkplot.Pmf(marginal_alpha)
     # thinkplot.Pmf(marginal_beta)
@@ -128,10 +129,10 @@ def make_conditional_plot(suite):
     suite: posterior joint distribution of location
     """
     betas = [10, 20, 40]
-    thinkplot.pre_plot(num=len(betas))
+    thinkplot.PrePlot(num=len(betas))
 
     for beta in betas:
-        cond = suite.conditional(0, 1, beta)
+        cond = thinkbayes.c01_probability.conditional(0, 1, beta)
         cond.name = f"beta = {beta}"
         thinkplot.plot_pdf_line(cond)
 
@@ -159,7 +160,7 @@ def make_credible_plot(suite):
 
     suite: Suite
     """
-    d = dict((pair, 0) for pair in suite.values())
+    d = dict((pair, 0) for pair in thinkbayes.c01_probability.values())
 
     percentages = [75, 50, 25]
     for p in percentages:

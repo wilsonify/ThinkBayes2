@@ -7,7 +7,7 @@ MIT License: https://opensource.org/licenses/MIT
 
 import numpy as np
 from thinkbayes import Suite, Beta
-from thinkbayes import thinkplot
+import thinkplot
 
 POP_FRAC_LABEL = "Fraction of the population"
 
@@ -37,7 +37,7 @@ def test_social_desirability_problem():
     # Solution
 
     class Social(Suite):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """
             data: outcome of unreliable measurement, either 'YES' or 'NO'
             hypo: actual proportion of the thing we're measuring
@@ -54,25 +54,22 @@ def test_social_desirability_problem():
     prior = np.linspace(0, 1, 101)
     suite = Social(prior)
 
-    thinkplot.plot_pdf_line(suite, label="Prior")
     thinkplot.decorate(xlabel=POP_FRAC_LABEL, ylabel="PDF")
 
     # Solution
 
     for i in range(55):
-        suite.update("YES")
+        suite.Update("YES")
 
     for i in range(45):
-        suite.update("NO")
+        suite.Update("NO")
 
     # Solution
 
-    thinkplot.plot_pdf_line(suite, label="Posterior")
-    thinkplot.decorate(xlabel=POP_FRAC_LABEL, ylabel="PDF")
-
     # Solution
 
-    suite.mean(), suite.MAP()
+    suite.Mean()
+    suite.MAP()
 
     # Solution
 
@@ -80,11 +77,7 @@ def test_social_desirability_problem():
     # to survey 100 people directly?
 
     beta = Beta(1, 1)
-    beta.update((60, 40))
-    thinkplot.plot_pdf_line(beta.make_pmf(), label="Direct", color="gray")
-
-    thinkplot.plot_pdf_line(suite, label="Randomized")
-    thinkplot.decorate(xlabel=POP_FRAC_LABEL, ylabel="PDF")
+    beta.Update((60, 40))
 
     # Solution
 
@@ -93,11 +86,7 @@ def test_social_desirability_problem():
 
     factor = 4
     beta = Beta(1, 1)
-    beta.update((60 / factor, 40 / factor))
-    thinkplot.plot_pdf_line(beta.make_pmf(), label="Direct", color="gray")
-
-    thinkplot.plot_pdf_line(suite, label="Randomized")
-    thinkplot.decorate(xlabel=POP_FRAC_LABEL, ylabel="PDF")
+    beta.Update((60 / factor, 40 / factor))
 
     # Solution
 

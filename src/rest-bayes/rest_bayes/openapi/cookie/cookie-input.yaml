@@ -1,0 +1,7 @@
+type: object
+properties:
+  observations:
+    type: array
+    items:
+      type: string
+example: { "observations": [ "vanilla", "chocolate", "vanilla" ] }

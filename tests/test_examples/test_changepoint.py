@@ -11,7 +11,7 @@ import pandas as pd
 import pytest
 from scipy.stats import poisson
 from thinkbayes import Suite, Joint
-from thinkbayes import thinkplot
+import thinkplot
 
 CURDIR = os.path.dirname(__file__)
 PARDIR = os.path.join(CURDIR, os.pardir)
@@ -68,7 +68,7 @@ def data_fixture(before, after):
 
 
 class Change(Suite, Joint):
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """
         
         data: array of counts

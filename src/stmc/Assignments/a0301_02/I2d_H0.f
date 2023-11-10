@@ -18,7 +18,7 @@ C
         call potts_act(ista,ipf,idel,ns,nqm1,nd,iact)
         ha(iact)=ha(iact)+one
         iE=2*iact-nlink
-        if(ndat*((10*idat)/ndat).eq.(10*idat))
+        if(ndat*((10*idat)/ndat)==(10*idat))
      &  write(iuo,'(" idat,iact,iE:",3I10)') idat,iact,iE
       end do
 C
@@ -30,7 +30,7 @@ C
         pe=sqrt( p*(one-p)/(ndat-1) ) ! Binomial error bar.
         he=ndat*pe
         h=ha(iact)
-        if(h.gt.0.1d0) write(iud,'(1I6,5F12.5)') iE,es,p,pe,h,he
+        if(h>0.1d0) write(iud,'(1I6,5F12.5)') iE,es,p,pe,h,he
       end do
       close(iud)
 C

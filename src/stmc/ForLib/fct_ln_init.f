@@ -1,11 +1,11 @@
       SUBROUTINE FCT_LN_INIT
 C Initialization for fast calculations of binomial expressions.
 C Transfer the FCT_LN array through the common block.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       PARAMETER(NMAX=500)
       COMMON /BINO/ FCT_LN(0:NMAX),IBINO
-      IF(NDAT.GT.NMAX) STOP "FCT_LN_INIT: NDAT.GT.NMAX."
+      IF(NDAT>NMAX) STOP "FCT_LN_INIT: NDAT.GT.NMAX."
       IBINO=1
 C Log of the factorials:
       DO K=0,NDAT

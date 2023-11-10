@@ -1,0 +1,17 @@
+post:
+  tags: [mixture]
+  operationId: hockey
+  x-openapi-router-controller: rest_bayes.controllers.math_controller
+  description: "posterior of a coin"
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "hockey-input.yaml"
+  responses:
+    "200":
+      description: "Description of this response."
+      content:
+        application/json:
+          schema:
+            $ref: "hockey-output.yaml"

@@ -5,7 +5,7 @@ Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
-from thinkbayes import thinkplot
+import thinkplot
 from thinkbayes.scripts.dice import Dice
 NTRAINS_LABEL = "Number of trains"
 

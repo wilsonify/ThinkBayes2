@@ -1,0 +1,17 @@
+post:
+  tags: [bayes]
+  operationId: conditional
+  x-openapi-router-controller: rest_bayes.controllers.math_controller
+  description: "Probability of A given B"
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "conditional-input.yaml"
+  responses:
+    "200":
+      description: "Description of this response."
+      content:
+        application/json:
+          schema:
+            $ref: "conditional-output.yaml"

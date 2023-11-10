@@ -14,13 +14,13 @@ C    OUTPUT:
 C     
 C    DATB:    ARRAY CONTAINING THE BINNED DATA.
 C
-      include 'implicit.sta' 
+      include '../../ForLib/implicit.sta'
       DIMENSION DATA(NDAT),DATB(NBINS)
       DATA IWARN /0/
 C
       NBIN=NDAT/NBINS
       NTEST=NBIN*NBINS
-      IF(IWARN.EQ.0 .AND. NTEST.NE.NDAT) THEN
+      IF(IWARN==0 .AND. NTEST/=NDAT) THEN
       PRINT*,'WARNING FROM SUBROUTINE BINING:'
       PRINT*,'NDAT =      ',NDAT
       PRINT*,'NBIN*NBINS =',NTEST

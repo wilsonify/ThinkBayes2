@@ -13,12 +13,12 @@ C
       DO I=-30,30
         X=(I*ONE)/TEN
         YU=ZERO
-        IF(X.GE.-ONE .AND. X.LE.+ONE) YU=HALF
+        IF(X>=-ONE .AND. X<=+ONE) YU=HALF
         YG=EXP(-HALF*X**2)/SQRT(TPI) 
         YC=ONE/(PI+PI*X**2)
-        IF(X.EQ.-ONE) WRITE(IUGNU,'(4G16.7)') X,ZERO,YG,YC
+        IF(X==-ONE) WRITE(IUGNU,'(4G16.7)') X,ZERO,YG,YC
         WRITE(IUGNU,'(4G16.7)') X,YU,YG,YC
-        IF(X.EQ.+ONE) WRITE(IUGNU,'(4G16.7)') X,ZERO,YG,YC
+        IF(X==+ONE) WRITE(IUGNU,'(4G16.7)') X,ZERO,YG,YC
       END DO  
       CLOSE (IUGNU)
 C
@@ -28,8 +28,8 @@ C
       DO I=-30,30
         X=(I*ONE)/TEN
         YU=ZERO
-        IF(X.GT.-ONE) YU=HALF*(X+ONE)
-        IF(X.GT.+ONE) YU=ONE
+        IF(X>-ONE) YU=HALF*(X+ONE)
+        IF(X>+ONE) YU=ONE
         YG=GAU_DF(X)
         YC=CAU_DF(X)
         WRITE(IUGNU,'(4G16.7)') X,YU,YG,YC

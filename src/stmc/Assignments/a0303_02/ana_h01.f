@@ -35,12 +35,12 @@ C
       cut=half/nrpt
       ns=nsfun(nla,nd)
       do ilink=0,nlink
-        if(ham(ilink).gt.cut) then
+        if(ham(ilink)>cut) then
           ham(ilink)=(nrpt*ham(ilink))/ns
           hae(ilink)=(nrpt*hae(ilink))/ns
           actm=ilink/(nlink*one)
-          if(nq.eq.2) em=nd*two*(half-actm) ! Ising.
-          if(nq.ne.2) em=nd*two*(-actm)     ! Potts, not Ising.
+          if(nq==2) em=nd*two*(half-actm) ! Ising.
+          if(nq/=2) em=nd*two*(-actm)     ! Potts, not Ising.
           write(iud1,'(I10,4G15.6)') ilink,actm,em,ham(ilink),hae(ilink)
         end if
       end do
@@ -48,10 +48,10 @@ C
 C
       call steb0(nrpt,act,actm,actv,acte)
       write(iuo,'(" actm =",F16.9,"  +/-",F16.9)') actm,acte
-      if(nq.eq.2) em=nd*two*((one/nq)-actm) ! Internal energy per site.
+      if(nq==2) em=nd*two*((one/nq)-actm) ! Internal energy per site.
       ee=nd*two*acte
       write(iuo,'(" em   =",F16.9,"  +/-",F16.9)') em,ee
-      if(nd.eq.3.and.nq.eq.2)
+      if(nd==3.and.nq==2)
      & write(iuo,'(" em_A =",F16.9,"  +/-",F16.9)') (em/four),(ee/four)
 C
       stop

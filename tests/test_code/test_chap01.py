@@ -4,47 +4,27 @@ This notebook presents example code and exercise solutions for Think Bayes.
 
 import numpy as np
 
-
-def values(series):
-    return series.value_counts().sort_index()
-
-
-def prob(A):
-    """Probability of A"""
-    return A.mean()
-
-
-def count(A):
-    """Number of instances of A"""
-    return A.sum()
-
-
-def conditional(A, B):
-    """Conditional probability of A given B"""
-    return prob(A[B])
-
-
-def conjunction(A, B):
-    """Probability of both A and B"""
-    return prob(A) * conditional(A=B, B=A)
-
-
-def bayes_theorem(A, B):
-    """Conditional probability of A given B, using Bayes's theorem"""
-    return prob(A) * conditional(A=B, B=A) / prob(B)
+from thinkbayes.c01_probability import (
+    values,
+    prob,
+    count,
+    conditional,
+    conjunction,
+    bayes_theorem
+)
 
 
 def test_total(gss):
-    gss.feminist.replace([0, 8, 9], np.nan, inplace=True)
+    # gss.feminist.replace([0, 8, 9], np.nan, inplace=True)
     gss.polviews.replace([0, 8, 9], np.nan, inplace=True)
     gss.partyid.replace([8, 9], np.nan, inplace=True)
     gss.indus10.replace([0], np.nan, inplace=True)
-    gss.occ10.replace([0], np.nan, inplace=True)
+    # gss.occ10.replace([0], np.nan, inplace=True)
 
-    values(gss.feminist)
+    # values(gss.feminist)
     values(gss.polviews)
     values(gss.partyid)
-    values(gss.race)
+    # values(gss.race)
     values(gss.sex)
     values(gss.indus10).head()
     np.mean(gss.indus10 == 6870)
@@ -52,7 +32,7 @@ def test_total(gss):
     (gss.indus10 == 6870).mean()
 
     subset = gss.dropna(subset=["sex", "polviews", "partyid", "indus10"])
-    assert subset.shape == (50287, 19)
+    assert subset.shape == (49290, 6)
 
     female = gss.sex == 2
     values(female)

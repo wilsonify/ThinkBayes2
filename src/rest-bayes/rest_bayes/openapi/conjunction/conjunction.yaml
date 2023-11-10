@@ -1,0 +1,17 @@
+post:
+  tags: [bayes]
+  operationId: conjunction
+  x-openapi-router-controller: rest_bayes.controllers.math_controller
+  description: "logical and; Probability of both A and B"
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "conjunction-input.yaml"
+  responses:
+    "200":
+      description: "Description of this response."
+      content:
+        application/json:
+          schema:
+            $ref: "conjunction-output.yaml"

@@ -8,8 +8,11 @@ import logging
 
 import numpy as np
 import pytest
+from scipy.stats import binom
+
 from thinkbayes import Hist, Pmf, Suite, Beta
-from thinkbayes import thinkplot
+from thinkbayes import MakeBinomialPmf
+from thinkbayes import MakeMixture
 
 P_HIT_LABEL = "Probability of hit"
 N_HITS_LABEL = "Number of hits"
@@ -31,19 +34,15 @@ def test_alien_blaster_problem():
     # Here's the prior
 
     prior = Beta(5, 10)
-    thinkplot.plot_pdf_line(prior.make_pmf())
-
-    thinkplot.decorate(xlabel=P_HIT_LABEL, ylabel="PMF")
-    prior.mean()
+    prior.Mean()
 
     # Solution
 
     # And here's the likelhood function
 
-    from scipy.stats import binom
 
     class AlienBlaster(Suite):
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """Computes the likeliood of data under hypo.
 
             data: number of shots they took
@@ -65,11 +64,9 @@ def test_alien_blaster_problem():
     # If we start with a uniform prior,
     # we can see what the likelihood function looks like:
 
-    pmf = Beta(1, 1).make_pmf()
+    pmf = Beta(1, 1).MakePmf()
     blaster = AlienBlaster(pmf)
-    blaster.update(2)
-    thinkplot.plot_pdf_line(blaster)
-    thinkplot.decorate(xlabel=P_HIT_LABEL, ylabel="PMF")
+    blaster.Update(2)
 
     # Solution
 
@@ -77,26 +74,23 @@ def test_alien_blaster_problem():
     # see what happens when we multiply the convex prior and
     # the concave posterior.
 
-    pmf = Beta(5, 10).make_pmf()
+    pmf = Beta(5, 10).MakePmf()
     blaster = AlienBlaster(pmf)
-    thinkplot.plot_pdf_line(blaster, color="gray")
-    blaster.update(2)
-    thinkplot.plot_pdf_line(blaster)
-    thinkplot.decorate(xlabel=P_HIT_LABEL, ylabel="PMF")
+    blaster.Update(2)
 
     # Solution
 
     # The posterior mean is lower
 
-    logging.info("%r", f"prior.Mean() = {prior.mean()}")
-    logging.info("%r", f"blaster.Mean() = {blaster.mean()}")
+    logging.info("%r", f"prior.Mean() = {prior.Mean()}")
+    logging.info("%r", f"blaster.Mean() = {blaster.Mean()}")
 
     # Solution
 
     # So is the MAP
 
-    logging.info("%r", f"prior.map() = {prior.map()}")
-    logging.info("%r", f"blaster.map() = {blaster.map()}")
+    logging.info("%r", f"prior.map() = {prior.MAP()}")
+    logging.info("%r", f"blaster.map() = {blaster.MAP()}")
 
     # So if we learn that the new design is "consistent",
     # it is more likely to be consistently bad (in this case).
@@ -148,10 +142,6 @@ def test_alien_blaster_problem():
     # Here's what the distribution looks like.
 
     pmf = Pmf(ks)
-    thinkplot.plot_hist_bar(pmf)
-
-    thinkplot.decorate(xlabel=N_HITS_LABEL, ylabel="PMF")
-
     logging.info("%r", f"len(ks) = {len(ks)}")
     logging.info("%r", f"np.mean(ks) = {np.mean(ks)}")
 
@@ -167,29 +157,24 @@ def test_alien_blaster_problem():
     # And the results look similar.
 
     pmf = Pmf(ks)
-    thinkplot.plot_hist_bar(pmf)
-    thinkplot.decorate(xlabel=N_HITS_LABEL, ylabel="PMF")
     np.mean(ks)
 
     # One more way to do the same thing is to make a meta-Pmf, which contains the two binomial `Pmf` objects:
 
-    from thinkbayes import make_binomial_pmf
 
-    pmf1 = make_binomial_pmf(n, x1)
-    pmf2 = make_binomial_pmf(n, x2)
+    pmf1 = MakeBinomialPmf(n, x1)
+    pmf2 = MakeBinomialPmf(n, x2)
 
     metapmf = Pmf({pmf1: 0.3, pmf2: 0.7})
-    metapmf.print()
+    metapmf.Print()
 
     # Here's how we can draw samples from the meta-Pmf:
 
-    ks = [metapmf.random().random() for _ in range(1000)]
+    ks = [metapmf.Random() for _ in range(1000)]
 
     # And here are the results, one more time:
 
     pmf = Pmf(ks)
-    thinkplot.plot_hist_bar(pmf)
-    thinkplot.decorate(xlabel=N_HITS_LABEL, ylabel="PMF")
     np.mean(ks)
 
     # This result, which we have estimated three ways, is a predictive distribution, based on our uncertainty about `x`.
@@ -218,11 +203,10 @@ def test_alien_blaster_problem():
     #
     # In the example, each Pmf is associated with a value of `x` (probability of hitting a target).  The inner loop enumerates the values of `k` (number of targets hit after 10 shots).
 
-    from thinkbayes import make_mixture
 
-    mix = make_mixture(metapmf)
-    thinkplot.plot_hist_bar(mix)
-    mix.mean()
+
+    mix = MakeMixture(metapmf)
+    mix.Mean()
 
     assert mix[3] == pytest.approx(0.23, abs=0.1)
 

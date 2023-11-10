@@ -5,15 +5,15 @@ Copyright 2012 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 
+import thinkplot
 from thinkbayes.scripts.dice import Dice
-
-from thinkbayes import thinkplot
 
 NTRAINS_LABEL = "Number of trains"
 
-class Train(Dice):
-    """Represents hypotheses about how many trains the company has.
 
+class Train(Dice):
+    """
+    Represents hypotheses about how many trains the company has.
     The likelihood function for the train problem is the same as
     for the Dice problem.
     """
@@ -26,7 +26,7 @@ def main():
     suite.update(60)
     print(suite.mean())
 
-    thinkplot.pre_plot(1)
+    thinkplot.PrePlot(1)
     thinkplot.plot_pmf_line(suite)
 
     thinkplot.save_plot(

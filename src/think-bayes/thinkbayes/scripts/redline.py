@@ -11,7 +11,8 @@ import sys
 
 import numpy
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkbayes.c01_probability
+import thinkplot
 
 FORMATS = ["pdf", "eps", "png", "jpg"]
 
@@ -132,7 +133,7 @@ def bias_pmf(pmf, label=None, invert=False):
     """
     new_pmf = pmf.copy(label=label)
 
-    for x in pmf.values():
+    for x in thinkbayes.c01_probability.values():
         if invert:
             new_pmf.mult(x, 1.0 / x)
         else:
@@ -261,7 +262,7 @@ class WaitTimeCalculator(object):
         pmfs = scale_dists([self.pmf_z, self.pmf_zb], 1.0 / 60)
 
         thinkplot.clear_figure()
-        thinkplot.pre_plot(2)
+        thinkplot.PrePlot(2)
         thinkplot.plot_pmfs(pmfs)
 
         thinkplot.save_plot(root=root, xlabel=TIME_LABEL, ylabel="CDF", formats=FORMATS)
@@ -282,7 +283,7 @@ class WaitTimeCalculator(object):
         cdfs = scale_dists([cdf_z, cdf_zb, cdf_y], 1.0 / 60)
 
         thinkplot.clear_figure()
-        thinkplot.pre_plot(3)
+        thinkplot.PrePlot(3)
         thinkplot.plot_cdfs(cdfs)
         thinkplot.save_plot(root=root, xlabel=TIME_LABEL, ylabel="CDF", formats=FORMATS)
 
@@ -357,7 +358,7 @@ class ElapsedTimeEstimator(object):
         cdfs = scale_dists([cdf_prior_x, cdf_post_x, cdf_y], 1.0 / 60)
 
         thinkplot.clear_figure()
-        thinkplot.pre_plot(3)
+        thinkplot.PrePlot(3)
         thinkplot.plot_cdfs(cdfs)
         thinkplot.save_plot(root=root, xlabel=TIME_LABEL, ylabel="CDF", formats=FORMATS)
 
@@ -365,7 +366,7 @@ class ElapsedTimeEstimator(object):
 class ArrivalRate(thinkbayes.Suite):
     """Represents the distribution of arrival rates (lambda)."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         Evaluates the Poisson PMF for lambda and k.
@@ -375,7 +376,7 @@ class ArrivalRate(thinkbayes.Suite):
         """
         lam = hypo
         x, k = data
-        like = thinkbayes.eval_poisson_pmf(k, lam * x)
+        like = thinkbayes.EvalPoissonPmf(k, lam * x)
         return like
 
 
@@ -409,7 +410,7 @@ class ArrivalRateEstimator(object):
         root: string
         """
         thinkplot.clear_figure()
-        thinkplot.pre_plot(2)
+        thinkplot.PrePlot(2)
 
         # convert units to passengers per minute
         prior = self.prior_lam.make_cdf().scale(60)
@@ -428,7 +429,7 @@ class ArrivalRateEstimator(object):
 class Elapsed(thinkbayes.Suite):
     """Represents the distribution of elapsed time (x)."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """Computes the likelihood of the data under the hypothesis.
 
         Evaluates the Poisson PMF for lambda and k.
@@ -438,7 +439,7 @@ class Elapsed(thinkbayes.Suite):
         """
         x = hypo
         lam, k = data
-        like = thinkbayes.eval_poisson_pmf(k, lam * x)
+        like = thinkbayes.EvalPoissonPmf(k, lam * x)
         return like
 
 
@@ -462,7 +463,7 @@ def remove_negatives(pmf):
 
     pmf: Pmf
     """
-    for val in list(pmf.values()):
+    for val in list(thinkbayes.c01_probability.values()):
         if val < 0:
             pmf.remove(val)
     pmf.normalize()
@@ -472,7 +473,7 @@ class Gaps(thinkbayes.Suite):
     """Represents the distribution of gap times,
     as updated by an observed waiting time."""
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """The likelihood of the data under the hypothesis.
 
         If the actual gap time is z, what is the likelihood
@@ -679,7 +680,7 @@ class WaitMixtureEstimator(object):
         thinkplot.clear_figure()
 
         # plot the MetaPmf
-        for pmf, prob in sorted(self.metapmf.items()):
+        for pmf, prob in sorted(self.metapmf.Items()):
             cdf = pmf.make_cdf().scale(1.0 / 60)
             width = 2 / math.log(-math.log(prob))
             thinkplot.plot_line(
@@ -687,7 +688,7 @@ class WaitMixtureEstimator(object):
             )
 
         # plot the mixture and the distribution based on a point estimate
-        thinkplot.pre_plot(2)
+        thinkplot.PrePlot(2)
         # thinkplot.Cdf(self.point.MakeCdf(label='point').Scale(1.0/60))
         thinkplot.plot_cdf_line(self.mixture.make_cdf(label="mix").scale(1.0 / 60))
 
@@ -739,7 +740,7 @@ def run_simple_process(gap_times, lam=0.0333, num_passengers=15, plot=True):
     UPPER_BOUND = 1200
 
     cdf_z = thinkbayes.Cdf(gap_times).scale(1.0 / 60)
-    print("CI z", cdf_z.credible_interval(90))
+    print("CI z", cdf_z.CredibleInterval(90))
 
     xs = make_range(low=10)
 
@@ -841,7 +842,7 @@ def run_loop(gap_times, nums, lam=0.0333):
 
         # compute the posterior prob of waiting more than 15 minutes
         cdf_y = ete.pmf_y.make_cdf()
-        prob = 1 - cdf_y.prob(900)
+        prob = 1 - thinkbayes.c01_probability.prob(900)
         probs.append(prob)
 
         # thinkplot.Cdf(ete.pmf_y.MakeCdf(label=str(num_passengers)))

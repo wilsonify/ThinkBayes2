@@ -2,8 +2,8 @@
 C Copyright, Bernd Berg, Apr 19, 2001.
 C Asymptotic two-sided Kolmogorov test in the form of
 C M.A. Stephens, J. Royal Stat. Soc. B 32 (1970) 115.
-      include 'implicit.sta'
-      include 'constants.par'
+      include '../../ForLib/implicit.sta'
+      include '../../ForLib/constants.par'
       DIMENSION Fxct(N)
 C
       DEL=ZERO
@@ -22,7 +22,7 @@ C
       DO J=1,100
         ADD=SIGN_TWO*EXP(A*J**2)
         Q=Q+ADD
-        IF(ABS(ADD).LT.CUT) RETURN
+        IF(ABS(ADD)<CUT) RETURN
         SIGN_TWO=-SIGN_TWO
         CUT=ABS(ADD)/1000
       END DO

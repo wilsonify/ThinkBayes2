@@ -6,7 +6,7 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 from thinkbayes import Suite, Beta
-from thinkbayes import thinkplot
+import thinkplot
 
 
 class UnreliableCoin(Suite):
@@ -31,7 +31,7 @@ class UnreliableCoin(Suite):
         super().__init__(prior)
         self.y = y
 
-    def likelihood(self, data, hypo):
+    def Likelihood(self, data, hypo):
         """
         data: outcome of unreliable measurement, either 'H' or 'T'
         hypo: probability of heads, 0-100
@@ -47,7 +47,6 @@ class UnreliableCoin(Suite):
 def test_UnreliableCoin():
     prior = range(0, 101)
     suite = UnreliableCoin(prior, y=0.9)
-    thinkplot.plot_pdf_line(suite)
 
     # +
     # Solution
@@ -55,9 +54,7 @@ def test_UnreliableCoin():
     # And update with 3 heads and 7 tails.
 
     for outcome in "HHHTTTTTTT":
-        suite.update(outcome)
-
-    thinkplot.plot_pdf_line(suite)
+        suite.Update(outcome)
 
     # +
     # Solution
@@ -68,13 +65,11 @@ def test_UnreliableCoin():
         prior = range(0, 101)
         suite = UnreliableCoin(prior, y=y)
         for outcome in "HHHTTTTTTT":
-            suite.update(outcome)
+            suite.Update(outcome)
 
-        thinkplot.plot_pdf_line(suite, label="y=%g" % y)
+            # +
 
-    # +
     # Solution
-
     # The posterior distribution gets wider as the measurement gets less reliable.
 
     compute_prior(1)
@@ -138,7 +133,7 @@ def test_UnreliableCoin():
     class Redditor(Suite):
         """Represents hypotheses about the trustworthiness of a redditor."""
 
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: integer value of r, the prob of a correct vote (0-100)
@@ -161,7 +156,7 @@ def test_UnreliableCoin():
     class Item(Suite):
         """Represents hypotheses about the quality of an item."""
 
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: integer value of x, the prob of garnering an upvote
@@ -185,11 +180,11 @@ def test_UnreliableCoin():
 
     redditor = Redditor(label="redditor")
     beta = Beta(2, 1)
-    for val, prob in beta.make_pmf().items():
-        redditor.set(val * 100, prob)
+    for val, prob in beta.MakePmf().Items():
+        redditor.Set(val * 100, prob)
 
-    thinkplot.plot_pdf_line(redditor)
-    mean_r = redditor.mean() / 100.0
+
+    mean_r = redditor.Mean() / 100.0
 
     # +
     # Solution
@@ -198,8 +193,8 @@ def test_UnreliableCoin():
 
     item = Item(range(0, 101), label="item")
 
-    thinkplot.plot_pdf_line(item)
-    mean_q = item.mean() / 100.0
+
+    mean_q = item.Mean() / 100.0
 
     # +
     # Solution
@@ -209,8 +204,8 @@ def test_UnreliableCoin():
     # Note: this is a shortcut that should give us an approximate solution; later
     # we will come back and do this right with a joint distribution of q and r.
 
-    redditor.update(("up", mean_q))
-    item.update(("up", mean_r))
+    redditor.Update(("up", mean_q))
+    item.Update(("up", mean_r))
 
     # +
     # Solution
@@ -218,8 +213,8 @@ def test_UnreliableCoin():
     # And here are the results.  Since we knew nothing about the item,
     # the vote provides no information about the redditor:
 
-    thinkplot.plot_pdf_line(redditor)
-    print(redditor.mean(), redditor.credible_interval(90))
+
+    print(redditor.Mean(), redditor.CredibleInterval(90))
 
     # +
     # Solution
@@ -227,8 +222,8 @@ def test_UnreliableCoin():
     # But since we think the redditor is reliable, the vote provides
     # some information about the item:
 
-    thinkplot.plot_pdf_line(item)
-    print(item.mean(), item.credible_interval(90))
+
+    print(item.Mean(), item.CredibleInterval(90))
 
     # +
     # Solution

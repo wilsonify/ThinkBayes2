@@ -13,8 +13,8 @@ def test_vote():
 
     def add(pmf1, pmf2):
         res = Pmf()
-        for v1, p1 in pmf1.items():
-            for v2, p2 in pmf2.items():
+        for v1, p1 in pmf1.Items():
+            for v2, p2 in pmf2.Items():
                 res[v1, v2] = p1 * p2
         return res
 
@@ -42,7 +42,7 @@ def test_vote():
     #
 
     pmf_citizen_report = add(pmf_citizen, pmf_error)
-    pmf_citizen_report.print()
+    pmf_citizen_report.Print()
 
     #
 
@@ -52,7 +52,7 @@ def test_vote():
     #
 
     pmf_cv_report = add(pmf_cv, pmf_error)
-    pmf_cv_report.print()
+    pmf_cv_report.Print()
 
     #
 
@@ -61,19 +61,19 @@ def test_vote():
     #
 
     pmf_ncv_report = add(pmf_ncv, pmf_error)
-    pmf_ncv_report.print()
+    pmf_ncv_report.Print()
 
     #
 
     mix = Pmf()
 
-    for val1, p1 in pmf_citizen_report.items():
+    for val1, p1 in pmf_citizen_report.Items():
         c, e = val1
         pmf = pmf_cv_report if c == "citizen" else pmf_ncv_report
-        for val2, p2 in pmf.items():
+        for val2, p2 in pmf.Items():
             mix[val1, val2] = p1 * p2
 
-    mix.print()
+    mix.Print()
 
     #
 
@@ -96,13 +96,13 @@ def test_vote():
 
     pmf_report = Pmf()
 
-    for (cstate, vstate), p in mix.items():
+    for (cstate, vstate), p in mix.Items():
         creport = report(cstate, citizen_status)
         vreport = report(vstate, vote_status)
         pmf_report[creport, vreport] += p
 
     #
 
-    pmf_report.print()
+    pmf_report.Print()
 
     #

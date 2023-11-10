@@ -1,0 +1,60 @@
+openapi: 3.0.1
+info:
+  description:
+    "This is a sample server Petstore server.  You can find out more about     Swagger
+    at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For
+    this sample, you can use the api key `special-key` to test the authorization     filters."
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Petstore
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+
+tags:
+  - name: math
+    description: math
+paths:
+  /sqrt:
+    $ref: "sqrt/sqrt.yaml"
+  /strength:
+    $ref: "strength/strength.yaml"
+  /conjunction:
+    $ref: "conjunction/conjunction.yaml"
+  /conditional:
+    $ref: "conditional/conditional.yaml"
+  /bayes:
+    $ref: "bayes/bayes.yaml"
+  /cookie:
+    $ref: "cookie/cookie.yaml"
+  /monty:
+    $ref: "monty/monty.yaml"
+  /mandm:
+    $ref: "mandm/mandm.yaml"
+  /euro:
+    $ref: "euro/euro.yaml"
+  /probability-to-odds:
+    $ref: "probability-to-odds/probability-to-odds.yaml"
+  /odds-to-probability:
+    $ref: "odds-to-probability/odds-to-probability.yaml"
+  /blood:
+    $ref: "blood/blood.yaml"
+  /hockey:
+    $ref: "hockey/hockey.yaml"
+  /overtime:
+    $ref: "overtime/overtime.yaml"
+  /overtime2:
+    $ref: "overtime2/overtime2.yaml"
+  /shut_out:
+    $ref: "shut-out/shut-out.yaml"
+  /soccer:
+    $ref: "soccer/soccer.yaml"
+
+components:
+  securitySchemes:
+    petstore_auth:
+      $ref: "components/securitySchemes/petstore_auth.yaml"
+    api_key:
+      $ref: "components/securitySchemes/api_key.yaml"

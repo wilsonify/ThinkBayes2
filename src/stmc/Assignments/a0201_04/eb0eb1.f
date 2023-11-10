@@ -15,7 +15,7 @@ C
         I=0
         DO K=1,KMAX
           NDAT=2**K
-          IF(K.EQ.KMAX) NDAT=2
+          IF(K==KMAX) NDAT=2
           IDAT=IDAT+NDAT
           DAT1(K)=ZERO
           DO N=1,NDAT
@@ -27,7 +27,7 @@ C
           WGHT(K)=NDAT*ONE
           DAT1(K)=DAT1(K)/WGHT(K)
         END DO
-        IF(I.NE.NDT0) STOP 'ERROR IN COUNTING I=1,...,NDT0.'
+        IF(I/=NDT0) STOP 'ERROR IN COUNTING I=1,...,NDT0.'
         CALL STEB1(KMAX,DAT1,WGHT,XM1,XE1)
         CALL STEB0(NDT0,DAT0,XM0,XV0,XE0)
         VA1(J)=XE1**2

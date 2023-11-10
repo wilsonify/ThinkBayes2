@@ -1,7 +1,7 @@
       subroutine write_progress(iud,ctxt,irpt,iact,acpt)
 C Copyright, Bernd Berg, Dec 13, 2000.
 C Write subroutine to monitor progress.
-      include 'implicit.sta'
+      include '../../ForLib/implicit.sta'
       character*(*) ctxt
       open(iud,file="progress.d",form="formatted",status="unknown")
       rewind iud

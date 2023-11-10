@@ -18,7 +18,7 @@ C
 1     ncall=ncall+1  ! Calls for reaching equilibrium.
         call potts_clw(nclsize)
         nflip=nflip+nclsize
-      if(nflip.le.ns*nequi) go to 1
+      if(nflip<=ns*nequi) go to 1
       ratio=(one*ncall)/(one*nequi)
       write(iuo,'(" nequi,ncall,ratio:",2I10,1F12.6)')
      &              nequi,ncall,ratio

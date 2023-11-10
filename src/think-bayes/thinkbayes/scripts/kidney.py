@@ -11,7 +11,8 @@ import sys
 import matplotlib.pyplot as pyplot
 import numpy as np
 import thinkbayes
-from thinkbayes import thinkplot
+import thinkbayes.c01_probability
+import thinkplot
 
 INTERVAL = 245 / 365.0
 FORMATS = ["pdf", "eps"]
@@ -108,7 +109,7 @@ def plot_cdf(cdf):
     # CDF, model and data
 
     thinkplot.clear_figure()
-    thinkplot.pre_plot(num=2)
+    thinkplot.PrePlot(num=2)
     mxs, mys = model_cdf()
     thinkplot.plot_line(mxs, mys, label="model", linestyle="dashed")
 
@@ -260,7 +261,7 @@ def model_cdf(pc=0.35, lam1=0.79, lam2=5.0):
 
     Returns: list of xs, list of ys
     """
-    cdf = thinkbayes.eval_exponential_cdf
+    cdf = thinkbayes.EvalExponentialCdf
     x1 = np.arange(-2, 0, 0.1)
     y1 = [pc * (1 - cdf(-x, lam2)) for x in x1]
     x2 = np.arange(0, 7, 0.1)
@@ -346,7 +347,7 @@ class Cache(object):
         """
         bucket = cm_to_bucket(cm)
         cdf = self.conditional_cdf(bucket)
-        p = cdf.prob(age)
+        p = thinkbayes.c01_probability.prob(age)
         return 1 - p
 
     def get_dist_age_size(self, size_thresh=MAXSIZE):
@@ -532,7 +533,7 @@ class Calculator(object):
             cdfs.append(cdf)
 
         thinkplot.clear_figure()
-        thinkplot.pre_plot(num=len(cdfs))
+        thinkplot.PrePlot(num=len(cdfs))
         thinkplot.plot_cdfs(cdfs)
 
         thinkplot.save_plot(
@@ -544,7 +545,7 @@ class Calculator(object):
             loc=4,
         )
 
-    def plot_credible_intervals(self, xscale="linear"):
+    def plot_CredibleIntervals(self, xscale="linear"):
         """Plots the confidence interval for each bucket."""
         xs = []
         ts = []
@@ -793,7 +794,7 @@ def main(script):
 
     calc.plot_conditional_cdfs()
 
-    calc.plot_credible_intervals(xscale="log")
+    calc.plot_CredibleIntervals(xscale="log")
 
     calc.plot_joint_dist()
 

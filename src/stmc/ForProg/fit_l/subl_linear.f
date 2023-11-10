@@ -54,7 +54,7 @@ C SUBL - linear package. Straight line fit y=a1+a2*x.
       DATA NCALL/0/
       SAVE NCALL
       NCALL=NCALL+1
-      IF(NCALL.EQ.1) WRITE(IUO,'(1X,
+      IF(NCALL==1) WRITE(IUO,'(1X,
      & "SUBL: STRAIGHT LINE FIT   Y=A(1)+A(2)*X.",/,"  ")')
       RETURN
       END

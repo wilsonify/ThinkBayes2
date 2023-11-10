@@ -1,6 +1,6 @@
       subroutine potts_act(ista,ipf,idel,ns,nqm1,nd,iact)
 C Calculates action value iact of potts.com.
-      include 'implicit.sta'
+      include '../../ForLib/implicit.sta'
       dimension ipf(nd,ns),ista(ns),idel(0:nqm1,0:nqm1)
       iact=0
       do is=1,ns

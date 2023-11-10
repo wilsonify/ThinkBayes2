@@ -35,7 +35,7 @@ C
         iact=nint(act)
         call write_progress(iud2,"irpt,iact,acpt:",irpt,iact,acpt)
         call On_act(sta,ipf,n,ns,nd,act_test)
-        if(abs((act/nlink)-(act_test/nlink)).gt.eps) then
+        if(abs((act/nlink)-(act_test/nlink))>eps) then
           write(iuo,'("On_ts: STOP act rounding errors too big!")')
           stop "On_ts: act rounding errors too big!"
         end if

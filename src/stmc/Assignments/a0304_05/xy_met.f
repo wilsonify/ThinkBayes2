@@ -28,8 +28,8 @@ C                 updating. Acceptance rate self-adjusting to 1/2.
           dact=dact+sta(1,ipf(id,is))*dx+sta(2,ipf(id,is))*dy
           dact=dact+sta(1,ipb(id,is))*dx+sta(2,ipb(id,is))*dy
         end do
-        if(dact.lt.zero) then
-        if(rmafun().ge.exp(beta*dact)) go to 1
+        if(dact<zero) then
+        if(rmafun()>=exp(beta*dact)) go to 1
         end if
           sta(1,is)=xnew
           sta(2,is)=ynew

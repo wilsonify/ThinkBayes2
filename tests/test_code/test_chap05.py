@@ -5,25 +5,7 @@ import logging
 
 import pytest
 
-
-def Odds(p):
-    """
-    converts from probabilities to odds
-
-    :param p:
-    :return:
-    """
-    return p / (1 - p)
-
-
-def Probability(o):
-    """
-    converts from odds to probabilities.
-
-    :param o:
-    :return:
-    """
-    return o / (o + 1)
+from thinkbayes.c05_counts import Odds, Probability
 
 
 def test_odds():
@@ -67,11 +49,20 @@ def test_cookie():
 def test_Oliver():
     # ## Oliver's blood
     #
-    # The likelihood ratio is also useful for talking about the strength of evidence without getting bogged down talking about priors.
+    # The likelihood ratio is also useful for talking about the
+    # strength of evidence without getting bogged down talking about priors.
     #
-    # As an example, we'll solve this problem from MacKay's {\it Information Theory, Inference, and Learning Algorithms}:
+    # As an example,
+    # we'll solve this problem from MacKay's {\it Information Theory, Inference, and Learning Algorithms}:
     #
-    # > Two people have left traces of their own blood at the scene of a crime.  A suspect, Oliver, is tested and found to have type 'O' blood.  The blood groups of the two traces are found to be of type 'O' (a common type in the local population, having frequency 60) and of type 'AB' (a rare type, with frequency 1). Do these data [the traces found at the scene] give evidence in favor of the proposition that Oliver was one of the people [who left blood at the scene]?
+    # > Two people have left traces of their own blood at the scene of a crime.
+    # A suspect, Oliver, is tested and found to have type 'O' blood.
+    # The blood groups of the two traces are found to be of type 'O'
+    # (a common type in the local population, having frequency 60)
+    # and of type 'AB' (a rare type, with frequency 1).
+    # Do these data [the traces found at the scene]
+    # give evidence in favor of the proposition that
+    # Oliver was one of the people [who left blood at the scene]?
     #
     # If Oliver is
     # one of the people who left blood at the crime scene, then he
@@ -100,16 +91,22 @@ def test_Oliver():
 
     # Since the ratio is less than 1, it is evidence *against* the hypothesis that Oliver left blood at the scence.
     #
-    # But it is weak evidence.  For example, if the prior odds were 1 (that is, 50% probability), the posterior odds would be 0.83, which corresponds to a probability of:
+    # But it is weak evidence.
+    # For example, if the prior odds were 1 (that is, 50% probability),
+    # the posterior odds would be 0.83, which corresponds to a probability of:
 
     post_odds = 1 * like1 / like2
     Probability(post_odds)
 
     # So this evidence doesn't "move the needle" very much.
 
-    # **Exercise:** Suppose other evidence had made you 90% confident of Oliver's guilt.  How much would this exculpatory evidence change your beliefs?  What if you initially thought there was only a 10% chance of his guilt?
+    # **Exercise:**
+    # Suppose other evidence had made you 90% confident of Oliver's guilt.
+    # How much would this exculpatory evidence change your beliefs?
+    # What if you initially thought there was only a 10% chance of his guilt?
     #
-    # Notice that evidence with the same strength has a different effect on probability, depending on where you started.
+    # Notice that evidence with the same strength has a different effect on probability,
+    # depending on where you started.
 
     # +
     # Solution goes here

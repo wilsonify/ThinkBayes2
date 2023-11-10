@@ -6,7 +6,7 @@ MIT License: https://opensource.org/licenses/MIT
 """
 
 from thinkbayes import Pmf, Suite, Beta
-from thinkbayes import thinkplot
+import thinkplot
 
 
 def test_unreliable_evaluators():
@@ -45,29 +45,24 @@ def test_unreliable_evaluators():
     # Suppose we start with a redditor who has demonstrated some reliability.
 
     beta = Beta(2, 1)
-    redditor = beta.make_pmf(11)
-    thinkplot.plot_pdf_line(redditor)
-    thinkplot.decorate(xlabel="Reliability (R)", ylabel="PMF")
+    redditor = beta.MakePmf(11)
 
-    mean_r = redditor.mean()
+    mean_r = redditor.Mean()
 
     # Solution
-
     # And a completely unknown item.
 
     beta = Beta(1, 1)
-    item = beta.make_pmf(11)
-    thinkplot.plot_pdf_line(item)
-    thinkplot.decorate(xlabel="Quality (Q))", ylabel="PMF")
+    item = beta.MakePmf(11)
 
-    mean_q = item.mean()
+    mean_q = item.Mean()
 
     # Solution
 
     class Pair(Suite):
         """Represents hypotheses about the reliability and quality."""
 
-        def likelihood(self, data, hypo):
+        def Likelihood(self, data, hypo):
             """Computes the likelihood of the data under the hypothesis.
 
             hypo: q, r
@@ -87,38 +82,38 @@ def test_unreliable_evaluators():
     # the vote provides no information about the redditor:
 
     d = {}
-    for r, p1 in redditor.items():
-        for q, p2 in item.items():
+    for r, p1 in redditor.Items():
+        for q, p2 in item.Items():
             d[q, r] = p1 * p2
 
     suite = Pair(d)
 
     # Solution
 
-    suite.update("up")
+    suite.Update("up")
 
     # Solution
 
     redditor_post = Pmf()
-    for (q, r), p in suite.items():
+    for (q, r), p in suite.Items():
         redditor_post[r] += p
 
-    redditor_post.total()
+    redditor_post.Total()
 
-    thinkplot.plot_pdf_line(redditor_post)
-    ylim = 0, redditor_post.max_like() * 1.05
+
+    ylim = 0, redditor_post.MaxLike() * 1.05
     thinkplot.decorate(xlabel="Reliability (R)", ylabel="PMF", ylim=ylim)
 
-    mean_r = redditor_post.mean()
+    mean_r = redditor_post.Mean()
 
     item_post = Pmf()
-    for (q, r), p in suite.items():
+    for (q, r), p in suite.Items():
         item_post[q] += p
 
-    item_post.total()
+    item_post.Total()
 
-    thinkplot.plot_pdf_line(item_post)
-    ylim = 0, item_post.max_like() * 1.05
+
+    ylim = 0, item_post.MaxLike() * 1.05
     thinkplot.decorate(xlabel="Quality (Q))", ylabel="PMF", ylim=ylim)
 
-    mean_q = item_post.mean()
+    mean_q = item_post.Mean()

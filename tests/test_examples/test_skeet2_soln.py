@@ -8,7 +8,6 @@ import logging
 
 import numpy as np
 from thinkbayes import Pmf, Beta
-from thinkbayes import thinkplot
 
 
 def test_comparing_distributions():
@@ -25,16 +24,12 @@ def test_comparing_distributions():
     # First I create a Beta distribution for each of the competitors, and update it with the results.
 
     rhode = Beta(1, 1, label="Rhode")
-    rhode.update((22, 11))
+    rhode.Update((22, 11))
 
     wei = Beta(1, 1, label="Wei")
-    wei.update((21, 12))
+    wei.Update((21, 12))
 
     # Based on the data, the distribution for Rhode is slightly farther right than the distribution for Wei, but there is a lot of overlap.
-
-    thinkplot.plot_pdf_line(rhode.make_pmf())
-    thinkplot.plot_pdf_line(wei.make_pmf())
-    thinkplot.config_plot(xlabel="x", ylabel="Probability")
 
     # To compute the probability that Rhode actually has a higher value of `p`, there are two options:
     #
@@ -47,8 +42,8 @@ def test_comparing_distributions():
     iters = 1000
     count = 0
     for _ in range(iters):
-        x1 = rhode.random()
-        x2 = wei.random()
+        x1 = rhode.Random()
+        x2 = wei.Random()
         if x1 > x2:
             count += 1
 
@@ -56,27 +51,27 @@ def test_comparing_distributions():
 
     # `Beta` also provides `Sample`, which returns a NumPy array, so we an perform the comparisons using array operations:
 
-    rhode_sample = rhode.sample(iters)
-    wei_sample = wei.sample(iters)
+    rhode_sample = rhode.Sample(iters)
+    wei_sample = wei.Sample(iters)
     np.mean(rhode_sample > wei_sample)
 
     # The other option is to make `Pmf` objects that approximate the Beta distributions, and enumerate pairs of values:
 
     def ProbGreater(pmf1, pmf2):
         total = 0
-        for x1, prob1 in pmf1.items():
-            for x2, prob2 in pmf2.items():
+        for x1, prob1 in pmf1.Items():
+            for x2, prob2 in pmf2.Items():
                 if x1 > x2:
                     total += prob1 * prob2
         return total
 
-    pmf1 = rhode.make_pmf(1001)
-    pmf2 = wei.make_pmf(1001)
+    pmf1 = rhode.MakePmf(1001)
+    pmf2 = wei.MakePmf(1001)
     ProbGreater(pmf1, pmf2)
 
-    pmf1.prob_greater(pmf2)
+    pmf1.ProbGreater(pmf2)
 
-    pmf1.prob_less(pmf2)
+    pmf1.ProbLess(pmf2)
 
     # **Exercise:** Run this analysis again with a different prior and see how much effect it has on the results.
 
@@ -90,7 +85,6 @@ def test_comparing_distributions():
     #
     # I'll do it by sampling first.
 
-    
     def flip(p):
         return np.random.random() < p
 
@@ -103,8 +97,8 @@ def test_comparing_distributions():
     losses = 0
 
     for _ in range(iters):
-        x1 = rhode.random()
-        x2 = wei.random()
+        x1 = rhode.Random()
+        x2 = wei.Random()
 
         count1 = count2 = 0
         for _ in range(25):
@@ -122,7 +116,6 @@ def test_comparing_distributions():
     # Or, realizing that the distribution of `k` is binomial, we can simplify the code using NumPy:
 
     rhode_rematch = np.random.binomial(25, rhode_sample)
-    thinkplot.plot_hist_bar(Pmf(rhode_rematch))
 
     wei_rematch = np.random.binomial(25, wei_sample)
     np.mean(rhode_rematch > wei_rematch)
@@ -131,40 +124,38 @@ def test_comparing_distributions():
 
     # Alternatively, we can make a mixture that represents the distribution of `k`, taking into account our uncertainty about `x`:
 
-    from thinkbayes import make_binomial_pmf
+    from thinkbayes import MakeBinomialPmf
 
     def MakeBinomialMix(pmf, label=""):
         mix = Pmf(label=label)
-        for x, prob in pmf.items():
-            binom = make_binomial_pmf(n=25, p=x)
-            for k, p in binom.items():
+        for x, prob in pmf.Items():
+            binom = MakeBinomialPmf(n=25, p=x)
+            for k, p in binom.Items():
                 mix[k] += prob * p
         return mix
 
-    rhode_rematch = MakeBinomialMix(rhode.make_pmf(), label="Rhode")
-    wei_rematch = MakeBinomialMix(wei.make_pmf(), label="Wei")
-    thinkplot.plot_pdf_line(rhode_rematch)
-    thinkplot.plot_pdf_line(wei_rematch)
-    thinkplot.config_plot(xlabel="hits")
+    rhode_rematch = MakeBinomialMix(rhode.MakePmf(), label="Rhode")
+    wei_rematch = MakeBinomialMix(wei.MakePmf(), label="Wei")
 
-    rhode_rematch.prob_greater(wei_rematch), rhode_rematch.prob_less(wei_rematch)
+    rhode_rematch.ProbGreater(wei_rematch)
+    rhode_rematch.ProbLess(wei_rematch)
 
     # Alternatively, we could use MakeMixture:
 
-    from thinkbayes import make_mixture
+    from thinkbayes import MakeMixture
 
     def MakeBinomialMix2(pmf):
         binomials = Pmf()
-        for x, prob in pmf.items():
-            binom = make_binomial_pmf(n=25, p=x)
+        for x, prob in pmf.Items():
+            binom = MakeBinomialPmf(n=25, p=x)
             binomials[binom] = prob
-        return make_mixture(binomials)
+        return MakeMixture(binomials)
 
     # Here's how we use it.
 
-    rhode_rematch = MakeBinomialMix2(rhode.make_pmf())
-    wei_rematch = MakeBinomialMix2(wei.make_pmf())
-    rhode_rematch.prob_greater(wei_rematch), rhode_rematch.prob_less(wei_rematch)
+    rhode_rematch = MakeBinomialMix2(rhode.MakePmf())
+    wei_rematch = MakeBinomialMix2(wei.MakePmf())
+    rhode_rematch.ProbGreater(wei_rematch), rhode_rematch.ProbLess(wei_rematch)
 
     # **Exercise:** Run this analysis again with a different prior and see how much effect it has on the results.
 
@@ -181,54 +172,51 @@ def test_comparing_distributions():
     iters = 1000
     pmf = Pmf()
     for _ in range(iters):
-        k = rhode_rematch.random() + wei_rematch.random()
+        k = rhode_rematch.Random() + wei_rematch.Random()
         pmf[k] += 1
-    pmf.normalize()
-    thinkplot.plot_hist_bar(pmf)
+    pmf.Normalize()
 
     # Or we could use `Sample` and NumPy:
 
-    ks = rhode_rematch.sample(iters) + wei_rematch.sample(iters)
+    ks = rhode_rematch.Sample(iters) + wei_rematch.Sample(iters)
     pmf = Pmf(ks)
-    thinkplot.plot_hist_bar(pmf)
 
     # Alternatively, we could compute the distribution of the sum by enumeration:
 
     def AddPmfs(pmf1, pmf2):
         pmf = Pmf()
-        for v1, p1 in pmf1.items():
-            for v2, p2 in pmf2.items():
+        for v1, p1 in pmf1.Items():
+            for v2, p2 in pmf2.Items():
                 pmf[v1 + v2] += p1 * p2
         return pmf
 
     # Here's how it's used:
 
     pmf = AddPmfs(rhode_rematch, wei_rematch)
-    thinkplot.plot_pdf_line(pmf)
 
     # The `Pmf` class provides a `+` operator that does the same thing.
 
     pmf = rhode_rematch + wei_rematch
-    thinkplot.plot_pdf_line(pmf)
 
     # **Exercise:**  The Pmf class also provides the `-` operator, which computes the distribution of the difference in values from two distributions.  Use the distributions from the previous section to compute the distribution of the differential between Rhode and Wei in a rematch.  On average, how many clays should we expect Rhode to win by?  What is the probability that Rhode wins by 10 or more?
 
     # Solution
 
     pmf = rhode_rematch - wei_rematch
-    thinkplot.plot_pdf_line(pmf)
 
     # Solution
 
     # On average, we expect Rhode to win by about 1 clay.
 
-    pmf.mean(), pmf.median(), pmf.mode()
+    pmf.Mean()
+    pmf.Median()
+    pmf.Mode()
 
     # Solution
 
     # But there is, according to this model, a 2% chance that she could win by 10.
 
-    p_win_by_10 = sum([p for (x, p) in pmf.items() if x >= 10])
+    p_win_by_10 = sum([p for (x, p) in pmf.Items() if x >= 10])
     logging.info("%r", f"p_win_by_10 = {p_win_by_10}")
 
     # ## Distribution of maximum
@@ -246,15 +234,14 @@ def test_comparing_distributions():
     iters = 1000
     pmf = Pmf()
     for _ in range(iters):
-        ks = rhode_rematch.sample(6)
+        ks = rhode_rematch.Sample(6)
         pmf[max(ks)] += 1
-    pmf.normalize()
-    thinkplot.plot_hist_bar(pmf)
+    pmf.Normalize()
 
     # And here's a version using NumPy.  I'll generate an array with 6 rows and 10 columns:
 
     iters = 1000
-    ks = rhode_rematch.sample((6, iters))
+    ks = rhode_rematch.Sample((6, iters))
     logging.info("%r", f"ks = {ks}")
 
     # Compute the maximum in each column:
@@ -265,7 +252,6 @@ def test_comparing_distributions():
     # And then plot the distribution of maximums:
 
     pmf = Pmf(maxes)
-    thinkplot.plot_hist_bar(pmf)
 
     # Or we can figure it out analytically.  If the maximum is less-than-or-equal-to some value `k`, all 6 random selections must be less-than-or-equal-to `k`, so:
     #
@@ -273,8 +259,7 @@ def test_comparing_distributions():
     #
     # `Pmf` provides a method that computes and returns this `Cdf`, so we can compute the distribution of the maximum like this:
 
-    pmf = rhode_rematch.max(6).make_pmf()
-    thinkplot.plot_hist_bar(pmf)
+    pmf = rhode_rematch.Max(6).MakePmf()
 
     # **Exercise:**  Here's how Pmf.Max works:
     #
@@ -292,9 +277,8 @@ def test_comparing_distributions():
     # Write a function that takes a Pmf and an integer `n` and returns a Pmf that represents the distribution of the minimum of `k` values drawn from the given Pmf.  Use your function to compute the distribution of the minimum score Kim Rhode would be expected to shoot in six competitions.
 
     def Min(pmf, k):
-        cdf = pmf.make_cdf()
+        cdf = pmf.MakeCdf()
         cdf.ps = 1 - (1 - cdf.ps) ** k
         return cdf
 
-    pmf = Min(rhode_rematch, 6).make_pmf()
-    thinkplot.plot_hist_bar(pmf)
+    pmf = Min(rhode_rematch, 6).MakePmf()

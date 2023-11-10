@@ -24,17 +24,17 @@ C
       DO IBIN=0,NBINS 
         WRITE(CBIN,'(I2.2)') IBIN
         OPEN(IUD,FILE="datj"//CBIN//".d",FORM='FORMATTED',STATUS='OLD')
-        IF(IBIN.EQ.0) THEN
+        IF(IBIN==0) THEN
           READ(IUD,*) NBINS_IN,NDAT
           WRITE(IUO,'(" NBINS,NBINS_IN,NDAT:",3I9)') NBINS,NBINS_IN,NDAT
-          IF(NBINS.NE.NBINS_IN) STOP "NBINS must equal NBINS_IN."
+          IF(NBINS/=NBINS_IN) STOP "NBINS must equal NBINS_IN."
         END IF
         DO IDAT=1,NDAT
           READ(IUD,*) X(IDAT),Y(IDAT),YE(IDAT)
         END DO
         CLOSE(IUD)
 C Write mean value data on file for use with gnuplot:
-        IF(IBIN.EQ.0) THEN
+        IF(IBIN==0) THEN
           OPEN(IUD,FILE="data.d",STATUS='UNKNOWN')
           DO IDAT=1,NDAT
             WRITE(IUD,'(3G16.7)') X(IDAT),Y(IDAT),YE(IDAT)

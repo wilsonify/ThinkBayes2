@@ -1,0 +1,9 @@
+type: object
+properties:
+  observations:
+    type: array
+    items:
+      type: array
+      items:
+        type: string
+example: { "observations": [ ["bag1", "yellow"], ["bag2", "green"], ["bag1", "blue"] ] }
