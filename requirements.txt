@@ -1,9 +1,27 @@
-empiricaldist
+sympy
+numpy
 pandas
 scipy
-arviz
-pymc
-pytest
-
-setuptools~=60.2.0
-pika~=1.3.0
+matplotlib
+# arviz
+# auto_mix_prep
+# empiricaldist
+# empiricaldist
+# html5lib
+# jupyter
+# jupyter
+# lxml
+# nbclassic
+# networkx
+# pymc3
+# pytest
+# pytest
+# redis
+# scikit-learn
+# scipy
+# seaborn
+# statsmodels
+# statsmodels
+# tables
+# tables
+# xlrd

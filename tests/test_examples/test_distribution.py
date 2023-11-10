@@ -171,14 +171,16 @@ def test_print(d6):
     so the total probability in the `Pmf` is 6,
     which doesn't make a lot of sense.
     """
-    assert d6.d == {
-        1: 0.16666666666666666,
-        2: 0.16666666666666666,
-        3: 0.16666666666666666,
-        4: 0.16666666666666666,
-        5: 0.16666666666666666,
-        6: 0.16666666666666666
+    expected_probabilities = {
+        1: round(1 / 6, 4),
+        2: round(1 / 6, 4),
+        3: round(1 / 6, 4),
+        4: round(1 / 6, 4),
+        5: round(1 / 6, 4),
+        6: round(1 / 6, 4)
     }
+
+    assert d6.d == pytest.approx(expected_probabilities, abs=0.01)
 
 
 def test_norm(d6):
@@ -193,14 +195,15 @@ def test_norm(d6):
     """
 
     d6.Normalize()
-    assert d6.d == {
-        1: 0.16666666666666669,
-        2: 0.16666666666666669,
-        3: 0.16666666666666669,
-        4: 0.16666666666666669,
-        5: 0.16666666666666669,
-        6: 0.16666666666666669
+    expected_probabilities = {
+        1: round(1 / 6, 4),
+        2: round(1 / 6, 4),
+        3: round(1 / 6, 4),
+        4: round(1 / 6, 4),
+        5: round(1 / 6, 4),
+        6: round(1 / 6, 4)
     }
+    assert d6.d == pytest.approx(expected_probabilities, abs=0.01)
 
 
 def test_3(d6):

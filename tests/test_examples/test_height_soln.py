@@ -108,7 +108,7 @@ def test_one():
         print(hypo, prob)
 
     heights = np.linspace(130, 210)
-    series = pd.Series(index=heights, dtype=np.float64)
+    series = pd.Series(index=heights, dtype=float)
 
     for height in heights:
         series[height] = prob_male(height)

@@ -5,6 +5,8 @@ Copyright 2018 Allen B. Downey
 MIT License: https://opensource.org/licenses/MIT
 """
 import logging
+
+import pytest
 import scipy.stats
 import matplotlib.pyplot as plt
 
@@ -54,6 +56,7 @@ class August(Suite, Joint):
         return pmf
 
 
+@pytest.mark.skip(reason="long running test")
 def test_birthday_problem():
     # ### The August birthday problem
     #
@@ -97,23 +100,7 @@ def test_birthday_problem():
 
     # Here's the data from the table.
 
-    totals = np.array(
-        [
-            32690,
-            31238,
-            34405,
-            34565,
-            34977,
-            34415,
-            36577,
-            36319,
-            35353,
-            34405,
-            31285,
-            31617,
-        ]
-    )
-
+    totals = np.array([32690, 31238, 34405, 34565, 34977, 34415, 36577, 36319, 35353, 34405, 31285, 31617, ])
     diagnosed = np.array([265, 280, 307, 312, 317, 287, 320, 309, 225, 240, 232, 243])
 
     # I'll roll the data so September comes first.

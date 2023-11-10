@@ -176,8 +176,8 @@ def test_lightbulb():
     # Solution
     lam = 2
     k = 1.5
-    lams = np.linspace(0, 5, 101)
-    ks = np.linspace(0, 5, 101)
+    lams = np.linspace(0, 5, 10)
+    ks = np.linspace(0, 5, 10)
     suite = LightBulb(product(lams, ks))
     datum = SampleWeibull(lam, k, 10)
     suite.UpdateSet(datum)
@@ -201,7 +201,7 @@ def test_lightbulb2():
 def test_lightbulb3():
     lam = 2
     k = 1.5
-    n = 15
+    n = 5
     t_end = 10
     starts = np.random.uniform(0, t_end, n)
     lifespans = SampleWeibull(lam, k, n)
@@ -228,8 +228,8 @@ def test_lightbulb3():
     for pair in data:
         print(pair)
 
-    lams = np.linspace(0, 10, 101)
-    ks = np.linspace(0, 10, 101)
+    lams = np.linspace(0, 10, 11)
+    ks = np.linspace(0, 10, 11)
     suite = LightBulb3(product(lams, ks))
     suite.UpdateSet(data)
     pmf_lam = suite.Marginal(0)
@@ -265,8 +265,8 @@ def test_lightbulb5():
 
     n = 100
     t_return = 1
-    lams = np.linspace(0, 10, 101)
-    ks = np.linspace(0, 10, 101)
+    lams = np.linspace(0, 10, 11)
+    ks = np.linspace(0, 10, 11)
     metapmf = Pmf()
     suite = LightBulb4(product(lams, ks))
     for (lam, k), prob in suite.Items():

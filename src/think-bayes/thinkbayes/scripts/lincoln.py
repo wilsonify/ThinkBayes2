@@ -45,36 +45,77 @@ Of course, whenever I see something like this, the idea that pops into
 my head is that there must be a (better) Bayesian solution! And there
 is.
 """
+import numpy as np
 
 import thinkbayes
 import numpy
 import thinkplot
 
 
-def choose(n, k, d=None):
-    """The binomial coefficient "n choose k".
+# def choose(n, k, d=None):
+#     """The binomial coefficient "n choose k".
+#
+#     Args:
+#       n: number of trials
+#       k: number of successes
+#       d: map from (n,k) tuples to cached results
+#
+#     Returns:
+#       int
+#     """
+#     if d is None:
+#         d = {}
+#     if k == 0:
+#         return 1
+#     if n == 0:
+#         return 0
+#
+#     try:
+#         return d[n, k]
+#     except KeyError:
+#         res = choose(n - 1, k) + choose(n - 1, k - 1)
+#         d[n, k] = res
+#         return res
+
+def choose(n, k):
+    """
+    The binomial coefficient "n choose k
+    This version of the function uses a 2D table (dp) to store intermediate results
+     and iteratively fills in the table from the base case (C(n, 0))
+     to the target case (C(n, k)).
+     The result is directly obtained from the table without recursive calls.
+    ".
 
     Args:
       n: number of trials
       k: number of successes
-      d: map from (n,k) tuples to cached results
 
     Returns:
       int
     """
-    if d is None:
-        d = {}
-    if k == 0:
-        return 1
-    if n == 0:
+    if k < 0 or k > n:
         return 0
 
-    try:
-        return d[n, k]
-    except KeyError:
-        res = choose(n - 1, k) + choose(n - 1, k - 1)
-        d[n, k] = res
-        return res
+    # Create a 2D table to store the results
+    dp = [[0] * (k + 1) for _ in range(n + 1)]
+
+    # Base case: C(n, 0) = 1
+    for i in range(n + 1):
+        dp[i][0] = 1
+
+    # Fill in the table using bottom-up dynamic programming
+    for i in range(1, n + 1):
+        for j in range(1, min(i, k) + 1):
+            dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j]
+
+    result = dp[n][k]
+
+    # Ensure the result is a valid integer
+    assert not np.isnan(result)
+    assert np.isfinite(result)
+
+    return int(result)
+
 
 
 def binom(k, n, p):
@@ -84,7 +125,18 @@ def binom(k, n, p):
     n: number of attempts
     p: probability of a hit
     """
-    return p ** k * (1 - p) ** (n - k)
+
+    if p < 0 or p > 1:
+        return 0
+
+    # Calculate the probability mass function
+    prob = p ** k * (1 - p) ** (n - k)
+
+    # Ensure the result is a valid float
+    if np.isnan(prob) or not np.isfinite(prob):
+        return 0
+
+    return prob
 
 
 class Lincoln(thinkbayes.Suite, thinkbayes.Joint):
@@ -101,6 +153,8 @@ class Lincoln(thinkbayes.Suite, thinkbayes.Joint):
 
         part1 = choose(n, k1) * binom(k1, n, p1)
         part2 = choose(k1, c) * choose(n - k1, k2 - c) * binom(k2, n, p2)
+        assert not np.isnan(part1)
+        assert not np.isnan(part2)
         return part1 * part2
 
 
