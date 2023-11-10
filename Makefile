@@ -11,6 +11,7 @@ create_environment:
 
 requirements:
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
+	$(PYTHON_INTERPRETER) -m pip install -r requirements-dev.txt
 	cd src/think-bayes; $(PYTHON_INTERPRETER) setup.py develop
 
 
