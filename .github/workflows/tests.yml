@@ -33,6 +33,7 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
           pip install src/think-bayes
+          pip install src/think-plot
 
       # potentially cache action runner here
       - uses: actions/checkout@v2
