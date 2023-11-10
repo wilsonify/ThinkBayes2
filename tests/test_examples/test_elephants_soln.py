@@ -81,7 +81,7 @@ def test_elephant():
                 raise ValueError("A Dirichlet distribution with " "n<2 makes no sense")
 
             self.n = n
-            self.params = np.ones(n, dtype=np.float) * conc
+            self.params = np.ones(n, dtype=float) * conc
             self.label = label if label is not None else "_nolegend_"
 
         def Update(self, data):

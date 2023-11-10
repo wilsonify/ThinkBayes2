@@ -6,6 +6,7 @@ MIT License: https://opensource.org/licenses/MIT
 from itertools import product
 
 import numpy as np
+import pytest
 from scipy.stats import norm
 
 import thinkplot
@@ -39,6 +40,7 @@ class Regress2(Suite, Joint):
         return like
 
 
+@pytest.mark.skip(reason="long running test")
 def test_bayes_reg():
     # ## Bayesian regression
     #

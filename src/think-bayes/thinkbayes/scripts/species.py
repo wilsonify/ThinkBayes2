@@ -160,7 +160,7 @@ class Subject(object):
         """
         counts = self.get_counts()
         total = sum(counts)
-        prevalences = np.array(counts, dtype=np.float) / total
+        prevalences = np.array(counts, dtype=float) / total
         return prevalences
 
     def process(self, low=None, high=500, conc=1.0, iters=100):
@@ -812,8 +812,8 @@ class Species2(object):
     def __init__(self, ns, conc=1.0, iters=1000):
         self.ns = ns
         self.conc = conc
-        self.probs = np.ones(len(ns), dtype=np.float)
-        self.params = np.ones(self.ns[-1], dtype=np.float) * conc
+        self.probs = np.ones(len(ns), dtype=float)
+        self.params = np.ones(self.ns[-1], dtype=float) * conc
         self.iters = iters
         self.num_reads = 0
         self.m = 0
@@ -827,7 +827,7 @@ class Species2(object):
         singletons = thinkbayes.c01_probability.count(1)
         num = m - singletons
         print(m, singletons, num)
-        addend = np.ones(num, dtype=np.float) * 1
+        addend = np.ones(num, dtype=float) * 1
         print(len(addend))
         print(len(self.params[singletons:m]))
         self.params[singletons:m] += addend
@@ -840,7 +840,7 @@ class Species2(object):
         """
         self.num_reads += sum(data)
 
-        like = np.zeros(len(self.ns), dtype=np.float)
+        like = np.zeros(len(self.ns), dtype=float)
         for _ in range(self.iters):
             like += self.sample_likelihood(data)
 
@@ -1031,7 +1031,7 @@ class Species3(Species2):
         data: list of observations
         """
         # sample the likelihoods and add them up
-        like = np.zeros(len(self.ns), dtype=np.float)
+        like = np.zeros(len(self.ns), dtype=float)
         for _ in range(self.iters):
             like += self.sample_likelihood(data)
 
@@ -1158,7 +1158,7 @@ class Species5(Species2):
             return
 
         # sample the likelihoods and add them up
-        likes = np.zeros(len(self.ns), dtype=np.float)
+        likes = np.zeros(len(self.ns), dtype=float)
         for _ in range(self.iters):
             likes += self.sample_likelihood(i, count)
 
