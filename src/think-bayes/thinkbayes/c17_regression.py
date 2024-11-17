@@ -1,25 +1,36 @@
-import pandas as pd
-from scipy.stats import norm
-from empiricaldist import Pmf
-import statsmodels.formula.api as smf
 import numpy as np
+import pandas as pd
+import statsmodels.formula.api as smf
+from empiricaldist import Pmf
+from matplotlib import pyplot as plt
+from matplotlib.gridspec import GridSpec
+from scipy.stats import norm
+
+
+def normalize(joint):
+    """Normalize a joint distribution.
+
+    joint: DataFrame
+    """
+    prob_data = joint.to_numpy().sum()
+    joint /= prob_data
+    return prob_data
+
 
 # Load data
-def load_and_prepare_data(file_path):
+def load_data(file_path):
     """
     Load the dataset and prepare it for analysis.
     """
     df = pd.read_csv(file_path, parse_dates=["DATE"])
+    return df
+
+
+def prepare_data(df):
     df["YEAR"] = df["DATE"].dt.year
     snow = df.groupby("YEAR")["SNOW"].sum()
     return snow
 
-# Create a Pmf for snowfall data
-def create_pmf(snow):
-    """
-    Create a probability mass function (Pmf) for snowfall data.
-    """
-    return Pmf.from_seq(snow)
 
 # Fit a least-squares regression model
 def fit_regression(data):
@@ -31,97 +42,166 @@ def fit_regression(data):
     data["y"] = data["SNOW"]
     formula = "y ~ x"
     results = smf.ols(formula, data=data).fit()
-    return results, offset
+    model = {
+        "offset": offset,
+        "intercept": results.params.Intercept,
+        "slope": results.params.x,
+        "sigma": results.resid.std()
+    }
+    return model
+
 
 # Create priors
-def make_uniform(qs, label):
-    """
-    Create a uniform prior distribution.
-    """
-    probs = np.ones_like(qs) / len(qs)
-    return Pmf(dict(zip(qs, probs)), name=label)
+def make_uniform(qs, name=None, **options):
+    """Make a Pmf that represents a uniform distribution."""
+    pmf = Pmf(1.0, qs, **options)
+    pmf.normalize()
+    if name:
+        pmf.index.name = name
+    return pmf
 
-def create_priors():
-    """
-    Create prior distributions for slope, intercept, and sigma.
-    """
-    slope_qs = np.linspace(-0.5, 1.5, 51)
-    intercept_qs = np.linspace(54, 75, 41)
-    sigma_qs = np.linspace(20, 35, 31)
-    prior_slope = make_uniform(slope_qs, "Slope")
-    prior_intercept = make_uniform(intercept_qs, "Intercept")
-    prior_sigma = make_uniform(sigma_qs, "Sigma")
-    return prior_slope, prior_intercept, prior_sigma
 
 # Make a joint distribution
-def make_joint(pmf1, pmf2):
+def make_joint(s1, s2):
+    """Compute the outer product of two Series.
+
+    First Series goes across the columns;
+    second goes down the rows.
+
+    s1: Series
+    s2: Series
+
+    return: DataFrame
     """
-    Create a joint distribution from two PMFs.
-    """
-    return Pmf({(x, y): p1 * p2 for x, p1 in pmf1.items() for y, p2 in pmf2.items()})
+    X, Y = np.meshgrid(s1, s2)
+    return pd.DataFrame(X * Y, columns=s1.index, index=s2.index)
+
 
 def make_joint3(pmf1, pmf2, pmf3):
-    """
-    Create a joint distribution from three PMFs.
-    """
-    joint2 = make_joint(pmf2, pmf1)
-    joint3 = make_joint(pmf3, joint2)
+    """Make a joint distribution with three parameters."""
+    joint2 = make_joint(pmf2, pmf1).stack()
+    joint3 = make_joint(pmf3, joint2).stack()
     return Pmf(joint3)
 
+
 # Compute likelihood
-def compute_likelihood(xs, ys, prior):
+def compute_likelihood(data, model):
     """
     Compute the likelihood of the data for each set of parameters.
     """
-    likelihood = prior.copy()
-    for (slope, intercept, sigma) in prior.index:
-        expected = slope * xs + intercept
-        resid = ys - expected
-        densities = norm.pdf(resid, 0, sigma)
-        likelihood[slope, intercept, sigma] = densities.prod()
+    offset = model["offset"]
+    inter = model["intercept"]
+    slope = model["slope"]
+    sigma = model["sigma"]
+    xs = data['x']
+    ys = data['y']
+    expected = slope * xs + inter
+    resid = ys - expected
+    densities = norm(0, sigma).pdf(resid)
+    likelihood = densities.prod()
     return likelihood
 
+
 # Bayesian update
-def update_posterior(prior, likelihood):
+def update_posterior(data, prior):
     """
     Perform Bayesian update to compute the posterior.
     """
+    xs = data['x']
+    ys = data['y']
+    likelihood = prior.copy()
+    for slope, inter, sigma in prior.index:
+        expected = slope * xs + inter
+        resid = ys - expected
+        densities = norm.pdf(resid, 0, sigma)
+        likelihood[slope, inter, sigma] = densities.prod()
     posterior = prior * likelihood
     posterior.normalize()
     return posterior
 
+
+def update_optimized(data, prior):
+    """Posterior distribution of regression parameters
+    `slope`, `inter`, and `sigma`.
+
+    prior: Pmf representing the joint prior
+    data: DataFrame with columns `x` and `y`
+
+    returns: Pmf representing the joint posterior
+    """
+    xs = data['x']
+    ys = data['y']
+    sigmas = prior.columns
+    likelihood = prior.copy()
+
+    for slope, inter in prior.index[0,1]:
+        expected = slope * xs + inter
+        resid = ys - expected
+        resid_mesh, sigma_mesh = np.meshgrid(resid, sigmas)
+        densities = norm.pdf(resid_mesh, 0, sigma_mesh)
+        likelihood.loc[slope, inter] = densities.prod(axis=1)
+
+    posterior = prior * likelihood
+    normalize(posterior)
+    return posterior
+
+
 # Main function
 def main():
     # Load and prepare data
-    snow = load_and_prepare_data("/mnt/SSD1/mrepos/github.com/wilsonify/ThinkBayes2/data/2239075.csv")
-    pmf_snowfall = create_pmf(snow)
+    snow = prepare_data(load_data("/mnt/SSD1/mrepos/github.com/wilsonify/ThinkBayes2/data/2239075.csv"))
+    pmf_snowfall = Pmf.from_seq(snow)
     mean, std = pmf_snowfall.mean(), pmf_snowfall.std()
     print(f"Mean snowfall: {mean}, Std dev: {std}")
+    dist = norm(mean, std)
+    qs = pmf_snowfall.qs
+    ps = dist.cdf(qs)
+    fig = plt.figure(figsize=(8, 5))
+    gs = GridSpec(1, 1, height_ratios=[1])
+    ax0 = fig.add_subplot(gs[0, 0])
+    pmf_snowfall.make_cdf().plot(label='data', ax=ax0)
+    ax0.plot(qs, ps, color='C5', label='model', )
+    ax0.set_xlabel('Total snowfall (inches)')
+    ax0.set_ylabel('CDF')
+    ax0.set_title('Normal model of variation in snowfall')
+    ax0.legend()
+    plt.savefig("normal_model_of_variation_in_snowfall.png")
 
     # Fit regression model
     data = snow.reset_index()
-    results, offset = fit_regression(data)
-    print(f"Regression coefficients: {results.params}")
-    print(f"Residual std dev: {results.resid.std()}")
+    data.head(3)
+    results = fit_regression(data)
+    print(f"results = {results}")
 
     # Create priors
-    prior_slope, prior_intercept, prior_sigma = create_priors()
+    slope_qs = np.linspace(-0.5, 1.5, 51)
+    prior_slope = make_uniform(slope_qs, "Slope")
+
+    intercept_qs = np.linspace(54, 75, 41)
+    prior_intercept = make_uniform(intercept_qs, "Intercept")
+
+    sigma_qs = np.linspace(20, 35, 31)
+    prior_sigma = make_uniform(sigma_qs, "Sigma")
+
     prior = make_joint3(prior_slope, prior_intercept, prior_sigma)
+    print(f"prior = {prior}")
 
     # Compute likelihood and update posterior
-    xs = data["x"]
-    ys = data["y"]
-    likelihood = compute_likelihood(xs, ys, prior)
-    posterior = update_posterior(prior, likelihood)
+    likelihood = compute_likelihood(data, results)
+    print(f"likelihood = {likelihood}")
+
+    posterior = update_posterior(data, prior)
+    print(f"posterior = {posterior}")
 
     # Extract marginals
-    posterior_slope = posterior.marginal(0)
-    posterior_intercept = posterior.marginal(1)
-    posterior_sigma = posterior.marginal(2)
+    model_updated = {
+        "offset": results["offset"],
+        "intercept": posterior.marginal(1).mode(),
+        "slope": posterior.marginal(0).mode(),
+        "sigma": posterior.marginal(2).mode()
+    }
+    print(f"posterior model = {model_updated}")
 
-    print("Posterior slope mean:", posterior_slope.mean())
-    print("Posterior intercept mean:", posterior_intercept.mean())
-    print("Posterior sigma mean:", posterior_sigma.mean())
 
 if __name__ == "__main__":
     main()

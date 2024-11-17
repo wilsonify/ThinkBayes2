@@ -4,3 +4,4 @@ empiricaldist
 statsmodels
 numpy
 matplotlib
+sympy
