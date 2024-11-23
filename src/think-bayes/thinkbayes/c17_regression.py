@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 import numpy as np
 import pandas as pd
 import statsmodels.formula.api as smf
@@ -5,6 +7,26 @@ from empiricaldist import Pmf
 from matplotlib import pyplot as plt
 from matplotlib.gridspec import GridSpec
 from scipy.stats import norm
+
+
+@dataclass
+class RegressionModel:
+    """
+    Dataclass representing a regression model.
+
+    Attributes:
+        intercept (np.float64): The intercept of the regression line.
+        offset (np.float64): The offset value for the model.
+        sigma (np.float64): The standard deviation (sigma) of the model.
+        slope (np.float64): The slope of the regression line.
+    """
+    intercept: np.float64
+    offset: np.float64
+    sigma: np.float64
+    slope: np.float64
+
+    def predict(self, x):
+        return self.slope * x + self.intercept + self.sigma + self.offset
 
 
 def normalize(joint):
@@ -37,66 +59,46 @@ def fit_regression(data):
     """
     Fit a least-squares regression model to the snowfall data.
     """
-    offset = data["YEAR"].mean().round()
-    data["x"] = data["YEAR"] - offset
-    data["y"] = data["SNOW"]
+    offset = pd.Series(data.index.values).mean().round()
+    x = data.index - offset
+    y = data.values
     formula = "y ~ x"
-    results = smf.ols(formula, data=data).fit()
-    model = {
-        "offset": offset,
-        "intercept": results.params.Intercept,
-        "slope": results.params.x,
-        "sigma": results.resid.std()
-    }
+    results = smf.ols(formula, data=pd.DataFrame({"x": x, "y": y})).fit()
+    model = RegressionModel(
+        offset=offset,
+        intercept=results.params.Intercept,
+        slope=results.params.x,
+        sigma=results.resid.std()
+    )
     return model
 
 
 # Create priors
-def make_uniform(qs, name=None, **options):
+def make_uniform(qs):
     """Make a Pmf that represents a uniform distribution."""
-    pmf = Pmf(1.0, qs, **options)
+    pmf = Pmf(1.0, qs)
     pmf.normalize()
-    if name:
-        pmf.index.name = name
     return pmf
 
 
-# Make a joint distribution
-def make_joint(s1, s2):
-    """Compute the outer product of two Series.
-
-    First Series goes across the columns;
-    second goes down the rows.
-
-    s1: Series
-    s2: Series
-
-    return: DataFrame
-    """
-    X, Y = np.meshgrid(s1, s2)
-    return pd.DataFrame(X * Y, columns=s1.index, index=s2.index)
-
-
-def make_joint3(pmf1, pmf2, pmf3):
+def make_joint3(pmf1: Pmf, pmf2: Pmf, pmf3: Pmf):
     """Make a joint distribution with three parameters."""
-    joint2 = make_joint(pmf2, pmf1).stack()
-    joint3 = make_joint(pmf3, joint2).stack()
-    return Pmf(joint3)
+    joint2 = pmf1.make_joint(pmf2)
+    joint3 = joint2.make_joint(pmf3)
+    return joint3
 
 
 # Compute likelihood
-def compute_likelihood(data, model):
+def compute_likelihood(data, model: RegressionModel):
     """
     Compute the likelihood of the data for each set of parameters.
     """
-    offset = model["offset"]
-    inter = model["intercept"]
-    slope = model["slope"]
-    sigma = model["sigma"]
-    xs = data['x']
-    ys = data['y']
-    expected = slope * xs + inter
-    resid = ys - expected
+    offset = model.offset
+    inter = model.intercept
+    slope = model.slope
+    sigma = model.sigma
+    expected = slope * data.index + inter
+    resid = data.values - expected
     densities = norm(0, sigma).pdf(resid)
     likelihood = densities.prod()
     return likelihood
@@ -134,7 +136,7 @@ def update_optimized(data, prior):
     sigmas = prior.columns
     likelihood = prior.copy()
 
-    for slope, inter in prior.index[0,1]:
+    for slope, inter in prior.index[0, 1]:
         expected = slope * xs + inter
         resid = ys - expected
         resid_mesh, sigma_mesh = np.meshgrid(resid, sigmas)
