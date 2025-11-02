@@ -1,8 +1,13 @@
-from scipy.misc import derivative
+import numpy as np
+
 
 import thinkbayes
 import thinkplot
 import numpy
+
+def derivative(func, x0, dx=1e-6):
+    """Simple numerical derivative function"""
+    return (func(x0 + dx) - func(x0 - dx)) / (2 * dx)
 
 
 def test_tinder():
