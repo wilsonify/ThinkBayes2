@@ -16,6 +16,7 @@ variables of interest:
 
 """
 from json import loads
+import os
 import datetime
 import numpy as np
 from requests import get
@@ -25,7 +26,7 @@ MAX = 8000000
 today =  datetime.datetime.today()
 randint = np.random.randint
 N = 120 #sample size. 
-auth = ("username", "password" )
+auth = (os.getenv("GITHUB_USERNAME", "username"), os.getenv("GITHUB_PASSWORD", "password"))
 
 language_mappings = {"Python": 0, "JavaScript": 1, "Ruby": 2, "Java":3, "Shell":4, "PHP":5}
 

@@ -1,4 +1,5 @@
 """A standard machine learning task without much sacred magic."""
+import os
 import pymongo as pymongo
 from sacred import Experiment
 from sacred.observers import MongoObserver
@@ -8,8 +9,8 @@ assert "mongo_client" in dir(pymongo)
 
 ex = Experiment("svm")
 
-mongo_user = "mongo_user"
-mongo_pwd = "mongo_password"
+mongo_user = os.getenv("MONGO_USER", "mongo_user")
+mongo_pwd = os.getenv("MONGO_PASSWORD", "mongo_password")
 mongo_host = "localhost"
 mongo_port = 27017
 mongo_db = "sacred"
