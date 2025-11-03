@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Book, Calculator, BarChart3, Lightbulb } from 'lucide-react';
+import { Book, Calculator, BarChart3, Lightbulb, Activity, Building2, TrendingUp, Zap, Heart, Edit } from 'lucide-react';
 import Header from './components/Header';
 import Navigation from './components/Navigation';
 import BayesTheorem from './components/BayesTheorem';
@@ -7,6 +7,12 @@ import CookieProblem from './components/CookieProblem';
 import DiceProblem from './components/DiceProblem';
 import PMFDemo from './components/PMFDemo';
 import Introduction from './components/Introduction';
+import HockeyGoals from './components/HockeyGoals';
+import Hospital from './components/Hospital';
+import ChangepointDetection from './components/ChangepointDetection';
+import Radiation from './components/Radiation';
+import SurvivalAnalysis from './components/SurvivalAnalysis';
+import TyposEstimation from './components/TyposEstimation';
 
 function App() {
   const [activeSection, setActiveSection] = useState('intro');
@@ -17,6 +23,12 @@ function App() {
     { id: 'cookie', title: 'Cookie Problem', icon: Lightbulb },
     { id: 'dice', title: 'Dice Problem', icon: Calculator },
     { id: 'pmf', title: 'Probability Distributions', icon: BarChart3 },
+    { id: 'hockey', title: 'Hockey Goals', icon: Activity },
+    { id: 'hospital', title: 'Hospital Birth Rates', icon: Building2 },
+    { id: 'changepoint', title: 'Changepoint Detection', icon: TrendingUp },
+    { id: 'radiation', title: 'Radiation Sensor', icon: Zap },
+    { id: 'survival', title: 'Survival Analysis', icon: Heart },
+    { id: 'typos', title: 'Typos Estimation', icon: Edit },
   ];
 
   const renderContent = () => {
@@ -31,6 +43,18 @@ function App() {
         return <DiceProblem />;
       case 'pmf':
         return <PMFDemo />;
+      case 'hockey':
+        return <HockeyGoals />;
+      case 'hospital':
+        return <Hospital />;
+      case 'changepoint':
+        return <ChangepointDetection />;
+      case 'radiation':
+        return <Radiation />;
+      case 'survival':
+        return <SurvivalAnalysis />;
+      case 'typos':
+        return <TyposEstimation />;
       default:
         return <Introduction />;
     }

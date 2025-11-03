@@ -1,134 +1,257 @@
 # Think Bayes 2 - Interactive Demo
 
-An interactive frontend application demonstrating key concepts from Allen B. Downey's "Think Bayes 2" book. This web app provides hands-on examples of Bayesian statistics with visualizations and interactive calculations.
+An interactive frontend application demonstrating key concepts from Allen B. Downey's "Think Bayes 2" book. This web app provides hands-on examples of Bayesian statistics with real-time visualizations and interactive calculations.
 
-## Features
+## 🎯 Available Demos
 
-### 🎯 Interactive Demonstrations
-- **Bayes' Theorem Calculator**: Adjust parameters and see real-time probability updates
-- **Cookie Problem**: Classic Bayesian inference example with configurable bowls
-- **Dice Problem**: Simulate dice rolls and update beliefs about which die was chosen
-- **Probability Distributions**: Explore PMFs and CDFs for binomial, Poisson, and uniform distributions
+### 1. **Hockey Goals Analysis**
+- **Bayesian Model**: Gamma-Poisson distribution for hockey goal scoring
+- **Features**: Interactive goal data input, prior/posterior distribution visualization
+- **Learning**: Bayesian inference for count data with hierarchical models
 
-### 📊 Visualizations
-- Real-time probability charts using Recharts
-- Interactive sliders for parameter adjustment
-- Color-coded probability updates
-- Mathematical notation with KaTeX
+### 2. **Survival Analysis**
+- **Bayesian Model**: Weibull distribution for time-to-event data
+- **Features**: Kaplan-Meier survival curves, hazard function visualization
+- **Learning**: Survival analysis and reliability modeling
 
-### 🎨 Modern UI
-- Clean, responsive design with Tailwind CSS
-- Intuitive navigation between sections
-- Professional color scheme and typography
-- Mobile-friendly interface
+### 3. **Changepoint Detection**
+- **Bayesian Model**: Poisson processes with structural change detection
+- **Features**: Time series event analysis, probability distribution for changepoint location
+- **Learning**: Bayesian detection of structural changes in sequential data
 
-## Technologies Used
+### 4. **Hospital Birth Rates**
+- **Bayesian Model**: Hierarchical models for hospital performance analysis
+- **Features**: Multi-level Bayesian inference, hospital comparison with uncertainty
+- **Learning**: Hierarchical Bayesian modeling and partial pooling
 
-- **React 18** - Modern component-based UI framework
-- **Vite** - Fast development build tool
-- **Tailwind CSS** - Utility-first CSS framework
-- **Recharts** - Chart library for data visualization
-- **KaTeX** - Mathematical notation rendering
-- **Lucide React** - Beautiful icon set
+### 5. **Radiation Sensor Analysis**
+- **Bayesian Model**: Poisson-Gamma model for radiation detection
+- **Features**: Sensor calibration, source strength estimation, efficiency modeling
+- **Learning**: Bayesian inference for physical measurement systems
 
-## Quick Start
+### 6. **Typos Estimation (Capture-Recapture)**
+- **Bayesian Model**: Lincoln index and Bayesian capture-recapture
+- **Features**: Two-reader typo detection, population estimation with uncertainty
+- **Learning**: Capture-recapture methods for population estimation
 
-1. **Install dependencies**:
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 16+ installed on your system
+- Modern web browser (Chrome, Firefox, Safari, Edge)
+
+### Installation & Running
+
+#### 🚀 Quick Start (Recommended)
+
+**For macOS/Linux:**
+```bash
+cd demo
+./setup.sh
+```
+
+**For Windows:**
+```cmd
+cd demo
+setup.bat
+```
+
+The setup script will automatically:
+- ✅ Check for Node.js 16+
+- ✅ Install all dependencies  
+- ✅ Run tests to verify setup
+- ✅ Start the development server
+
+#### 📋 Manual Setup
+
+If you prefer manual setup:
+
+1. **Navigate to the demo directory**:
    ```bash
    cd demo
+   ```
+
+2. **Install dependencies**:
+   ```bash
    npm install
    ```
 
-2. **Start development server**:
+3. **Start the development server**:
    ```bash
    npm run dev
    ```
 
-3. **Open your browser** and navigate to `http://localhost:3000`
+4. **Open your browser** and navigate to the URL shown (usually `http://localhost:5173` or `http://localhost:3000`)
 
-## Build for Production
+5. **Explore the demos** using the navigation menu:
+   - Click on any demo name in the navigation bar
+   - Each demo loads instantly with no 404 errors
+   - All interactive elements are fully functional
+
+### Alternative: Production Build
+
+If you prefer to build and serve the demo statically:
+
+1. **Build for production**:
+   ```bash
+   npm run build
+   ```
+
+2. **Serve the built files** (using any static server):
+   ```bash
+   # Using Python
+   python -m http.server 8000 -d dist
+   
+   # Using Node.js serve (if installed)
+   npx serve dist
+   
+   # Using Vite preview
+   npm run preview
+   ```
+
+3. **Open your browser** and navigate to `http://localhost:8000` (or appropriate port)
+
+## 🛠️ Development Commands
 
 ```bash
+# Start development server with hot reload
+npm run dev
+
+# Run tests for all demos
+npm test
+
+# Run tests for specific demo
+npm test -- --run src/test/HockeyGoals.test.jsx
+
+# Build for production
 npm run build
+
+# Preview production build
+npm run preview
+
+# Run linting (if configured)
+npm run lint
 ```
 
-The built files will be in the `dist` directory.
+## 📊 Technologies Used
 
-## Project Structure
+- **React 18** - Modern component-based UI framework
+- **Vite** - Fast development build tool with hot module replacement
+- **Tailwind CSS** - Utility-first CSS framework for styling
+- **Recharts** - Interactive chart library for data visualization
+- **KaTeX** - Mathematical notation rendering
+- **Vitest** - Fast unit testing framework
+
+## 🏗️ Project Structure
 
 ```
 demo/
 ├── src/
 │   ├── components/
-│   │   ├── Header.jsx           # App header with branding
-│   │   ├── Navigation.jsx       # Section navigation
-│   │   ├── Introduction.jsx     # Welcome and overview
-│   │   ├── BayesTheorem.jsx     # Interactive Bayes' theorem demo
-│   │   ├── CookieProblem.jsx    # Classic cookie bowl problem
-│   │   ├── DiceProblem.jsx      # Dice inference simulation
-│   │   └── PMFDemo.jsx          # Probability distributions explorer
-│   ├── App.jsx                  # Main application component
-│   ├── main.jsx                 # Application entry point
-│   └── index.css                # Global styles
-├── index.html                   # HTML template
-├── package.json                 # Dependencies and scripts
-├── vite.config.js               # Vite configuration
-├── tailwind.config.js           # Tailwind CSS configuration
-└── postcss.config.js            # PostCSS configuration
+│   │   ├── HockeyGoals.jsx           # Hockey goals analysis
+│   │   ├── SurvivalAnalysis.jsx      # Survival analysis demo
+│   │   ├── ChangepointDetection.jsx  # Changepoint detection
+│   │   ├── Hospital.jsx              # Hospital birth rates
+│   │   ├── Radiation.jsx             # Radiation sensor analysis
+│   │   ├── TyposEstimation.jsx       # Capture-recapture typos
+│   │   ├── Header.jsx                # App header and navigation
+│   │   └── Navigation.jsx            # Demo navigation menu
+│   ├── test/                         # Unit tests for each demo
+│   │   ├── HockeyGoals.test.jsx
+│   │   ├── SurvivalAnalysis.test.jsx
+│   │   ├── ChangepointDetection.test.jsx
+│   │   ├── Hospital.test.jsx
+│   │   ├── Radiation.test.jsx
+│   │   └── TyposEstimation.test.jsx
+│   ├── App.jsx                       # Main application router
+│   ├── main.jsx                      # Application entry point
+│   └── index.css                     # Global styles
+├── dist/                             # Production build output
+├── index.html                        # HTML template
+├── package.json                      # Dependencies and scripts
+├── vite.config.js                    # Vite configuration
+├── vitest.config.js                  # Test configuration
+└── tailwind.config.js                # Tailwind CSS configuration
 ```
 
-## Learning Objectives
+## 🎓 Learning Objectives
 
-This demo helps users understand:
+Each demo helps users understand specific Bayesian concepts:
 
-1. **Bayesian Thinking**: How prior beliefs are updated with evidence
-2. **Conditional Probability**: The foundation of Bayesian inference
-3. **Prior vs Posterior**: How evidence changes our beliefs
-4. **Likelihood Functions**: How evidence relates to hypotheses
-5. **Probability Distributions**: The building blocks of Bayesian analysis
+### Core Bayesian Concepts
+- **Prior Distributions**: Representing initial beliefs
+- **Likelihood Functions**: How data relates to parameters
+- **Posterior Inference**: Updating beliefs with evidence
+- **Predictive Distributions**: Making predictions with uncertainty
 
-## Examples Included
+### Advanced Topics
+- **Hierarchical Models**: Multi-level Bayesian inference
+- **Time Series Analysis**: Sequential data and changepoints
+- **Survival Analysis**: Time-to-event modeling
+- **Capture-Recapture Methods**: Population estimation
 
-### Medical Testing Scenario
-- Demonstrates counterintuitive probability results
-- Shows importance of considering base rates
-- Interactive parameter adjustment
+### Practical Applications
+- **Sports Analytics**: Hockey goal scoring patterns
+- **Medical Statistics**: Survival analysis and reliability
+- **Quality Control**: Changepoint detection in processes
+- **Sensor Calibration**: Physical measurement systems
+- **Population Ecology**: Capture-recapture estimation
 
-### Cookie Bowl Problem
-- Classic example from the book
-- Visual representation of probability updates
-- Configurable bowl compositions
+## 🔧 Troubleshooting
 
-### Dice Inference
-- Multi-step Bayesian updating
-- Simulation of evidence accumulation
-- Real-time belief visualization
+### Common Issues
 
-### Distribution Explorer
-- Binomial, Poisson, and Uniform distributions
-- Interactive parameter controls
-- PMF and CDF visualizations
+1. **"404 Error" when clicking demos**
+   - **Solution**: All demos are now fixed! If you see 404 errors, ensure you're running the latest version
 
-## Educational Value
+2. **"Port already in use" error**
+   - **Solution**: The dev server will automatically try the next available port (3001, 3002, etc.)
+   - **Alternative**: Kill existing Node processes: `pkill -f "node.*vite"`
 
-This interactive demo serves as a supplement to the Think Bayes 2 book by:
+3. **"Module not found" errors**
+   - **Solution**: Run `npm install` to ensure all dependencies are installed
+   - **Alternative**: Delete `node_modules` and `package-lock.json`, then run `npm install` again
 
-- Providing hands-on experience with Bayesian concepts
-- Visualizing abstract probability ideas
-- Allowing experimentation with different parameters
-- Reinforcing key learning objectives through practice
+4. **Build fails with JSX errors**
+   - **Solution**: Ensure all files are saved and there are no syntax errors
+   - **Check**: Run `npm test` to identify specific issues
 
-## Contributing
+### Performance Tips
 
-This demo is designed to accompany the Think Bayes 2 book. For contributions to the main book content, please visit the [official repository](https://github.com/AllenDowney/ThinkBayes2).
+- **Development**: Use `npm run dev` for fast development with hot reload
+- **Testing**: Run `npm test` to verify all demos work correctly
+- **Production**: Use `npm run build` for optimized production builds
 
-## License
+## 🤝 Contributing
+
+This demo accompanies the Think Bayes 2 book. To contribute:
+
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b new-demo-feature`
+3. **Add your demo** with corresponding tests
+4. **Update documentation** in this README
+5. **Submit a pull request**
+
+### Adding New Demos
+
+1. Create component in `src/components/YourDemo.jsx`
+2. Add test file in `src/test/YourDemo.test.jsx`
+3. Import and add to navigation in `src/App.jsx`
+4. Update this README with demo description
+
+## 📚 Resources
+
+- **[Think Bayes 2 Book](http://allendowney.github.io/ThinkBayes2)** - Original textbook
+- **[Official Repository](https://github.com/AllenDowney/ThinkBayes2)** - Book source code
+- **[React Documentation](https://react.dev)** - React framework docs
+- **[Vite Documentation](https://vitejs.dev)** - Build tool docs
+- **[Tailwind CSS](https://tailwindcss.com)** - Styling framework
+- **[Recharts Documentation](https://recharts.org)** - Chart library
+
+## 📄 License
 
 This demo follows the same license as Think Bayes 2: Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0).
 
-## Resources
+---
 
-- [Think Bayes 2 Book](http://allendowney.github.io/ThinkBayes2)
-- [Official Repository](https://github.com/AllenDowney/ThinkBayes2)
-- [React Documentation](https://react.dev)
-- [Tailwind CSS](https://tailwindcss.com)
+**🎉 All demos are fully functional and ready to explore!** Each demo includes interactive controls, real-time visualizations, and mathematical frameworks to help you understand Bayesian concepts through hands-on experimentation.

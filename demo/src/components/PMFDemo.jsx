@@ -102,7 +102,7 @@ const PMFDemo = () => {
             <div className="bg-green-50 rounded-lg p-3">
               <h4 className="font-semibold text-green-800 mb-1">CDF</h4>
               <p className="text-sm text-green-700">
-                P(X ≤ x) - Cumulative probability
+                P(X &le; x) - Cumulative probability
               </p>
             </div>
             <div className="bg-purple-50 rounded-lg p-3">
@@ -283,8 +283,8 @@ const PMFDemo = () => {
               <tr className="bg-gray-100">
                 <th className="px-4 py-2 text-left">Value (x)</th>
                 <th className="px-4 py-2 text-left">P(X = x)</th>
-                <th className="px-4 py-2 text-left">P(X ≤ x)</th>
-                <th className="px-4 py-2 text-left">P(X > x)</th>
+                <th className="px-4 py-2 text-left">P(X &le; x)</th>
+                <th className="px-4 py-2 text-left">P(X &gt; x)</th>
               </tr>
             </thead>
             <tbody>
