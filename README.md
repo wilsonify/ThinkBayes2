@@ -6,55 +6,83 @@ by Allen B. Downey
 
 *Think Bayes* is an introduction to Bayesian statistics using computational methods.  
 
-*Think Bayes* is a Free Book. It is available under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/), which means that you are free to copy and modify it, as long as you attribute the work and don’t use it for commercial purposes.
+*Think Bayes* is a Free Book. It is available under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/), which means that you are free to copy and modify it, as long as you attribute the work and don't use it for commercial purposes.
 
 Other Free Books by Allen Downey are available from [Green Tea Press](https://greenteapress.com/wp/).
 
-## Run the notebooks
+## Installation
 
-[Download the notebooks as a Zip file](https://github.com/AllenDowney/ThinkBayes2/raw/master/ThinkBayes2Notebooks.zip)
+This project now uses **Python 3.13+** and **uv** for package management.
 
-Or use these links to run the notebooks on Colab:
+### Prerequisites
 
-* [Chapter 1](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap01.ipynb)
+1. Install Python 3.13 or later
+2. Install [uv](https://docs.astral.sh/uv/getting-started/installation/):
+   ```bash
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
 
-* [Chapter 2](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap02.ipynb)
+### Quick Setup
 
-* [Chapter 3](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap03.ipynb)
+```bash
+# Clone the repository
+git clone https://github.com/wilsonify/ThinkBayes2.git
+cd ThinkBayes2
 
-* [Chapter 4](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap04.ipynb)
+# Create virtual environment and install all dependencies
+make create_environment
 
-* [Chapter 5](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap05.ipynb)
+# Activate the environment
+source .venv/bin/activate
+```
 
-* [Chapter 6](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap06.ipynb)
+### Alternative Installation Methods
 
-* [Chapter 7](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap07.ipynb)
+#### Using uv directly
 
-* [Chapter 8](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap08.ipynb)
+```bash
+# Create virtual environment
+uv venv --python 3.13
 
-* [Chapter 9](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap09.ipynb)
+# Install all dependencies (including notebooks)
+uv pip install -e .[all]
 
-* [Chapter 10](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap10.ipynb)
+# Or install just core dependencies
+uv pip install -e .
 
-* [Chapter 11](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap11.ipynb)
+# Or install with development tools
+uv pip install -e .[dev]
+```
 
-* [Chapter 12](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap12.ipynb)
+#### Using pip (legacy)
 
-* [Chapter 13](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap13.ipynb)
+```bash
+# Install core dependencies
+pip install -r requirements.txt
 
-* [Chapter 14](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap14.ipynb)
+# Install development dependencies
+pip install -r requirements-dev.txt
 
-* [Chapter 15](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap15.ipynb)
+# Install the package in development mode
+pip install -e src/think-bayes
+```
 
-* [Chapter 16](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap16.ipynb)
+### Development Setup
 
-* [Chapter 17](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap17.ipynb)
+```bash
+# Install development dependencies
+make install-dev
 
-* [Chapter 18](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap18.ipynb)
+# Run linting
+make lint
 
-* [Chapter 19](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap19.ipynb)
+# Format code
+make format
 
-* [Chapter 20](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap20.ipynb)
+# Run tests
+make test
+```
+
 
 ## Interactive Web Demo
 

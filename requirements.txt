@@ -1,27 +1,24 @@
-sympy
-numpy
-pandas
-scipy
-matplotlib
-# arviz
-# auto_mix_prep
-# empiricaldist
-# empiricaldist
-# html5lib
-# jupyter
-# jupyter
-# lxml
-# nbclassic
-# networkx
-# pymc3
-# pytest
-# pytest
-# redis
-# scikit-learn
-# scipy
-# seaborn
-# statsmodels
-# statsmodels
-# tables
-# tables
-# xlrd
+# Core dependencies for Think Bayes 2 - Python 3.13 compatible versions
+# These are now managed in pyproject.toml, but kept for backward compatibility
+sympy>=1.13
+numpy>=2.1.0
+pandas>=2.2.0
+scipy>=1.14.0
+matplotlib>=3.9.0
+
+# Optional dependencies (commented out - use pyproject.toml extras)
+# arviz>=0.19.0
+# empiricaldist>=0.6.7
+# html5lib>=1.1
+# jupyter>=1.1.0
+# lxml>=5.3.0
+# nbclassic>=1.2.0
+# networkx>=3.3
+# pymc>=5.16.0
+# pytest>=8.3.0
+# redis>=5.1.0
+# scikit-learn>=1.5.0
+# seaborn>=0.13.0
+# statsmodels>=0.14.0
+# pytables>=3.9.0
+# xlrd>=2.0.0

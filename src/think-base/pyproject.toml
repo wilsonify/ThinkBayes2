@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "bayes"
+version = "1.0.0"
+description = "Base utilities for Think Bayes 2e"
+readme = "README.md"
+license = {text = "CC BY-NC-SA 4.0"}
+authors = [
+    {name = "Allen B. Downey", email = "downey@allendowney.com"}
+]
+requires-python = ">=3.13"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Education",
+]
+keywords = ["bayesian", "statistics", "probability", "data analysis"]
+
+dependencies = [
+    "sympy>=1.13",
+    "numpy>=2.1.0",
+    "pandas>=2.2.0",
+    "scipy>=1.14.0",
+    "matplotlib>=3.9.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/AllenDowney/ThinkBayes2"
+Repository = "https://github.com/AllenDowney/ThinkBayes2"
+"Bug Tracker" = "https://github.com/AllenDowney/ThinkBayes2/issues"
