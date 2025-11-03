@@ -55,3 +55,50 @@ Or use these links to run the notebooks on Colab:
 * [Chapter 19](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap19.ipynb)
 
 * [Chapter 20](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap20.ipynb)
+
+## Interactive Web Demo
+
+ **New!** Try the interactive web demo with hands-on Bayesian examples:
+
+### Quick Start
+```bash
+cd demo
+npm install
+npm run dev
+```
+
+Then open `http://localhost:5173` in your browser.
+
+### Available Demos
+- **Hockey Goals Analysis** - Gamma-Poisson modeling for sports analytics
+- **Survival Analysis** - Weibull distribution and reliability modeling  
+- **Changepoint Detection** - Bayesian detection of structural changes
+- **Hospital Birth Rates** - Hierarchical models for medical statistics
+- **Radiation Sensor Analysis** - Poisson-Gamma models for physical systems
+- **Typos Estimation** - Capture-recapture methods for population estimation
+
+Each demo features interactive controls, real-time visualizations, and mathematical frameworks to help you understand Bayesian concepts through hands-on experimentation.
+
+ **Full documentation**: See `demo/README.md` for detailed setup instructions and troubleshooting.
+
+## Run the notebooks
+
+* [Chapter 11](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap11.ipynb)
+
+* [Chapter 12](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap12.ipynb)
+
+* [Chapter 13](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap13.ipynb)
+
+* [Chapter 14](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap14.ipynb)
+
+* [Chapter 15](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap15.ipynb)
+
+* [Chapter 16](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap16.ipynb)
+
+* [Chapter 17](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap17.ipynb)
+
+* [Chapter 18](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap18.ipynb)
+
+* [Chapter 19](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap19.ipynb)
+
+* [Chapter 20](https://colab.research.google.com/github/AllenDowney/ThinkBayes2/blob/master/notebooks/chap20.ipynb)
