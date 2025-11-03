@@ -14,7 +14,15 @@ def info_from_api_key(api_key, required_scopes):
     :return: Information attached to provided api_key or None if api_key is invalid or does not allow access to called API
     :rtype: dict | None
     """
-    return {'uid': 'user_id'}
+    # Validate API key format and length
+    if not api_key or len(api_key) < 16:
+        return None
+    
+    # For demo purposes, accept 'special-key' as mentioned in OpenAPI spec
+    if api_key == 'special-key':
+        return {'uid': 'demo_user'}
+    
+    return None
 
 
 def info_from_petstore_auth(token):
@@ -29,7 +37,12 @@ def info_from_petstore_auth(token):
     :return: Decoded token information or None if token is invalid
     :rtype: dict | None
     """
-    return {'scopes': ['read:pets', 'write:pets'], 'uid': 'user_id'}
+    # Basic token validation
+    if not token or len(token) < 10:
+        return None
+    
+    # For demo purposes, return mock token info
+    return {'scopes': ['read:pets', 'write:pets'], 'uid': 'demo_user'}
 
 
 def validate_scope_petstore_auth(required_scopes, token_scopes):
@@ -43,5 +56,8 @@ def validate_scope_petstore_auth(required_scopes, token_scopes):
     :return: True if access to called API is allowed
     :rtype: bool
     """
+    if not required_scopes or not token_scopes:
+        return False
+    
     return set(required_scopes).issubset(set(token_scopes))
 
