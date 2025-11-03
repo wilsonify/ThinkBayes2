@@ -109,7 +109,7 @@ If you prefer to build and serve the demo statically:
    npm run preview
    ```
 
-3. **Open your browser** and navigate to `http://localhost:8000` (or appropriate port)
+3. **Open your browser** and navigate to `http://localhost:3000` (or appropriate port)
 
 ## 🛠️ Development Commands
 
